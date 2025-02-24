@@ -4445,6 +4445,7 @@ MonoBehaviour:
   groupSize: 5
   difficultyCorrelation: 1
   enemy: {fileID: 775192684408327974, guid: b587f76b55b7e66468a24fcdbcf2809f, type: 3}
+  lensFlare: {fileID: 7927319850947223451, guid: 0119a1835db822f47945b700a97f513c, type: 3}
 --- !u!1 &1727411571
 GameObject:
   m_ObjectHideFlags: 0

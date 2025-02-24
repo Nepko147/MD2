@@ -9,13 +9,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int groupSize;
     [SerializeField] private bool difficultyCorrelation;
     [SerializeField] private GameObject enemy;
-    private GameObject newEnemy;
-    private int lineNumber;
+    [SerializeField] private GameObject lensFlare;
     private float difficulty;
     private float timer;
     private float delay; 
     private int size;
-    private List<GameObject> enemyList = new List<GameObject>();   
+    private List<GameObject> delObjList = new List<GameObject>();   
 
     public static EnemySpawner Instance { get; private set; }
 
@@ -48,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
         
-        lineNumber = Random.Range(1, 5);
+        int lineNumber = Random.Range(1, 5);
         spawnEnemy(enemy, lineNumber);
         timer = difficultyCorrelation ? spawnTime - (difficulty - 1) / 10 : spawnTime;
         timer = timer < 0.12f ? 0.12f : timer;
@@ -63,38 +62,43 @@ public class EnemySpawner : MonoBehaviour
 
     public void spawnEnemy(GameObject _enemy, int _lineNumber)
     {
-        Vector2 position = new Vector2(12, -1.75f);
+        Vector2 enemy_position = new Vector2(12, -1.75f);
+        Vector2 lensFlare_position = new Vector2(11, -1.75f);
         switch (_lineNumber)
         {
             case 2:
-                position.y = -2.65f;
+                enemy_position.y = -2.65f;
+                lensFlare_position.y = -2.65f;
                 break;
             case 3:
-                position.y = -3.55f;
+                enemy_position.y = -3.55f;
+                lensFlare_position.y = -3.55f;
                 break;
             case 4:
-                position.y = -4.4f;
+                enemy_position.y = -4.4f;
+                lensFlare_position.y = -4.4f;
                 break;
         }
-        
-        newEnemy = Instantiate(_enemy, position, new Quaternion());  //Спауним противника и запомниемм ссылку на него (его Rigidbody2D)
-        enemyList.Add(newEnemy);                                //Добавляем противника (его Rigidbody2D) в "Книжечку"
-        if (enemyList[0] == null)
+        GameObject newLensFlare = Instantiate(lensFlare, lensFlare_position, new Quaternion());
+        delObjList.Add(newLensFlare);
+        GameObject newEnemy = Instantiate(_enemy, enemy_position, new Quaternion());  //Спауним противника и запомниемм ссылку на него (его Rigidbody2D)
+        delObjList.Add(newEnemy);                                //Добавляем противника (его Rigidbody2D) в "Книжечку"
+        if (delObjList[0] == null)
         {
-            enemyList.RemoveAt(0); //Если противника больше нет, вычеркиваем его из "Книжечки"
+            delObjList.RemoveAt(0); //Если противника больше нет, вычеркиваем его из "Книжечки"
         }
     }
     public void PrepareToStart()
     {      
         //Разъёбываем всех, кто записан в "Книжечку"
-        foreach (GameObject enemy in enemyList) 
+        foreach (GameObject obj in delObjList) 
         {
-            if (!(enemy == null)) //Нам нужны только ещё существующие противники
+            if (!(obj == null)) //Нам нужны только ещё существующие противники
             {
-                Destroy(enemy.gameObject); // !!! РАЗЪЁБ !!! 
+                Destroy(obj.gameObject); // !!! РАЗЪЁБ !!! 
             }                 
         }
-        enemyList.Clear(); //Гарантируем, что "Книжечка" пуста
+        delObjList.Clear(); //Гарантируем, что "Книжечка" пуста
         timer = spawnTime;
         delay = delayBetweenGroups;
         size = groupSize;
