@@ -27,7 +27,7 @@ public class Buttons : MonoBehaviour
         onScreen = true;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         //Отодвигаем кнопки, при необходимости
         if (!onScreen)

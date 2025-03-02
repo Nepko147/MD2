@@ -13,7 +13,7 @@ public class LensFlare : MonoBehaviour
         downScaleSpeed /= 100;
     }
         
-    void Update()
+    void FixedUpdate()
     {
         //Проверка на возможность игры        
         if (!Globalist.Instance.canPlay())

@@ -12,8 +12,6 @@ public class Globalist : MonoBehaviour
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip Music;    
     private AudioSource sourcePause;
-    private Text midScreenText;
-    private Text midScreenSubText;
     private float timer;
     private float coinUpTimer;
     private float coinValue;
@@ -27,8 +25,8 @@ public class Globalist : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;        
+        Instance = this;        
         difficulty = 1;
         timer = difficultyUpTime;
         luckyTime = 0;
@@ -36,13 +34,11 @@ public class Globalist : MonoBehaviour
         gameStart = false;
         gameOver = false;
         luck = false;
-        sourcePause = GetComponent<AudioSource>();
-        midScreenText = GameObject.Find("MidScreenText").GetComponent<Text>();
-        midScreenSubText = GameObject.Find("MidScreenSubText").GetComponent<Text>();        
+        sourcePause = GetComponent<AudioSource>();        
     }
 
     private void Start()
-    {        
+    {              
         float volume = (((float)SaveLoader.Instance.Load("Settings.db")) / 10);
         sourcePause.volume = volume;        
     }
@@ -60,17 +56,13 @@ public class Globalist : MonoBehaviour
         {            
             if (!pause)
             {
-                midScreenText.text = "PAUSE";
-                midScreenSubText.fontSize = 30;
-                midScreenSubText.text = "[Backspace] to resume";
+                Indicators.Instance.SetPause(true);
                 sourcePause.PlayOneShot(pauseSound);
                 AudioManager.Instance.Pause();
                 pause = !pause;
                 return;
             }
-            midScreenText.text = "";
-            midScreenSubText.fontSize = 64;
-            midScreenSubText.text = "";
+            Indicators.Instance.SetPause(false);
             AudioManager.Instance.UnPause();
             pause = !pause;
         }
@@ -126,13 +118,13 @@ public class Globalist : MonoBehaviour
         gameOver = false;
         luck = false;
         luckyTime = 0;
-        midScreenText.text = "";
-        midScreenSubText.text = "";
         AudioManager.Instance.PlaySound(Music);
         Indicators.Instance.MoveToTheScreen();
         Player.Instance.goToSartPosition();
         EnemySpawner.Instance.PrepareToStart();
         BonusSpawner.Instance.PrepareToStart();
+        MainCameraSlope.Instance.RotationReset();
+        Indicators.Instance.PrepareToStart();
     }
 
     public void EndGame() // ГЙЕМ ОВЕР, ЧУВАК
@@ -140,19 +132,19 @@ public class Globalist : MonoBehaviour
         AudioManager.Instance.Stop();
         AudioManager.Instance.PlaySound(gameOverSound);
         AudioManager.Instance.PlaySound(hitSound);
-        Indicators.Instance.MoveOutTheScreen();
-        midScreenText.text = "GAME OVER";
-        midScreenSubText.text = "SCORE: " + Player.Instance.getScore();
+        Indicators.Instance.ShowGameOver();
+        MainCameraSlope.Instance.RotationReset();
+        MainCameraZoom.Instance.ZoomReset();        
         gameOver = true;
     }
     public void ReturnToMainMenu() //Возврат в главное меню
-    {
-        midScreenText.text = "";
-        midScreenSubText.text = "";
+    {        
         pause = false;
         gameStart = false;
         gameOver = false;
         Buttons.Instance.MoveToTheScreen();
+        MainCameraZoom.Instance.ZoomReset();
+        Indicators.Instance.PrepareToStart();
     }
 
     public float GetDifficultyScale() //Даём возможность другим объектам получать текущую сложность

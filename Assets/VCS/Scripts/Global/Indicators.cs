@@ -3,38 +3,33 @@ using UnityEngine.UI;
 
 public class Indicators : MonoBehaviour
 {
-    private Rigidbody2D body;
-    Vector2 startPosition;
-    Vector2 awayPosition;
-    private bool onScreen;
+    Canvas canvas;
     private Text ups;
     private Text score;
     private Text hiScore;
+    private Text midScreenText;
+    private Text midScreenSubText;
 
     public static Indicators Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
-        body = GetComponent<Rigidbody2D>();
-        startPosition = new Vector2(body.position.x, body.position.y);
-        awayPosition = new Vector2(body.position.x, body.position.y - 2);
+        canvas = GetComponent<Canvas>();
+        canvas.enabled = false;
         ups = GameObject.Find("Ups").GetComponent<Text>();
         score = GameObject.Find("Score").GetComponent<Text>();
         hiScore = GameObject.Find("HiScore").GetComponent<Text>();
+        midScreenText = GameObject.Find("MidScreenText").GetComponent<Text>();
+        midScreenSubText = GameObject.Find("MidScreenSubText").GetComponent<Text>();
     }
 
     private void FixedUpdate()
-    {
-        if (!onScreen)
+    {        
+        if (!Globalist.Instance.canPlay())
         {
-            transform.position = Vector2.MoveTowards(transform.position, startPosition, 1);
             return;
-        } else //Вывовдим игровой интерфейс с цЫферами
-        {
-            transform.position = Vector2.MoveTowards(transform.position, awayPosition, 1);
-        }       
-        
+        }
         //Получение данных из объекта игрока (Player)
         ups.text = Player.Instance.getUps() + " UP";
         score.text = "SCORE: " + Player.Instance.getScore();
@@ -42,11 +37,33 @@ public class Indicators : MonoBehaviour
     }
     public void MoveToTheScreen()
     {
-        onScreen = true;
+        canvas.enabled = true;
     }
 
     public void MoveOutTheScreen()
     {
-        onScreen = false;        
+        canvas.enabled = false;
+    }
+
+    public void ShowGameOver()
+    {
+        ups.text = "";
+        score.text = "";
+        hiScore.text = "";
+        midScreenText.text = "GAME OVER";
+        midScreenSubText.text = "SCORE: " + Player.Instance.getScore();
+    }
+
+    public void PrepareToStart()
+    {
+        midScreenText.text = "";
+        midScreenSubText.text = "";
+    }
+
+    public void SetPause(bool _pause)
+    {        
+        midScreenText.text = _pause ? "PAUSE" : "";
+        midScreenSubText.fontSize = _pause ? 30 : 64;
+        midScreenSubText.text = _pause ? "[Backspace] to resume" : "";        
     }
 }

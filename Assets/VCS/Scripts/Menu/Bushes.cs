@@ -62,7 +62,7 @@ public class Bushes : MonoBehaviour
 
     public void MoveBack()
     {
-        transform.position = Vector2.MoveTowards(transform.position, startPosition, speed);
+        transform.position = Vector2.MoveTowards(transform.position, startPosition, speed * 4);
     }    
 
     public void SetVolume(float _volume)

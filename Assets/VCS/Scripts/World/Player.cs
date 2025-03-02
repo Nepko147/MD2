@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
     public void goToSartPosition()
     {
         body.MovePosition(startPosition);
-        Ups = 2;
+        Ups = ups;
         score = 0;
         hiScore = SaveLoader.Instance.Load("HiScore.db");
     }

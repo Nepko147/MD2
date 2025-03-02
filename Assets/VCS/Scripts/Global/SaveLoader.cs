@@ -15,7 +15,7 @@ public class SaveLoader : MonoBehaviour
     {
         Instance = this;
         directoryPath = "C:/Midnight Drive/";
-     }
+    }
 
     public void Save(int _hiScore , string _fileName)
     {       
