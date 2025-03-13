@@ -4,7 +4,6 @@ public class Sound : MonoBehaviour
 {    
     [SerializeField] private AudioClip switchSound;
     private Animator anim;
-    private string settingsFileName;
     private float state;    
     private bool active;
     private bool needToSave;
@@ -16,7 +15,6 @@ public class Sound : MonoBehaviour
     {
         Instance = this;
         anim = GetComponent<Animator>();
-        settingsFileName = "Settings.db";
         active = false;
         needToSave = false;
         needToLoad = true;        
@@ -32,7 +30,7 @@ public class Sound : MonoBehaviour
 
         if (needToLoad)
         {
-            state = SaveLoader.Instance.Load(settingsFileName);
+            state = SaveLoader.Instance.Load("volume");
             needToLoad = false;
         }
 
@@ -53,13 +51,12 @@ public class Sound : MonoBehaviour
         //Отображаем текущую настройку
         anim.Play("Base Layer.a_menu_sound", 0, state / anim.GetCurrentAnimatorStateInfo(0).length);
         float volume = ((float)(state/10));
-        Bushes.Instance.SetVolume(volume);
-        Globalist.Instance.SetVolume(volume);
-        AudioManager.Instance.SetVolume(volume);
+        ApplyVolume(volume);
+
         //Закрытие меню
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            SaveLoader.Instance.Save((int)state, settingsFileName);
+            SaveLoader.Instance.Save((int)state, "volume");
             needToSave = false;
         }        
     }   
@@ -72,5 +69,12 @@ public class Sound : MonoBehaviour
     public void Disactrivate()
     {
         active = false;        
+    }
+
+    private void ApplyVolume(float _volume)
+    {
+        Bushes.Instance.SetVolume(_volume);
+        Globalist.Instance.SetVolume(_volume);
+        AudioManager.Instance.SetVolume(_volume);
     }
 }

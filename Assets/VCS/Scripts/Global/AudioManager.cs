@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        float volume = (((float)SaveLoader.Instance.Load("Settings.db")) / 10);
+        float volume = (((float)SaveLoader.Instance.Load("volume")) / 10);
         source.volume = volume;
     }
 

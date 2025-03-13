@@ -28,7 +28,7 @@ public class Bushes : MonoBehaviour
     {
         if(!(audioSource == null))
         {
-            float volume = (((float)SaveLoader.Instance.Load("Settings.db")) / 10);
+            float volume = (((float)SaveLoader.Instance.Load("volume")) / 10);
             audioSource.volume = volume;
         }            
     }

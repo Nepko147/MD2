@@ -115,10 +115,10 @@ public class Player : MonoBehaviour
         Ups -= _damage;
         if (Ups <= 0)
         {
-            if ((int)score > SaveLoader.Instance.Load("HiScore.db"))
+            if ((int)score > SaveLoader.Instance.Load("hiscore"))
             {
                 hiScore = (int)score;
-                SaveLoader.Instance.Save(hiScore, "HiScore.db");
+                SaveLoader.Instance.Save(hiScore, "hiscore");
             }
             Globalist.Instance.EndGame();
         }
@@ -134,6 +134,6 @@ public class Player : MonoBehaviour
         body.MovePosition(startPosition);
         Ups = ups;
         score = 0;
-        hiScore = SaveLoader.Instance.Load("HiScore.db");
+        hiScore = SaveLoader.Instance.Load("hiscore");
     }
 }
