@@ -61,10 +61,14 @@ public class SaveLoader : MonoBehaviour
 
         XmlNode userNode; //Объявляем экземпляр подузла
 
-        userNode = xmlDoc.CreateElement("hiscore"); //Создаём новый элемент
-        userNode.InnerText = "0";                   //Задаём ему значение
+        userNode = xmlDoc.CreateElement("complete"); //Создаём новый элемент
+        userNode.InnerText = "1000000";                   //Задаём ему значение
         rootNode.AppendChild(userNode);             //Добавляем его, как подузел
                                                     //...
+        userNode = xmlDoc.CreateElement("coins");
+        userNode.InnerText = "0";
+        rootNode.AppendChild(userNode);
+
         userNode = xmlDoc.CreateElement("volume");
         userNode.InnerText = "10";
         rootNode.AppendChild(userNode);

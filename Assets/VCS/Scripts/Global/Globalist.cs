@@ -13,8 +13,6 @@ public class Globalist : MonoBehaviour
     [SerializeField] private AudioClip Music;    
     private AudioSource sourcePause;
     private float timer;
-    private float coinUpTimer;
-    private float coinValue;
     public float luckyTime;
     public bool pause;
     public bool gameStart;
@@ -85,13 +83,6 @@ public class Globalist : MonoBehaviour
             timer = difficultyUpTime;
         }
 
-        coinUpTimer -= Time.deltaTime;
-        if (coinUpTimer <= 0)
-        {
-            coinValue++;
-            coinUpTimer = 1;
-        }
-
         //Запуск трека, после его окончания
         if (!AudioManager.Instance.source.isPlaying)
         {
@@ -112,8 +103,6 @@ public class Globalist : MonoBehaviour
     {
         difficulty = 1;
         timer = difficultyUpTime;
-        coinUpTimer = 1;
-        coinValue = BonusSpawner.Instance.GetCoinValue();
         gameStart = true;
         gameOver = false;
         luck = false;
@@ -144,7 +133,7 @@ public class Globalist : MonoBehaviour
         gameOver = false;
         Buttons.Instance.MoveToTheScreen();
         MainCameraZoom.Instance.ZoomReset();
-        Indicators.Instance.PrepareToStart();
+        Indicators.Instance.MoveOutTheScreen();
     }
 
     public float GetDifficultyScale() //Даём возможность другим объектам получать текущую сложность
@@ -164,10 +153,5 @@ public class Globalist : MonoBehaviour
     public void SetVolume(float _volume)
     {
         sourcePause.volume = _volume;
-    }
-
-    public float GetCoinValue()
-    {
-        return coinValue;
     }
 }

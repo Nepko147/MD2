@@ -5,8 +5,10 @@ public class Indicators : MonoBehaviour
 {
     Canvas canvas;
     private Text ups;
-    private Text score;
-    private Text hiScore;
+    private Image upsIco;
+    private Text coins;
+    private Image coinsIco;
+    private Text complete;
     private Text midScreenText;
     private Text midScreenSubText;
 
@@ -18,8 +20,10 @@ public class Indicators : MonoBehaviour
         canvas = GetComponent<Canvas>();
         canvas.enabled = false;
         ups = GameObject.Find("Ups").GetComponent<Text>();
-        score = GameObject.Find("Score").GetComponent<Text>();
-        hiScore = GameObject.Find("HiScore").GetComponent<Text>();
+        upsIco = GameObject.Find("UpsIco").GetComponent<Image>();
+        coins = GameObject.Find("Coins").GetComponent<Text>();
+        coinsIco = GameObject.Find("CoinsIco").GetComponent<Image>();
+        complete = GameObject.Find("Complete").GetComponent<Text>();
         midScreenText = GameObject.Find("MidScreenText").GetComponent<Text>();
         midScreenSubText = GameObject.Find("MidScreenSubText").GetComponent<Text>();
     }
@@ -31,9 +35,9 @@ public class Indicators : MonoBehaviour
             return;
         }
         //Получение данных из объекта игрока (Player)
-        ups.text = Player.Instance.getUps() + " UP";
-        score.text = "SCORE: " + Player.Instance.getScore();
-        hiScore.text = "HI-SCORE: " + Player.Instance.getHiScore();      
+        ups.text = "x" + Player.Instance.Ups;
+        coins.text = "x" + Player.Instance.Coins;
+        complete.text = "COMPLETE: " + (int)Player.Instance.Complete + " m.";      
     }
     public void MoveToTheScreen()
     {
@@ -48,14 +52,18 @@ public class Indicators : MonoBehaviour
     public void ShowGameOver()
     {
         ups.text = "";
-        score.text = "";
-        hiScore.text = "";
+        upsIco.enabled = false;
+        coins.text = "";
+        coinsIco.enabled = false;
+        complete.text = "";
         midScreenText.text = "GAME OVER";
-        midScreenSubText.text = "SCORE: " + Player.Instance.getScore();
+        midScreenSubText.text = "Distance ramain: " + (int)Player.Instance.Complete + " m.";
     }
 
     public void PrepareToStart()
     {
+        upsIco.enabled = true;
+        coinsIco.enabled = true;
         midScreenText.text = "";
         midScreenSubText.text = "";
     }

@@ -6,7 +6,6 @@ public class BonusSpawner : MonoBehaviour
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float maxSpawnTime;
     [SerializeField] private float luckyCoinCoolDown;
-    [SerializeField] private float luckyCoinValue;
     [SerializeField] private GameObject bonus;
     private GameObject newBonus;
     private int lineNumber;
@@ -81,10 +80,5 @@ public class BonusSpawner : MonoBehaviour
     public void SetLuckyTimer()
     {
         timer = luckyCoinCoolDown;
-    }
-
-    public float GetCoinValue()
-    {
-        return luckyCoinValue;
     }
 }

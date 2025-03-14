@@ -6,20 +6,22 @@ public class Player : MonoBehaviour
     [SerializeField] private int ups;
     public Animator anim;
     private Rigidbody2D body;
-    private SpriteRenderer spriteRenderer;    
-    private float score;
-    private int hiScore;
+    private SpriteRenderer spriteRenderer;
     private Vector2 position;
     private Vector2 startPosition;
 
     public static Player Instance { get; private set; }
 
     public int Ups { get; set; }
+    public int Coins { get; set; }
+    public float Complete { get; set; }
 
     private void Awake()
     {       
         Instance = this;
         Ups = ups;
+        Coins = SaveLoader.Instance.Load("coins");
+        Complete = SaveLoader.Instance.Load("complete");
         anim = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();        
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -38,8 +40,10 @@ public class Player : MonoBehaviour
         }
         //Выключение паузы анимации объекта
         anim.StopPlayback();
-        //Начисление очков
-        score += Globalist.Instance.GetDifficultyScale();          
+
+        //Расчёт оставшегося расстояния        
+        Complete -= Globalist.Instance.GetDifficultyScale();
+
         //Обработка ввода
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
         {
@@ -92,48 +96,29 @@ public class Player : MonoBehaviour
                 spriteRenderer.sortingOrder = 6;
                 break;
         }
-    }
-
-    //Выдача кол-ва жизней другим объектамм    
-    public int getUps()
-    {
-        return Ups;
-    }
-
-    //Выдача кол-ва очков другим объектамм    
-    public int getScore()
-    {
-        return (int)score;
-    }
-    public int getHiScore()
-    {
-        return hiScore;
-    }
+    }      
+        
     //Получение урона объектом
     public void takeDamage(int _damage)
     {
         Ups -= _damage;
         if (Ups <= 0)
         {
-            if ((int)score > SaveLoader.Instance.Load("hiscore"))
-            {
-                hiScore = (int)score;
-                SaveLoader.Instance.Save(hiScore, "hiscore");
-            }
+            SaveLoader.Instance.Save((int)Complete, "complete");
+            SaveLoader.Instance.Save(Coins, "coins");
             Globalist.Instance.EndGame();
         }
     }
 
-    public void takePoints(float _points)
-    {
-        score += _points;
+    public void TakeCoin(int _number)
+    {        
+        Coins += _number;
     }
 
     public void goToSartPosition()
     {
         body.MovePosition(startPosition);
         Ups = ups;
-        score = 0;
-        hiScore = SaveLoader.Instance.Load("hiscore");
+        Complete = SaveLoader.Instance.Load("complete");
     }
 }

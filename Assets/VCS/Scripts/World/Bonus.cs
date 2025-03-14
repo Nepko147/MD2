@@ -9,8 +9,7 @@ public class Bonus : MonoBehaviour
     [SerializeField] private BonusString popUpString;
     public Animator anim;     
     private BoxCollider2D boxCollider;
-    private Rigidbody2D body;    
-    private float coinPoints;
+    private Rigidbody2D body;
     private float onSpeed;
     private int bonusType;
     private string effect;           
@@ -20,8 +19,7 @@ public class Bonus : MonoBehaviour
         anim = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         body = GetComponent<Rigidbody2D>();        
-        onSpeed = 0;               
-        coinPoints = Globalist.Instance.GetCoinValue();
+        onSpeed = 0;
 
         //Проверка на возможность игры      
         if (Globalist.Instance.canPlay())
@@ -47,7 +45,7 @@ public class Bonus : MonoBehaviour
                     body.transform.localScale = new Vector2(1.5f, 1.5f);
                     boxCollider.size = new Vector2(0.48f, 0.48f);
                     anim.SetInteger("type", 3);
-                    effect = "+" + coinPoints + " points";
+                    effect = "+1 Coin";
                     break;
             }
         }       
@@ -87,7 +85,7 @@ public class Bonus : MonoBehaviour
                     break;
                 case > 2:
                     AudioManager.Instance.PlaySound(coinSound);
-                    Player.Instance.takePoints(coinPoints);
+                    Player.Instance.TakeCoin(1);
                     
                     break;
             }
