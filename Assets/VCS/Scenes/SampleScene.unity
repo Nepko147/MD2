@@ -3328,6 +3328,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e82c67bf7abb70429ab58073dde0725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upsUI: {fileID: 1338160577}
+  upsIcoUI: {fileID: 805238758}
+  coinsUI: {fileID: 1137204571}
+  coinsIcoUI: {fileID: 1196997010}
+  completeUI: {fileID: 1379618275}
+  midScreenTextUI: {fileID: 1454147468}
+  midScreenSubTextUI: {fileID: 713616187}
 --- !u!1 &1020778433
 GameObject:
   m_ObjectHideFlags: 0

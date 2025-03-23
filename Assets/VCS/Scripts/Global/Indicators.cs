@@ -3,6 +3,14 @@ using UnityEngine.UI;
 
 public class Indicators : MonoBehaviour
 {
+    [SerializeField] GameObject upsUI;
+    [SerializeField] GameObject upsIcoUI;
+    [SerializeField] GameObject coinsUI;
+    [SerializeField] GameObject coinsIcoUI;
+    [SerializeField] GameObject completeUI;
+    [SerializeField] GameObject midScreenTextUI;
+    [SerializeField] GameObject midScreenSubTextUI;
+    
     Canvas canvas;
     private Text ups;
     private Image upsIco;
@@ -19,13 +27,13 @@ public class Indicators : MonoBehaviour
         Instance = this;
         canvas = GetComponent<Canvas>();
         canvas.enabled = false;
-        ups = GameObject.Find("Ups").GetComponent<Text>();
-        upsIco = GameObject.Find("UpsIco").GetComponent<Image>();
-        coins = GameObject.Find("Coins").GetComponent<Text>();
-        coinsIco = GameObject.Find("CoinsIco").GetComponent<Image>();
-        complete = GameObject.Find("Complete").GetComponent<Text>();
-        midScreenText = GameObject.Find("MidScreenText").GetComponent<Text>();
-        midScreenSubText = GameObject.Find("MidScreenSubText").GetComponent<Text>();
+        ups = upsUI.GetComponent<Text>();
+        upsIco = upsIcoUI.GetComponent<Image>();
+        coins = coinsUI.GetComponent<Text>();
+        coinsIco = coinsIcoUI.GetComponent<Image>();
+        complete = completeUI.GetComponent<Text>();
+        midScreenText = midScreenTextUI.GetComponent<Text>();
+        midScreenSubText = midScreenSubTextUI.GetComponent<Text>();
     }
 
     private void FixedUpdate()
