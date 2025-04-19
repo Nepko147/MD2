@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-namespace GitIntegration
+namespace Git
 {
     [InitializeOnLoad]
     public class SmartMergeRegistrator
