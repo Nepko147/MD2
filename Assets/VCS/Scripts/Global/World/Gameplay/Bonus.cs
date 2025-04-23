@@ -3,7 +3,8 @@ using UnityEngine;
 public class Bonus : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private float luckyTime;    
+    [SerializeField] private float luckyTime;
+    [SerializeField] private bool distortionEffect;
     [SerializeField] private AudioClip bonusSound;
     [SerializeField] private AudioClip coinSound;
     [SerializeField] private BonusString popUpString;
@@ -32,19 +33,22 @@ public class Bonus : MonoBehaviour
                 case 1:
                     body.name = "BonusUp";
                     anim.SetInteger("type", bonusType);
+                    distortionEffect = true;
                     effect = "+1 UP";
                     break;
                 case 2:
                     body.name = "BonusLuck";
                     boxCollider.size = new Vector2(0.32f, 0.32f);
                     anim.SetInteger("type", bonusType);
+                    distortionEffect = true;
                     effect = "Lucky time!";
                     break;
                 case > 2:
                     body.name = "BonusCoin";
                     body.transform.localScale = new Vector2(3.0f, 3.0f);
-                    boxCollider.size = new Vector2(0.48f, 0.48f);
+                    boxCollider.size = new Vector2(0.16f, 0.16f);
                     anim.SetInteger("type", 3);
+                    distortionEffect = false;
                     effect = "+1 Coin";
                     break;
             }
@@ -90,6 +94,14 @@ public class Bonus : MonoBehaviour
                     break;
             }
             popUpString.DisplayPopUp(effect, body);
+            if (distortionEffect)
+            {                
+                DistortionDynamic distortion = DistortionDynamic.Singletone;
+                Vector2 screenPosition = distortion.GetComponent<Camera>().WorldToScreenPoint(transform.position);
+                distortion.distortionStart = true;
+                distortion.posX = screenPosition.x /= Screen.width;
+                distortion.posY = screenPosition.y /= Screen.height;
+            }
             Destroy(this.gameObject);
         }
 
