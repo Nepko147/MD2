@@ -40,7 +40,7 @@ public class City : MonoBehaviour
         { 
             Vector2 position = new Vector2(transform.position.x + 38.4f, transform.position.y);
             Quaternion rotation = new Quaternion();
-            Instantiate(body, position, rotation);
+            Instantiate(body, position, rotation, transform.parent);
             NeedClone = false;
         }
         

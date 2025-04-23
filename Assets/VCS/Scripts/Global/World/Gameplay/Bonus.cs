@@ -42,7 +42,7 @@ public class Bonus : MonoBehaviour
                     break;
                 case > 2:
                     body.name = "BonusCoin";
-                    body.transform.localScale = new Vector2(1.5f, 1.5f);
+                    body.transform.localScale = new Vector2(3.0f, 3.0f);
                     boxCollider.size = new Vector2(0.48f, 0.48f);
                     anim.SetInteger("type", 3);
                     effect = "+1 Coin";
