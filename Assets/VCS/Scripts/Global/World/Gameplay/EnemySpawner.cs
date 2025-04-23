@@ -79,9 +79,9 @@ public class EnemySpawner : MonoBehaviour
                 lensFlare_position.y = -4.4f;
                 break;
         }
-        GameObject newLensFlare = Instantiate(lensFlare, lensFlare_position, new Quaternion());
+        GameObject newLensFlare = Instantiate(lensFlare, lensFlare_position, new Quaternion(), transform.parent);
         delObjList.Add(newLensFlare);
-        GameObject newEnemy = Instantiate(_enemy, enemy_position, new Quaternion());  //Спауним противника и запомниемм ссылку на него (его Rigidbody2D)
+        GameObject newEnemy = Instantiate(_enemy, enemy_position, new Quaternion(), transform.parent);  //Спауним противника и запомниемм ссылку на него (его Rigidbody2D)
         delObjList.Add(newEnemy);                                //Добавляем противника (его Rigidbody2D) в "Книжечку"
         if (delObjList[0] == null)
         {
