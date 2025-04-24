@@ -1,7 +1,11 @@
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
+    //[SerializeField] SceneAsset scene_menu;
+    //[SerializeField] SceneAsset scene_main;
     [SerializeField] private AudioClip switchSound;
     private Rigidbody2D body;
     private Animator anim;
@@ -39,11 +43,16 @@ public class GameOver : MonoBehaviour
         {
             AudioManager.Instance.PlaySound(switchSound);
             if (!menu)
-            {
-                Globalist.Instance.ReturnToMainMenu();
+            {                
+                SceneManager.LoadScene(1);
+                Globalist.Instance.gameOver = false;
+                Globalist.Instance.gameStart = false;
             } else
             {
-                Globalist.Instance.StartGame();
+                SceneManager.LoadScene(2);
+                Globalist.Instance.gameOver = false;
+                Globalist.Instance.gameStart = true;
+
             }
         }
     }

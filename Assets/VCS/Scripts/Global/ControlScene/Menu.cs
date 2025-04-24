@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class ControlScene_Menu : MonoBehaviour
 {
-    [SerializeField] SceneAsset scene_main;
+    //[SerializeField] SceneAsset scene_main;
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.PageDown))
         {
-            SceneManager.LoadScene(scene_main.name);
+            SceneManager.LoadScene(3);
         }
     }
 }

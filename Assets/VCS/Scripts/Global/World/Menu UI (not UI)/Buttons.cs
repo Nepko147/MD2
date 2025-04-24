@@ -1,11 +1,15 @@
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Buttons : MonoBehaviour
 {
+    [SerializeField] private float sceneSwitchTimer;
     [SerializeField] private float speed;
     [SerializeField] private int state;
     [SerializeField] private AudioClip switchSound;
     [SerializeField] private AudioClip sound;
+    //[SerializeField] SceneAsset scene_main;
     Vector2 startPosition;
     Vector2 awayPosition;
     private Rigidbody2D body;    
@@ -22,13 +26,24 @@ public class Buttons : MonoBehaviour
         anim = GetComponent<Animator>();
         startPosition = new Vector2(body.position.x, body.position.y);
         awayPosition = new Vector2(body.position.x + 15.5f, body.position.y);        
-        anim.SetInteger("state", 0);
-        isActive = false;
+        anim.SetInteger("state", 1);
+        isActive = true;
         onScreen = true;
     }
 
     private void Update()
     {
+
+        if (Globalist.Instance.gameStart)
+        {
+            sceneSwitchTimer -= Time.deltaTime;
+            if (sceneSwitchTimer < 0)
+            {
+                //Globalist.Instance.pause = true;
+                SceneManager.LoadSceneAsync(2);
+            }
+        }
+
         //Отодвигаем кнопки, при необходимости
         if (!onScreen)
         {
@@ -76,6 +91,7 @@ public class Buttons : MonoBehaviour
             {
                 case 1:
                     MoveOutTheScreen();
+                    Destroy(Lights.Instance.gameObject);
                     Globalist.Instance.StartGame();                    
                     break;
                 case 2:

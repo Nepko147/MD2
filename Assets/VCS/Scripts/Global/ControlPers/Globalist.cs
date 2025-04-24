@@ -6,13 +6,14 @@ public class Globalist : MonoBehaviour
     [SerializeField] private float difficultyMax;
     [SerializeField] private float difficultyScale;
     [SerializeField] private float difficultyUpTime;
-    [SerializeField] private float difficulty;
+    [SerializeField] private float difficultyOnStart;
     [SerializeField] private AudioClip pauseSound;
     [SerializeField] private AudioClip gameOverSound;
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip Music;    
     private AudioSource sourcePause;
     private float timer;
+    private float difficulty;
     public float luckyTime;
     public bool pause;
     public bool gameStart;
@@ -25,7 +26,7 @@ public class Globalist : MonoBehaviour
     {
         Application.targetFrameRate = 60;        
         Instance = this;        
-        difficulty = 1;
+        difficulty = difficultyOnStart;
         timer = difficultyUpTime;
         luckyTime = 0;
         pause = false;
@@ -101,19 +102,19 @@ public class Globalist : MonoBehaviour
 
     public void StartGame() //Предворительная подготовка к старту/рестарту
     {
-        difficulty = 1;
         timer = difficultyUpTime;
         gameStart = true;
         gameOver = false;
         luck = false;
         luckyTime = 0;
+        difficulty = difficultyOnStart;
         AudioManager.Instance.PlaySound(Music);
-        Indicators.Instance.MoveToTheScreen();
-        Player.Instance.goToSartPosition();
-        EnemySpawner.Instance.PrepareToStart();
-        BonusSpawner.Instance.PrepareToStart();
+        //Indicators.Instance.MoveToTheScreen();
+        //Player.Instance.goToSartPosition();
+        //EnemySpawner.Instance.PrepareToStart();
+        //BonusSpawner.Instance.PrepareToStart();
         MainCameraSlope.Instance.RotationReset();
-        Indicators.Instance.PrepareToStart();
+        //Indicators.Instance.PrepareToStart();
     }
 
     public void EndGame() // ГЙЕМ ОВЕР, ЧУВАК

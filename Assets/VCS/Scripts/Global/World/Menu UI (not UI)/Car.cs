@@ -1,4 +1,6 @@
 using UnityEngine;
+//using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class Car : MonoBehaviour
 {
@@ -6,8 +8,10 @@ public class Car : MonoBehaviour
     [SerializeField] private float lag;
     [SerializeField] private AudioClip carSound;
     [SerializeField] private AudioClip dingSound;
+    //[SerializeField] SceneAsset scene_menu;
     private Rigidbody2D body;
     private bool timeToDestroyThisShit;
+    bool isPlayed = false;
 
     private void Awake()
     {
@@ -40,12 +44,16 @@ public class Car : MonoBehaviour
         }
 
         //после выхода из кадра, объект активирует меню и самоуничтожается!
-        if (transform.position.x >= 42.5f)
+        if (transform.position.x >= 42.5f && !isPlayed)
         {
             AudioManager.Instance.PlaySound(dingSound);
-            Buttons.Instance.MakeActive(true);
-            Destroy(Lights.Instance.gameObject, 0.75f);
-            Destroy(this.gameObject);
+            isPlayed = true;
         }
+
+        if (transform.position.x >= 42.5f * 1.8f)
+        {            
+            SceneManager.LoadScene(1);
+        }
+
     }
 }

@@ -26,7 +26,6 @@ public class Indicators : MonoBehaviour
     {
         Instance = this;
         canvas = GetComponent<Canvas>();
-        canvas.enabled = false;
         ups = upsUI.GetComponent<Text>();
         upsIco = upsIcoUI.GetComponent<Image>();
         coins = coinsUI.GetComponent<Text>();
@@ -34,6 +33,7 @@ public class Indicators : MonoBehaviour
         complete = completeUI.GetComponent<Text>();
         midScreenText = midScreenTextUI.GetComponent<Text>();
         midScreenSubText = midScreenSubTextUI.GetComponent<Text>();
+        PrepareToStart();
     }
 
     private void FixedUpdate()
