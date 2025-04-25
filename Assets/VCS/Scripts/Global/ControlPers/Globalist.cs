@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Globalist : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class Globalist : MonoBehaviour
     public bool gameOver;
     public bool luck;
 
+    // Постпроцесс
+    private PostProcessVolume postProcessVoolume;
+    private DepthOfField depthOfField;
+    private ChromaticAberration chromaticAberration;
+
     public static Globalist Instance { get; private set; }
 
     private void Awake()
@@ -33,7 +39,12 @@ public class Globalist : MonoBehaviour
         gameStart = false;
         gameOver = false;
         luck = false;
-        sourcePause = GetComponent<AudioSource>();        
+        sourcePause = GetComponent<AudioSource>();
+
+        // Постпроцесс
+        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
+        postProcessVoolume.profile.TryGetSettings(out chromaticAberration);
     }
 
     private void Start()
@@ -48,23 +59,7 @@ public class Globalist : MonoBehaviour
         if (!gameStart || gameOver)
         {
             return;
-        }        
-
-        //Включение паузы
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {            
-            if (!pause)
-            {
-                Indicators.Instance.SetPause(true);
-                sourcePause.PlayOneShot(pauseSound);
-                AudioManager.Instance.Pause();
-                pause = !pause;
-                return;
-            }
-            Indicators.Instance.SetPause(false);
-            AudioManager.Instance.UnPause();
-            pause = !pause;
-        }
+        }  
         
         if (pause){ return; }
 
@@ -81,6 +76,7 @@ public class Globalist : MonoBehaviour
         if (timer <= 0 && difficulty < difficultyMax)
         {
             difficulty += difficultyScale;
+            chromaticAberration.intensity.value = (difficulty - 1.0f) / 10.0f;
             timer = difficultyUpTime;
         }
 
@@ -109,12 +105,8 @@ public class Globalist : MonoBehaviour
         luckyTime = 0;
         difficulty = difficultyOnStart;
         AudioManager.Instance.PlaySound(Music);
-        //Indicators.Instance.MoveToTheScreen();
-        //Player.Instance.goToSartPosition();
-        //EnemySpawner.Instance.PrepareToStart();
-        //BonusSpawner.Instance.PrepareToStart();
         MainCameraSlope.Instance.RotationReset();
-        //Indicators.Instance.PrepareToStart();
+        chromaticAberration.intensity.value = 0;
     }
 
     public void EndGame() // ГЙЕМ ОВЕР, ЧУВАК
@@ -124,7 +116,8 @@ public class Globalist : MonoBehaviour
         AudioManager.Instance.PlaySound(hitSound);
         Indicators.Instance.ShowGameOver();
         MainCameraSlope.Instance.RotationReset();
-        MainCameraZoom.Instance.ZoomReset();        
+        MainCameraZoom.Instance.ZoomReset();
+        chromaticAberration.intensity.value = 0;
         gameOver = true;
     }
     public void ReturnToMainMenu() //Возврат в главное меню
@@ -132,9 +125,8 @@ public class Globalist : MonoBehaviour
         pause = false;
         gameStart = false;
         gameOver = false;
-        Buttons.Instance.MoveToTheScreen();
+        chromaticAberration.intensity.value = 0;
         MainCameraZoom.Instance.ZoomReset();
-        Indicators.Instance.MoveOutTheScreen();
     }
 
     public float GetDifficultyScale() //Даём возможность другим объектам получать текущую сложность
@@ -154,5 +146,22 @@ public class Globalist : MonoBehaviour
     public void SetVolume(float _volume)
     {
         sourcePause.volume = _volume;
+    }
+
+    public void Pause()
+    {
+        Indicators.Instance.SetPause(true);
+        sourcePause.PlayOneShot(pauseSound);
+        AudioManager.Instance.Pause();
+        depthOfField.aperture.value = 1;
+        pause = true;
+    }
+
+    public void UnPause()
+    {
+        Indicators.Instance.SetPause(false);
+        AudioManager.Instance.UnPause();
+        depthOfField.aperture.value = 3;
+        pause = false;
     }
 }

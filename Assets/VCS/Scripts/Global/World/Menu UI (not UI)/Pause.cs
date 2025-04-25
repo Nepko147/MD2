@@ -3,13 +3,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
-public class GameOver : MonoBehaviour
+public class Pause : MonoBehaviour
 {
     //[SerializeField] SceneAsset scene_menu;
     //[SerializeField] SceneAsset scene_main;
     [SerializeField] private AudioClip switchSound;
     private Rigidbody2D body;
     private Animator anim;
+    private AudioSource audioSource;
     private bool menu;
     Vector2 startPosition;
     Vector2 awayPosition;
@@ -22,6 +23,8 @@ public class GameOver : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = AudioManager.Instance.source.volume;
         menu = false;        
         startPosition = new Vector2(body.position.x, body.position.y);
         awayPosition = new Vector2(body.position.x, body.position.y + 4);
@@ -32,9 +35,13 @@ public class GameOver : MonoBehaviour
     }
 
     private void Update()
-    {        
-        if (!Globalist.Instance.gameOver)
+    {  
+        if (!Globalist.Instance.pause)
         {
+            if (Input.GetKey(KeyCode.Backspace))
+            {
+                Globalist.Instance.Pause();
+            }
             MoveOutTheScreen();
             return;
         }
@@ -43,7 +50,7 @@ public class GameOver : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            audioSource.PlayOneShot(switchSound);
             menu = !menu;
             anim.SetBool("menu", menu);
         }
@@ -52,16 +59,13 @@ public class GameOver : MonoBehaviour
         {
             AudioManager.Instance.PlaySound(switchSound);
             if (!menu)
-            {
-                SceneManager.LoadScene(2);
-                Globalist.Instance.StartGame();
-                
+            {   
+                Globalist.Instance.UnPause();
             } else
             {
+                Globalist.Instance.ReturnToMainMenu();
+                AudioManager.Instance.Stop();
                 SceneManager.LoadScene(1);
-                Globalist.Instance.gameOver = false;
-                Globalist.Instance.gameStart = false;
-                depthOfField.aperture.value = 1;
             }
         }
     }

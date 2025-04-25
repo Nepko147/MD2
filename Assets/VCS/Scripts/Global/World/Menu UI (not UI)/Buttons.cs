@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Buttons : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class Buttons : MonoBehaviour
     private bool isActive;
     private bool onScreen;
 
+    // Постпроцесс
+    private PostProcessVolume postProcessVoolume;
+    private DepthOfField depthOfField;
+
     public static Buttons Instance { get; private set; }
 
     private void Awake()
@@ -29,6 +34,9 @@ public class Buttons : MonoBehaviour
         anim.SetInteger("state", 1);
         isActive = true;
         onScreen = true;
+
+        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
     }
 
     private void Update()
@@ -37,6 +45,7 @@ public class Buttons : MonoBehaviour
         if (Globalist.Instance.gameStart)
         {
             sceneSwitchTimer -= Time.deltaTime;
+            depthOfField.aperture.value = depthOfField.aperture.value < 3 ? depthOfField.aperture.value + 0.045f : 3;
             if (sceneSwitchTimer < 0)
             {
                 //Globalist.Instance.pause = true;

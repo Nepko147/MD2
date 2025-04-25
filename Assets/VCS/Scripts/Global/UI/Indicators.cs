@@ -66,6 +66,7 @@ public class Indicators : MonoBehaviour
         complete.text = "";
         midScreenText.text = "GAME OVER";
         midScreenSubText.text = "Distance ramain: " + (int)Player.Instance.Complete + " m.";
+        midScreenSubText.fontSize = 48;
     }
 
     public void PrepareToStart()
@@ -79,7 +80,6 @@ public class Indicators : MonoBehaviour
     public void SetPause(bool _pause)
     {        
         midScreenText.text = _pause ? "PAUSE" : "";
-        midScreenSubText.fontSize = _pause ? 30 : 64;
-        midScreenSubText.text = _pause ? "[Backspace] to resume" : "";        
+        midScreenSubText.fontSize = 30;      
     }
 }
