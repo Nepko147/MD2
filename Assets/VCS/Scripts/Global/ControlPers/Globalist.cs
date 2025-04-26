@@ -114,7 +114,7 @@ public class Globalist : MonoBehaviour
         AudioManager.Instance.Stop();
         AudioManager.Instance.PlaySound(gameOverSound);
         AudioManager.Instance.PlaySound(hitSound);
-        Indicators.Instance.ShowGameOver();
+        UI_IndicatorsCanvas_Entity.Instance.ShowGameOver();
         MainCameraSlope.Instance.RotationReset();
         MainCameraZoom.Instance.ZoomReset();
         chromaticAberration.intensity.value = 0;
@@ -150,7 +150,7 @@ public class Globalist : MonoBehaviour
 
     public void Pause()
     {
-        Indicators.Instance.SetPause(true);
+        UI_IndicatorsCanvas_Entity.Instance.SetPause(true);
         sourcePause.PlayOneShot(pauseSound);
         AudioManager.Instance.Pause();
         depthOfField.aperture.value = 1;
@@ -159,7 +159,7 @@ public class Globalist : MonoBehaviour
 
     public void UnPause()
     {
-        Indicators.Instance.SetPause(false);
+        UI_IndicatorsCanvas_Entity.Instance.SetPause(false);
         AudioManager.Instance.UnPause();
         depthOfField.aperture.value = 3;
         pause = false;
