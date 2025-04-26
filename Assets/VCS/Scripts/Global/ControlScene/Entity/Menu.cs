@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ControlScene_Menu : MonoBehaviour
+public class ControlScene_Entity_Menu : MonoBehaviour
 {
     //[SerializeField] SceneAsset scene_main;
 
