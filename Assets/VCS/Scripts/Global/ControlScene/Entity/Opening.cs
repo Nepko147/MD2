@@ -2,15 +2,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ControlScene_Menu : MonoBehaviour
+public class ControlScene_Entity_Opening : MonoBehaviour
 {
-    [SerializeField] SceneAsset scene_main;
+    [SerializeField] SceneAsset scene_menu;
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene(scene_main.name);
+            SceneManager.LoadScene(scene_menu.name);
         }
     }
 }

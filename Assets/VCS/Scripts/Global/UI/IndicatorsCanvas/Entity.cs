@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Indicators : MonoBehaviour
+public class UI_IndicatorsCanvas_Entity : MonoBehaviour
 {
     [SerializeField] GameObject upsUI;
     [SerializeField] GameObject upsIcoUI;
@@ -20,7 +20,7 @@ public class Indicators : MonoBehaviour
     private Text midScreenText;
     private Text midScreenSubText;
 
-    public static Indicators Instance { get; private set; }
+    public static UI_IndicatorsCanvas_Entity Instance { get; private set; }
 
     private void Awake()
     {

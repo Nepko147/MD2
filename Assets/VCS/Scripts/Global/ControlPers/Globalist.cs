@@ -54,13 +54,13 @@ public class Globalist : MonoBehaviour
         {            
             if (!pause)
             {
-                Indicators.Instance.SetPause(true);
+                UI_IndicatorsCanvas_Entity.Instance.SetPause(true);
                 sourcePause.PlayOneShot(pauseSound);
                 AudioManager.Instance.Pause();
                 pause = !pause;
                 return;
             }
-            Indicators.Instance.SetPause(false);
+            UI_IndicatorsCanvas_Entity.Instance.SetPause(false);
             AudioManager.Instance.UnPause();
             pause = !pause;
         }
@@ -108,12 +108,12 @@ public class Globalist : MonoBehaviour
         luck = false;
         luckyTime = 0;
         AudioManager.Instance.PlaySound(Music);
-        Indicators.Instance.MoveToTheScreen();
+        UI_IndicatorsCanvas_Entity.Instance.MoveToTheScreen();
         Player.Instance.goToSartPosition();
         EnemySpawner.Instance.PrepareToStart();
         BonusSpawner.Instance.PrepareToStart();
         MainCameraSlope.Instance.RotationReset();
-        Indicators.Instance.PrepareToStart();
+        UI_IndicatorsCanvas_Entity.Instance.PrepareToStart();
     }
 
     public void EndGame() // ГЙЕМ ОВЕР, ЧУВАК
@@ -121,7 +121,7 @@ public class Globalist : MonoBehaviour
         AudioManager.Instance.Stop();
         AudioManager.Instance.PlaySound(gameOverSound);
         AudioManager.Instance.PlaySound(hitSound);
-        Indicators.Instance.ShowGameOver();
+        UI_IndicatorsCanvas_Entity.Instance.ShowGameOver();
         MainCameraSlope.Instance.RotationReset();
         MainCameraZoom.Instance.ZoomReset();        
         gameOver = true;
@@ -133,7 +133,7 @@ public class Globalist : MonoBehaviour
         gameOver = false;
         Buttons.Instance.MoveToTheScreen();
         MainCameraZoom.Instance.ZoomReset();
-        Indicators.Instance.MoveOutTheScreen();
+        UI_IndicatorsCanvas_Entity.Instance.MoveOutTheScreen();
     }
 
     public float GetDifficultyScale() //Даём возможность другим объектам получать текущую сложность
