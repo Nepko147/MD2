@@ -12,7 +12,7 @@ public class UI_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
     private bool active = false;
 
-    [SerializeField] private float inner_position_offset_max = 0.5f;
+    [SerializeField] private float inner_position_offset_max = 15f; //Для координат камеры: 0.42f
 
     public float Inner_Direction { get; private set; }
 
@@ -31,7 +31,7 @@ public class UI_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
         {
             var _screen_position_vec2 = InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 100);
-            var _world_position_vec3 = UI_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3);
+            var _world_position_vec3 = _screen_position_vec3; //Для координат камеры: UI_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3);
 
             if (!active)
             {
