@@ -27,6 +27,8 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
     private void Update()
     {
+        Inner_Direction = 0;
+
         if (InputHandler.Singleton.Screen_Pressed)
         {
             var _screen_position_vec2 = InputHandler.Singleton.Screen_Position;

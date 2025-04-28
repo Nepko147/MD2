@@ -59,7 +59,7 @@ public class Globalist : MonoBehaviour
         if (!gameStart || gameOver)
         {
             return;
-        }  
+        }
         
         if (pause){ return; }
 
@@ -150,6 +150,8 @@ public class Globalist : MonoBehaviour
 
     public void Pause()
     {
+        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
         UI_IndicatorsCanvas_Entity.Instance.SetPause(true);
         sourcePause.PlayOneShot(pauseSound);
         AudioManager.Instance.Pause();
@@ -159,6 +161,8 @@ public class Globalist : MonoBehaviour
 
     public void UnPause()
     {
+        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
         UI_IndicatorsCanvas_Entity.Instance.SetPause(false);
         AudioManager.Instance.UnPause();
         depthOfField.aperture.value = 3;
