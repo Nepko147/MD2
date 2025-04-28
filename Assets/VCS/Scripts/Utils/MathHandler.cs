@@ -73,7 +73,7 @@ namespace Utils
             return _smoothVal;
         }
 
-        //Получение случайного угла
+        //Получение случайного направления
         /*
         public static Vector2 GetRandomDirection()
         {

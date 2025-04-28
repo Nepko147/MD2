@@ -1,12 +1,12 @@
 using UnityEngine;
 using Utils;
 
-public class UI_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
+public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 {
-    public static UI_GeneralCanvas_VirtualStick_Entity Singleton { get; private set; }
+    public static AppScreen_GeneralCanvas_VirtualStick_Entity Singleton { get; private set; }
 
-    public UI_GeneralCanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
-    public UI_GeneralCanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
+    public AppScreen_GeneralCanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
+    public AppScreen_GeneralCanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
 
     private RectTransform rectTransrotm;
 
@@ -31,7 +31,7 @@ public class UI_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
         {
             var _screen_position_vec2 = InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 100);
-            var _world_position_vec3 = _screen_position_vec3; //Для координат камеры: UI_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3);
+            var _world_position_vec3 = _screen_position_vec3; //Для координат камеры: AppScreen_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3);
 
             if (!active)
             {
