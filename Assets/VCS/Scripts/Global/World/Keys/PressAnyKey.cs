@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PressAnyKey : MonoBehaviour
+public class World_PressAnyKey : MonoBehaviour
 {
     [SerializeField] private AudioClip switchSound;    
 
@@ -12,26 +12,26 @@ public class PressAnyKey : MonoBehaviour
         
         if (Input.GetKey(KeyCode.Backspace))
         {
-            button = "BackSpaceKey";
+            button = "BackSpace";
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            button = "DownKey"; 
+            button = "Down"; 
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            button = "UpKey";
+            button = "Up";
         }
         if (Input.GetKey(KeyCode.Return))
         {
-            button = "EnterKey"; 
+            button = "Enter"; 
         }
 
         if (button == "")
         {
             return;
         }
-        AudioManager.Instance.PlaySound(switchSound);
+        ControlPers_AudioManager.Singletone.PlaySound(switchSound);
         GameObject.Find(button).GetComponent<Animator>().SetBool("blinking", true);               
         Destroy(GameObject.Find("Keys"), 1);
         Destroy(this.gameObject);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DistortionStatic : MonoBehaviour
+public class AppScreen_Camera_DistortionStatic : MonoBehaviour
 {
     [SerializeField] Material distortion;
     [SerializeField] Texture2D baseNormalMap;
@@ -8,7 +8,7 @@ public class DistortionStatic : MonoBehaviour
     float screenWidth;
     float screenHeight;
 
-    public static DistortionStatic Singletone { get; private set; }
+    public static AppScreen_Camera_DistortionStatic Singletone { get; private set; }
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class DistortionStatic : MonoBehaviour
     {
         float u_aspect = screenHeight / screenWidth;
         distortion.SetFloat("u_aspect", u_aspect);
-        distortion.SetTexture("u_tex", Globalist.Instance.gameOver ? gameOverNormalMap : baseNormalMap);
+        distortion.SetTexture("u_tex", ControlPers_Globalist.Singletone.gameOver ? gameOverNormalMap : baseNormalMap);
         if (baseNormalMap != null) Graphics.Blit(source, destination, distortion);
     }
 }

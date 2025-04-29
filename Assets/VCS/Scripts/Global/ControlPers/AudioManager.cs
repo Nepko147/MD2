@@ -1,18 +1,18 @@
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class ControlPers_AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance { get; private set; }    
+    public static ControlPers_AudioManager Singletone { get; private set; }    
     public AudioSource source;
     
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         source = GetComponent<AudioSource>();        
     }
     private void Start()
     {
-        float volume = (((float)SaveLoader.Instance.Load("volume")) / 10);
+        float volume = (((float)ControlPers_SaveLoader.Singletone.Load("volume")) / 10);
         source.volume = volume;
     }
 

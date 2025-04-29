@@ -9,7 +9,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
 
     private void Start()
     {
-        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
         postProcessVoolume.profile.TryGetSettings(out depthOfField);
         depthOfField.aperture.value = 3;
     }

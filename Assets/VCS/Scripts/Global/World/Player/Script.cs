@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class World_Player : MonoBehaviour
 {
     [SerializeField] private float controlls;
     [SerializeField] private int ups;
@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Vector2 position;
     private Vector2 startPosition;
 
-    public static Player Instance { get; private set; }
+    public static World_Player Singletone { get; private set; }
 
     public int Ups { get; set; }
     public int Coins { get; set; }
@@ -18,10 +18,10 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {       
-        Instance = this;
+        Singletone = this;
         Ups = ups;
-        Coins = SaveLoader.Instance.Load("coins");
-        Complete = SaveLoader.Instance.Load("complete");
+        Coins = ControlPers_SaveLoader.Singletone.Load("coins");
+        Complete = ControlPers_SaveLoader.Singletone.Load("complete");
         anim = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();        
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     {
         position = body.transform.position;        
         //Включение паузы для объекта
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             body.linearVelocity = new Vector2(0, 0);
             anim.StartPlayback();
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
         anim.StopPlayback();
 
         //Расчёт оставшегося расстояния        
-        Complete -= Globalist.Instance.GetDifficultyScale();
+        Complete -= ControlPers_Globalist.Singletone.GetDifficultyScale();
 
         //Обработка ввода
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
@@ -54,15 +54,17 @@ public class Player : MonoBehaviour
         }
         
         //Ограничение вертикального передвижения
-        if (Input.GetKey(KeyCode.UpArrow) && position.y < -1.7f
-            || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0)
+        if ((Input.GetKey(KeyCode.UpArrow) 
+            || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0) 
+            && position.y < -1.7f)
         {
             anim.SetBool("up", true);
             anim.SetBool("down", false);
             body.linearVelocity = new Vector2(body.linearVelocity.x, controlls);
         }
-        else if (Input.GetKey(KeyCode.DownArrow) && position.y > -4.3f
+        else if ((Input.GetKey(KeyCode.DownArrow) 
             || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0)
+            && position.y > -4.3f)
         {
             anim.SetBool("up", false);
             anim.SetBool("down", true);
@@ -106,9 +108,9 @@ public class Player : MonoBehaviour
         Ups -= _damage;
         if (Ups <= 0)
         {
-            SaveLoader.Instance.Save((int)Complete, "complete");
-            SaveLoader.Instance.Save(Coins, "coins");
-            Globalist.Instance.EndGame();
+            ControlPers_SaveLoader.Singletone.Save((int)Complete, "complete");
+            ControlPers_SaveLoader.Singletone.Save(Coins, "coins");
+            ControlPers_Globalist.Singletone.EndGame();
         }
     }
 
@@ -121,6 +123,6 @@ public class Player : MonoBehaviour
     {
         body.MovePosition(startPosition);
         Ups = ups;
-        Complete = SaveLoader.Instance.Load("complete");
+        Complete = ControlPers_SaveLoader.Singletone.Load("complete");
     }
 }

@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BonusString : MonoBehaviour
+public class World_BonusString : MonoBehaviour
 {
     [SerializeField] private GameObject body;
-    [SerializeField] private Text popUpString;
-    //private BoxCollider2D boxCollider;
-    
+    [SerializeField] private Text popUpString;    
 
     void Awake()
     {

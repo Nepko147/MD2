@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class Bonus : MonoBehaviour
+public class World_Bonus : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float luckyTime;
     [SerializeField] private bool distortionEffect;
     [SerializeField] private AudioClip bonusSound;
     [SerializeField] private AudioClip coinSound;
-    [SerializeField] private BonusString popUpString;
+    [SerializeField] private World_BonusString popUpString;
     public Animator anim;     
     private BoxCollider2D boxCollider;
     private Rigidbody2D body;
@@ -23,11 +23,11 @@ public class Bonus : MonoBehaviour
         onSpeed = 0;
 
         //Проверка на возможность игры      
-        if (Globalist.Instance.canPlay())
+        if (ControlPers_Globalist.Singletone.canPlay())
         {
             onSpeed = speed;
             bonusType = Random.Range(1, 10);
-            bonusType = Globalist.Instance.IsLuckyTime() ? 3 : bonusType;
+            bonusType = ControlPers_Globalist.Singletone.IsLuckyTime() ? 3 : bonusType;
             switch (bonusType)
             {
                 case 1:
@@ -58,7 +58,7 @@ public class Bonus : MonoBehaviour
     private void FixedUpdate()
     {
         //Проверка на возможность игры      
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             body.linearVelocity = new Vector2(0, 0);
             anim.StartPlayback();
@@ -68,35 +68,35 @@ public class Bonus : MonoBehaviour
 
         if (body.GetRelativeVector(body.linearVelocity).x < onSpeed)
         {
-            body.linearVelocity = new Vector2(-onSpeed * Globalist.Instance.GetDifficultyScale(), 0);
+            body.linearVelocity = new Vector2(-onSpeed * ControlPers_Globalist.Singletone.GetDifficultyScale(), 0);
         }
 
         //Проверка на контакт с игроком
-        if (boxCollider.bounds.Intersects(Player.Instance.GetComponent<BoxCollider2D>().bounds))
+        if (boxCollider.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds))
         {
             switch (bonusType)
             {
                 case 1:
-                    AudioManager.Instance.PlaySound(bonusSound);
-                    Player.Instance.takeDamage(-1);
+                    ControlPers_AudioManager.Singletone.PlaySound(bonusSound);
+                    World_Player.Singletone.takeDamage(-1);
                     
                     break;
                 case 2:
-                    AudioManager.Instance.PlaySound(bonusSound);
-                    Globalist.Instance.StartLuckyTime(luckyTime);
-                    BonusSpawner.Instance.SetLuckyTimer();
+                    ControlPers_AudioManager.Singletone.PlaySound(bonusSound);
+                    ControlPers_Globalist.Singletone.StartLuckyTime(luckyTime);
+                    World_BonusSpawner.Singletone.SetLuckyTimer();
                     
                     break;
                 case > 2:
-                    AudioManager.Instance.PlaySound(coinSound);
-                    Player.Instance.TakeCoin(1);
+                    ControlPers_AudioManager.Singletone.PlaySound(coinSound);
+                    World_Player.Singletone.TakeCoin(1);
                     
                     break;
             }
             popUpString.DisplayPopUp(effect, body);
             if (distortionEffect)
             {                
-                DistortionDynamic distortion = DistortionDynamic.Singletone;
+                AppScreen_Camera_DistortionDynamic distortion = AppScreen_Camera_DistortionDynamic.Singletone;
                 Vector2 screenPosition = distortion.GetComponent<Camera>().WorldToScreenPoint(transform.position);
                 distortion.distortionStart = true;
                 distortion.posX = screenPosition.x /= Screen.width;

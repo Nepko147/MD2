@@ -3,10 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
-public class GameOver : MonoBehaviour
-{
-    //[SerializeField] SceneAsset scene_menu;
-    //[SerializeField] SceneAsset scene_main;
+public class World_UI_GameOver : MonoBehaviour
+{    
     [SerializeField] private AudioClip switchSound;
     private Rigidbody2D body;
     private Animator anim;
@@ -21,7 +19,7 @@ public class GameOver : MonoBehaviour
     private void Start()
     {
         // Постпроцесс
-        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
         postProcessVoolume.profile.TryGetSettings(out depthOfField);
     }
 
@@ -36,7 +34,7 @@ public class GameOver : MonoBehaviour
 
     private void Update()
     {        
-        if (!Globalist.Instance.gameOver)
+        if (!ControlPers_Globalist.Singletone.gameOver)
         {
             MoveOutTheScreen();
             return;
@@ -46,24 +44,24 @@ public class GameOver : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             menu = !menu;
             anim.SetBool("menu", menu);
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             if (!menu)
             {
                 SceneManager.LoadScene(2);
-                Globalist.Instance.StartGame();
+                ControlPers_Globalist.Singletone.StartGame();
                 
             } else
             {
                 SceneManager.LoadScene(1);
-                Globalist.Instance.gameOver = false;
-                Globalist.Instance.gameStart = false;
+                ControlPers_Globalist.Singletone.gameOver = false;
+                ControlPers_Globalist.Singletone.gameStart = false;
                 depthOfField.aperture.value = 1;
             }
         }

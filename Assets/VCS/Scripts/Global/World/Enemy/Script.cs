@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class World_Enemy : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private AudioClip hitSound;
@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         isDamaged = false;
         position = body.transform.position;        
-        speed = speed * (1 + (Globalist.Instance.GetDifficultyScale() - 1) / 2.5f);
+        speed = speed * (1 + (ControlPers_Globalist.Singletone.GetDifficultyScale() - 1) / 2.5f);
         onSpeed = speed;
 
         //Изменение порядка отображения на 2D слое и не только
@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //Проверка на возможность игры        
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             body.linearVelocity = new Vector2(0, 0);
             return;
@@ -65,12 +65,12 @@ public class Enemy : MonoBehaviour
             body.linearVelocity = new Vector2(-onSpeed, 0);
         }
         //Проверка на контакт с игроком
-        if ((boxCollider1.bounds.Intersects(Player.Instance.GetComponent<BoxCollider2D>().bounds) || 
-             boxCollider2.bounds.Intersects(Player.Instance.GetComponent<BoxCollider2D>().bounds)) && !isDamaged)
+        if ((boxCollider1.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds) || 
+             boxCollider2.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds)) && !isDamaged)
         {
-            AudioManager.Instance.PlaySound(hitSound);
+            ControlPers_AudioManager.Singletone.PlaySound(hitSound);
             isDamaged = true;
-            Player.Instance.takeDamage(1);
+            World_Player.Singletone.takeDamage(1);
         }
 
         //Уничтожаем объект, когда он уходит за пределы экрана

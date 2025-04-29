@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class BonusSpawner : MonoBehaviour
+public class World_BonusSpawner : MonoBehaviour
 {
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float maxSpawnTime;
@@ -12,18 +12,18 @@ public class BonusSpawner : MonoBehaviour
     private float timer;    
     private List<GameObject> bonusList = new List<GameObject>();
 
-    public static BonusSpawner Instance { get; private set; }
+    public static World_BonusSpawner Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;                
+        Singletone = this;                
         maxSpawnTime = maxSpawnTime <= minSpawnTime ? minSpawnTime + 1 : maxSpawnTime;
         minSpawnTime = minSpawnTime >= maxSpawnTime ? maxSpawnTime - 1 : minSpawnTime;               
     }
 
     private void FixedUpdate()
     {        
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             return;
         }
@@ -36,8 +36,8 @@ public class BonusSpawner : MonoBehaviour
         
         lineNumber = Random.Range(1, 5);
         spawnBonus(bonus, lineNumber);
-        //Если Lucky Time, то BonusSpawner дрыщщет монетками, иначе работает в шттатном режиме
-        timer = Globalist.Instance.IsLuckyTime() ? luckyCoinCoolDown : Random.Range(minSpawnTime, maxSpawnTime);
+        //Если Lucky Time, то World_BonusSpawner дрыщщет монетками, иначе работает в шттатном режиме
+        timer = ControlPers_Globalist.Singletone.IsLuckyTime() ? luckyCoinCoolDown : Random.Range(minSpawnTime, maxSpawnTime);
     }
 
     public void spawnBonus(GameObject _bonus, int _lineNumber)

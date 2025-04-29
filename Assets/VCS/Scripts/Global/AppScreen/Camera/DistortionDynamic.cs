@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DistortionDynamic : MonoBehaviour
+public class AppScreen_Camera_DistortionDynamic : MonoBehaviour
 {
     [SerializeField] Material distortion;
     [SerializeField] Material normalMapMix;
@@ -18,7 +18,7 @@ public class DistortionDynamic : MonoBehaviour
     float timer = 3.0f;
     public bool distortionStart;
 
-    public static DistortionDynamic Singletone { get; private set; }
+    public static AppScreen_Camera_DistortionDynamic Singletone { get; private set; }
 
     private void Awake()
     {

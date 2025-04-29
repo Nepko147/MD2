@@ -3,15 +3,15 @@ using System.IO;
 using System.Xml;
 using System;
 
-public class SaveLoader : MonoBehaviour
+public class ControlPers_SaveLoader : MonoBehaviour
 {
-    public static SaveLoader Instance { get; private set; }
+    public static ControlPers_SaveLoader Singletone { get; private set; }
     private string filePath;
     private string directoryPath;
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Midnight Drive\";
     }
 

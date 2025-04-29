@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class City : MonoBehaviour
+public class World_City : MonoBehaviour
 {
     [SerializeField] private float speed;
     private float difficultyScale;
@@ -11,28 +11,27 @@ public class City : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         NeedClone = true;        
-        difficultyScale = Globalist.Instance.GetDifficultyScale(); 
+        difficultyScale = ControlPers_Globalist.Singletone.GetDifficultyScale(); 
         body.name = body.name.Substring(0,4);
-        if (Globalist.Instance.gameStart)
+        if (ControlPers_Globalist.Singletone.gameStart)
         {
             body.linearVelocity = new Vector2(-speed * difficultyScale, 0);
         } else {
             body.linearVelocity = new Vector2(0, 0);
         }
-
     }
     
     private void FixedUpdate()
     {                
         //Проверка для паузы
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             body.linearVelocity = new Vector2(0, 0);
             return;
         }
         if (body.GetRelativeVector(body.linearVelocity).x < speed)
         {
-            body.linearVelocity = new Vector2(-speed * Globalist.Instance.GetDifficultyScale(), 0);
+            body.linearVelocity = new Vector2(-speed * ControlPers_Globalist.Singletone.GetDifficultyScale(), 0);
         }
            
         //Город занимается СамоВоспроизводством

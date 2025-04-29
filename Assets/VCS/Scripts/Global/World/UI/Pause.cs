@@ -3,10 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
-public class Pause : MonoBehaviour
+public class World_UI_Pause : MonoBehaviour
 {
-    //[SerializeField] SceneAsset scene_menu;
-    //[SerializeField] SceneAsset scene_main;
     [SerializeField] private AudioClip switchSound;
     private Rigidbody2D body;
     private Animator anim;
@@ -24,7 +22,7 @@ public class Pause : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        audioSource.volume = AudioManager.Instance.source.volume;
+        audioSource.volume = ControlPers_AudioManager.Singletone.source.volume;
         menu = false;        
         startPosition = new Vector2(body.position.x, body.position.y);
         awayPosition = new Vector2(body.position.x, body.position.y + 4);        
@@ -33,17 +31,17 @@ public class Pause : MonoBehaviour
     private void Start()
     {
         // Постпроцесс
-        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
         postProcessVoolume.profile.TryGetSettings(out depthOfField);
     }
 
     private void Update()
     {  
-        if (!Globalist.Instance.pause)
+        if (!ControlPers_Globalist.Singletone.pause)
         {
             if (Input.GetKey(KeyCode.Backspace))
             {
-                Globalist.Instance.Pause();
+                ControlPers_Globalist.Singletone.Pause();
             }
             MoveOutTheScreen();
             return;
@@ -60,14 +58,14 @@ public class Pause : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             if (!menu)
             {   
-                Globalist.Instance.UnPause();
+                ControlPers_Globalist.Singletone.UnPause();
             } else
             {
-                Globalist.Instance.ReturnToMainMenu();
-                AudioManager.Instance.Stop();
+                ControlPers_Globalist.Singletone.ReturnToMainMenu();
+                ControlPers_AudioManager.Singletone.Stop();
                 SceneManager.LoadScene(1);
             }
         }

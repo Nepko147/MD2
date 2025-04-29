@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class Lights : MonoBehaviour
+public class World_BackGround_Lights : MonoBehaviour
 {
-    public static Lights Instance { get; private set; }
+    public static World_BackGround_Lights Singletone { get; private set; }
 
     void Awake()
     {
-        Instance = this;
+        Singletone = this;
     }
     public void PlayAnimation()
     {

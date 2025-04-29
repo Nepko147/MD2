@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Settings : MonoBehaviour
+public class World_Settings_Entity : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private AudioClip switchSound;
@@ -9,11 +9,11 @@ public class Settings : MonoBehaviour
     private Rigidbody2D body;    
     private bool onScreen;
 
-    public static Settings Instance { get; private set; }
+    public static World_Settings_Entity Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         body = GetComponent<Rigidbody2D>();
         startPosition = new Vector2(body.position.x, body.position.y);
         onScreenPosition = new Vector2(body.position.x, body.position.y + 7);
@@ -33,9 +33,9 @@ public class Settings : MonoBehaviour
         //Обработка ввода клавиши BackSpace
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Buttons.Instance.MoveToTheScreen();
-            Sound.Instance.Disactrivate();
-            AudioManager.Instance.PlaySound(switchSound);
+            World_Buttons.Singletone.MoveToTheScreen();
+            World_Settings_Sound.Singletone.Disactrivate();
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             MoveOut();
         }
     }   

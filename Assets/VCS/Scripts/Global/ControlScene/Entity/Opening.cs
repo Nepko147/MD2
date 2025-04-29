@@ -6,7 +6,7 @@ public class ControlScene_Entity_Opening : MonoBehaviour
 {
     public void Update()
     {
-        if (Car.Singleton.Done)
+        if (World_Car.Singleton.Done)
         {
             SceneManager.LoadScene(1);
         }

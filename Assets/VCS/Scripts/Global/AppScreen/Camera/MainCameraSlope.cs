@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MainCameraSlope : MonoBehaviour    
+public class AppScreen_Camera_MainCameraSlope : MonoBehaviour    
 {
     [SerializeField] private float cameraSpeed;
     [SerializeField] private float cameraMaxAngle; 
@@ -12,18 +12,18 @@ public class MainCameraSlope : MonoBehaviour
     private float slopeTimer;
     private bool toLeft;
 
-    public static MainCameraSlope Instance { get; private set; }
+    public static AppScreen_Camera_MainCameraSlope Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;        
+        Singletone = this;        
         originRotation = transform.eulerAngles;
         leftMaxRotation = new Vector3(0, 0, 360.0f - cameraMaxAngle);
         rightMaxRotation = new Vector3(0, 0, cameraMaxAngle);
     }
     private void FixedUpdate()
     {
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             return;
         }

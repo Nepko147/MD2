@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LensFlare : MonoBehaviour
+public class World_LensFlare : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float downScaleSpeed;
@@ -9,14 +9,14 @@ public class LensFlare : MonoBehaviour
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        speed = speed * (1 + (Globalist.Instance.GetDifficultyScale() - 1) / 2.5f);
+        speed = speed * (1 + (ControlPers_Globalist.Singletone.GetDifficultyScale() - 1) / 2.5f);
         downScaleSpeed /= 100;
     }
         
     void FixedUpdate()
     {
         //Проверка на возможность игры        
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             body.linearVelocity = new Vector2(0, 0);
             return;

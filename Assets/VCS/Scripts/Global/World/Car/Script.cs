@@ -2,7 +2,7 @@ using UnityEngine;
 //using UnityEditor;
 using UnityEngine.SceneManagement;
 
-public class Car : MonoBehaviour
+public class World_Car : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float lag;
@@ -12,7 +12,7 @@ public class Car : MonoBehaviour
     private bool timeToDestroyThisShit;
     bool isPlayed = false;
 
-    public static Car Singleton { get; private set; }
+    public static World_Car Singleton { get; private set; }
 
     public bool Done { get; private set; }
 
@@ -37,12 +37,12 @@ public class Car : MonoBehaviour
         if (timeToDestroyThisShit)
         {
             lag -= Time.deltaTime;
-            Lights.Instance.PlayAnimation();
+            World_BackGround_Lights.Singletone.PlayAnimation();
         }
         //Если время пришло, объект начинает движение
         if (lag <= 0)
         {
-            AudioManager.Instance.PlaySound(carSound);            
+            ControlPers_AudioManager.Singletone.PlaySound(carSound);            
             body.linearVelocity = new Vector2(speed, 0);
             lag = 99;
         }
@@ -50,7 +50,7 @@ public class Car : MonoBehaviour
         //после выхода из кадра, объект активирует меню и самоуничтожается!
         if (transform.position.x >= 42.5f && !isPlayed)
         {
-            AudioManager.Instance.PlaySound(dingSound);
+            ControlPers_AudioManager.Singletone.PlaySound(dingSound);
             isPlayed = true;
         }
 

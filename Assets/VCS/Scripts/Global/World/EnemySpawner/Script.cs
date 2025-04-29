@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EnemySpawner : MonoBehaviour
+public class World_EnemySpawner : MonoBehaviour
 {
     [SerializeField] private float spawnTime;
     [SerializeField] private float delayBetweenGroups;
@@ -16,23 +16,23 @@ public class EnemySpawner : MonoBehaviour
     private int size;
     private List<GameObject> delObjList = new List<GameObject>();   
 
-    public static EnemySpawner Instance { get; private set; }
+    public static World_EnemySpawner Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;           
+        Singletone = this;           
     }
 
     private void FixedUpdate()
     {        
-        if (!Globalist.Instance.CanSpawnEnemies())
+        if (!ControlPers_Globalist.Singletone.CanSpawnEnemies())
         {
             return;
         }
 
         if (difficultyCorrelation)
         {
-            difficulty = Globalist.Instance.GetDifficultyScale();
+            difficulty = ControlPers_Globalist.Singletone.GetDifficultyScale();
         }
 
         if (delay > 0)
@@ -102,6 +102,6 @@ public class EnemySpawner : MonoBehaviour
         timer = spawnTime;
         delay = delayBetweenGroups;
         size = groupSize;
-        difficulty = Globalist.Instance.GetDifficultyScale();
+        difficulty = ControlPers_Globalist.Singletone.GetDifficultyScale();
     }
 }

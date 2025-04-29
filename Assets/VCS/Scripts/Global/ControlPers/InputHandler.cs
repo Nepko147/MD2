@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputHandler : MonoBehaviour
+public class ControlPers_InputHandler : MonoBehaviour
 {
-    public static InputHandler Singleton { get; private set; }
+    public static ControlPers_InputHandler Singleton { get; private set; }
 
     InputActions inputActions;
 

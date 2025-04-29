@@ -3,14 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
-public class Buttons : MonoBehaviour
+public class World_Buttons : MonoBehaviour
 {
     [SerializeField] private float sceneSwitchTimer;
     [SerializeField] private float speed;
     [SerializeField] private int state;
     [SerializeField] private AudioClip switchSound;
     [SerializeField] private AudioClip sound;
-    //[SerializeField] SceneAsset scene_main;
     Vector2 startPosition;
     Vector2 awayPosition;
     private Rigidbody2D body;    
@@ -24,17 +23,17 @@ public class Buttons : MonoBehaviour
 
     public bool GO { get; private set; }
 
-    public static Buttons Instance { get; private set; }
+    public static World_Buttons Singletone { get; private set; }
 
     private void Start()
     {
-        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
         postProcessVoolume.profile.TryGetSettings(out depthOfField);
     }
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         startPosition = new Vector2(body.position.x, body.position.y);
@@ -47,7 +46,7 @@ public class Buttons : MonoBehaviour
     private void Update()
     {
 
-        if (Globalist.Instance.gameStart)
+        if (ControlPers_Globalist.Singletone.gameStart)
         {
             sceneSwitchTimer -= Time.deltaTime;
             depthOfField.aperture.value = depthOfField.aperture.value < 3 ? depthOfField.aperture.value + 0.045f : 3;
@@ -74,7 +73,7 @@ public class Buttons : MonoBehaviour
         //Обработка ввода клавиши ВВЕРХ
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             if (anim.GetInteger("state") == 1)
             {
                 anim.SetInteger("state", 4);
@@ -86,7 +85,7 @@ public class Buttons : MonoBehaviour
         //Обработка ввода клавиши ВНИЗ
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             if (anim.GetInteger("state") == 4)
             {
                 anim.SetInteger("state", 1);
@@ -99,21 +98,21 @@ public class Buttons : MonoBehaviour
         //Обработка ввода клавиши Enter
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            AudioManager.Instance.PlaySound(switchSound);
+            ControlPers_AudioManager.Singletone.PlaySound(switchSound);
             switch (anim.GetInteger("state"))
             {
                 case 1:
                     MoveOutTheScreen();
-                    Destroy(Lights.Instance.gameObject);
-                    Globalist.Instance.StartGame();                    
+                    Destroy(World_BackGround_Lights.Singletone.gameObject);
+                    ControlPers_Globalist.Singletone.StartGame();                    
                     break;
                 case 2:
                     MoveOutTheScreen();
-                    Settings.Instance.MoveToTheScreen();
-                    Sound.Instance.Actievate();
+                    World_Settings_Entity.Singletone.MoveToTheScreen();
+                    World_Settings_Sound.Singletone.Actievate();
                     break;
                 case 3:
-                    AudioManager.Instance.PlaySound(sound);
+                    ControlPers_AudioManager.Singletone.PlaySound(sound);
                     break;
                 case 4:
                     Application.Quit();

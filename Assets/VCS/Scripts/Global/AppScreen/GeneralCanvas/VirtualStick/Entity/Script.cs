@@ -29,11 +29,12 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
     {
         Inner_Direction = 0;
 
-        if (InputHandler.Singleton.Screen_Pressed)
+        if (ControlPers_InputHandler.Singleton.Screen_Pressed)
         {
-            var _screen_position_vec2 = InputHandler.Singleton.Screen_Position;
+            var _screen_position_vec2 = ControlPers_InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 100);
-            var _world_position_vec3 = _screen_position_vec3; //Для координат камеры: AppScreen_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3);
+            //var _world_position_vec3 = _screen_position_vec3; // Изначальное
+            var _world_position_vec3 = AppScreen_GeneralCanvas_Entity.Singleton.canvas_camera.ScreenToWorldPoint(_screen_position_vec3); //Для координат камеры
 
             if (!active)
             {

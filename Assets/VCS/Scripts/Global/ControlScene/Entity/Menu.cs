@@ -6,7 +6,7 @@ public class ControlScene_Entity_Menu : MonoBehaviour
 {
     public void Update()
     {
-        if (Buttons.Instance.GO)
+        if (World_Buttons.Singletone.GO)
         {
             SceneManager.LoadScene(2);
         }

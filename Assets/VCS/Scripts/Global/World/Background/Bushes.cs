@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bushes : MonoBehaviour
+public class World_BackGround_Bushes : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private AudioClip soundMenu;
@@ -9,11 +9,11 @@ public class Bushes : MonoBehaviour
     Vector2 awayPosition;
     private Rigidbody2D body;
 
-    public static Bushes Instance { get; private set; }
+    public static World_BackGround_Bushes Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         body = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         if (audioSource != null)
@@ -28,7 +28,7 @@ public class Bushes : MonoBehaviour
     {
         if(!(audioSource == null))
         {
-            float volume = (((float)SaveLoader.Instance.Load("volume")) / 10);
+            float volume = (((float)ControlPers_SaveLoader.Singletone.Load("volume")) / 10);
             audioSource.volume = volume;
         }            
     }
@@ -36,7 +36,7 @@ public class Bushes : MonoBehaviour
     private void FixedUpdate()
     {
         //Отодвигаем кусты, после начала игры
-        if (GameObject.Find("Globalist").GetComponent<Globalist>().gameStart == true)
+        if (ControlPers_Globalist.Singletone.gameStart == true)
         {
             if (audioSource != null)
             {
