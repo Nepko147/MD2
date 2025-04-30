@@ -9,7 +9,6 @@ public class World_Buttons : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private int state;
     [SerializeField] private AudioClip switchSound;
-    [SerializeField] private AudioClip sound;
     Vector2 startPosition;
     Vector2 awayPosition;
     private Rigidbody2D body;    
@@ -112,7 +111,6 @@ public class World_Buttons : MonoBehaviour
                     World_Settings_Sound.Singletone.Actievate();
                     break;
                 case 3:
-                    ControlPers_AudioManager.Singletone.PlaySound(sound);
                     break;
                 case 4:
                     Application.Quit();

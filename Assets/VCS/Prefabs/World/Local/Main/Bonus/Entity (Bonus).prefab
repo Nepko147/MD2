@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 520037462669553467}
   - component: {fileID: 4246126299255342881}
   m_Layer: 0
-  m_Name: Bonus
+  m_Name: Entity (Bonus)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

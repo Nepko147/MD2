@@ -50,7 +50,7 @@ public class ControlPers_Globalist : MonoBehaviour
     private void Start()
     {              
         float volume = (((float)ControlPers_SaveLoader.Singletone.Load("volume")) / 10);
-        sourcePause.volume = volume;        
+        sourcePause.volume = volume;
     }
 
     private void FixedUpdate()
