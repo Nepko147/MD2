@@ -4,13 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class ControlScene_Entity_Menu : MonoBehaviour
 {
-    //[SerializeField] SceneAsset scene_main;
-
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.PageDown))
+        if (World_Buttons.Singletone.GO)
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(2);
         }
     }
 }

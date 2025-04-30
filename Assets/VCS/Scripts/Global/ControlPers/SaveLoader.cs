@@ -3,19 +3,19 @@ using System.IO;
 using System.Xml;
 using System;
 
-public class SaveLoader : MonoBehaviour
+public class ControlPers_SaveLoader : MonoBehaviour
 {
-    public static SaveLoader Instance { get; private set; }
+    public static ControlPers_SaveLoader Singletone { get; private set; }
     private string filePath;
     private string directoryPath;
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Midnight Drive\";
     }
 
-    public void Save(int _parameter , string _parameterName)
+    public void Save(int _value , string _key)
     {       
         if (!Directory.Exists(directoryPath)) //Проверка наличия папки с сейвами
         {
@@ -30,11 +30,11 @@ public class SaveLoader : MonoBehaviour
         
         XmlDocument xmlDoc = new XmlDocument();
         xmlDoc.Load(filePath);
-        xmlDoc.SelectSingleNode("gamesave/" + _parameterName).InnerText = "" + _parameter;
+        xmlDoc.SelectSingleNode("gamesave/" + _key).InnerText = "" + _value;
         xmlDoc.Save(filePath);
     }
 
-    public int Load(string _parameterName)
+    public int Load(string _key)
     {
         filePath = directoryPath + "Save.xml";
 
@@ -45,7 +45,7 @@ public class SaveLoader : MonoBehaviour
         
         XmlDocument xmlDoc = new XmlDocument();
         xmlDoc.Load(filePath);
-        return int.Parse(xmlDoc.SelectSingleNode("gamesave/" + _parameterName).InnerText);
+        return int.Parse(xmlDoc.SelectSingleNode("gamesave/" + _key).InnerText);
     }
 
     private void CreateSaveFile(string _path)  //Процесс создания нового файла

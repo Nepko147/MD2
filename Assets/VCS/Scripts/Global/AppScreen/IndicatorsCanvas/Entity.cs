@@ -20,11 +20,11 @@ public class UI_IndicatorsCanvas_Entity : MonoBehaviour
     private Text midScreenText;
     private Text midScreenSubText;
 
-    public static UI_IndicatorsCanvas_Entity Instance { get; private set; }
+    public static UI_IndicatorsCanvas_Entity Singletone { get; private set; }
 
     private void Awake()
     {
-        Instance = this;
+        Singletone = this;
         canvas = GetComponent<Canvas>();
         ups = upsUI.GetComponent<Text>();
         upsIco = upsIcoUI.GetComponent<Image>();
@@ -38,14 +38,14 @@ public class UI_IndicatorsCanvas_Entity : MonoBehaviour
 
     private void FixedUpdate()
     {        
-        if (!Globalist.Instance.canPlay())
+        if (!ControlPers_Globalist.Singletone.canPlay())
         {
             return;
         }
-        //Получение данных из объекта игрока (Player)
-        ups.text = "x" + Player.Instance.Ups;
-        coins.text = "x" + Player.Instance.Coins;
-        complete.text = "COMPLETE: " + (int)Player.Instance.Complete + " m.";      
+        //Получение данных из объекта игрока (World_Player)
+        ups.text = "x" + World_Player.Singletone.Ups;
+        coins.text = "x" + World_Player.Singletone.Coins;
+        complete.text = "COMPLETE: " + (int)World_Player.Singletone.Complete + " m.";      
     }
     public void MoveToTheScreen()
     {
@@ -65,7 +65,7 @@ public class UI_IndicatorsCanvas_Entity : MonoBehaviour
         coinsIco.enabled = false;
         complete.text = "";
         midScreenText.text = "GAME OVER";
-        midScreenSubText.text = "Distance ramain: " + (int)Player.Instance.Complete + " m.";
+        midScreenSubText.text = "Distance ramain: " + (int)World_Player.Singletone.Complete + " m.";
         midScreenSubText.fontSize = 48;
     }
 

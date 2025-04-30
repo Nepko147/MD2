@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
 
-public class Globalist : MonoBehaviour
+public class ControlPers_Globalist : MonoBehaviour
 {
     [SerializeField] private float difficultyMax;
     [SerializeField] private float difficultyScale;
@@ -26,12 +26,12 @@ public class Globalist : MonoBehaviour
     private DepthOfField depthOfField;
     private ChromaticAberration chromaticAberration;
 
-    public static Globalist Instance { get; private set; }
+    public static ControlPers_Globalist Singletone { get; private set; }
 
     private void Awake()
     {
         Application.targetFrameRate = 60;        
-        Instance = this;        
+        Singletone = this;        
         difficulty = difficultyOnStart;
         timer = difficultyUpTime;
         luckyTime = 0;
@@ -42,14 +42,14 @@ public class Globalist : MonoBehaviour
         sourcePause = GetComponent<AudioSource>();
 
         // Постпроцесс
-        postProcessVoolume = MainCameraZoom.Instance.GetComponent<PostProcessVolume>();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
         postProcessVoolume.profile.TryGetSettings(out depthOfField);
         postProcessVoolume.profile.TryGetSettings(out chromaticAberration);
     }
 
     private void Start()
     {              
-        float volume = (((float)SaveLoader.Instance.Load("volume")) / 10);
+        float volume = (((float)ControlPers_SaveLoader.Singletone.Load("volume")) / 10);
         sourcePause.volume = volume;        
     }
 
@@ -59,7 +59,7 @@ public class Globalist : MonoBehaviour
         if (!gameStart || gameOver)
         {
             return;
-        }  
+        }
         
         if (pause){ return; }
 
@@ -76,14 +76,16 @@ public class Globalist : MonoBehaviour
         if (timer <= 0 && difficulty < difficultyMax)
         {
             difficulty += difficultyScale;
+            postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
+            postProcessVoolume.profile.TryGetSettings(out chromaticAberration);
             chromaticAberration.intensity.value = (difficulty - 1.0f) / 10.0f;
             timer = difficultyUpTime;
         }
 
         //Запуск трека, после его окончания
-        if (!AudioManager.Instance.source.isPlaying)
+        if (!ControlPers_AudioManager.Singletone.source.isPlaying)
         {
-            AudioManager.Instance.PlaySound(Music);
+            ControlPers_AudioManager.Singletone.PlaySound(Music);
         }
  }
 
@@ -104,19 +106,19 @@ public class Globalist : MonoBehaviour
         luck = false;
         luckyTime = 0;
         difficulty = difficultyOnStart;
-        AudioManager.Instance.PlaySound(Music);
-        MainCameraSlope.Instance.RotationReset();
+        ControlPers_AudioManager.Singletone.PlaySound(Music);
+        AppScreen_Camera_MainCameraSlope.Singletone.RotationReset();
         chromaticAberration.intensity.value = 0;
     }
 
     public void EndGame() // ГЙЕМ ОВЕР, ЧУВАК
     {
-        AudioManager.Instance.Stop();
-        AudioManager.Instance.PlaySound(gameOverSound);
-        AudioManager.Instance.PlaySound(hitSound);
-        UI_IndicatorsCanvas_Entity.Instance.ShowGameOver();
-        MainCameraSlope.Instance.RotationReset();
-        MainCameraZoom.Instance.ZoomReset();
+        ControlPers_AudioManager.Singletone.Stop();
+        ControlPers_AudioManager.Singletone.PlaySound(gameOverSound);
+        ControlPers_AudioManager.Singletone.PlaySound(hitSound);
+        UI_IndicatorsCanvas_Entity.Singletone.ShowGameOver();
+        AppScreen_Camera_MainCameraSlope.Singletone.RotationReset();
+        AppScreen_Camera_MainCameraZoom.Singletone.ZoomReset();
         chromaticAberration.intensity.value = 0;
         gameOver = true;
     }
@@ -126,7 +128,7 @@ public class Globalist : MonoBehaviour
         gameStart = false;
         gameOver = false;
         chromaticAberration.intensity.value = 0;
-        MainCameraZoom.Instance.ZoomReset();
+        AppScreen_Camera_MainCameraZoom.Singletone.ZoomReset();
     }
 
     public float GetDifficultyScale() //Даём возможность другим объектам получать текущую сложность
@@ -150,17 +152,21 @@ public class Globalist : MonoBehaviour
 
     public void Pause()
     {
-        UI_IndicatorsCanvas_Entity.Instance.SetPause(true);
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
+        UI_IndicatorsCanvas_Entity.Singletone.SetPause(true);
         sourcePause.PlayOneShot(pauseSound);
-        AudioManager.Instance.Pause();
+        ControlPers_AudioManager.Singletone.Pause();
         depthOfField.aperture.value = 1;
         pause = true;
     }
 
     public void UnPause()
     {
-        UI_IndicatorsCanvas_Entity.Instance.SetPause(false);
-        AudioManager.Instance.UnPause();
+        postProcessVoolume = AppScreen_Camera_MainCameraZoom.Singletone.GetComponent<PostProcessVolume>();
+        postProcessVoolume.profile.TryGetSettings(out depthOfField);
+        UI_IndicatorsCanvas_Entity.Singletone.SetPause(false);
+        ControlPers_AudioManager.Singletone.UnPause();
         depthOfField.aperture.value = 3;
         pause = false;
     }

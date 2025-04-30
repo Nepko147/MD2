@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FontControl : MonoBehaviour
+public class AppScreen_Misc_FontControl : MonoBehaviour
 {
     void Start()
     {

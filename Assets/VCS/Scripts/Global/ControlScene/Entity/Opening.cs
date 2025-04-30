@@ -4,11 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class ControlScene_Entity_Opening : MonoBehaviour
 {
-    //[SerializeField] SceneAsset scene_menu;
-
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (World_Car.Singleton.Done)
         {
             SceneManager.LoadScene(1);
         }
