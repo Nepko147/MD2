@@ -12,19 +12,19 @@ public class World_PressAnyKey : MonoBehaviour
         
         if (Input.GetKey(KeyCode.Backspace))
         {
-            button = "BackSpace";
+            button = "Backspace_Sprite";
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            button = "Down"; 
+            button = "Down_Sprite"; 
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            button = "Up";
+            button = "Up_Sprite";
         }
         if (Input.GetKey(KeyCode.Return))
         {
-            button = "Enter"; 
+            button = "Enter_Sprite"; 
         }
 
         if (button == "")
@@ -32,7 +32,7 @@ public class World_PressAnyKey : MonoBehaviour
             return;
         }
         ControlPers_AudioManager.Singletone.PlaySound(switchSound);
-        GameObject.Find(button).GetComponent<Animator>().SetBool("blinking", true);               
+        GameObject.Find(button).GetComponent<Animator>().SetBool("blinking", true);
         Destroy(GameObject.Find("Keys"), 1);
         Destroy(this.gameObject);
     }    
