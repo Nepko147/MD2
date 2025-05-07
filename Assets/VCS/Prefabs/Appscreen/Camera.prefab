@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39629fd53def1fa4ea77d1bdb2cd78e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distortion: {fileID: 2100000, guid: a28a3ff4b8356824daee7cf6ed7d97d6, type: 2}
+  distortion_material: {fileID: 0}
   baseNormalMap: {fileID: 2800000, guid: 706d679241999ea419197261fa07fc55, type: 3}
   gameOverNormalMap: {fileID: 2800000, guid: c54f3baa17564e849a2a32c1ec23b687, type: 3}
 --- !u!114 &6140396279256370080
@@ -597,11 +597,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 403fe692cc1070842b241ee9f5e9b9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distortion: {fileID: 2100000, guid: a28a3ff4b8356824daee7cf6ed7d97d6, type: 2}
-  normalMapMix: {fileID: 2100000, guid: da9164803c2541a4eba44a2c899a17a1, type: 2}
-  baseNormalMap: {fileID: 2800000, guid: 706d679241999ea419197261fa07fc55, type: 3}
-  distorionNormalMap: {fileID: 2800000, guid: bd3a184677b82034b9d0ee47f2506f72, type: 3}
-  distortionSpeed: 3
-  posX: 0
-  posY: 0
-  distortionStart: 0
+  distortion_material: {fileID: 2100000, guid: a28a3ff4b8356824daee7cf6ed7d97d6, type: 2}
+  normalMapMix_material: {fileID: 2100000, guid: da9164803c2541a4eba44a2c899a17a1, type: 2}
+  normalMapMix_material_baseNormalMap: {fileID: 2800000, guid: 706d679241999ea419197261fa07fc55, type: 3}
+  normalMapMix_material_distorionNormalMap: {fileID: 2800000, guid: bd3a184677b82034b9d0ee47f2506f72, type: 3}
+  normalMapMix_material_distortionSpeed: 2
+  normalMapMix_material_pos_x: 0
+  normalMapMix_material_pos_y: 0
+  normalMapMix_material_active: 0
+  normalMapMix_material_timer_max: 2

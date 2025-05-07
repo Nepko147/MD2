@@ -3,76 +3,168 @@ using System.IO;
 using System.Xml;
 using System;
 
-public class ControlPers_SaveLoader : MonoBehaviour
+public class ControlPers_DataHandler : MonoBehaviour
 {
-    public static ControlPers_SaveLoader Singletone { get; private set; }
-    private string filePath;
-    private string directoryPath;
+    public static ControlPers_DataHandler Singletone { get; private set; }
+
+    private string directory_path; 
+    
+    private string file_progressData_path;
+    private const string FILE_PROGRESSDATA_NAME = "ProgressData.xml";
+    private const string FILE_PROGRESSDATA_ROOT_GAMESAVE = "gamesave";
+    private const string FILE_PROGRESSDATA_ROOT_GAMESAVE_COINS = "coins";
+
+    private string file_settingsData_path;
+    private const string FILE_SETTINGSDATA_NAME = "Settings.xml";
+    private const string FILE_SETTINGSDATA_ROOT_AUDIO = "audio";
+    private const string FILE_SETTINGSDATA_ROOT_SETTINGS_VOLUME = "volume";
+
+    private ProgressData progressData;
+    private SettingsData settingsData;
+
+    private struct ProgressData
+    {
+        public int coins;
+    }
+
+    private struct SettingsData
+    {
+        public int volume;
+    }
+
+    public int ProgressData_Coins_Get() 
+    {
+        return progressData.coins;
+    }
+
+    public void ProgressData_Coins_Set(int _value)
+    {
+        progressData.coins = _value;
+    }
+
+    public int Settings_Volume_Get()
+    {
+        return settingsData.volume;
+    }
+
+    public void Settings_Volume_Set(int _value)
+    {
+        settingsData.volume = _value;
+    }
 
     private void Awake()
     {
         Singletone = this;
-        directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Midnight Drive\";
+        Application.targetFrameRate = 500;
+        directory_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Midnight Drive\";
+        
+        if (!Directory.Exists(directory_path)) //Проверка наличия папки
+        {
+            Directory.CreateDirectory(directory_path); //Создаём, если папки нет
+        }
+
+        //Грузим прогресс
+        file_progressData_path = directory_path + FILE_PROGRESSDATA_NAME;
+
+        XmlDocument _xmlDoc_progressData = new XmlDocument();
+
+        if (!File.Exists(file_progressData_path)) //Проверка существования файла прогресса
+        {                              
+            XmlNode _rootNode = _xmlDoc_progressData.CreateElement(FILE_PROGRESSDATA_ROOT_GAMESAVE);    //Создаём новый элемент
+            _xmlDoc_progressData.AppendChild(_rootNode);                                                //Добавляем его, как корневой узел
+
+            XmlNode _childNode; //Объявляем экземпляр подузла
+
+            _childNode = _xmlDoc_progressData.CreateElement(FILE_PROGRESSDATA_ROOT_GAMESAVE_COINS);
+            _childNode.InnerText = "0";
+            _rootNode.AppendChild(_childNode);
+
+            _xmlDoc_progressData.Save(file_progressData_path); //Сохраняем документ
+        }
+
+        _xmlDoc_progressData.Load(file_progressData_path);
+        var _coins = _xmlDoc_progressData.SelectSingleNode(FILE_PROGRESSDATA_ROOT_GAMESAVE + "/" + FILE_PROGRESSDATA_ROOT_GAMESAVE_COINS).InnerText;
+        progressData.coins = int.Parse(_coins);
+
+        //Грузим настройки
+        file_settingsData_path = directory_path + FILE_SETTINGSDATA_NAME;
+
+        XmlDocument _xmlDoc_settings = new XmlDocument();
+
+        if (!File.Exists(file_settingsData_path)) //Проверка существования файла настроек
+        {            
+            XmlNode _rootNode = _xmlDoc_settings.CreateElement(FILE_SETTINGSDATA_ROOT_AUDIO);   //Создаём новый элемент
+            _xmlDoc_settings.AppendChild(_rootNode);                                            //Добавляем его, как корневой узел
+
+            XmlNode _childNode; //Объявляем экземпляр подузла
+
+            _childNode = _xmlDoc_settings.CreateElement(FILE_SETTINGSDATA_ROOT_SETTINGS_VOLUME);
+            _childNode.InnerText = "10";
+            _rootNode.AppendChild(_childNode);
+
+            _xmlDoc_settings.Save(file_settingsData_path); //Сохраняем документ
+        }
+
+        _xmlDoc_settings.Load(file_settingsData_path);
+        var _volume = _xmlDoc_settings.SelectSingleNode(FILE_SETTINGSDATA_ROOT_AUDIO + "/" + FILE_SETTINGSDATA_ROOT_SETTINGS_VOLUME).InnerText;
+        settingsData.volume = int.Parse(_volume);
     }
 
-    public void Save(int _value , string _key)
+    public void SaveProgress()
     {       
-        if (!Directory.Exists(directoryPath)) //Проверка наличия папки с сейвами
+        if (!Directory.Exists(directory_path)) //Проверка наличия папки с сейвами
         {
-            Directory.CreateDirectory(directoryPath); //Создаём, если папки нет
+            Directory.CreateDirectory(directory_path); //Создаём, если папки нет
         }
 
-        filePath = directoryPath + "Save.xml";
-        if (!File.Exists(filePath)) //Проверка существования файла сохранения
+        XmlDocument _xmlDoc_progressData = new XmlDocument();
+
+        if (!File.Exists(file_progressData_path)) //Проверка существования файла сохранения
         {
-            CreateSaveFile(filePath); //Создаём, если файла нет           
+            XmlNode _rootNode = _xmlDoc_progressData.CreateElement(FILE_PROGRESSDATA_ROOT_GAMESAVE);    //Создаём новый элемент
+            _xmlDoc_progressData.AppendChild(_rootNode);                                       //Добавляем его, как корневой узел
+
+            XmlNode _childNode; //Объявляем экземпляр подузла
+
+            _childNode = _xmlDoc_progressData.CreateElement(FILE_PROGRESSDATA_ROOT_GAMESAVE_COINS);
+            _childNode.InnerText = "0";
+            _rootNode.AppendChild(_childNode);
+
+            _xmlDoc_progressData.Save(file_progressData_path); //Сохраняем документ
         }
-        
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(filePath);
-        xmlDoc.SelectSingleNode("gamesave/" + _key).InnerText = "" + _value;
-        xmlDoc.Save(filePath);
+
+        XmlDocument _xmlDoc = new XmlDocument();
+        _xmlDoc.Load(file_progressData_path);        
+        _xmlDoc.SelectSingleNode(FILE_PROGRESSDATA_ROOT_GAMESAVE + "/" + FILE_PROGRESSDATA_ROOT_GAMESAVE_COINS).InnerText = progressData.coins.ToString();        
+        _xmlDoc.Save(file_progressData_path);
     }
 
-    public int Load(string _key)
+    public void SaveSettings()
     {
-        filePath = directoryPath + "Save.xml";
-
-        if (!File.Exists(filePath)) //Проверка существования файла сохранения
+        if (!Directory.Exists(directory_path)) //Проверка наличия папки с сейвами
         {
-            CreateSaveFile(filePath); //Создаём, если файла нет 
-        }
-        
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(filePath);
-        return int.Parse(xmlDoc.SelectSingleNode("gamesave/" + _key).InnerText);
-    }
-
-    private void CreateSaveFile(string _path)  //Процесс создания нового файла
-    {
-        if (!Directory.Exists(directoryPath)) //Проверка наличия папки с сейвами
-        {
-            Directory.CreateDirectory(directoryPath); //Создаём, если папки нет
+            Directory.CreateDirectory(directory_path); //Создаём, если папки нет
         }
 
-        XmlDocument xmlDoc = new XmlDocument();                 //Создаём новый документ
-        XmlNode rootNode = xmlDoc.CreateElement("gamesave");    //Создаём новый элемент
-        xmlDoc.AppendChild(rootNode);                           //Добавляем его, как корневой узел
+        XmlDocument _xmlDoc_settingsData = new XmlDocument();
 
-        XmlNode userNode; //Объявляем экземпляр подузла
+        if (!File.Exists(file_settingsData_path)) //Проверка существования файла сохранения
+        {
+            XmlNode _rootNode = _xmlDoc_settingsData.CreateElement(FILE_SETTINGSDATA_ROOT_AUDIO);    //Создаём новый элемент
+            _xmlDoc_settingsData.AppendChild(_rootNode);                                       //Добавляем его, как корневой узел
 
-        userNode = xmlDoc.CreateElement("complete"); //Создаём новый элемент
-        userNode.InnerText = "1000000";                   //Задаём ему значение
-        rootNode.AppendChild(userNode);             //Добавляем его, как подузел
-                                                    //...
-        userNode = xmlDoc.CreateElement("coins");
-        userNode.InnerText = "0";
-        rootNode.AppendChild(userNode);
+            XmlNode _childNode; //Объявляем экземпляр подузла
 
-        userNode = xmlDoc.CreateElement("volume");
-        userNode.InnerText = "10";
-        rootNode.AppendChild(userNode);
+            _childNode = _xmlDoc_settingsData.CreateElement(FILE_SETTINGSDATA_ROOT_SETTINGS_VOLUME);
+            _childNode.InnerText = "0";
+            _rootNode.AppendChild(_childNode);
 
-        xmlDoc.Save(_path); //Сохраняем документ
+            _xmlDoc_settingsData.Save(file_settingsData_path); //Сохраняем документ
+        }
+
+        XmlDocument _xmlDoc = new XmlDocument();
+        _xmlDoc.Load(file_settingsData_path);
+        _xmlDoc.SelectSingleNode(FILE_SETTINGSDATA_ROOT_AUDIO + "/" + FILE_SETTINGSDATA_ROOT_SETTINGS_VOLUME).InnerText = settingsData.volume.ToString();
+        _xmlDoc.Save(file_settingsData_path);
     }
 }

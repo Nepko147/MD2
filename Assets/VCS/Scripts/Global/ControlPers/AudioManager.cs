@@ -4,7 +4,8 @@ public class ControlPers_AudioManager : MonoBehaviour
 {
     public static ControlPers_AudioManager Singletone { get; private set; }    
     public AudioSource source;
-    
+    [SerializeField] private AudioClip music;
+
     private void Awake()
     {
         Singletone = this;
@@ -12,14 +13,19 @@ public class ControlPers_AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        float volume = (((float)ControlPers_SaveLoader.Singletone.Load("volume")) / 10);
+        float volume = (((float)ControlPers_DataHandler.Singletone.Settings_Volume_Get()) / 10);
         source.volume = volume;
     }
 
     public void PlaySound(AudioClip _sound)
     {
         source.PlayOneShot(_sound);
-    }   
+    }
+
+    public void PlayMusic()
+    {
+        source.PlayOneShot(music);
+    }
 
     public void Pause()
     {        
