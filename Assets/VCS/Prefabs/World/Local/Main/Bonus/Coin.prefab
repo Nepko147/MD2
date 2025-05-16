@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12, y: 6.5, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 6
+  m_SortingOrder: 70
   m_Sprite: {fileID: 807422354, guid: 1f79821980b463945a413eff65414ff3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -203,4 +203,3 @@ MonoBehaviour:
   bonus_sound: {fileID: 8300000, guid: 98281e0d92360734c9cf57929dc5c043, type: 3}
   bonus_popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
   bonus_popUpString_text: +1 Coin
-  bonus_animation: {fileID: 0}

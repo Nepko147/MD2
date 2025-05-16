@@ -67,7 +67,7 @@ Material:
     m_Floats:
     - _AlphaBase: 0.6
     - _AlphaOverlay: 0
-    - _AspectX: 1920
+    - _AspectX: 2400
     - _AspectY: 1080
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -83,10 +83,10 @@ Material:
     - _OverlayScale: 1.0287787
     - _OverlayScaleX: 0.3
     - _OverlayScaleY: 0.3
-    - _OverlayTexApha: 0.0021995902
-    - _OverlayTexPosX: 0.19743636
-    - _OverlayTexPosY: 0.325
-    - _OverlayTexScale: 3.9912016
+    - _OverlayTexApha: 0.00023651123
+    - _OverlayTexPosX: 0.20750731
+    - _OverlayTexPosY: 0.2582366
+    - _OverlayTexScale: 3.999054
     - _Parallax: 0.02
     - _PositionX: 0
     - _PositionY: 0
