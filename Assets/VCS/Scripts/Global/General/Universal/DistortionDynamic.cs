@@ -4,6 +4,8 @@ public class Universal_DistortionDynamic : MonoBehaviour
 {
     public static Universal_DistortionDynamic Singletone { get; private set; }
 
+    public bool GameOver { get; set; }
+
     float screenWidth;
     float screenHeight;
 
@@ -46,7 +48,9 @@ public class Universal_DistortionDynamic : MonoBehaviour
     private void Awake()
     {
         Singletone = this;
-        
+
+        GameOver = false;
+
         screenWidth = Screen.width;
         screenHeight = Screen.height;
         camera = GetComponent<Camera>();
@@ -89,7 +93,7 @@ public class Universal_DistortionDynamic : MonoBehaviour
         }
 
         var _normalMap = normalMapMix_material_output_normalMap_texture2d;
-        if (ControlScene_Entity_Main.Singletone.GameOver)
+        if (GameOver)
         {
             _normalMap = normalMapMix_material_gameOverNormalMap;
         }
