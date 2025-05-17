@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        u_tex ("u_tex", 2D) = "bump" {}
+        u_texNormalMap ("u_texNormalMap", 2D) = "bump" {}
         u_strength ("u_strength", Range (0, 1)) = 0.04
     }
 
@@ -32,7 +32,7 @@
             float4 _MainTex_ST;
 
             sampler2D _MainTex;
-            sampler2D u_tex;
+            sampler2D u_texNormalMap;
             fixed u_strength;
             fixed u_aspect;            
 
@@ -49,7 +49,7 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 // Получаем текущий цвет пикселя
-                float2 offset = (tex2D(u_tex, i.uv).rg - 0.5) * 2.0 * u_strength;
+                float2 offset = (tex2D(u_texNormalMap, i.uv).rg - 0.5) * 2.0 * u_strength;
                 //offset.x /= u_aspect;
                 
                 correction.x = u_strength * u_aspect + (u_strength * 0.014); // Автоматическая крректировка положения изображения вместо "костыликов"
