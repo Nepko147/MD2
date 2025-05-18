@@ -21,7 +21,7 @@ public class World_Enemy : MonoBehaviour
         //Проверка на возможность игры        
         if (Active)
         {
-            transform.position += Vector3.left * enemy_speed * World_Background_Entity.Singletone.SpeedScale;
+            transform.position += Vector3.left * enemy_speed * World_MovingBackground_Entity.Singletone.SpeedScale;
 
             //Проверка на контакт с игроком
             if (enemy_collider.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds) && !enemy_isDamaged)

@@ -21,10 +21,6 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
     private void Awake()
     {
         Singletone = this;
-    }
-
-    private void Start()
-    {
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);

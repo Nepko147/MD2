@@ -41,7 +41,7 @@ public class World_Player : MonoBehaviour
         {
             player_animation.speed = 1;
 
-            Player_Complete -= World_Background_Entity.Singletone.SpeedScale;                    
+            Player_Complete -= World_MovingBackground_Entity.Singletone.SpeedScale;                    
             
             if ((Input.GetKey(KeyCode.UpArrow) 
                 || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0) 

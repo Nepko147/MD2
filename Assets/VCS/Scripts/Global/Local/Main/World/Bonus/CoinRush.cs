@@ -29,7 +29,7 @@ public class World_Bonus_CoinRush : MonoBehaviour
         if (Active)
         {
             bonus_animation.speed = 1;
-            transform.position += Vector3.left * bonus_speed * World_Background_Entity.Singletone.SpeedScale; 
+            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.Singletone.SpeedScale; 
             
             if (bonus_boxCollider.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds))
             {
