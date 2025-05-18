@@ -18,8 +18,9 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
     [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.000001f;
     [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.2f;
 
-    private void Start()
+    private void Awake()
     {
+        Singletone = this;
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
@@ -35,17 +36,12 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
         _value = Mathf.Clamp(_value, 0, 1);
         postProcess_profile_depthOfField_aperture_duration = _duration;
         var _aperture_value = POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN + (POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX - POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN) * (1 - _value);
-        postProcess_profile_depthOfField_aperture_step = (_aperture_value - postProcess_profile_depthOfField.aperture.value) / _duration;        
+        postProcess_profile_depthOfField_aperture_step = (_aperture_value - postProcess_profile_depthOfField.aperture.value) / _duration;
     }
 
     public void ChromaticAberrationEnable(bool _state)
     {
         postProcess_profile_chromaticAberration_intensity_change = _state;
-    }
-
-    private void Awake()
-    {
-        Singletone = this;        
     }
 
     private void Update()
