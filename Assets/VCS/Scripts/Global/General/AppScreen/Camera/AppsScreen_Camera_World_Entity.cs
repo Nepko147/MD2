@@ -38,7 +38,7 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
         var _aperture_value = POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN + (POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX - POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN) * (1 - _value);
         postProcess_profile_depthOfField_aperture_step = (_aperture_value - postProcess_profile_depthOfField.aperture.value) / _duration;
     }
-
+    
     public void ChromaticAberrationEnable(bool _state)
     {
         postProcess_profile_chromaticAberration_intensity_change = _state;
