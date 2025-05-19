@@ -3,7 +3,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class AppScreen_Camera_World_Entity : MonoBehaviour    
 {
-    public static AppScreen_Camera_World_Entity Singletone { get; private set; }
+    public static AppScreen_Camera_World_Entity SingleOnScene { get; private set; }
 
     private PostProcessVolume   postProcess_volume;
     private DepthOfField        postProcess_profile_depthOfField;
@@ -20,7 +20,7 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);

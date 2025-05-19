@@ -29,15 +29,15 @@ public class World_Bonus_CoinRush : MonoBehaviour
         if (Active)
         {
             bonus_animation.speed = 1;
-            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.Singletone.SpeedScale; 
+            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
-            if (bonus_boxCollider.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds))
+            if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
-                ControlPers_AudioManager.Singletone.PlaySound(bonus_sound);
-                ControlScene_Entity_Main.Singletone.CoinRush = true;
-                World_BonusSpawner.Singletone.BonusSpawn_Delay_Reset();
+                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
+                World_BonusSpawner.SingleOnScene.CoinRush = true;
+                World_BonusSpawner.SingleOnScene.BonusSpawn_Delay_Reset();
                 bonus_popUpString.DisplayPopUp(bonus_popUpString_text, transform.position.x, transform.position.y);
-                Universal_DistortionDynamic.Singletone.WorldDistortion(transform.position);
+                Universal_DistortionDynamic.SingleOnScene.WorldDistortion(transform.position);
                 Destroy(gameObject);
             }
 

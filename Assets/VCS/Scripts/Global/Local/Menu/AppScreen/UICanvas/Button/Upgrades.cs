@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Appscreen_UICanvas_Button_Upgrades : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Button_Upgrades Singletone { get; private set; }
+    public static Appscreen_UICanvas_Button_Upgrades SingleOnScene { get; private set; }
 
     public bool Pressed { get; private set; }
 
@@ -22,12 +22,12 @@ public class Appscreen_UICanvas_Button_Upgrades : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioManager.Singletone.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
     }
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Pressed = false;
         image = GetComponent<Image>();

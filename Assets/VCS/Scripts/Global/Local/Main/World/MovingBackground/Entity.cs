@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World_MovingBackground_Entity : MonoBehaviour
 {
-    public static World_MovingBackground_Entity Singletone { get; private set; }
+    public static World_MovingBackground_Entity SingleOnScene { get; private set; }
 
     public bool Active { private get; set; }
 
@@ -13,7 +13,7 @@ public class World_MovingBackground_Entity : MonoBehaviour
     
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         SpeedScale = speedScale_init;
         Active = false;

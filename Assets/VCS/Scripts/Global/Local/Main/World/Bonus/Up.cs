@@ -29,14 +29,14 @@ public class World_Bonus_Up : MonoBehaviour
         if (Active)
         {
             bonus_animation.speed = 1;
-            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.Singletone.SpeedScale; 
+            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
-            if (bonus_boxCollider.bounds.Intersects(World_Player.Singletone.GetComponent<BoxCollider2D>().bounds))
+            if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
-                ControlPers_AudioManager.Singletone.PlaySound(bonus_sound);
-                World_Player.Singletone.TakeDamage(-1);
+                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
+                World_Player.SingleOnScene.TakeDamage(-1);
                 bonus_popUpString.DisplayPopUp(bonus_popUpString_text, transform.position.x, transform.position.y);
-                Universal_DistortionDynamic.Singletone.WorldDistortion(transform.position);
+                Universal_DistortionDynamic.SingleOnScene.WorldDistortion(transform.position);
                 Destroy(gameObject);
             }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Universal_DistortionDynamic : MonoBehaviour
 {
-    public static Universal_DistortionDynamic Singletone { get; private set; }
+    public static Universal_DistortionDynamic SingleOnScene { get; private set; }
 
     public bool GameOver { get; set; }
 
@@ -23,45 +23,57 @@ public class Universal_DistortionDynamic : MonoBehaviour
     const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE = "_OverlayTexScale";
     const string                NORMALMAPMIX_MATERIAL_ASPECTX = "_AspectX";
     const string                NORMALMAPMIX_MATERIAL_ASPECTY = "_AspectY";
-    [SerializeField] Texture2D  normalMapMix_material_baseNormalMap;
+    [SerializeField] Texture2D  normalMapMix_material_clearNormalMap;
     [SerializeField] Texture2D  normalMapMix_material_gameOverNormalMap;
-    [SerializeField] Texture2D  normalMapMix_material_distorionNormalMap;
-    [SerializeField] float      normalMapMix_material_distortionSpeed;
-    public float                NormalMapMix_Material_Pos_X { get; set; }
-    public float                NormalMapMix_Material_Pos_Y { get; set; }
+    [SerializeField] Sprite     normalMapMix_material_distorionNormalMap_sprite;
+    Texture2D                   normalMapMix_material_distorionNormalMap_texture;
+    [SerializeField] float      normalMapMix_material_distorionNormalMap_visualDiameterInPixels;
+    [SerializeField] float      normalMapMix_material_distortionScale;
     public bool                 NormalMapMix_Material_Active { get; set; }
+    public Vector3              NormalMapMix_Material_WorldPos { get; set; }
+    public float                NormalMapMix_Material_ScreenPos_X { get; set; }
+    public float                NormalMapMix_Material_ScreenPos_Y { get; set; }
     float                       normalMapMix_material_timer;
     [SerializeField] float      normalMapMix_material_timer_max;
     RenderTexture               normalMapMix_material_output_normalMap_renderTexture;
     Texture2D                   normalMapMix_material_output_normalMap_texture2d;
     Rect                        normalMapMix_material_output_normalMap_rect;
 
+
     public void WorldDistortion(Vector3 _position)
     {
-        Vector2 _screenPosition = camera.WorldToScreenPoint(_position);
         NormalMapMix_Material_Active = true;
-        NormalMapMix_Material_Pos_X = _screenPosition.x / screenWidth;
-        NormalMapMix_Material_Pos_Y = _screenPosition.y / screenHeight;
+        NormalMapMix_Material_WorldPos = _position;
+        Vector2 _screenPosition = camera.WorldToScreenPoint(_position);
+        NormalMapMix_Material_ScreenPos_X = _screenPosition.x / screenWidth;
+        NormalMapMix_Material_ScreenPos_Y = _screenPosition.y / screenHeight;
     }
 
+    public float DistortionDistance_Get()
+    {
+        var _worldDistance = normalMapMix_material_distorionNormalMap_visualDiameterInPixels / normalMapMix_material_distorionNormalMap_sprite.pixelsPerUnit;
+        return (_worldDistance * normalMapMix_material_timer * normalMapMix_material_distortionScale);
+    }
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         GameOver = false;
 
         screenWidth = Screen.width;
         screenHeight = Screen.height;
+
         camera = GetComponent<Camera>();
-        var _distortion_material_aspect = (float)normalMapMix_material_baseNormalMap.height / normalMapMix_material_baseNormalMap.width;
+
+        var _distortion_material_aspect = (float)normalMapMix_material_clearNormalMap.height / normalMapMix_material_clearNormalMap.width;
         distortion_material.SetFloat(DISTORION_MATERIAL_U_ASPECT, _distortion_material_aspect);
-            
-        normalMapMix_material_output_normalMap_renderTexture = new RenderTexture(normalMapMix_material_baseNormalMap.width, normalMapMix_material_baseNormalMap.height, 32); //Подготавливаем рендер-текстуру, в которой будем собирать нормалку из фона и кружочка
-        Graphics.Blit(normalMapMix_material_baseNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); // Отрисовываем пустую на текстуру пустую нормаль. Затем, помещаем результат в подготовленную рендер-тектуру       
+
+        normalMapMix_material_distorionNormalMap_texture = normalMapMix_material_distorionNormalMap_sprite.texture;
+        normalMapMix_material_output_normalMap_renderTexture = new RenderTexture(normalMapMix_material_clearNormalMap.width, normalMapMix_material_clearNormalMap.height, 32); //Подготавливаем рендер-текстуру, в которой будем собирать нормалку из фона и кружочка
+        Graphics.Blit(normalMapMix_material_clearNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); // Отрисовываем пустую на текстуру пустую нормаль. Затем, помещаем результат в подготовленную рендер-тектуру       
         normalMapMix_material_output_normalMap_rect = new Rect(0, 0, normalMapMix_material_output_normalMap_renderTexture.width, normalMapMix_material_output_normalMap_renderTexture.height); //GETRECT!
-        
-        normalMapMix_material_output_normalMap_texture2d = new Texture2D(normalMapMix_material_baseNormalMap.width, normalMapMix_material_baseNormalMap.height, TextureFormat.RGBA32, false); //Подготавливаем 2D-текстуру
+        normalMapMix_material_output_normalMap_texture2d = new Texture2D(normalMapMix_material_clearNormalMap.width, normalMapMix_material_clearNormalMap.height, TextureFormat.RGBA32, false); //Подготавливаем 2D-текстуру
         normalMapMix_material_output_normalMap_texture2d.ReadPixels(normalMapMix_material_output_normalMap_rect, 0, 0); //Помещаем пиксЭлы с подготовленной рендер-текстуры в поле Colors 2D-текстуры
         normalMapMix_material_output_normalMap_texture2d.Apply(); //Отрисовываем на 2D-текстуре, помещённые в её поле Colors пиксЭлы
     }
@@ -70,19 +82,20 @@ public class Universal_DistortionDynamic : MonoBehaviour
     {
         if (NormalMapMix_Material_Active)
         {
-            normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_distorionNormalMap); 
+            normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_distorionNormalMap_texture); 
             float _alpha = 1 - normalMapMix_material_timer / normalMapMix_material_timer_max;
             _alpha = Mathf.Clamp(_alpha, 0, 1);
             normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA, _alpha);                      
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, NormalMapMix_Material_Pos_X);  
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, NormalMapMix_Material_Pos_Y);  
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_timer * normalMapMix_material_distortionSpeed);
+            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, NormalMapMix_Material_ScreenPos_X);  
+            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, NormalMapMix_Material_ScreenPos_Y);  
+            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_timer * normalMapMix_material_distortionScale);
             normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTX, screenWidth);
             normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTY, screenHeight);
-            Graphics.Blit(normalMapMix_material_baseNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения. Затем, помещаем результат в подготовленную рендер-тектуру 
+            Graphics.Blit(normalMapMix_material_clearNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения. Затем, помещаем результат в подготовленную рендер-тектуру 
             
             normalMapMix_material_output_normalMap_texture2d.ReadPixels(normalMapMix_material_output_normalMap_rect, 0, 0, false); //Помещаем пиксЭлы с подготовленной рендер-текстуры в поле Colors 2D-текстуры
             normalMapMix_material_output_normalMap_texture2d.Apply(); //Отрисовываем на 2D-текстуре, помещённые в её поле Colors пиксЭлы
+
             normalMapMix_material_timer += Time.deltaTime;
             
             if (normalMapMix_material_timer >= normalMapMix_material_timer_max)

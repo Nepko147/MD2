@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World_Player : MonoBehaviour
 {
-    public static World_Player Singletone { get; private set; }
+    public static World_Player SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
 
@@ -24,12 +24,12 @@ public class World_Player : MonoBehaviour
 
     private void Awake()
     {       
-        Singletone = this;
+        SingleOnScene = this;
 
         Active = true;
 
         Player_Ups = player_ups_init;
-        Plyer_Coins = ControlPers_DataHandler.Singletone.ProgressData_Coins_Get();
+        Plyer_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();       
@@ -41,11 +41,11 @@ public class World_Player : MonoBehaviour
         {
             player_animation.speed = 1;
 
-            Player_Complete -= World_MovingBackground_Entity.Singletone.SpeedScale;                    
+            Player_Complete -= World_MovingBackground_Entity.SingleOnScene.SpeedScale;                    
             
             if ((Input.GetKey(KeyCode.UpArrow) 
                 || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0) 
-                && transform.position.y < ControlScene_Entity_Main.Singletone.SpawnPoint_Line_1.y)
+                && transform.position.y < ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_1.y)
             {
                 player_animation.SetBool(PLAYER_ANIMATION_UP, true);
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
@@ -53,7 +53,7 @@ public class World_Player : MonoBehaviour
             }
             else if ((Input.GetKey(KeyCode.DownArrow) 
                 || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0)
-                && transform.position.y > ControlScene_Entity_Main.Singletone.SpawnPoint_Line_4.y)
+                && transform.position.y > ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_4.y)
             {
                 player_animation.SetBool(PLAYER_ANIMATION_UP, false);
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World_EnemySpawner : MonoBehaviour
 {
-    public static World_EnemySpawner Singletone { get; private set; }
+    public static World_EnemySpawner SingleOnScene { get; private set; }
     
     public bool Active { get; set; }
 
@@ -33,19 +33,19 @@ public class World_EnemySpawner : MonoBehaviour
         switch (_lineNumber)
         {
             case 1:
-                _position = ControlScene_Entity_Main.Singletone.SpawnPoint_Line_1;
+                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_1;
                 _sortingOrder = ControlScene_Entity_Main.LINE_1_SORTINGORDER_ENEMY;
                 break;
             case 2:
-                _position = ControlScene_Entity_Main.Singletone.SpawnPoint_Line_2;
+                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_2;
                 _sortingOrder = ControlScene_Entity_Main.LINE_2_SORTINGORDER_ENEMY;
                 break;
             case 3:
-                _position = ControlScene_Entity_Main.Singletone.SpawnPoint_Line_3;
+                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_3;
                 _sortingOrder = ControlScene_Entity_Main.LINE_3_SORTINGORDER_ENEMY;
                 break;
             case 4:
-                _position = ControlScene_Entity_Main.Singletone.SpawnPoint_Line_4;
+                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_4;
                 _sortingOrder = ControlScene_Entity_Main.LINE_4_SORTINGORDER_ENEMY;
                 break;
         }
@@ -57,7 +57,7 @@ public class World_EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Active = true;
 
@@ -66,8 +66,9 @@ public class World_EnemySpawner : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {        
-        if (Active && !ControlScene_Entity_Main.Singletone.CoinRush)
+    {
+        if (Active 
+            && !World_BonusSpawner.SingleOnScene.CoinRush)
         {
             if (enemySpawn_wave_delay > 0)
             {

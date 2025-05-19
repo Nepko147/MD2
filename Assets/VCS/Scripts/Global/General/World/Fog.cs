@@ -46,8 +46,7 @@ public class World_Fog : MonoBehaviour
     private float material_offset_stepScale_step = 0;
     private bool material_offset_stepScale_step_change = false;
     private float material_offset_stepScale_step_change_duration = 0f;
-    
-    public float Offset_Step(float _old_offset) 
+    public float Material_Offset_Step(float _old_offset) 
     {
         var _new_offset = _old_offset + Time.deltaTime * material_offset_stepScale;
         material_offset_val.x = _new_offset;
@@ -55,12 +54,11 @@ public class World_Fog : MonoBehaviour
 
         return (_new_offset);
     }
-
     /// <summary>
-    /// <para> _value - Нормализованная величина скейла шага отступа. </para>
-    /// <para> _duration - Кол-во секунд, за которое величина скейла шага отступа приёдт к _value. </para>
+    /// <para> _value - нормализованная величина скейла шага отступа. </para>
+    /// <para> _duration - кол-во секунд, за которое величина скейла шага отступа приёдт к _value. </para>
     /// </summary>
-    public void Offset_StepScale_Change(float _value, float _duration)
+    public void Material_Offset_StepScale_Change(float _value, float _duration)
     {
         material_offset_stepScale_step_change = true;
         material_offset_stepScale_step_change_duration = _duration;

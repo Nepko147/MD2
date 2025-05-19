@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 {
-    public static Main_AppScreen_UICanvas_Entity Singletone { get; private set; }
+    public static Main_AppScreen_UICanvas_Entity SingleOnScene { get; private set; }
 
     public Camera AppScreen_Canvas_Camera { get; private set; }
     
@@ -45,7 +45,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         appScreen_canvas_midScreenBigString_text.enabled = true;
         appScreen_canvas_midScreenBigString_text.text = APPSCREEN_CANVAS_TEXT_GAMEOVER;
         appScreen_canvas_midScreenSmallString_text.enabled = true;
-        appScreen_canvas_midScreenSmallString_text.text = APPSCREEN_CANVAS_TEXT_DISTANCEREMMAIN + (int)World_Player.Singletone.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
+        appScreen_canvas_midScreenSmallString_text.text = APPSCREEN_CANVAS_TEXT_DISTANCEREMMAIN + (int)World_Player.SingleOnScene.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
     }
 
     public void SetPause(bool _pause)
@@ -56,7 +56,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         AppScreen_Canvas_Camera = GetComponent<Canvas>().worldCamera;
         appScreen_canvas_ups_string_text = appScreen_canvas_ups_string.GetComponent<Text>();
@@ -71,8 +71,8 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
     private void FixedUpdate()
     {
         //Получение данных из объекта игрока (World_Player)
-        appScreen_canvas_ups_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.Singletone.Player_Ups;
-        appScreen_canvas_coins_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.Singletone.Plyer_Coins;
-        appScreen_canvas_complete_string_text.text = APPSCREEN_CANVAS_TEXT_COMPLETE + (int)World_Player.Singletone.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
+        appScreen_canvas_ups_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.SingleOnScene.Player_Ups;
+        appScreen_canvas_coins_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.SingleOnScene.Plyer_Coins;
+        appScreen_canvas_complete_string_text.text = APPSCREEN_CANVAS_TEXT_COMPLETE + (int)World_Player.SingleOnScene.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
     }
 }

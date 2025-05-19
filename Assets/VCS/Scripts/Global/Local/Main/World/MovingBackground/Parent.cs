@@ -16,7 +16,7 @@ public class World_MovingBackground_Parent : MonoBehaviour
     {
         if (Active)
         {
-            transform.position += Vector3.left * Speed * World_MovingBackground_Entity.Singletone.SpeedScale;
+            transform.position += Vector3.left * Speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale;
 
             //Город занимается СамоВоспроизводством
             if (transform.position.x <= -11f)

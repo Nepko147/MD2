@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour    
 {
-    public static AppScreen_Camera_WorldCammera_Zoom Singletone { get; private set; }
+    public static AppScreen_Camera_WorldCammera_Zoom SingleOnScene { get; private set; }
 
     new private Camera              camera;
     private Vector3                 camera_position_origin;
@@ -22,7 +22,7 @@ public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
         camera = GetComponent<Camera>();
         camera_originalFieldOfView = camera.fieldOfView;
         camera_position_origin = transform.position;
@@ -31,7 +31,7 @@ public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour
     }
     private void FixedUpdate()
     {       
-        if (ControlScene_Entity_Main.Singletone != null)
+        if (ControlScene_Entity_Main.SingleOnScene != null)
         {            
             //¬ход в состо€ние овер«ума
             if (camera.fieldOfView > camera_zoom_max && camera_overZoom && camera_overZoomt_timer <= 0)

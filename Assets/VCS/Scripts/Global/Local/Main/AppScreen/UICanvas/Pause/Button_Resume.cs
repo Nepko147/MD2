@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Pause_Button_Resume Singletone { get; private set; }
+    public static Appscreen_UICanvas_Pause_Button_Resume SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 
@@ -11,7 +11,7 @@ public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Pressed = false;
 
@@ -21,6 +21,6 @@ public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
     public void OnClick()
     {
         Pressed = true;
-        ControlPers_AudioManager.Singletone.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
     }
 }

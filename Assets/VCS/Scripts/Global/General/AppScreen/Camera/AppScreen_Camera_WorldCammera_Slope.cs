@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AppScreen_Camera_WorldCammera_Slope : MonoBehaviour    
 {
-    public static AppScreen_Camera_WorldCammera_Slope Singletone { get; private set; }
+    public static AppScreen_Camera_WorldCammera_Slope SingleOnScene { get; private set; }
     
     private Vector3 camera_originRotation;
     private Vector3 camera_leftMaxRotation;
@@ -17,7 +17,7 @@ public class AppScreen_Camera_WorldCammera_Slope : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         camera_originRotation = transform.eulerAngles;
         camera_leftMaxRotation = new Vector3(0, 0, 360.0f - camera_slope_maxAngle);
@@ -25,7 +25,7 @@ public class AppScreen_Camera_WorldCammera_Slope : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (ControlScene_Entity_Main.Singletone != null)
+        if (ControlScene_Entity_Main.SingleOnScene != null)
         {
             if (camera_slope_delay >= 0)
             {

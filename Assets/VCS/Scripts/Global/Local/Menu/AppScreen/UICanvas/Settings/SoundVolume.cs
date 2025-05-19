@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class AppScreen_Canvas_Settings_SoundVolume : MonoBehaviour
 {    
-    public static AppScreen_Canvas_Settings_SoundVolume Singletone { get; private set; }
+    public static AppScreen_Canvas_Settings_SoundVolume SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
 
@@ -15,14 +15,14 @@ public class AppScreen_Canvas_Settings_SoundVolume : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
         
         settings_sound_image = GetComponent<Image>();
     }
 
     private void Start()
     {
-        settings_sound_state = ControlPers_DataHandler.Singletone.Settings_Volume_Get();
+        settings_sound_state = ControlPers_DataHandler.SingleOnScene.Settings_Volume_Get();
     }
 
     private void Update()
@@ -34,14 +34,14 @@ public class AppScreen_Canvas_Settings_SoundVolume : MonoBehaviour
             //Обработка клавиш ввода
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {            
-                ControlPers_AudioManager.Singletone.PlaySound(settings_sound_switchSound);                
+                ControlPers_AudioManager.SingleOnScene.PlaySound(settings_sound_switchSound);                
                 var _newState = settings_sound_state >= _maxState ? _maxState : settings_sound_state + 1;
                 settings_sound_state = _newState;
             }
             
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                ControlPers_AudioManager.Singletone.PlaySound(settings_sound_switchSound);
+                ControlPers_AudioManager.SingleOnScene.PlaySound(settings_sound_switchSound);
                 var _newState = settings_sound_state <= 0 ? 0 : settings_sound_state - 1;
                 settings_sound_state = _newState;
             }
@@ -49,9 +49,9 @@ public class AppScreen_Canvas_Settings_SoundVolume : MonoBehaviour
             //Отображаем текущую настройку
             settings_sound_image.sprite = settings_sound_spriteArray[(int)settings_sound_state];
             float _volume = (float)(settings_sound_state / _maxState);
-            //World_UI_Bushes.Singletone.SetVolume(_volume);
-            ControlPers_AudioManager.Singletone.SetVolume(_volume);
-            ControlPers_DataHandler.Singletone.Settings_Volume_Set((int)settings_sound_state);            
+            //World_UI_Bushes.SingleOnScene.SetVolume(_volume);
+            ControlPers_AudioManager.SingleOnScene.SetVolume(_volume);
+            ControlPers_DataHandler.SingleOnScene.Settings_Volume_Set((int)settings_sound_state);            
         }  
     }
 }

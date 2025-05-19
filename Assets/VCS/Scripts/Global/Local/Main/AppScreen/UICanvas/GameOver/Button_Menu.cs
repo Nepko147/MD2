@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Button_Menu Singletone { get; private set; }
+    public static Appscreen_UICanvas_Button_Menu SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 
@@ -11,7 +11,7 @@ public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Pressed = false;
         GetComponent<Image>().enabled = false;
@@ -20,6 +20,6 @@ public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
     public void OnClick()
     {
         Pressed = true;
-        ControlPers_AudioManager.Singletone.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
     }
 }

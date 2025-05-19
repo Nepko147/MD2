@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AppScreen_UICanvas_Settings_Button_Menu : MonoBehaviour
 {
-    public static AppScreen_UICanvas_Settings_Button_Menu Singletone { get; private set; }
+    public static AppScreen_UICanvas_Settings_Button_Menu SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 
@@ -10,13 +10,13 @@ public class AppScreen_UICanvas_Settings_Button_Menu : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioManager.Singletone.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
         Pressed = true;
     }
 
     private void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Pressed = false;
     }

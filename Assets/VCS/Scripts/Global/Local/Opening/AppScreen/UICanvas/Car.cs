@@ -21,8 +21,8 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
 
     public void Activate()
     {
-        ControlPers_AudioManager.Singletone.PlaySound(dingSound);
-        ControlPers_AudioManager.Singletone.PlaySound(car_sound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(dingSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(car_sound);
         active = true;
     }
 
@@ -33,7 +33,7 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
 
     private void Start()
     {
-        camera = AppScreen_Camera_UI_Entity.Singletone.GetComponent<Camera>();
+        camera = AppScreen_Camera_UI_Entity.SingleOnScene.GetComponent<Camera>();
         screenWidth = new Vector3(camera.pixelWidth, 0, 0);
         var _worldToScreenPosition = camera.WorldToScreenPoint(transform.position);
         var _screenToWorldPosition = new Vector3(0, _worldToScreenPosition.y, _worldToScreenPosition.z);

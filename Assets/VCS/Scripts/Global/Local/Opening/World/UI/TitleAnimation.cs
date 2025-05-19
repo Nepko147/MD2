@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World_UI_TitleAnimation : MonoBehaviour
 {
-    public static World_UI_TitleAnimation Singletone { get; private set; }
+    public static World_UI_TitleAnimation SingleOnScene { get; private set; }
 
     public bool Done { get; private set; }
 
@@ -21,7 +21,7 @@ public class World_UI_TitleAnimation : MonoBehaviour
 
     void Awake()
     {
-        Singletone = this;
+        SingleOnScene = this;
 
         Done = false;        
     }
