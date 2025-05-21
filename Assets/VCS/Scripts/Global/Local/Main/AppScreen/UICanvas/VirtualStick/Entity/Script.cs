@@ -8,7 +8,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
     public AppScreen_GeneralCanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
     public AppScreen_GeneralCanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
 
-    public bool Screen_Pressed { private get; set; }
+    public bool Enabled { private get; set; }
 
     private RectTransform rectTransrotm;
 
@@ -24,7 +24,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
         rectTransrotm = GetComponent<RectTransform>();
 
-        Screen_Pressed = false;
+        Enabled = false;
         Inner_Direction = 0;
     }
 
@@ -32,7 +32,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
     {
         Inner_Direction = 0;
 
-        if (Screen_Pressed)
+        if (Enabled)
         {
             var _screen_position_vec2 = ControlPers_InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 1);
