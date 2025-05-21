@@ -4,6 +4,8 @@ public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour
 {
     public static AppScreen_Camera_WorldCammera_Zoom SingleOnScene { get; private set; }
 
+    public bool Active { get; set; }
+
     new private Camera              camera;
     private Vector3                 camera_position_origin;
     private Vector3                 camera_position_correction;
@@ -23,6 +25,7 @@ public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour
     private void Awake()
     {
         SingleOnScene = this;
+
         camera = GetComponent<Camera>();
         camera_originalFieldOfView = camera.fieldOfView;
         camera_position_origin = transform.position;
@@ -31,7 +34,7 @@ public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour
     }
     private void FixedUpdate()
     {       
-        if (ControlScene_Entity_Main.SingleOnScene != null)
+        if (Active)
         {            
             //¬ход в состо€ние овер«ума
             if (camera.fieldOfView > camera_zoom_max && camera_overZoom && camera_overZoomt_timer <= 0)

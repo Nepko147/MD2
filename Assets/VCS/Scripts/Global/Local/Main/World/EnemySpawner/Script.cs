@@ -7,6 +7,11 @@ public class World_EnemySpawner : MonoBehaviour
     public bool Active { get; set; }
 
     [SerializeField] private GameObject[] enemyArray;
+
+    public Vector2 EnemySpawn_SpawnPoint_Line_1 { get; set; }
+    public Vector2 EnemySpawn_SpawnPoint_Line_2 { get; set; }
+    public Vector2 EnemySpawn_SpawnPoint_Line_3 { get; set; }
+    public Vector2 EnemySpawn_SpawnPoint_Line_4 { get; set; } 
     
     private float                  enemySpawn_wave_enemyDelay;
     [SerializeField] private float enemySpawn_wave_enemyDelay_init;
@@ -22,7 +27,7 @@ public class World_EnemySpawner : MonoBehaviour
     [SerializeField] private int   enemySpawn_wave_size_init;
     private float                  enemySpawn_wave_size_counter;
     [SerializeField] private float enemySpawn_wave_size_counter_increaseCf;
-    [SerializeField] private int   enemySpawn_wave_size_counter_max;    
+    [SerializeField] private int   enemySpawn_wave_size_counter_max;
 
     public void spawnEnemy()
     {
@@ -33,20 +38,20 @@ public class World_EnemySpawner : MonoBehaviour
         switch (_lineNumber)
         {
             case 1:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_1;
-                _sortingOrder = ControlScene_Entity_Main.LINE_1_SORTINGORDER_ENEMY;
+                _position = EnemySpawn_SpawnPoint_Line_1;
+                _sortingOrder = World_Enemy.LINE_1_SORTINGORDER;
                 break;
             case 2:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_2;
-                _sortingOrder = ControlScene_Entity_Main.LINE_2_SORTINGORDER_ENEMY;
+                _position = EnemySpawn_SpawnPoint_Line_2;
+                _sortingOrder = World_Enemy.LINE_2_SORTINGORDER;
                 break;
             case 3:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_3;
-                _sortingOrder = ControlScene_Entity_Main.LINE_3_SORTINGORDER_ENEMY;
+                _position = EnemySpawn_SpawnPoint_Line_3;
+                _sortingOrder = World_Enemy.LINE_3_SORTINGORDER;
                 break;
             case 4:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_4;
-                _sortingOrder = ControlScene_Entity_Main.LINE_4_SORTINGORDER_ENEMY;
+                _position = EnemySpawn_SpawnPoint_Line_4;
+                _sortingOrder = World_Enemy.LINE_4_SORTINGORDER;
                 break;
         }
         

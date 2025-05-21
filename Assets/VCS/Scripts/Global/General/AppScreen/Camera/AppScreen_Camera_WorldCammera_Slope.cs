@@ -24,47 +24,44 @@ public class AppScreen_Camera_WorldCammera_Slope : MonoBehaviour
         camera_rightMaxRotation = new Vector3(0, 0, camera_slope_maxAngle);
     }
     private void FixedUpdate()
-    {
-        if (ControlScene_Entity_Main.SingleOnScene != null)
+    {        
+        if (camera_slope_delay >= 0)
         {
-            if (camera_slope_delay >= 0)
-            {
-                camera_slope_delay -= Time.deltaTime;
+            camera_slope_delay -= Time.deltaTime;
+        }
+        else
+        {
+            //Наклон влево
+            if (camera_slope_toleft)
+            {                        
+                if (transform.eulerAngles.z <= 360.0f - camera_slope_maxAngle && transform.eulerAngles.z > camera_slope_maxAngle) // !!!
+                {
+                    transform.eulerAngles = camera_leftMaxRotation; //Присвоить максимальный угол наклона влево
+                    camera_slope_toleft = false;
+                    camera_slope_delay = camera_slope_delay_init;
+                }
+                else
+                {
+                    camera_slope.z = transform.eulerAngles.z - camera_slope_speed;
+                    transform.rotation = Quaternion.Euler(camera_slope);
+                }                        
             }
-            else
-            {
-                //Наклон влево
-                if (camera_slope_toleft)
-                {                        
-                    if (transform.eulerAngles.z <= 360.0f - camera_slope_maxAngle && transform.eulerAngles.z > camera_slope_maxAngle) // !!!
-                    {
-                        transform.eulerAngles = camera_leftMaxRotation; //Присвоить максимальный угол наклона влево
-                        camera_slope_toleft = false;
-                        camera_slope_delay = camera_slope_delay_init;
-                    }
-                    else
-                    {
-                        camera_slope.z = transform.eulerAngles.z - camera_slope_speed;
-                        transform.rotation = Quaternion.Euler(camera_slope);
-                    }                        
-                }
 
-                //Наклон вправо
-                if (!camera_slope_toleft)
-                {            
-                    if (transform.eulerAngles.z >= camera_slope_maxAngle && transform.eulerAngles.z + camera_slope_maxAngle < 360.0f)
-                    {
-                        transform.eulerAngles = camera_rightMaxRotation; //Присвоить максимальный угол наклона вправо
-                        camera_slope_toleft = true;
-                        camera_slope_delay = camera_slope_delay_init;
-                    }
-                    else
-                    {
-                        camera_slope.z = transform.eulerAngles.z + camera_slope_speed;
-                        transform.rotation = Quaternion.Euler(camera_slope);
-                    }                    
+            //Наклон вправо
+            if (!camera_slope_toleft)
+            {            
+                if (transform.eulerAngles.z >= camera_slope_maxAngle && transform.eulerAngles.z + camera_slope_maxAngle < 360.0f)
+                {
+                    transform.eulerAngles = camera_rightMaxRotation; //Присвоить максимальный угол наклона вправо
+                    camera_slope_toleft = true;
+                    camera_slope_delay = camera_slope_delay_init;
                 }
-            }            
+                else
+                {
+                    camera_slope.z = transform.eulerAngles.z + camera_slope_speed;
+                    transform.rotation = Quaternion.Euler(camera_slope);
+                }                    
+            }
         }        
     }
 

@@ -20,6 +20,6 @@ public class Appscreen_UICanvas_GameOver_Button_Restart : MonoBehaviour
     public void OnClick()
     {
         Pressed = true;
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound); //Ждём появления АудиоМиксера
     }
 }

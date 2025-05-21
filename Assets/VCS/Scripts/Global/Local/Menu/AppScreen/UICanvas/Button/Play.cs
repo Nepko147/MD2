@@ -22,7 +22,7 @@ public class Appscreen_UICanvas_Button_Play : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
+        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound); //Ждём появления АудиоМиксера
         Pressed = true;        
     }
 

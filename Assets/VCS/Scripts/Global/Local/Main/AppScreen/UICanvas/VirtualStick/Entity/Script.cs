@@ -8,6 +8,8 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
     public AppScreen_GeneralCanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
     public AppScreen_GeneralCanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
 
+    public bool Screen_Pressed { private get; set; }
+
     private RectTransform rectTransrotm;
 
     private bool active = false;
@@ -22,6 +24,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
         rectTransrotm = GetComponent<RectTransform>();
 
+        Screen_Pressed = false;
         Inner_Direction = 0;
     }
 
@@ -29,11 +32,10 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
     {
         Inner_Direction = 0;
 
-        if (ControlPers_InputHandler.Singleton.Screen_Pressed)
+        if (Screen_Pressed)
         {
             var _screen_position_vec2 = ControlPers_InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 1);
-            //var _world_position_vec3 = _screen_position_vec3; // Изначальное
             var _world_position_vec3 = Main_AppScreen_UICanvas_Entity.SingleOnScene.AppScreen_Canvas_Camera.ScreenToWorldPoint(_screen_position_vec3); //Для координат камеры
 
             if (!active)

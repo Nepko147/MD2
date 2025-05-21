@@ -6,6 +6,11 @@ public class World_Player : MonoBehaviour
 
     public bool Active { get; set; }
 
+    public const int LINE_1_SORTINGORDER_PLAYER = 90;
+    public const int LINE_2_SORTINGORDER_PLAYER = 110;
+    public const int LINE_3_SORTINGORDER_PLAYER = 130;
+    public const int LINE_4_SORTINGORDER_PLAYER = 150;
+
     [SerializeField] private float  player_controlls;
 
     public int                      Player_Ups { get; set; }
@@ -22,6 +27,9 @@ public class World_Player : MonoBehaviour
 
     private SpriteRenderer          player_spriteRenderer;
 
+    private float border_top = -0.55f; //Временно
+    private float border_bot = -1.45f; //Временно
+
     private void Awake()
     {       
         SingleOnScene = this;
@@ -29,7 +37,6 @@ public class World_Player : MonoBehaviour
         Active = true;
 
         Player_Ups = player_ups_init;
-        Plyer_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();       
@@ -45,7 +52,7 @@ public class World_Player : MonoBehaviour
             
             if ((Input.GetKey(KeyCode.UpArrow) 
                 || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0) 
-                && transform.position.y < ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_1.y)
+                && transform.position.y < border_top)
             {
                 player_animation.SetBool(PLAYER_ANIMATION_UP, true);
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
@@ -53,7 +60,7 @@ public class World_Player : MonoBehaviour
             }
             else if ((Input.GetKey(KeyCode.DownArrow) 
                 || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0)
-                && transform.position.y > ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_4.y)
+                && transform.position.y > border_bot)
             {
                 player_animation.SetBool(PLAYER_ANIMATION_UP, false);
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
@@ -68,16 +75,16 @@ public class World_Player : MonoBehaviour
             switch (transform.position.y) // ВРЕМЕННО
             {
                 case < -1.45f:
-                    player_spriteRenderer.sortingOrder = ControlScene_Entity_Main.LINE_4_SORTINGORDER_PLAYER;
+                    player_spriteRenderer.sortingOrder = LINE_4_SORTINGORDER_PLAYER;
                     break;
                 case < -1.15f:
-                    player_spriteRenderer.sortingOrder = ControlScene_Entity_Main.LINE_3_SORTINGORDER_PLAYER;
+                    player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
                     break;
                 case < -0.85f:
-                    player_spriteRenderer.sortingOrder = ControlScene_Entity_Main.LINE_2_SORTINGORDER_PLAYER;
+                    player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
                     break;
                 case < -0.6f:
-                    player_spriteRenderer.sortingOrder = ControlScene_Entity_Main.LINE_1_SORTINGORDER_PLAYER;
+                    player_spriteRenderer.sortingOrder = LINE_1_SORTINGORDER_PLAYER;
                     break;
             }
 

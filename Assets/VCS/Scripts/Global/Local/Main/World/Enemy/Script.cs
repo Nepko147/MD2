@@ -4,6 +4,11 @@ public class World_Enemy : MonoBehaviour
 {
     public bool Active { get; set; }
 
+    public const int LINE_1_SORTINGORDER = 80;
+    public const int LINE_2_SORTINGORDER = 100;
+    public const int LINE_3_SORTINGORDER = 120;
+    public const int LINE_4_SORTINGORDER = 140;
+
     [SerializeField] private float      enemy_speed;
     [SerializeField] private AudioClip  enemy_hitSound;
     private bool                        enemy_isDamaged = false;
@@ -26,7 +31,7 @@ public class World_Enemy : MonoBehaviour
             //Проверка на контакт с игроком
             if (enemy_collider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds) && !enemy_isDamaged)
             {
-                ControlPers_AudioManager.SingleOnScene.PlaySound(enemy_hitSound);
+                ControlPers_AudioManager.SingleOnScene.PlaySound(enemy_hitSound); //Ждём появления АудиоМиксера
                 enemy_isDamaged = true;
                 World_Player.SingleOnScene.TakeDamage(1);
             }

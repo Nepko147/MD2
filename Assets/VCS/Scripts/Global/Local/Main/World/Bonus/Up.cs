@@ -33,7 +33,7 @@ public class World_Bonus_Up : MonoBehaviour
             
             if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
-                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
+                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound); //Ждём появления АудиоМиксера
                 World_Player.SingleOnScene.TakeDamage(-1);
                 bonus_popUpString.DisplayPopUp(bonus_popUpString_text, transform.position.x, transform.position.y);
                 Universal_DistortionDynamic.SingleOnScene.WorldDistortion(transform.position);

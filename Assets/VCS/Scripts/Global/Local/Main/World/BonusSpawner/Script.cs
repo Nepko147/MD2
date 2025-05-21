@@ -8,6 +8,11 @@ public class World_BonusSpawner : MonoBehaviour
 
     [SerializeField] private GameObject[] bonusArray;
 
+    public Vector2 BonusSpawn_SpawnPoint_Line_1 { get; set; }
+    public Vector2 BonusSpawn_SpawnPoint_Line_2 { get; set; }
+    public Vector2 BonusSpawn_SpawnPoint_Line_3 { get; set; }
+    public Vector2 BonusSpawn_SpawnPoint_Line_4 { get; set; }
+
     private float                   bonusSpawn_delay;
     [SerializeField] private float  bonusSpawn_delay_init;
     [SerializeField] private float  bonusSpawn_delay_coinRush;
@@ -26,16 +31,16 @@ public class World_BonusSpawner : MonoBehaviour
         switch (_lineNumber)
         {
             case 1:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_1;
+                _position = BonusSpawn_SpawnPoint_Line_1;
                 break;
             case 2:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_2;
+                _position = BonusSpawn_SpawnPoint_Line_2;
                 break;
             case 3:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_3;
+                _position = BonusSpawn_SpawnPoint_Line_3;
                 break;
             case 4:
-                _position = ControlScene_Entity_Main.SingleOnScene.SpawnPoint_Line_4;
+                _position = BonusSpawn_SpawnPoint_Line_4;
                 break;
         }
         
