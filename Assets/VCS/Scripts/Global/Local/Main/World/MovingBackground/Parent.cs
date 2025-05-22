@@ -9,7 +9,7 @@ public class World_MovingBackground_Parent : MonoBehaviour
 
     protected void Awake()
     {
-        Active = true;
+        Active = false;
     }
 
     private void FixedUpdate()
