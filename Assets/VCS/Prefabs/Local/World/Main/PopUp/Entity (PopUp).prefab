@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 191972602186567944}
   - component: {fileID: 7591861414053075770}
-  - component: {fileID: 4785309593638528172}
   - component: {fileID: 4864488512681004471}
   m_Layer: 0
-  m_Name: String (Bonus)
+  m_Name: Entity (PopUp)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,23 +61,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 80
   m_TargetDisplay: 0
---- !u!114 &4785309593638528172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 742127726445996379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &4864488512681004471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,8 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 228cea4a3568c644c8605dc38680bc32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popup_string: {fileID: 291695020300536469}
-  popup_time: 0.3
+  textComponent: {fileID: 291695020300536469}
 --- !u!1 &5308367077025006301
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +88,7 @@ GameObject:
   - component: {fileID: 2922681564654387511}
   - component: {fileID: 170149880965417878}
   m_Layer: 0
-  m_Name: PopUpString
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +154,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +1 Coin
+  m_Text: Pop Up Text
 --- !u!114 &2922681564654387511
 MonoBehaviour:
   m_ObjectHideFlags: 0

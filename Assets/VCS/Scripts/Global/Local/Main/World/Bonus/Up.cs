@@ -4,14 +4,14 @@ public class World_Bonus_Up : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private float              bonus_speed;
-    [SerializeField] private AudioClip          bonus_sound;
+    [SerializeField] private float          bonus_speed;
+    [SerializeField] private AudioClip      bonus_sound;
 
-    [SerializeField] private World_BonusString  bonus_popUpString;
-    [SerializeField] private string             bonus_popUpString_text;
+    [SerializeField] private World_PopUp    bonus_popUpString;
 
-    Animator                                    bonus_animation;
-    BoxCollider2D                               bonus_boxCollider;  
+    Animator bonus_animation;
+    const string BONUS_ANIMATION_TYPE = "type";
+    BoxCollider2D bonus_boxCollider;
 
     private void Awake()
     {
@@ -30,15 +30,19 @@ public class World_Bonus_Up : MonoBehaviour
             
             if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
-                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound); //∆дЄм по€влени€ јудиоћиксера
-                World_Player.SingleOnScene.TakeDamage(-1);
-                bonus_popUpString.DisplayPopUp(bonus_popUpString_text, transform.position.x, transform.position.y);
-                Universal_DistortionDynamic.SingleOnScene.WorldDistortion(transform.position);
+                Active = false;
+
+                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
+                World_Player.SingleOnScene.TakeUp();
+
+                var _popUp = Instantiate(bonus_popUpString, transform.position, transform.rotation);
+                _popUp.Display_AsUp();
+
                 Destroy(gameObject);
             }
 
             //”ничтожаем объект, когда он уходит за пределы экрана
-            if (gameObject.transform.position.x <= -10.0f)
+            if (transform.position.x <= -10.0f)
             {
                 Destroy(gameObject);
             }            

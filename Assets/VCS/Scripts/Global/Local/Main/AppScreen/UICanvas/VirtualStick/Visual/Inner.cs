@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AppScreen_GeneralCanvas_VirtualStick_Visual_Inner : AppScreen_GeneralCanvas_VirtualStick_Visual_Parent
 {

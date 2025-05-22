@@ -19,7 +19,7 @@ public class World_Player : MonoBehaviour
     public float                    Player_Complete { get; set; }
     [SerializeField] private float  player_complete_init;
 
-    public int                      Plyer_Coins { get; set; }
+    public int                      Player_Coins { get; set; }
 
     Animator                        player_animation;
     const string                    PLAYER_ANIMATION_UP = "up";
@@ -37,6 +37,7 @@ public class World_Player : MonoBehaviour
         Active = true;
 
         Player_Ups = player_ups_init;
+        Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();       
@@ -99,15 +100,20 @@ public class World_Player : MonoBehaviour
             player_animation.speed = 0;
         }                  
     }    
-        
-    //Получение урона объектом
-    public void TakeDamage(int _damage)
+    
+    public void LoseUp()
     {
-        Player_Ups -= _damage;
+        --Player_Ups;
+        Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual -= 1;
+    }
+
+    public void TakeUp()
+    {
+        ++Player_Ups;
     }
 
     public void TakeCoin()
     {
-        ++Plyer_Coins;
+        ++Player_Coins;
     }
 }
