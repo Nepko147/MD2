@@ -1,18 +1,18 @@
+using System;
 using UnityEngine;
 
 public class World_Bonus_Coin : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private float              bonus_speed;
-    [SerializeField] private AudioClip          bonus_sound;
+    [SerializeField] private float        bonus_speed;
+    [SerializeField] private AudioClip    bonus_sound;
 
-    [SerializeField] private World_BonusString  bonus_popUpString;
-    [SerializeField] private string             bonus_popUpString_text;
+    [SerializeField] private World_PopUp  bonus_popUpString;
 
-    Animator                                    bonus_animation;
-    const string                                BONUS_ANIMATION_TYPE = "type";
-    BoxCollider2D                               bonus_boxCollider;  
+    Animator                              bonus_animation;
+    const string                          BONUS_ANIMATION_TYPE = "type";
+    BoxCollider2D                         bonus_boxCollider;  
 
     private void Awake()
     {
@@ -33,9 +33,13 @@ public class World_Bonus_Coin : MonoBehaviour
             
             if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
+                Active = false;
+
                 ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
                 World_Player.SingleOnScene.TakeCoin();
-                bonus_popUpString.DisplayPopUp(bonus_popUpString_text, transform.position.x, transform.position.y);
+
+                var _popUp = Instantiate(bonus_popUpString, transform.position, transform.rotation);
+                _popUp.Display_AsCoin();
 
                 Destroy(gameObject);
             }

@@ -28,7 +28,7 @@ public class World_Enemy : MonoBehaviour
             {
                 ControlPers_AudioManager.SingleOnScene.PlaySound(enemy_hitSound);
                 enemy_isDamaged = true;
-                World_Player.SingleOnScene.TakeDamage(1);
+                World_Player.SingleOnScene.LoseUp();
             }
 
             //”ничтожаем объект, когда он уходит за пределы экрана

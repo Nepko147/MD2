@@ -5,74 +5,103 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 {
     public static Main_AppScreen_UICanvas_Entity SingleOnScene { get; private set; }
 
-    public Camera AppScreen_Canvas_Camera { get; private set; }
+    public Camera Camera { get; private set; }
     
-    [SerializeField] GameObject appScreen_canvas_ups_string;
-    private Text                appScreen_canvas_ups_string_text;
+    [SerializeField] GameObject ups_string;
+    private Text                ups_string_text;
+    private int                 ups_visual;
+    public int                  Ups_Visual
+    {
+        get 
+        {
+            return (ups_visual); 
+        }
+        set 
+        {
+            ups_visual = value;
+            ups_string_text.text = TEXT_X + ups_visual.ToString();
+        }
+    }
 
-    [SerializeField] GameObject appScreen_canvas_ups_sprite;
-    private Image               appScreen_canvas_ups_sprite_image;
+    [SerializeField] GameObject ups_sprite;
+    private Image               ups_sprite_image;
 
-    [SerializeField] GameObject appScreen_canvas_coins_string;
-    private Text                appScreen_canvas_coins_string_text;
+    [SerializeField] GameObject coins_string;
+    private Text                coins_string_text;
+    private int                 coins_visual;
+    public int                  Coins_Visual
+    {
+        get
+        {
+            return (coins_visual);
+        }
+        set
+        {
+            coins_visual = value;
+            coins_string_text.text = TEXT_X + coins_visual.ToString();
+        }
+    }
 
-    [SerializeField] GameObject appScreen_canvas_coins_sprite;
-    private Image               appScreen_canvas_coins_sprite_image;
+    [SerializeField] GameObject coins_sprite;
+    private Image               coins_sprite_image;
 
-    [SerializeField] GameObject appScreen_canvas_complete_string;
-    private Text                appScreen_canvas_complete_string_text;
+    [SerializeField] GameObject complete_string;
+    private Text                complete_string_text;
 
-    [SerializeField] GameObject appScreen_canvas_midScreenBigString;
-    private Text                appScreen_canvas_midScreenBigString_text;
+    [SerializeField] GameObject midScreenBigString;
+    private Text                midScreenBigString_text;
 
-    [SerializeField] GameObject appScreen_canvas_midScreenSmallString;
-    private Text                appScreen_canvas_midScreenSmallString_text;
+    [SerializeField] GameObject midScreenSmallString;
+    private Text                midScreenSmallString_text;
 
-    const string APPSCREEN_CANVAS_TEXT_DISTANCEREMMAIN = "Distance ramain: ";
-    const string APPSCREEN_CANVAS_TEXT_COMPLETE = "COMPLETE: ";
-    const string APPSCREEN_CANVAS_TEXT_GAMEOVER = "GAME OVER";
-    const string APPSCREEN_CANVAS_TEXT_PAUSE = "PAUSE";
-    const string APPSCREEN_CANVAS_TEXT_METERS = " m.";
-    const string APPSCREEN_CANVAS_TEXT_X = "x";
+    const string TEXT_DISTANCEREMMAIN = "Distance ramain: ";
+    const string TEXT_COMPLETE = "COMPLETE: ";
+    const string TEXT_GAMEOVER = "GAME OVER";
+    const string TEXT_PAUSE = "PAUSE";
+    const string TEXT_METERS = " m.";
+    const string TEXT_X = "x";
 
     public void ShowGameOver()
     {        
-        appScreen_canvas_ups_string_text.enabled = false;
-        appScreen_canvas_ups_sprite_image.enabled = false;
-        appScreen_canvas_coins_string_text.enabled = false;
-        appScreen_canvas_coins_sprite_image.enabled = false;
-        appScreen_canvas_complete_string_text.enabled = false;
-        appScreen_canvas_midScreenBigString_text.enabled = true;
-        appScreen_canvas_midScreenBigString_text.text = APPSCREEN_CANVAS_TEXT_GAMEOVER;
-        appScreen_canvas_midScreenSmallString_text.enabled = true;
-        appScreen_canvas_midScreenSmallString_text.text = APPSCREEN_CANVAS_TEXT_DISTANCEREMMAIN + (int)World_Player.SingleOnScene.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
+        ups_string_text.enabled = false;
+        ups_sprite_image.enabled = false;
+        coins_string_text.enabled = false;
+        coins_sprite_image.enabled = false;
+        complete_string_text.enabled = false;
+        midScreenBigString_text.enabled = true;
+        midScreenBigString_text.text = TEXT_GAMEOVER;
+        midScreenSmallString_text.enabled = true;
+        midScreenSmallString_text.text = TEXT_DISTANCEREMMAIN + (int)World_Player.SingleOnScene.Player_Complete + TEXT_METERS;
     }
 
     public void SetPause(bool _pause)
     {        
-        appScreen_canvas_midScreenBigString_text.enabled = _pause;
-        appScreen_canvas_midScreenBigString_text.text = APPSCREEN_CANVAS_TEXT_PAUSE;
+        midScreenBigString_text.enabled = _pause;
+        midScreenBigString_text.text = TEXT_PAUSE;
     }
 
     private void Awake()
     {
         SingleOnScene = this;
 
-        AppScreen_Canvas_Camera = GetComponent<Canvas>().worldCamera;
-        appScreen_canvas_ups_string_text = appScreen_canvas_ups_string.GetComponent<Text>();
-        appScreen_canvas_ups_sprite_image = appScreen_canvas_ups_sprite.GetComponent<Image>();
-        appScreen_canvas_coins_string_text = appScreen_canvas_coins_string.GetComponent<Text>();
-        appScreen_canvas_coins_sprite_image = appScreen_canvas_coins_sprite.GetComponent<Image>();
-        appScreen_canvas_complete_string_text = appScreen_canvas_complete_string.GetComponent<Text>();
-        appScreen_canvas_midScreenBigString_text = appScreen_canvas_midScreenBigString.GetComponent<Text>();
-        appScreen_canvas_midScreenSmallString_text = appScreen_canvas_midScreenSmallString.GetComponent<Text>();
+        Camera = GetComponent<Canvas>().worldCamera;
+        ups_string_text = ups_string.GetComponent<Text>();
+        ups_sprite_image = ups_sprite.GetComponent<Image>();
+        coins_string_text = coins_string.GetComponent<Text>();
+        coins_sprite_image = coins_sprite.GetComponent<Image>();
+        complete_string_text = complete_string.GetComponent<Text>();
+        midScreenBigString_text = midScreenBigString.GetComponent<Text>();
+        midScreenSmallString_text = midScreenSmallString.GetComponent<Text>();
+    }
+
+    private void Start()
+    {
+        Ups_Visual = World_Player.SingleOnScene.Player_Ups;
+        Coins_Visual = World_Player.SingleOnScene.Player_Coins;
     }
 
     private void FixedUpdate()
     {
-        //Получение данных из объекта игрока (World_Player)
-        appScreen_canvas_ups_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.SingleOnScene.Player_Ups;
-        appScreen_canvas_coins_string_text.text = APPSCREEN_CANVAS_TEXT_X + World_Player.SingleOnScene.Plyer_Coins;
-        appScreen_canvas_complete_string_text.text = APPSCREEN_CANVAS_TEXT_COMPLETE + (int)World_Player.SingleOnScene.Player_Complete + APPSCREEN_CANVAS_TEXT_METERS;
+        complete_string_text.text = TEXT_COMPLETE + (int)World_Player.SingleOnScene.Player_Complete + TEXT_METERS;
     }
 }
