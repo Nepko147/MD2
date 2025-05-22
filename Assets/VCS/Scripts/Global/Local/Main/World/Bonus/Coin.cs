@@ -5,38 +5,37 @@ public class World_Bonus_Coin : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private float        bonus_speed;
-    [SerializeField] private AudioClip    bonus_sound;
+    [SerializeField] private float        speed;
+    [SerializeField] private AudioClip    sound;
 
-    [SerializeField] private World_PopUp  bonus_popUpString;
+    [SerializeField] private World_PopUp  popUpString;
 
-    Animator bonus_animation;
-    const string BONUS_ANIMATION_TYPE = "type";
-    BoxCollider2D bonus_boxCollider;
+    new Animator animation;
+    BoxCollider2D boxCollider;
 
     private void Awake()
     {
         Active = true;
 
-        bonus_animation = GetComponent<Animator>();
-        bonus_boxCollider = GetComponent<BoxCollider2D>();           
+        animation = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();           
     }
 
     private void FixedUpdate()
     {         
         if (Active)
         {
-            bonus_animation.speed = 1;
-            transform.position += Vector3.left * bonus_speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
+            animation.speed = 1;
+            transform.position += Vector3.left * speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
-            if (bonus_boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
+            if (boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
             {
                 Active = false;
 
-                ControlPers_AudioManager.SingleOnScene.PlaySound(bonus_sound);
+                ControlPers_AudioManager.SingleOnScene.PlaySound(sound);
                 World_Player.SingleOnScene.TakeCoin();
 
-                var _popUp = Instantiate(bonus_popUpString, transform.position, transform.rotation);
+                var _popUp = Instantiate(popUpString, transform.position, transform.rotation);
                 _popUp.Display_AsCoin();
 
                 Destroy(gameObject);
@@ -50,7 +49,7 @@ public class World_Bonus_Coin : MonoBehaviour
         } 
         else 
         {
-            bonus_animation.speed = 0;
+            animation.speed = 0;
         }        
     }
  }

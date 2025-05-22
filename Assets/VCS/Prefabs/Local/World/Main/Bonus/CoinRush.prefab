@@ -198,7 +198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1ad3a0c003cdd4b8aa11681f6fa3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonus_speed: 10
-  bonus_sound: {fileID: 8300000, guid: d68523d44f21e4641a6e778b0bad34f8, type: 3}
-  bonus_popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
-  bonus_popUpString_text: Coin Rush!
+  speed: 10
+  sound: {fileID: 8300000, guid: d68523d44f21e4641a6e778b0bad34f8, type: 3}
+  popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}

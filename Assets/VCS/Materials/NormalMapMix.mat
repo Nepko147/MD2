@@ -83,17 +83,10 @@ Material:
     - _OverlayScale: 1.0287787
     - _OverlayScaleX: 0.3
     - _OverlayScaleY: 0.3
-<<<<<<< HEAD
-    - _OverlayTexApha: 0.25215226
-    - _OverlayTexPosX: 0.12681618
-    - _OverlayTexPosY: 0.07255283
-    - _OverlayTexScale: 2.991391
-=======
-    - _OverlayTexApha: 0.0019093752
-    - _OverlayTexPosX: 0.11956832
-    - _OverlayTexPosY: 0.34783393
-    - _OverlayTexScale: 3.9923625
->>>>>>> threatlvl
+    - _OverlayTexApha: 0.0009165406
+    - _OverlayTexPosX: 0.1263431
+    - _OverlayTexPosY: 0.068188846
+    - _OverlayTexScale: 3.9963338
     - _Parallax: 0.02
     - _PositionX: 0
     - _PositionY: 0

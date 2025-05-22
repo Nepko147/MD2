@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 300, y: -50}
-  m_SizeDelta: {x: 729.5, y: 100}
+  m_AnchoredPosition: {x: 21.86, y: -16.13}
+  m_SizeDelta: {x: 173.21, y: 32.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4265488867649839611
 CanvasRenderer:
@@ -565,6 +565,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754a1dc815e38374abd4bc954e8e48e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  postProcess_profile_chromaticAberration_speed: 0.000001
+  postProcess_profile_chromaticAberration_max: 0.2
 --- !u!81 &7975770791044336780
 AudioListener:
   m_ObjectHideFlags: 0
@@ -799,10 +801,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e82c67bf7abb70429ab58073dde0725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appScreen_canvas_ups_string: {fileID: 0}
-  appScreen_canvas_ups_sprite: {fileID: 0}
-  appScreen_canvas_coins_string: {fileID: 0}
-  appScreen_canvas_coins_sprite: {fileID: 0}
-  appScreen_canvas_complete_string: {fileID: 0}
-  appScreen_canvas_midScreenBigString: {fileID: 0}
-  appScreen_canvas_midScreenSmallString: {fileID: 0}
+  ups_string: {fileID: 0}
+  ups_sprite: {fileID: 0}
+  coins_string: {fileID: 0}
+  coins_sprite: {fileID: 0}
+  complete_string: {fileID: 0}
+  midScreenBigString: {fileID: 0}
+  midScreenSmallString: {fileID: 0}

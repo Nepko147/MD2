@@ -198,7 +198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e40ba3a908794cb1e94aed3afc1f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonus_speed: 10
-  bonus_sound: {fileID: 8300000, guid: 98281e0d92360734c9cf57929dc5c043, type: 3}
-  bonus_popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
-  bonus_popUpString_text: +1 Coin
+  speed: 10
+  sound: {fileID: 8300000, guid: 98281e0d92360734c9cf57929dc5c043, type: 3}
+  popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
