@@ -11,7 +11,6 @@ public class World_Bonus_Coin : MonoBehaviour
     [SerializeField] private string             bonus_popUpString_text;
 
     Animator                                    bonus_animation;
-    const string                                BONUS_ANIMATION_TYPE = "type";
     BoxCollider2D                               bonus_boxCollider;  
 
     private void Awake()
@@ -19,8 +18,6 @@ public class World_Bonus_Coin : MonoBehaviour
         Active = true;
 
         bonus_animation = GetComponent<Animator>();
-        bonus_animation.SetInteger(BONUS_ANIMATION_TYPE, 0);
-
         bonus_boxCollider = GetComponent<BoxCollider2D>();           
     }
 

@@ -174,7 +174,7 @@ Animator:
   m_GameObject: {fileID: 7927319850947223451}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: db3987208f34fe3488f7b11242bf94c3, type: 2}
+  m_Controller: {fileID: 9100000, guid: f073031ea65652e48995cacbe0766446, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -199,7 +199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonus_speed: 10
-  bonus_distortionEffect: 1
   bonus_sound: {fileID: 8300000, guid: d68523d44f21e4641a6e778b0bad34f8, type: 3}
   bonus_popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
   bonus_popUpString_text: Coin Rush!

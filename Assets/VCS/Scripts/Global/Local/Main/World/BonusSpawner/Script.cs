@@ -23,37 +23,6 @@ public class World_BonusSpawner : MonoBehaviour
     private const float COINRUSH_TIMER_INIT = 5f;
     private float coinRush_timer = COINRUSH_TIMER_INIT;
 
-    public void BonusSpawn()
-    {
-        int _lineNumber = Random.Range(1, 5);
-        Vector2 _position = new Vector2();
-
-        switch (_lineNumber)
-        {
-            case 1:
-                _position = BonusSpawn_SpawnPoint_Line_1;
-                break;
-            case 2:
-                _position = BonusSpawn_SpawnPoint_Line_2;
-                break;
-            case 3:
-                _position = BonusSpawn_SpawnPoint_Line_3;
-                break;
-            case 4:
-                _position = BonusSpawn_SpawnPoint_Line_4;
-                break;
-        }
-        
-        int _bonusArray_index = 0; 
-
-        if (!CoinRush)
-        {
-            _bonusArray_index = Random.Range(0, bonusArray.Length);
-        }
-        
-        Instantiate(bonusArray[_bonusArray_index], _position, new Quaternion());
-    }
-
     public void BonusSpawn_Delay_Reset()
     {
         var _bonusSpawn_delay = Random.Range(bonusSpawn_delay_min, bonusSpawn_delay_max);
@@ -82,7 +51,33 @@ public class World_BonusSpawner : MonoBehaviour
             } 
             else
             {
-                BonusSpawn();
+                int _lineNumber = Random.Range(1, 5);
+                Vector2 _position = new Vector2();
+
+                switch (_lineNumber)
+                {
+                    case 1:
+                        _position = BonusSpawn_SpawnPoint_Line_1;
+                        break;
+                    case 2:
+                        _position = BonusSpawn_SpawnPoint_Line_2;
+                        break;
+                    case 3:
+                        _position = BonusSpawn_SpawnPoint_Line_3;
+                        break;
+                    case 4:
+                        _position = BonusSpawn_SpawnPoint_Line_4;
+                        break;
+                }
+
+                int _bonusArray_index = 0;
+
+                if (!CoinRush)
+                {
+                    _bonusArray_index = Random.Range(0, bonusArray.Length);
+                }
+
+                Instantiate(bonusArray[_bonusArray_index], _position, new Quaternion());
                 BonusSpawn_Delay_Reset();
             }
 
