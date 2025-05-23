@@ -14,9 +14,12 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
     private bool active = false;
 
+    [SerializeField] private float inner_position_deadzone = 0.001f;
     [SerializeField] private float inner_position_offset_max = 15f;
 
     public float Inner_Direction { get; private set; }
+
+    public float test;
 
     private void Awake()
     {
@@ -52,7 +55,11 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
                 var _inner_position_offset = _world_position_vec3 - rectTransrotm.position;
                 var _inner_position_offset_clamp = Vector3.ClampMagnitude(_inner_position_offset, inner_position_offset_max);
                 Visual_Inner.RectTransform_Position_Set = rectTransrotm.position + _inner_position_offset_clamp;
-                Inner_Direction = MathHandler.VectorToAngle(_inner_position_offset_clamp);
+                
+                if (_inner_position_offset_clamp.magnitude > inner_position_deadzone)
+                {
+                    Inner_Direction = MathHandler.VectorToAngle(_inner_position_offset_clamp);
+                }
             }
         }
         else

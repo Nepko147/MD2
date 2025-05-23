@@ -83,10 +83,10 @@ Material:
     - _OverlayScale: 1.0287787
     - _OverlayScaleX: 0.3
     - _OverlayScaleY: 0.3
-    - _OverlayTexApha: 0.0009165406
-    - _OverlayTexPosX: 0.1263431
-    - _OverlayTexPosY: 0.068188846
-    - _OverlayTexScale: 3.9963338
+    - _OverlayTexApha: 0.00071024895
+    - _OverlayTexPosX: 0.13210243
+    - _OverlayTexPosY: 0.084700674
+    - _OverlayTexScale: 3.997159
     - _Parallax: 0.02
     - _PositionX: 0
     - _PositionY: 0

@@ -6,12 +6,22 @@ public class World_Player : MonoBehaviour
 
     public bool Active { get; set; }
 
-    public const int LINE_1_SORTINGORDER_PLAYER = 90;
-    public const int LINE_2_SORTINGORDER_PLAYER = 110;
-    public const int LINE_3_SORTINGORDER_PLAYER = 130;
-    public const int LINE_4_SORTINGORDER_PLAYER = 150;
+    const int   LINE_1_SORTINGORDER_PLAYER = 90;
+    const float LINE_1_POSITION_Y = -0.55f;
+
+    const int   LINE_2_SORTINGORDER_PLAYER = 110;
+    const float LINE_2_POSITION_Y = -0.85f;
+
+    const int   LINE_3_SORTINGORDER_PLAYER = 130;
+    const float LINE_3_POSITION_Y = -1.15f;
+
+    const int   LINE_4_SORTINGORDER_PLAYER = 150;
+    const float LINE_4_POSITION_Y = -1.45f;
 
     [SerializeField] private float  player_controlls;
+
+    Vector3 player_newPosition;
+    bool player_moving;
 
     public int                      Player_Ups { get; set; }
     [SerializeField] private int    player_ups_init;    
@@ -25,11 +35,8 @@ public class World_Player : MonoBehaviour
     const string                    PLAYER_ANIMATION_UP = "up";
     const string                    PLAYER_ANIMATION_DOWN = "down";
 
-    private SpriteRenderer          player_spriteRenderer;
-
-    private float border_top = -0.55f; //¬ременно
-    private float border_bot = -1.45f; //¬ременно
-
+    private SpriteRenderer          player_spriteRenderer;  
+    
     private void Awake()
     {       
         SingleOnScene = this;
@@ -40,59 +47,99 @@ public class World_Player : MonoBehaviour
         Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
-        player_spriteRenderer = GetComponent<SpriteRenderer>();       
+        player_spriteRenderer = GetComponent<SpriteRenderer>();        
+        transform.position = new Vector3(transform.position.x, LINE_2_POSITION_Y, transform.position.z);
     }
 
     private void FixedUpdate()
-    {    
+    {     
         if (Active)
         {
             player_animation.speed = 1;
 
-            Player_Complete -= World_MovingBackground_Entity.SingleOnScene.SpeedScale;                    
-            
-            if ((Input.GetKey(KeyCode.UpArrow) 
-                || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0) 
-                && transform.position.y < border_top)
-            {
-                player_animation.SetBool(PLAYER_ANIMATION_UP, true);
-                player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
-                transform.position += Vector3.up * player_controlls;                
-            }
-            else if ((Input.GetKey(KeyCode.DownArrow) 
-                || AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0)
-                && transform.position.y > border_bot)
-            {
-                player_animation.SetBool(PLAYER_ANIMATION_UP, false);
-                player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
-                transform.position -= Vector3.up * player_controlls;
-            }
-            else
+            Player_Complete -= World_MovingBackground_Entity.SingleOnScene.SpeedScale;
+
+            if (!player_moving)
             {
                 player_animation.SetBool(PLAYER_ANIMATION_UP, false);
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
-            }
-            
-            switch (transform.position.y) // ¬–≈ћ≈ЌЌќ
-            {
-                case < -1.45f:
-                    player_spriteRenderer.sortingOrder = LINE_4_SORTINGORDER_PLAYER;
-                    break;
-                case < -1.15f:
-                    player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
-                    break;
-                case < -0.85f:
-                    player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
-                    break;
-                case < -0.6f:
-                    player_spriteRenderer.sortingOrder = LINE_1_SORTINGORDER_PLAYER;
-                    break;
             }
 
-            if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
+            if (AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0
+                && !player_moving)
             {
-                player_animation.SetBool(PLAYER_ANIMATION_UP, false);
+                player_moving = true;                
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
+                var _y = transform.position.y;
+
+                switch (transform.position.y)
+                {
+                    case LINE_1_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_UP, false);
+                        player_moving = false;
+                        break;
+                    case LINE_2_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_UP, true);
+                        player_spriteRenderer.sortingOrder = LINE_1_SORTINGORDER_PLAYER;
+                        _y = LINE_1_POSITION_Y;
+                        break;
+                    case LINE_3_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_UP, true);
+                        player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
+                        _y = LINE_2_POSITION_Y;
+                        break;
+                    case LINE_4_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_UP, true);
+                        player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
+                        _y = LINE_3_POSITION_Y;
+                        break;
+                }
+
+                player_newPosition = new Vector3(transform.position.x, _y , transform.position.z);
+            }
+
+            if (AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0
+                && !player_moving)
+            {
+                player_moving = true;
+                player_animation.SetBool(PLAYER_ANIMATION_UP, false);                
+                var _y = transform.position.y;
+
+                switch (transform.position.y)
+                {
+                    case LINE_1_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
+                        player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
+                        _y = LINE_2_POSITION_Y;
+                        break;
+                    case LINE_2_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
+                        player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
+                        _y = LINE_3_POSITION_Y;
+                        break;
+                    case LINE_3_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
+                        player_spriteRenderer.sortingOrder = LINE_4_SORTINGORDER_PLAYER;
+                        _y = LINE_4_POSITION_Y;
+                        break;
+                    case LINE_4_POSITION_Y:
+                        player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
+                        player_moving = false;
+                        break;
+                }
+
+                player_newPosition = new Vector3(transform.position.x, _y, transform.position.z);
+            }
+            
+            if (player_moving)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, player_newPosition, player_controlls);
+
+                if (transform.position == player_newPosition)
+                {                    
+                    transform.position = player_newPosition; // √аранитруем, что игрок будет в нужной точке. ¬Ќ≈«јѕЌќ: "transform.position == player_newPosition" и "Vector3.MoveTowards(...)" не грантируют!
+                    player_moving = false;
+                }
             }
         }
         else
