@@ -4,7 +4,7 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
 {
     public static AppScreen_UICanvas_Indicators SingleOnScene { get; private set; }
 
-    float alpha;
+    CanvasGroup canvasGroup;
     [SerializeField] float alpha_init;
     [SerializeField] float aplha_delta;
 
@@ -15,7 +15,8 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
     {
         SingleOnScene = this;
 
-        GetComponent<CanvasGroup>().alpha = alpha_init; //Если "GetComponent<CanvasGroup>().alpha" запихать в переменную, то работать ничего не будет.
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = alpha_init;
     }
 
     public void Show()
@@ -34,20 +35,20 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
     {
         if (show)
         {
-            GetComponent<CanvasGroup>().alpha += aplha_delta * Time.deltaTime;
-            if (alpha >= 1)
+            canvasGroup.alpha += aplha_delta * Time.deltaTime;
+            if (canvasGroup.alpha >= 1)
             {
-                alpha = 1;
+                canvasGroup.alpha = 1;
                 show = false;
             }
         }
 
         if (hide)
         {
-            GetComponent<CanvasGroup>().alpha -= aplha_delta * Time.deltaTime;
-            if (alpha <= 0)
+            canvasGroup.alpha -= aplha_delta * Time.deltaTime;
+            if (canvasGroup.alpha <= 0)
             {
-                alpha = 0;
+                canvasGroup.alpha = 0;
                 hide = false;
             }
         }
