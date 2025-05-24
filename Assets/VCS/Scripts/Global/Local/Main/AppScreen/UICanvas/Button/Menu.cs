@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
@@ -7,19 +8,20 @@ public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
 
     public bool Pressed { get; set; }
 
-    [SerializeField] private AudioClip switchSound;
+    [SerializeField] private AudioClip pressSound;
 
     private void Awake()
     {
         SingleOnScene = this;
 
         Pressed = false;
+
         GetComponent<Image>().enabled = false;
     }
 
     public void OnClick()
     {
         Pressed = true;
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound); //Ждём появления АудиоМиксера
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
     }
 }

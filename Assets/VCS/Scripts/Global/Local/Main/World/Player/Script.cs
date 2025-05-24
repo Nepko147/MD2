@@ -35,8 +35,9 @@ public class World_Player : MonoBehaviour
     const string                    PLAYER_ANIMATION_UP = "up";
     const string                    PLAYER_ANIMATION_DOWN = "down";
 
-    private SpriteRenderer          player_spriteRenderer;  
-    
+    private SpriteRenderer          player_spriteRenderer;
+    public BoxCollider2D            Player_BoxCollider { get; private set; }
+
     private void Awake()
     {       
         SingleOnScene = this;
@@ -47,7 +48,9 @@ public class World_Player : MonoBehaviour
         Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
-        player_spriteRenderer = GetComponent<SpriteRenderer>();        
+        player_spriteRenderer = GetComponent<SpriteRenderer>();
+        Player_BoxCollider = GetComponent<BoxCollider2D>();
+
         transform.position = new Vector3(transform.position.x, LINE_2_POSITION_Y, transform.position.z);
     }
 
@@ -151,7 +154,7 @@ public class World_Player : MonoBehaviour
     public void LoseUp()
     {
         --Player_Ups;
-        Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual -= 1;
+        --Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual;
     }
 
     public void TakeUp()

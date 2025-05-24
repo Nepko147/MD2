@@ -1,16 +1,15 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class World_Bonus_CoinRush : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private float        speed;
-    [SerializeField] private AudioClip    sound;
-
-    [SerializeField] private World_PopUp  popUpString;
-
-    new Animator animation;
-    BoxCollider2D boxCollider;
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private World_PopUp popUp;
+    [SerializeField] private AudioClip sound;
+    private new Animator animation;
+    private BoxCollider2D boxCollider;
 
     private void Awake()
     {
@@ -27,16 +26,17 @@ public class World_Bonus_CoinRush : MonoBehaviour
             animation.speed = 1;
             transform.position += Vector3.left * speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
-            if (boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
+            if (boxCollider.bounds.Intersects(World_Player.SingleOnScene.Player_BoxCollider.bounds))
             {
                 Active = false;
 
-                ControlPers_AudioManager.SingleOnScene.PlaySound(sound);
+                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound);
+
                 World_BonusSpawner.SingleOnScene.CoinRush = true;
                 World_BonusSpawner.SingleOnScene.BonusSpawn_Delay_Reset();
-                Universal_DistortionDynamic.SingleOnScene.WorldDistortion(transform.position);
+                Universal_DistortionDynamic.SingleOnScene.CoinRush(transform.position);
 
-                var _inst = Instantiate(popUpString, transform.position, transform.rotation);
+                var _inst = Instantiate(popUp, transform.position, transform.rotation);
                 _inst.Display_AsCoinRush();
                 
                 Destroy(gameObject);

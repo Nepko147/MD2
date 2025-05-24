@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_Camera_WorldCammera_Slope : MonoBehaviour    
+public class AppScreen_Camera_World_Slope : MonoBehaviour    
 {
-    public static AppScreen_Camera_WorldCammera_Slope SingleOnScene { get; private set; }
+    public static AppScreen_Camera_World_Slope SingleOnScene { get; private set; }
     
     private Vector3 camera_originRotation;
     private Vector3 camera_leftMaxRotation;

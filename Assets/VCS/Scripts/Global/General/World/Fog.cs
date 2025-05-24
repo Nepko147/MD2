@@ -41,7 +41,7 @@ public class World_Fog : MonoBehaviour
     private const string MATERIAL_OFFSET_UNIFORM = "u_offset";
     private Vector4 material_offset_val = new Vector4();
     private const float MATERIAL_OFFSET_STEPSCALE_MIN = 0.1f;
-    private const float MATERIAL_OFFSET_STEPSCALE_MAX = 2f;
+    private const float MATERIAL_OFFSET_STEPSCALE_MAX = 1f;
     private float material_offset_stepScale = MATERIAL_OFFSET_STEPSCALE_MIN;
     private float material_offset_stepScale_step = 0;
     private bool material_offset_stepScale_step_change = false;

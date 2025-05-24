@@ -69,7 +69,7 @@ public class World_MovingBackground_Entity : MonoBehaviour
         Active = false;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (Active)
         {

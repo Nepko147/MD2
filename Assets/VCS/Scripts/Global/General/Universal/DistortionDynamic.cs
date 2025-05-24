@@ -4,114 +4,130 @@ public class Universal_DistortionDynamic : MonoBehaviour
 {
     public static Universal_DistortionDynamic SingleOnScene { get; private set; }
 
-    public bool GameOver { get; set; }
+    private float screenWidth;
+    private float screenHeight;
 
-    float screenWidth;
-    float screenHeight;
+    private new Camera camera;
 
-    new Camera camera;
+    [SerializeField] private Material   distortion_material;
+    private const string                DISTORION_MATERIAL_U_ASPECT = "u_aspect";
+    private const string                DISTORION_MATERIAL_U_TEXNORMALMAP = "u_texNormalMap";
 
-    [SerializeField] Material   distortion_material;
-    const string                DISTORION_MATERIAL_U_ASPECT = "u_aspect";
-    const string                DISTORION_MATERIAL_U_TEXNORMALMAP = "u_texNormalMap";
+    [SerializeField] private Material   normalMapMix_material;
+    private const string                NORMALMAPMIX_MATERIAL_OVERLAYTEX = "_OverlayTex";
+    private const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA = "_OverlayTexApha";
+    private const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX = "_OverlayTexPosX";
+    private const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY = "_OverlayTexPosY";
+    private const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE = "_OverlayTexScale";
+    private const string                NORMALMAPMIX_MATERIAL_ASPECTX = "_AspectX";
+    private const string                NORMALMAPMIX_MATERIAL_ASPECTY = "_AspectY";
 
-    [SerializeField] Material   normalMapMix_material;
-    const string                NORMALMAPMIX_MATERIAL_OVERLAYTEX = "_OverlayTex";
-    const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA = "_OverlayTexApha";
-    const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX = "_OverlayTexPosX";
-    const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY = "_OverlayTexPosY";
-    const string                NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE = "_OverlayTexScale";
-    const string                NORMALMAPMIX_MATERIAL_ASPECTX = "_AspectX";
-    const string                NORMALMAPMIX_MATERIAL_ASPECTY = "_AspectY";
-    [SerializeField] Texture2D  normalMapMix_material_clearNormalMap;
-    [SerializeField] Texture2D  normalMapMix_material_gameOverNormalMap;
-    [SerializeField] Sprite     normalMapMix_material_distorionNormalMap_sprite;
-    Texture2D                   normalMapMix_material_distorionNormalMap_texture;
-    [SerializeField] float      normalMapMix_material_distorionNormalMap_visualDiameterInPixels;
-    [SerializeField] float      normalMapMix_material_distortionScale;
-    public bool                 NormalMapMix_Material_Active { get; set; }
-    public Vector3              NormalMapMix_Material_WorldPos { get; set; }
-    public float                NormalMapMix_Material_ScreenPos_X { get; set; }
-    public float                NormalMapMix_Material_ScreenPos_Y { get; set; }
-    float                       normalMapMix_material_timer;
-    [SerializeField] float      normalMapMix_material_timer_max;
-    RenderTexture               normalMapMix_material_output_normalMap_renderTexture;
-    Texture2D                   normalMapMix_material_output_normalMap_texture2d;
-    Rect                        normalMapMix_material_output_normalMap_rect;
+    [SerializeField] private Texture2D  normalMapMix_material_normalMap_clear;
 
+    public bool                         NormalMapMix_Material_NormalMap_CoinRush_Active { get; private set; }
+    [SerializeField] private Sprite     normalMapMix_material_normalMap_coinRush_sprite;
+    private Texture2D                   normalMapMix_material_normalMap_coinRush_texture;
+    [SerializeField] private float      normalMapMix_material_normalMap_coinRush_visualDiameterInPixels = 120f;
+    private float                       normalMapMix_material_normalMap_coinRush_scale = 0;
+    private const float                 NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_MAX = 4f;
+    private const float                 NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_STEP = NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_MAX / NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_TIME_MAX;
+    private float                       normalMapMix_material_normalMap_coinRush_time = 0;
+    private const float                 NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_TIME_MAX = 2f;
+    public Vector3                      NormalMapMix_Material_NormalMap_CoinRush_WorldPos { get; private set; }
+    private float                       normalMapMix_material_normalMap_coinRush_screenPos_x;
+    private float                       normalMapMix_material_normalMap_coinRush_screenPos_y;
 
-    public void WorldDistortion(Vector3 _position)
+    [SerializeField] private Texture2D  normalMapMix_material_normalMap_gameOver;
+    private bool                        normalMapMix_material_normalMap_gameOver_Active = false;
+    private bool                        normalMapMix_material_normalMap_gameOver_updated = false;
+
+    private RenderTexture               normalMapMix_material_normalMap_output_renderTexture;
+    private Rect                        normalMapMix_material_normalMap_output_rect;
+    private Texture2D                   normalMapMix_material_normalMap_output_texture2d;
+
+    public void CoinRush(Vector3 _position)
     {
-        NormalMapMix_Material_Active = true;
-        NormalMapMix_Material_WorldPos = _position;
+        NormalMapMix_Material_NormalMap_CoinRush_Active = true;
+        NormalMapMix_Material_NormalMap_CoinRush_WorldPos = _position;
         Vector2 _screenPosition = camera.WorldToScreenPoint(_position);
-        NormalMapMix_Material_ScreenPos_X = _screenPosition.x / screenWidth;
-        NormalMapMix_Material_ScreenPos_Y = _screenPosition.y / screenHeight;
+        normalMapMix_material_normalMap_coinRush_screenPos_x = _screenPosition.x / screenWidth;
+        normalMapMix_material_normalMap_coinRush_screenPos_y = _screenPosition.y / screenHeight;
     }
 
-    public float DistortionDistance_Get()
+    public float CoinRush_Distance_Get()
     {
-        var _worldDistance = normalMapMix_material_distorionNormalMap_visualDiameterInPixels / normalMapMix_material_distorionNormalMap_sprite.pixelsPerUnit;
-        return (_worldDistance * normalMapMix_material_timer * normalMapMix_material_distortionScale);
+        var _visualDiameterInWorld = normalMapMix_material_normalMap_coinRush_visualDiameterInPixels / normalMapMix_material_normalMap_coinRush_sprite.pixelsPerUnit;
+        return (_visualDiameterInWorld * normalMapMix_material_normalMap_coinRush_scale);
+    }
+
+    public void GameOver()
+    {
+        normalMapMix_material_normalMap_gameOver_Active = true;
     }
 
     private void Awake()
     {
         SingleOnScene = this;
 
-        GameOver = false;
-
         screenWidth = Screen.width;
         screenHeight = Screen.height;
 
         camera = GetComponent<Camera>();
 
-        var _distortion_material_aspect = (float)normalMapMix_material_clearNormalMap.height / normalMapMix_material_clearNormalMap.width;
-        distortion_material.SetFloat(DISTORION_MATERIAL_U_ASPECT, _distortion_material_aspect);
+        distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_clear); //Помещаем пустую нормаль в шейдере искажения
 
-        normalMapMix_material_distorionNormalMap_texture = normalMapMix_material_distorionNormalMap_sprite.texture;
-        normalMapMix_material_output_normalMap_renderTexture = new RenderTexture(normalMapMix_material_clearNormalMap.width, normalMapMix_material_clearNormalMap.height, 32); //Подготавливаем рендер-текстуру, в которой будем собирать нормалку из фона и кружочка
-        Graphics.Blit(normalMapMix_material_clearNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); // Отрисовываем пустую на текстуру пустую нормаль. Затем, помещаем результат в подготовленную рендер-тектуру       
-        normalMapMix_material_output_normalMap_rect = new Rect(0, 0, normalMapMix_material_output_normalMap_renderTexture.width, normalMapMix_material_output_normalMap_renderTexture.height); //GETRECT!
-        normalMapMix_material_output_normalMap_texture2d = new Texture2D(normalMapMix_material_clearNormalMap.width, normalMapMix_material_clearNormalMap.height, TextureFormat.RGBA32, false); //Подготавливаем 2D-текстуру
-        normalMapMix_material_output_normalMap_texture2d.ReadPixels(normalMapMix_material_output_normalMap_rect, 0, 0); //Помещаем пиксЭлы с подготовленной рендер-текстуры в поле Colors 2D-текстуры
-        normalMapMix_material_output_normalMap_texture2d.Apply(); //Отрисовываем на 2D-текстуре, помещённые в её поле Colors пиксЭлы
+        NormalMapMix_Material_NormalMap_CoinRush_Active = false;
+        var _distortion_material_aspect = (float)normalMapMix_material_normalMap_clear.height / normalMapMix_material_normalMap_clear.width;
+        distortion_material.SetFloat(DISTORION_MATERIAL_U_ASPECT, _distortion_material_aspect);
+        normalMapMix_material_normalMap_coinRush_texture = normalMapMix_material_normalMap_coinRush_sprite.texture;
+
+        normalMapMix_material_normalMap_output_renderTexture = new RenderTexture(normalMapMix_material_normalMap_clear.width, normalMapMix_material_normalMap_clear.height, 32); //Подготавливаем рендер-текстуру, в которой будем собирать нормаль для шейдера искажения из пустой нормали и нормали искажения
+        normalMapMix_material_normalMap_output_rect = new Rect(0, 0, normalMapMix_material_normalMap_output_renderTexture.width, normalMapMix_material_normalMap_output_renderTexture.height); //GETRECT!
+        normalMapMix_material_normalMap_output_texture2d = new Texture2D(normalMapMix_material_normalMap_clear.width, normalMapMix_material_normalMap_clear.height, TextureFormat.RGBA32, false); //Подготавливаем 2D-текстуру, в которую будем помещать нормаль для шейдера искажения собранную в рендер-текстуре
     }
 
     private void OnRenderImage(RenderTexture _source, RenderTexture _destination)
     {
-        if (NormalMapMix_Material_Active)
+        if (normalMapMix_material_normalMap_gameOver_Active)
         {
-            normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_distorionNormalMap_texture); 
-            float _alpha = 1 - normalMapMix_material_timer / normalMapMix_material_timer_max;
-            _alpha = Mathf.Clamp(_alpha, 0, 1);
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA, _alpha);                      
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, NormalMapMix_Material_ScreenPos_X);  
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, NormalMapMix_Material_ScreenPos_Y);  
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_timer * normalMapMix_material_distortionScale);
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTX, screenWidth);
-            normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTY, screenHeight);
-            Graphics.Blit(normalMapMix_material_clearNormalMap, normalMapMix_material_output_normalMap_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения. Затем, помещаем результат в подготовленную рендер-тектуру 
-            
-            normalMapMix_material_output_normalMap_texture2d.ReadPixels(normalMapMix_material_output_normalMap_rect, 0, 0, false); //Помещаем пиксЭлы с подготовленной рендер-текстуры в поле Colors 2D-текстуры
-            normalMapMix_material_output_normalMap_texture2d.Apply(); //Отрисовываем на 2D-текстуре, помещённые в её поле Colors пиксЭлы
-
-            normalMapMix_material_timer += Time.deltaTime;
-            
-            if (normalMapMix_material_timer >= normalMapMix_material_timer_max)
+            if (!normalMapMix_material_normalMap_gameOver_updated)
             {
-                NormalMapMix_Material_Active = false;
-                normalMapMix_material_timer = 0;
-            }        
+                distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_gameOver); //Помещаем нормаль искажения Game Over'а в шейдер искажения
+                normalMapMix_material_normalMap_gameOver_updated = true;
+            }
+        }
+        else
+        {
+            if (NormalMapMix_Material_NormalMap_CoinRush_Active)
+            {
+                normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_normalMap_coinRush_texture);
+                float _alpha = 1f - normalMapMix_material_normalMap_coinRush_scale / NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_MAX;
+                _alpha = Mathf.Clamp(_alpha, 0, 1f);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA, _alpha);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, normalMapMix_material_normalMap_coinRush_screenPos_x);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, normalMapMix_material_normalMap_coinRush_screenPos_y);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_normalMap_coinRush_scale);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTX, screenWidth);
+                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTY, screenHeight);
+                Graphics.Blit(normalMapMix_material_normalMap_clear, normalMapMix_material_normalMap_output_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения Coin Rush'а через шейдер совмещения нормалей. Затем, помещаем результат в подготовленную рендер-тектуру 
+
+                normalMapMix_material_normalMap_output_texture2d.ReadPixels(normalMapMix_material_normalMap_output_rect, 0, 0, false); //Помещаем пиксели с подготовленной рендер-текстуры в поле Colors подготовленной 2D-текстуры
+                normalMapMix_material_normalMap_output_texture2d.Apply(); //Отрисовываем на подготовленной 2D-текстуре, помещённые в её поле Colors пиксели, с получением нормали для шейдера искажения, которая совмещает в себе пустую нормаль и нормаль искажения Coin Rush'а
+
+                distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_output_texture2d); //Помещаем нормаль из подготовленной 2D-текстуры в шейдер искажения
+
+                normalMapMix_material_normalMap_coinRush_scale += NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_STEP * Time.deltaTime;
+                normalMapMix_material_normalMap_coinRush_time += Time.deltaTime;
+
+                if (normalMapMix_material_normalMap_coinRush_time >= NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_TIME_MAX)
+                {
+                    normalMapMix_material_normalMap_coinRush_scale = 0;
+                    normalMapMix_material_normalMap_coinRush_time = 0;
+                    NormalMapMix_Material_NormalMap_CoinRush_Active = false;
+                }
+            }
         }
 
-        var _normalMap = normalMapMix_material_output_normalMap_texture2d;
-        if (GameOver)
-        {
-            _normalMap = normalMapMix_material_gameOverNormalMap;
-        }
-        
-        distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, _normalMap);
-        Graphics.Blit(_source, _destination, distortion_material); //Искажаем рендер-текстуру с камеры текущего GameObject'а. Затем помещаем результат в рендер-текстуру камеры текущего GameObject'а
+        Graphics.Blit(_source, _destination, distortion_material); //Искажаем рендер-текстуру с камеры текущего GameObject'а через шейдер искажения. Затем помещаем результат в рендер-текстуру камеры текущего GameObject'а
     }
 }

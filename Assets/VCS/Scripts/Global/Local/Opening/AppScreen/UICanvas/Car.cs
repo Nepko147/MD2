@@ -5,24 +5,23 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
 {
     public static AppScreen_UICanvas_Car Singleton { get; private set; }
 
-    bool active = false;
+    private bool active = false;
 
     public bool Done { get; set; }
 
-    [SerializeField] private float      car_speed;
-    [SerializeField] private AudioClip  car_sound;
+    [SerializeField] private float car_speed = 0.04f;
 
-    [SerializeField] private AudioClip dingSound;
+    [SerializeField] private AudioClip  sound_car;
+    [SerializeField] private AudioClip  sound_ding;
 
-    new Camera camera;
-    private Vector3 screenWidth;
+    private new Camera camera;
 
-    float pivotLeftOffset_x;
+    private float pivotLeftOffset_x;
 
     public void Activate()
     {
-        ControlPers_AudioManager.SingleOnScene.PlaySound(dingSound);
-        ControlPers_AudioManager.SingleOnScene.PlaySound(car_sound);
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_car);
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_ding);
         active = true;
     }
 
@@ -34,7 +33,6 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
     private void Start()
     {
         camera = AppScreen_Camera_UI_Entity.SingleOnScene.GetComponent<Camera>();
-        screenWidth = new Vector3(camera.pixelWidth, 0, 0);
         var _worldToScreenPosition = camera.WorldToScreenPoint(transform.position);
         var _screenToWorldPosition = new Vector3(0, _worldToScreenPosition.y, _worldToScreenPosition.z);
         
