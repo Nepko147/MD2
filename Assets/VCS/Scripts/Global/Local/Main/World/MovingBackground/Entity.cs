@@ -22,16 +22,16 @@ public class World_MovingBackground_Entity : MonoBehaviour
     [SerializeField] GameObject road;
     [SerializeField] GameObject road_1;
     
-    public static Vector3 position_city_3;
-    public static Vector3 position_city_3_1;
-    public static Vector3 position_city_2;
-    public static Vector3 position_city_2_1;
-    public static Vector3 position_city_1;
-    public static Vector3 position_city_1_1;
-    public static Vector3 position_bushes;
-    public static Vector3 position_bushes_1;
-    public static Vector3 position_road;
-    public static Vector3 position_road_1;
+    static Vector3 position_city_3;
+    static Vector3 position_city_3_1;
+    static Vector3 position_city_2;
+    static Vector3 position_city_2_1;
+    static Vector3 position_city_1;
+    static Vector3 position_city_1_1;
+    static Vector3 position_bushes;
+    static Vector3 position_bushes_1;
+    static Vector3 position_road;
+    static Vector3 position_road_1;
 
     public void Position_Save()
     {

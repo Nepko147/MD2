@@ -19,8 +19,6 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
 
     public float Inner_Direction { get; private set; }
 
-    public float test;
-
     private void Awake()
     {
         Singleton = this;
