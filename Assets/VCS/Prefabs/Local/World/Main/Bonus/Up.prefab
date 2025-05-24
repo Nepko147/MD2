@@ -199,5 +199,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  popUp: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}
   sound: {fileID: 8300000, guid: d68523d44f21e4641a6e778b0bad34f8, type: 3}
-  popUpString: {fileID: 4864488512681004471, guid: c96b34bd499b7344d8b38f9372fec420, type: 3}

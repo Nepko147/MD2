@@ -26,6 +26,7 @@ public class World_Player : MonoBehaviour
     const string                    PLAYER_ANIMATION_DOWN = "down";
 
     private SpriteRenderer          player_spriteRenderer;
+    public BoxCollider2D            Player_BoxCollider { get; private set; }
 
     private float border_top = -0.55f; //Временно
     private float border_bot = -1.45f; //Временно
@@ -40,7 +41,8 @@ public class World_Player : MonoBehaviour
         Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
-        player_spriteRenderer = GetComponent<SpriteRenderer>();       
+        player_spriteRenderer = GetComponent<SpriteRenderer>();
+        Player_BoxCollider = GetComponent<BoxCollider2D>();
     }
 
     private void FixedUpdate()

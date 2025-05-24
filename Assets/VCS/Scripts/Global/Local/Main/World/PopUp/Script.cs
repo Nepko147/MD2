@@ -39,7 +39,7 @@ public class World_PopUp : MonoBehaviour
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
         {
-            Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual += 1;
+            ++Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual;
             Destroy(gameObject);
         }
     }
@@ -49,7 +49,7 @@ public class World_PopUp : MonoBehaviour
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
         {
-            Main_AppScreen_UICanvas_Entity.SingleOnScene.Coins_Visual += 1;
+            ++Main_AppScreen_UICanvas_Entity.SingleOnScene.Coins_Visual;
             Destroy(gameObject);
         }
     }
@@ -57,7 +57,7 @@ public class World_PopUp : MonoBehaviour
     private void Behaviour_CoinRush()
     {
         destinationPos.x = transform.position.x - SPEED;
-        destinationPos.y = transform.position.y + SPEED;
+        destinationPos.y = transform.position.y + SPEED * 3f;
         transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
 
         behaviour_CoinRush_time -= Time.fixedDeltaTime;

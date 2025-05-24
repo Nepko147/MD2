@@ -9,15 +9,16 @@ public class World_Enemy : MonoBehaviour
     public const int LINE_3_SORTINGORDER = 120;
     public const int LINE_4_SORTINGORDER = 140;
 
-    [SerializeField] private float      enemy_speed;
-    [SerializeField] private AudioClip  enemy_hitSound;
-    private bool                        enemy_isDamaged = false;
-    private PolygonCollider2D           enemy_collider;
+    [SerializeField] private float  enemy_speed = 8f;
+    private AudioSource             enemy_audioSource;
+    private bool                    enemy_isDamaged = false;
+    private PolygonCollider2D       enemy_collider;
 
     private void Awake()
     {
         Active = true;
 
+        enemy_audioSource = GetComponent<AudioSource>();
         enemy_collider = GetComponent<PolygonCollider2D>();
     }
 
@@ -29,9 +30,10 @@ public class World_Enemy : MonoBehaviour
             transform.position += Vector3.left * enemy_speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale;
 
             //Проверка на контакт с игроком
-            if (enemy_collider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds) && !enemy_isDamaged)
+            if (enemy_collider.bounds.Intersects(World_Player.SingleOnScene.Player_BoxCollider.bounds) 
+                && !enemy_isDamaged)
             {
-                ControlPers_AudioManager.SingleOnScene.PlaySound(enemy_hitSound); //Ждём появления АудиоМиксера
+                enemy_audioSource.Play();
                 enemy_isDamaged = true;
                 World_Player.SingleOnScene.LoseUp();
             }

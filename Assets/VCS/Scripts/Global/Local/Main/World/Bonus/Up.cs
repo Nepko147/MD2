@@ -1,16 +1,15 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class World_Bonus_Up : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private float          speed;
-    [SerializeField] private AudioClip      sound;
-
-    [SerializeField] private World_PopUp    popUpString;
-
-    new Animator animation;
-    BoxCollider2D boxCollider;
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private World_PopUp popUp;
+    [SerializeField] private AudioClip sound;
+    private new Animator animation;
+    private BoxCollider2D boxCollider;
 
     private void Awake()
     {
@@ -27,14 +26,15 @@ public class World_Bonus_Up : MonoBehaviour
             animation.speed = 1;
             transform.position += Vector3.left * speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
-            if (boxCollider.bounds.Intersects(World_Player.SingleOnScene.GetComponent<BoxCollider2D>().bounds))
+            if (boxCollider.bounds.Intersects(World_Player.SingleOnScene.Player_BoxCollider.bounds))
             {
                 Active = false;
 
-                ControlPers_AudioManager.SingleOnScene.PlaySound(sound);
+                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound);
+
                 World_Player.SingleOnScene.TakeUp();
 
-                var _popUp = Instantiate(popUpString, transform.position, transform.rotation);
+                var _popUp = Instantiate(popUp, transform.position, transform.rotation);
                 _popUp.Display_AsUp();
 
                 Destroy(gameObject);

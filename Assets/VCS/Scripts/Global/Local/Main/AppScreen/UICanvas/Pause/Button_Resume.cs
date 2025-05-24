@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
@@ -7,13 +8,14 @@ public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
 
     public bool Pressed { get; set; }
 
-    [SerializeField] private AudioClip switchSound;
+    private AudioSource audioSource;
 
     private void Awake()
     {
         SingleOnScene = this;
-
         Pressed = false;
+
+        audioSource = GetComponent<AudioSource>();
 
         GetComponent<Image>().enabled = false;
     }
@@ -21,6 +23,6 @@ public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
     public void OnClick()
     {
         Pressed = true;
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound); //Ждём появления АудиоМиксера
+        audioSource.Play();
     }
 }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_Camera_WorldCammera_Zoom : MonoBehaviour    
+public class AppScreen_Camera_World_Zoom : MonoBehaviour    
 {
-    public static AppScreen_Camera_WorldCammera_Zoom SingleOnScene { get; private set; }
+    public static AppScreen_Camera_World_Zoom SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
 

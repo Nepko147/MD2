@@ -6,11 +6,11 @@ public class AppScreen_UICanvas_Settings_Button_Menu : MonoBehaviour
 
     public bool Pressed { get; set; }
 
-    [SerializeField] private AudioClip switchSound;
+    [SerializeField] private AudioClip pressSound;
 
     public void OnClick()
     {
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound);
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
         Pressed = true;
     }
 

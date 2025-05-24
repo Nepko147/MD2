@@ -7,7 +7,7 @@ public class Appscreen_UICanvas_Button_Quit : MonoBehaviour
 
     public bool Pressed { get; private set; }
 
-    [SerializeField] private AudioClip switchSound;
+    [SerializeField] private AudioClip pressSound;
     Image image;
 
     public void Hide()
@@ -22,7 +22,7 @@ public class Appscreen_UICanvas_Button_Quit : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioManager.SingleOnScene.PlaySound(switchSound); //Ждём появления АудиоМиксера
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
         Pressed = true;
     }
 
