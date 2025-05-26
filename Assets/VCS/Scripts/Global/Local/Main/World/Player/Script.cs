@@ -23,6 +23,12 @@ public class World_Player : MonoBehaviour
     Vector3 player_newPosition;
     bool player_moving;
 
+    public bool             Player_Invul { get; private set; }
+    bool                    player_invul_alpha_increase = false;
+    [SerializeField] float  player_invul_alpha_delta; //„ем больше значение, тем быстрее моргает
+    [SerializeField] float  player_invul_timer_init;
+    float                   player_invul_timer;    
+
     public int                      Player_Ups { get; set; }
     [SerializeField] private int    player_ups_init;    
 
@@ -43,7 +49,7 @@ public class World_Player : MonoBehaviour
         SingleOnScene = this;
 
         Active = true;
-
+        Player_Invul = false;
         Player_Ups = player_ups_init;
         Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
@@ -55,7 +61,33 @@ public class World_Player : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {     
+    {
+        if (Player_Invul)
+        {
+            if (player_invul_alpha_increase)
+            {
+                player_spriteRenderer.color += new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
+                if (player_spriteRenderer.color.a >= 1)
+                {
+                    player_invul_alpha_increase = false;
+                }
+            }
+            else
+            {
+                player_spriteRenderer.color -= new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
+                if (player_spriteRenderer.color.a <= 0)
+                {
+                    player_invul_alpha_increase = true;
+                }
+            }
+            player_invul_timer -= Time.deltaTime;
+            if (player_invul_timer <= 0)
+            {
+                player_spriteRenderer.color += new Color(0, 0, 0, 1);
+                Player_Invul = false;
+            }
+        }
+
         if (Active)
         {
             player_animation.speed = 1;
@@ -143,7 +175,7 @@ public class World_Player : MonoBehaviour
                     transform.position = player_newPosition; // √аранитруем, что игрок будет в нужной точке. ¬Ќ≈«јѕЌќ: "transform.position == player_newPosition" и "Vector3.MoveTowards(...)" не грантируют!
                     player_moving = false;
                 }
-            }
+            }            
         }
         else
         {
@@ -155,6 +187,12 @@ public class World_Player : MonoBehaviour
     {
         --Player_Ups;
         --Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual;
+        Player_Invul = true;
+        player_invul_timer = player_invul_timer_init;
+        if (Player_Ups <= 0)
+        {
+            player_spriteRenderer.color = Color.red;
+        }
     }
 
     public void TakeUp()

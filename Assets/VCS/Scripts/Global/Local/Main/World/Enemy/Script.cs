@@ -30,7 +30,8 @@ public class World_Enemy : MonoBehaviour
             transform.position += Vector3.left * enemy_speed * World_MovingBackground_Entity.SingleOnScene.SpeedScale;
 
             //Проверка на контакт с игроком
-            if (enemy_collider.bounds.Intersects(World_Player.SingleOnScene.Player_BoxCollider.bounds) 
+            if (enemy_collider.bounds.Intersects(World_Player.SingleOnScene.Player_BoxCollider.bounds)
+                && !World_Player.SingleOnScene.Player_Invul
                 && !enemy_isDamaged)
             {
                 enemy_audioSource.Play();
