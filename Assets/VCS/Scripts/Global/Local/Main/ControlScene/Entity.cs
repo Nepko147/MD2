@@ -105,6 +105,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
         World_MovingBackground_Entity.SingleOnScene.Position_Load();
 
         AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
+        AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
         AppScreen_UICanvas_Indicators.SingleOnScene.Show();
         AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(true);
@@ -145,6 +146,10 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Backspace))
                 {
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
+                    AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
+                    AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
+                    AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.Pause();
+                    AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = true;
                     AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = true;
                     Main_AppScreen_UICanvas_Entity.SingleOnScene.SetPause(true);
@@ -163,8 +168,9 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Set(World_Player.SingleOnScene.Player_Coins);
                 ControlPers_DataHandler.SingleOnScene.SaveProgress();                
                 ControlPers_AudioMixer.SingleOnScene.Stop();
-                AppScreen_Camera_World_Slope.SingleOnScene.RotationReset();
-                AppScreen_Camera_World_Zoom.SingleOnScene.ZoomReset();
+                AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
+                AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
+                AppScreen_UICanvas_Indicators.SingleOnScene.Hide();
 
                 GameObjectsActiveState(false);
 
@@ -183,6 +189,10 @@ public class ControlScene_Entity_Main : MonoBehaviour
             if (AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed)
             {                
                 AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 1f);
+                AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
+                AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
+                AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.UnPause();
+                AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = false;
                 AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed = false;
                 AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = false;

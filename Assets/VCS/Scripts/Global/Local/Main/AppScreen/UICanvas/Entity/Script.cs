@@ -4,11 +4,10 @@ using UnityEngine.UI;
 public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 {
     public static Main_AppScreen_UICanvas_Entity SingleOnScene { get; private set; }
-
-    [SerializeField] GameObject ups_string;
-    private Text                ups_string_text;
-    private int                 ups_visual;
-    public int                  Ups_Visual
+        
+    private Text    ups_string_text;
+    private int     ups_visual;
+    public int      Ups_Visual
     {
         get 
         {
@@ -20,14 +19,10 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
             ups_string_text.text = TEXT_X + ups_visual.ToString();
         }
     }
-
-    [SerializeField] GameObject ups_sprite;
-    private Image               ups_sprite_image;
-
-    [SerializeField] GameObject coins_string;
-    private Text                coins_string_text;
-    private int                 coins_visual;
-    public int                  Coins_Visual
+    
+    private Text    coins_string_text;
+    private int     coins_visual;
+    public int      Coins_Visual
     {
         get
         {
@@ -40,17 +35,9 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    [SerializeField] GameObject coins_sprite;
-    private Image               coins_sprite_image;
-
-    [SerializeField] GameObject complete_string;
-    private Text                complete_string_text;
-
-    [SerializeField] GameObject midScreenBigString;
-    private Text                midScreenBigString_text;
-
-    [SerializeField] GameObject midScreenSmallString;
-    private Text                midScreenSmallString_text;
+    private Text complete_string_text;
+    private Text midScreenBigString_text;
+    private Text midScreenSmallString_text;
 
     const string TEXT_DISTANCEREMMAIN = "Distance ramain: ";
     const string TEXT_COMPLETE = "COMPLETE: ";
@@ -62,9 +49,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
     public void ShowGameOver()
     {        
         ups_string_text.enabled = false;
-        ups_sprite_image.enabled = false;
         coins_string_text.enabled = false;
-        coins_sprite_image.enabled = false;
         complete_string_text.enabled = false;
         midScreenBigString_text.enabled = true;
         midScreenBigString_text.text = TEXT_GAMEOVER;
@@ -80,21 +65,19 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 
     private void Awake()
     {
-        SingleOnScene = this;
-
-        ups_string_text = ups_string.GetComponent<Text>();
-        ups_sprite_image = ups_sprite.GetComponent<Image>();
-        coins_string_text = coins_string.GetComponent<Text>();
-        coins_sprite_image = coins_sprite.GetComponent<Image>();
-        complete_string_text = complete_string.GetComponent<Text>();
-        midScreenBigString_text = midScreenBigString.GetComponent<Text>();
-        midScreenSmallString_text = midScreenSmallString.GetComponent<Text>();
+        SingleOnScene = this; 
     }
 
     private void Start()
     {
+        ups_string_text = AppScreen_UICanvas_Indicators_Ups_String.SingleOnScene.GetComponent<Text>();
+        coins_string_text = AppScreen_UICanvas_Indicators_Coins_String.SingleOnScene.GetComponent<Text>();
+        complete_string_text = AppScreen_UICanvas_Indicators_Complete_String.SingleOnScene.GetComponent<Text>();
+        midScreenBigString_text = AppScreen_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.GetComponent<Text>();
+        midScreenSmallString_text = AppScreen_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.GetComponent<Text>();
+
         Ups_Visual = World_Player.SingleOnScene.Player_Ups;
-        Coins_Visual = World_Player.SingleOnScene.Player_Coins;
+        Coins_Visual = World_Player.SingleOnScene.Player_Coins;        
     }
 
     private void FixedUpdate()

@@ -26,11 +26,11 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
     {
         SingleOnScene = this;
 
+        Active = false;
         camera = GetComponent<Camera>();
         camera_originalFieldOfView = camera.fieldOfView;
         camera_position_origin = transform.localPosition;
         camera_position_correction = new Vector3(camera_position_origin.x, camera_position_origin.y - camera_position_correction_size, camera_position_origin.z);
-        ZoomReset();
     }
     private void FixedUpdate()
     {       
@@ -66,12 +66,5 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
                 }            
             }
         }
-    } 
-
-    public void ZoomReset()
-    {
-        camera.fieldOfView = camera_originalFieldOfView;
-        camera_overZoom = true;
-        camera_overZoomt_timer = 0;
     }
 }

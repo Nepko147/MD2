@@ -9,7 +9,7 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
 
     public bool Done { get; set; }
 
-    [SerializeField] private float car_speed = 0.04f;
+    [SerializeField] private float car_speed = 15.00f;
 
     [SerializeField] private AudioClip  sound_car;
     [SerializeField] private AudioClip  sound_ding;
@@ -50,7 +50,7 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
         if (active 
             && !Done)
         { 
-            transform.position += Vector3.right * car_speed;
+            transform.position += Vector3.right * car_speed * Time.deltaTime;
 
             if (transform.position.x >= pivotLeftOffset_x)
             {                
