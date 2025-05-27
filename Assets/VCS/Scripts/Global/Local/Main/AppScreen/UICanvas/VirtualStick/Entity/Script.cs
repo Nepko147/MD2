@@ -37,7 +37,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Entity : MonoBehaviour
         {
             var _screen_position_vec2 = ControlPers_InputHandler.Singleton.Screen_Position;
             var _screen_position_vec3 = new Vector3(_screen_position_vec2.x, _screen_position_vec2.y, 1);
-            var _world_position_vec3 = Main_AppScreen_UICanvas_Entity.SingleOnScene.Camera.ScreenToWorldPoint(_screen_position_vec3);
+            var _world_position_vec3 = General_AppScreen_UICanvas_Entity.SingleOnScene.Camera.ScreenToWorldPoint(_screen_position_vec3);
 
             if (!active)
             {

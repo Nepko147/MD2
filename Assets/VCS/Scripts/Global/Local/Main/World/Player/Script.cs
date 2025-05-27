@@ -112,22 +112,25 @@ public class World_Player : MonoBehaviour
                     case LINE_1_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_UP, false);
                         player_moving = false;
-                        break;
+                    break;
+
                     case LINE_2_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_UP, true);
                         player_spriteRenderer.sortingOrder = LINE_1_SORTINGORDER_PLAYER;
                         _y = LINE_1_POSITION_Y;
-                        break;
+                    break;
+
                     case LINE_3_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_UP, true);
                         player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
                         _y = LINE_2_POSITION_Y;
-                        break;
+                    break;
+
                     case LINE_4_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_UP, true);
                         player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
                         _y = LINE_3_POSITION_Y;
-                        break;
+                    break;
                 }
 
                 player_newPosition = new Vector3(transform.position.x, _y , transform.position.z);
@@ -146,21 +149,24 @@ public class World_Player : MonoBehaviour
                         player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
                         player_spriteRenderer.sortingOrder = LINE_2_SORTINGORDER_PLAYER;
                         _y = LINE_2_POSITION_Y;
-                        break;
+                    break;
+
                     case LINE_2_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
                         player_spriteRenderer.sortingOrder = LINE_3_SORTINGORDER_PLAYER;
                         _y = LINE_3_POSITION_Y;
-                        break;
+                    break;
+
                     case LINE_3_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
                         player_spriteRenderer.sortingOrder = LINE_4_SORTINGORDER_PLAYER;
                         _y = LINE_4_POSITION_Y;
-                        break;
+                    break;
+
                     case LINE_4_POSITION_Y:
                         player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
                         player_moving = false;
-                        break;
+                    break;
                 }
 
                 player_newPosition = new Vector3(transform.position.x, _y, transform.position.z);

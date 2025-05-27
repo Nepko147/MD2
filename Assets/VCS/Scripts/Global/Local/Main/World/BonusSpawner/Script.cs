@@ -58,16 +58,19 @@ public class World_BonusSpawner : MonoBehaviour
                 {
                     case 1:
                         _position = BonusSpawn_SpawnPoint_Line_1;
-                        break;
+                    break;
+
                     case 2:
                         _position = BonusSpawn_SpawnPoint_Line_2;
-                        break;
+                    break;
+
                     case 3:
                         _position = BonusSpawn_SpawnPoint_Line_3;
-                        break;
+                    break;
+
                     case 4:
                         _position = BonusSpawn_SpawnPoint_Line_4;
-                        break;
+                    break;
                 }
 
                 int _bonusArray_index = 0;

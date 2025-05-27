@@ -98,7 +98,8 @@ public class World_Fog : MonoBehaviour
                     {
                         Material_Color_CurrentState = Material_Color_State.green_up;
                     }
-                    break;
+                break;
+
                 case Material_Color_State.green_up:
                     material_color_val.y += MATERIAL_COLOR_STEP;
 
@@ -107,7 +108,8 @@ public class World_Fog : MonoBehaviour
                         material_color_delay = MATERIAL_COLOR_DELAY_INIT;
                         Material_Color_CurrentState = Material_Color_State.green_down;
                     }
-                    break;
+                break;
+                
                 case Material_Color_State.green_down:
                     material_color_val.y -= MATERIAL_COLOR_STEP;
 
@@ -115,7 +117,8 @@ public class World_Fog : MonoBehaviour
                     {
                         Material_Color_CurrentState = Material_Color_State.red_up;
                     }
-                    break;
+                break;
+
                 case Material_Color_State.red_up:
                     material_color_val.x += MATERIAL_COLOR_STEP;
 
@@ -124,7 +127,7 @@ public class World_Fog : MonoBehaviour
                         material_color_delay = MATERIAL_COLOR_DELAY_INIT;
                         Material_Color_CurrentState = Material_Color_State.red_down;
                     }
-                    break;
+                break;
             }
 
             material.SetVector(MATERIAL_COLOR_UNIFORM, material_color_val);

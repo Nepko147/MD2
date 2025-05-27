@@ -40,19 +40,22 @@ public class World_EnemySpawner : MonoBehaviour
             case 1:
                 _position = EnemySpawn_SpawnPoint_Line_1;
                 _sortingOrder = World_Enemy.LINE_1_SORTINGORDER;
-                break;
+            break;
+
             case 2:
                 _position = EnemySpawn_SpawnPoint_Line_2;
                 _sortingOrder = World_Enemy.LINE_2_SORTINGORDER;
-                break;
+            break;
+
             case 3:
                 _position = EnemySpawn_SpawnPoint_Line_3;
                 _sortingOrder = World_Enemy.LINE_3_SORTINGORDER;
-                break;
+            break;
+
             case 4:
                 _position = EnemySpawn_SpawnPoint_Line_4;
                 _sortingOrder = World_Enemy.LINE_4_SORTINGORDER;
-                break;
+            break;
         }
         
         int _enemyArray_index = Random.Range(0, enemyArray.Length);
