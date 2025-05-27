@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 21.86, y: -16.13}
+  m_AnchoredPosition: {x: 21.86, y: -16.130005}
   m_SizeDelta: {x: 173.21, y: 32.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4265488867649839611
@@ -432,6 +432,7 @@ GameObject:
   - component: {fileID: 385786318550474036}
   - component: {fileID: 1082939509731117414}
   - component: {fileID: 5187534705072863010}
+  - component: {fileID: 8554961974448961867}
   - component: {fileID: 906850978594742704}
   - component: {fileID: 7975770791044336780}
   - component: {fileID: 8587851848781440877}
@@ -553,6 +554,23 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &8554961974448961867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7554644766827694946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4eae0c3f3234dc4d8806b4e3d57b7f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera_shake_steps_init: 20
+  camera_shake_x_min: 0.1
+  camera_shake_x_max: 0.2
+  camera_shake_y_min: 0.02
+  camera_shake_y_max: 0.1
 --- !u!114 &906850978594742704
 MonoBehaviour:
   m_ObjectHideFlags: 0

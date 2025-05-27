@@ -28,7 +28,7 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
 
         camera = GetComponent<Camera>();
         camera_originalFieldOfView = camera.fieldOfView;
-        camera_position_origin = transform.position;
+        camera_position_origin = transform.localPosition;
         camera_position_correction = new Vector3(camera_position_origin.x, camera_position_origin.y - camera_position_correction_size, camera_position_origin.z);
         ZoomReset();
     }
@@ -40,7 +40,7 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
             if (camera.fieldOfView > camera_zoom_max && camera_overZoom && camera_overZoomt_timer <= 0)
             {
                 camera.fieldOfView -= camera_zoom_speed; //Увеличение Зума
-                camera.transform.position = Vector3.MoveTowards(transform.position, camera_position_correction, camera_position_correction_speed); //Сдвиг камеры вниз
+                camera.transform.localPosition = Vector3.MoveTowards(transform.localPosition, camera_position_correction, camera_position_correction_speed); //Сдвиг камеры вниз
             
                 //При достижении максимального зума (оверЗум), даём команду камере уменьшить зум
                 if (camera.fieldOfView <= camera_zoom_max)
@@ -55,7 +55,7 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
             if (!camera_overZoom)
             {
                 camera.fieldOfView += camera_zoom_speed; //Уменьшение зума
-                camera.transform.position = Vector3.MoveTowards(transform.position, camera_position_origin, camera_position_correction_speed); //Сдвиг камеры в изначальное положение
+                camera.transform.localPosition = Vector3.MoveTowards(transform.localPosition, camera_position_origin, camera_position_correction_speed); //Сдвиг камеры в изначальное положение
             
                 //При достижении минимального зума, разрешаем оверзум и обновляем его таймер
                 if (camera.fieldOfView >= camera_zoom_min)
@@ -71,7 +71,6 @@ public class AppScreen_Camera_World_Zoom : MonoBehaviour
     public void ZoomReset()
     {
         camera.fieldOfView = camera_originalFieldOfView;
-        transform.position = camera_position_origin;
         camera_overZoom = true;
         camera_overZoomt_timer = 0;
     }

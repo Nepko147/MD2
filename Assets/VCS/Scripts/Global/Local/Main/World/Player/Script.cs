@@ -25,8 +25,8 @@ public class World_Player : MonoBehaviour
 
     public bool             Player_Invul { get; private set; }
     bool                    player_invul_alpha_increase = false;
-    [SerializeField] float  player_invul_alpha_delta; //Чем больше значение, тем быстрее моргает
-    [SerializeField] float  player_invul_timer_init;
+    [SerializeField] float  player_invul_alpha_delta = 12; //Чем больше значение, тем быстрее моргает
+    [SerializeField] float  player_invul_timer_init = 1.2f;
     float                   player_invul_timer;    
 
     public int                      Player_Ups { get; set; }
@@ -61,7 +61,7 @@ public class World_Player : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
+    { 
         if (Player_Invul)
         {
             if (player_invul_alpha_increase)
@@ -189,10 +189,12 @@ public class World_Player : MonoBehaviour
         --Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual;
         Player_Invul = true;
         player_invul_timer = player_invul_timer_init;
+        AppScreen_Camera_World_Shake.Singleton.Shake();
+
         if (Player_Ups <= 0)
         {
             player_spriteRenderer.color = Color.red;
-        }
+        }     
     }
 
     public void TakeUp()
