@@ -5,8 +5,6 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
 {
     public static Main_AppScreen_UICanvas_Entity SingleOnScene { get; private set; }
 
-    public Camera Camera { get; private set; }
-    
     [SerializeField] GameObject ups_string;
     private Text                ups_string_text;
     private int                 ups_visual;
@@ -84,7 +82,6 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
     {
         SingleOnScene = this;
 
-        Camera = GetComponent<Canvas>().worldCamera;
         ups_string_text = ups_string.GetComponent<Text>();
         ups_sprite_image = ups_sprite.GetComponent<Image>();
         coins_string_text = coins_string.GetComponent<Text>();

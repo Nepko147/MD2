@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class Appscreen_UICanvas_Pause_Button_Resume : MonoBehaviour
+public class AppScreen_UICanvas_Pause_Button_Resume : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Pause_Button_Resume SingleOnScene { get; private set; }
+    public static AppScreen_UICanvas_Pause_Button_Resume SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 

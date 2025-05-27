@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Appscreen_UICanvas_GameOver_Button_Restart : MonoBehaviour
+public class AppScreen_UICanvas_GameOver_Button_Restart : MonoBehaviour
 {
-    public static Appscreen_UICanvas_GameOver_Button_Restart SingleOnScene { get; private set; }
+    public static AppScreen_UICanvas_GameOver_Button_Restart SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 

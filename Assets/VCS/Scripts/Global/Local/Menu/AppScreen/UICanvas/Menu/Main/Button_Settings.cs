@@ -1,23 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Appscreen_UICanvas_Button_Quit : MonoBehaviour
+public class AppScreen_UICanvas_Menu_Main_Button_Settings : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Button_Quit SingleOnScene { get; private set; }
+    public static AppScreen_UICanvas_Menu_Main_Button_Settings SingleOnScene { get; private set; }
 
-    public bool Pressed { get; private set; }
+    public bool Pressed { get; set; }
 
     [SerializeField] private AudioClip pressSound;
     Image image;
 
-    public void Hide()
+    public bool Visible
     {
-        image.enabled = false;
-    }
-
-    public void Show()
-    {
-        image.enabled = true;
+        get { return (image.enabled); }
+        set { image.enabled = value; }
     }
 
     public void OnClick()

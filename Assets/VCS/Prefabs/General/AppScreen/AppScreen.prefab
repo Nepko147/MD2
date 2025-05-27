@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 21.86, y: -16.13}
+  m_AnchoredPosition: {x: 21.86, y: -16.130005}
   m_SizeDelta: {x: 173.21, y: 32.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4265488867649839611
@@ -697,7 +697,7 @@ GameObject:
   - component: {fileID: 660054625047231331}
   - component: {fileID: 7353415046306511557}
   - component: {fileID: 512282593276747246}
-  - component: {fileID: 7948370451655822670}
+  - component: {fileID: 5459142524969817657}
   m_Layer: 5
   m_Name: UICanvas
   m_TagString: Untagged
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7948370451655822670
+--- !u!114 &5459142524969817657
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -798,13 +798,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8038596717822293607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e82c67bf7abb70429ab58073dde0725, type: 3}
+  m_Script: {fileID: 11500000, guid: a2d3497f45966804ab532cc06bd13551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ups_string: {fileID: 0}
-  ups_sprite: {fileID: 0}
-  coins_string: {fileID: 0}
-  coins_sprite: {fileID: 0}
-  complete_string: {fileID: 0}
-  midScreenBigString: {fileID: 0}
-  midScreenSmallString: {fileID: 0}

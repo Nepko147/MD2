@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class Appscreen_UICanvas_Button_Menu : MonoBehaviour
+public class AppScreen_UICanvas_Button_Menu : MonoBehaviour
 {
-    public static Appscreen_UICanvas_Button_Menu SingleOnScene { get; private set; }
+    public static AppScreen_UICanvas_Button_Menu SingleOnScene { get; private set; }
 
     public bool Pressed { get; set; }
 
