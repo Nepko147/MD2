@@ -4,6 +4,8 @@ public class AppScreen_Camera_World_Shake : MonoBehaviour
 {
     public static AppScreen_Camera_World_Shake Singleton { get; private set; }
 
+    Vector3                 camera_startPosition;
+
     float                   camera_shake_steps;
     [SerializeField] float  camera_shake_steps_init = 20;
     bool                    camera_shake_isShaked;
@@ -37,6 +39,8 @@ public class AppScreen_Camera_World_Shake : MonoBehaviour
     private void Awake()
     {
         Singleton = this;
+
+        camera_startPosition = transform.localPosition;
     }
    
     void FixedUpdate()
@@ -50,8 +54,8 @@ public class AppScreen_Camera_World_Shake : MonoBehaviour
             --camera_shake_steps;
 
             if (camera_shake_steps == 0)
-            {                
-                transform.localPosition = new Vector3(Round(transform.localPosition.x, ROUND_100), Round(transform.localPosition.y, ROUND_100), transform.localPosition.z);
+            {
+                transform.localPosition = camera_startPosition; // Гарантируем, что после всех встрясок камера вернётся в начальную точку.
                 camera_shake_isShaked = false;
             }
         }
