@@ -89,7 +89,6 @@ public class ControlScene_Entity_Main : MonoBehaviour
 
     private void Start()
     {
-        ControlPers_InputHandler.Singleton.GameStarted = true;
         ControlPers_FogHandler.Color_Load();
 
         World_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_1 = spawnPoint_line_1;
@@ -100,8 +99,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
         World_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_2 = spawnPoint_line_2;
         World_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_3 = spawnPoint_line_3;
         World_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_4 = spawnPoint_line_4;
-        World_Player.SingleOnScene.Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
-        World_Fog.Singleton.Material_Offset_StepScale_Change(1f, 0);
+        World_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_MovingBackground_Entity.SingleOnScene.Position_Load();
 
         AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
@@ -109,7 +107,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
         AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(true);
 
-        audio_source.volume = (float)ControlPers_DataHandler.SingleOnScene.Settings_Volume_Get() / 10; ;
+        audio_source.volume = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
 
         GameObjectsActiveState(true);
     }
@@ -158,13 +156,12 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 }
             }
             else
-            {     
-                AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(false);
-                ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Set(World_Player.SingleOnScene.Player_Coins);
-                ControlPers_DataHandler.SingleOnScene.SaveProgress();                
+            {
+                ControlPers_DataHandler.SingleOnScene.SaveProgress();
                 ControlPers_AudioMixer.SingleOnScene.Stop();
                 AppScreen_Camera_World_Slope.SingleOnScene.RotationReset();
                 AppScreen_Camera_World_Zoom.SingleOnScene.ZoomReset();
+                AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(false);
 
                 GameObjectsActiveState(false);
 
@@ -199,7 +196,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (AppScreen_UICanvas_Button_Menu.SingleOnScene.Pressed)
                 {
                     ControlPers_AudioMixer.SingleOnScene.Stop();
-                    ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Set(World_Player.SingleOnScene.Player_Coins);
+                    ControlPers_DataHandler.SingleOnScene.SaveProgress();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
                     SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
                 }

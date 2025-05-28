@@ -9,5 +9,7 @@ public class ControlPers_Entity : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
+
+        Application.targetFrameRate = 60;
     }
 }

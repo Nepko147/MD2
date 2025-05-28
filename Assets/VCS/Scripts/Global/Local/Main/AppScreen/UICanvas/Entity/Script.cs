@@ -94,7 +94,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
     private void Start()
     {
         Ups_Visual = World_Player.SingleOnScene.Player_Ups;
-        Coins_Visual = World_Player.SingleOnScene.Player_Coins;
+        Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
     }
 
     private void FixedUpdate()

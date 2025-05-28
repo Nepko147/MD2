@@ -51,7 +51,6 @@ public class World_Player : MonoBehaviour
         Active = true;
         Player_Invul = false;
         Player_Ups = player_ups_init;
-        Player_Coins = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Get();
         Player_Complete = player_complete_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();
@@ -100,7 +99,7 @@ public class World_Player : MonoBehaviour
                 player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
             }
 
-            if (AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction > 0
+            if (AppScreen_GeneralCanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction > 0
                 && !player_moving)
             {
                 player_moving = true;                
@@ -136,7 +135,7 @@ public class World_Player : MonoBehaviour
                 player_newPosition = new Vector3(transform.position.x, _y , transform.position.z);
             }
 
-            if (AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Inner_Direction < 0
+            if (AppScreen_GeneralCanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction < 0
                 && !player_moving)
             {
                 player_moving = true;
@@ -195,7 +194,7 @@ public class World_Player : MonoBehaviour
         --Main_AppScreen_UICanvas_Entity.SingleOnScene.Ups_Visual;
         Player_Invul = true;
         player_invul_timer = player_invul_timer_init;
-        AppScreen_Camera_World_Shake.Singleton.Shake();
+        AppScreen_Camera_World_Shake.SingleOnScene.Shake();
 
         if (Player_Ups <= 0)
         {
@@ -210,6 +209,6 @@ public class World_Player : MonoBehaviour
 
     public void TakeCoin()
     {
-        ++Player_Coins;
+        ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
     }
 }

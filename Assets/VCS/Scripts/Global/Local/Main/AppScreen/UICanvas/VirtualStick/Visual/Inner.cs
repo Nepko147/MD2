@@ -17,6 +17,6 @@ public class AppScreen_GeneralCanvas_VirtualStick_Visual_Inner : AppScreen_Gener
 
     private void Start()
     {
-        AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Visual_Inner = this;
+        AppScreen_GeneralCanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner = this;
     }
 }
