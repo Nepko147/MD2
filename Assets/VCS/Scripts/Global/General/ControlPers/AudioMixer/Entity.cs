@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ControlPers_AudioMixer : MonoBehaviour
 {
-    public static ControlPers_AudioMixer SingleOnScene { get; private set; }    
+    public static ControlPers_AudioMixer SingleOnScene { get; private set; }
 
     public void Pause()
     {
@@ -29,7 +29,7 @@ public class ControlPers_AudioMixer : MonoBehaviour
 
     private void Awake()
     {
-        SingleOnScene = this;      
+        SingleOnScene = this;     
     }
 
     private void Start()

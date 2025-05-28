@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World_Fog : MonoBehaviour
 {
-    public static World_Fog Singleton;
+    public static World_Fog SingleOnScene;
 
     private Material material;
 
@@ -69,7 +69,7 @@ public class World_Fog : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        SingleOnScene = this;
 
         material = GetComponent<SpriteRenderer>().material;
 

@@ -77,7 +77,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         midScreenSmallString_text = AppScreen_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.GetComponent<Text>();
 
         Ups_Visual = World_Player.SingleOnScene.Player_Ups;
-        Coins_Visual = World_Player.SingleOnScene.Player_Coins;        
+        Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
     }
 
     private void FixedUpdate()

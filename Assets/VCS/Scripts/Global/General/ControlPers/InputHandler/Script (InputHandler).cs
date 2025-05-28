@@ -3,15 +3,13 @@ using UnityEngine.InputSystem;
 
 public class ControlPers_InputHandler : MonoBehaviour
 {
-    public static ControlPers_InputHandler Singleton { get; private set; }
+    public static ControlPers_InputHandler SingleOnScene { get; private set; }
 
     InputActions inputActions;
 
     public Vector2 Screen_Position { get; private set; }
 
     public bool Screen_Pressed { get; private set; }
-
-    public bool GameStarted { get; set; }
 
     public void ScreenPress(InputAction.CallbackContext _context)
     {
@@ -31,7 +29,7 @@ public class ControlPers_InputHandler : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        SingleOnScene = this;
     }
 
     void Start()
@@ -42,18 +40,6 @@ public class ControlPers_InputHandler : MonoBehaviour
 
     void Update()
     {
-        if (GameStarted)
-        {
-            Screen_Position = inputActions.VirtualStick.Screen_Position.ReadValue<Vector2>();
-        
-            if (Screen_Pressed)
-            {
-                AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Enabled = true;
-            }
-            else
-            {
-                AppScreen_GeneralCanvas_VirtualStick_Entity.Singleton.Enabled = false;
-            }
-        }
+        Screen_Position = inputActions.VirtualStick.Screen_Position.ReadValue<Vector2>();
     }
 }

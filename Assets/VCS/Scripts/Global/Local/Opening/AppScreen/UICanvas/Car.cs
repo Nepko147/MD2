@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class AppScreen_UICanvas_Car : MonoBehaviour
 {
-    public static AppScreen_UICanvas_Car Singleton { get; private set; }
+    public static AppScreen_UICanvas_Car SingleOnScene { get; private set; }
 
     private bool active = false;
 
@@ -27,7 +27,7 @@ public class AppScreen_UICanvas_Car : MonoBehaviour
 
     private void Awake()
     {
-        Singleton = this;
+        SingleOnScene = this;
     }
 
     private void Start()

@@ -22,7 +22,7 @@ public class ControlScene_Entity_Opening : MonoBehaviour
 
             if (Input.anyKey)
             {
-                AppScreen_UICanvas_Car.Singleton.Activate();
+                AppScreen_UICanvas_Car.SingleOnScene.Activate();
                 World_UI_TitleAnimation.SingleOnScene.PlayAnimation();
 
                 stage_pressAnyKey = false;
@@ -34,7 +34,7 @@ public class ControlScene_Entity_Opening : MonoBehaviour
         {
             ControlPers_FogHandler.Move();
 
-            if (AppScreen_UICanvas_Car.Singleton.Done
+            if (AppScreen_UICanvas_Car.SingleOnScene.Done
                 && World_UI_TitleAnimation.SingleOnScene.Done)
             {
                 ControlPers_FogHandler.Color_Save();

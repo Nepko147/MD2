@@ -9,6 +9,7 @@ public class ControlScene_Entity_Menu : MonoBehaviour
     bool stage_init = true;
     bool stage_start = false;
     bool stage_settings = false;
+    float stage_settings_slider_sound_value_last;
 
     [SerializeField] private float sceneSwitchTime = 1f;
     [SerializeField] private float menuShiftTime = 0.2f;
@@ -22,9 +23,10 @@ public class ControlScene_Entity_Menu : MonoBehaviour
 
     private void Start()
     {
-        ControlPers_InputHandler.Singleton.GameStarted = false;
         ControlPers_FogHandler.Color_Load();
-        AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.State = ControlPers_DataHandler.SingleOnScene.Settings_Volume_Get();
+
+        AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
+        stage_settings_slider_sound_value_last = AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value;
     }
 
     public void Update()
@@ -38,7 +40,7 @@ public class ControlScene_Entity_Menu : MonoBehaviour
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
                 World_MovingBackground_Entity.SingleOnScene.Active = true;
-                World_Fog.Singleton.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
+                World_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
                 World_UI_Title.SingleOnScene.Visible = false;
                 World_UI_Bushes.SingleOnScene.GameStart = true;
                 AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, sceneSwitchTime);
@@ -104,10 +106,12 @@ public class ControlScene_Entity_Menu : MonoBehaviour
         {
             ControlPers_FogHandler.Move();
 
-            if (AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Updated)
+            var _sound_value = AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value;
+
+            if (stage_settings_slider_sound_value_last != _sound_value)
             {
-                ControlPers_DataHandler.SingleOnScene.Settings_Volume_Set((int)AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.State);
-                AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Updated = false;
+                ControlPers_DataHandler.SingleOnScene.Settings_SoundValue = _sound_value;
+                stage_settings_slider_sound_value_last = _sound_value;
             }
 
             if (AppScreen_UICanvas_Menu_Settings_Button_Menu.SingleOnScene.Pressed)
