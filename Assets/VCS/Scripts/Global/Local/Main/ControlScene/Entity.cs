@@ -20,7 +20,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
     private AudioSource audio_source;
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
-    [SerializeField] private AudioClip audio_sound_hit;
+    [SerializeField] private AudioClip audio_sound_crash;
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
@@ -106,9 +106,10 @@ public class ControlScene_Entity_Main : MonoBehaviour
 
         AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
         AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
+        AppScreen_Camera_Background_Entity.SingleOnScene.Active = true;
+        AppScreen_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(true);
         AppScreen_UICanvas_Indicators.SingleOnScene.Show();
-        AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);
-        AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(true);
+        AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);        
 
         audio_source.volume = (float)ControlPers_DataHandler.SingleOnScene.Settings_Volume_Get() / 10; ;
 
@@ -148,6 +149,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
                     AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
+                    AppScreen_Camera_Background_Entity.SingleOnScene.Active = false;
                     AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = true;
@@ -163,8 +165,10 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 }
             }
             else
-            {     
-                AppScreen_Camera_World_Entity.SingleOnScene.ChromaticAberrationEnable(false);
+            {
+                audio_source.PlayOneShot(audio_sound_crash);
+                Universal_DistortionDynamic.SingleOnScene.GameOver();
+                AppScreen_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(false);
                 ControlPers_DataHandler.SingleOnScene.ProgressData_Coins_Set(World_Player.SingleOnScene.Player_Coins);
                 ControlPers_DataHandler.SingleOnScene.SaveProgress();                
                 ControlPers_AudioMixer.SingleOnScene.Stop();
@@ -191,6 +195,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 1f);
                 AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
                 AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
+                AppScreen_Camera_Background_Entity.SingleOnScene.Active = true;
                 AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = false;
@@ -227,9 +232,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (!stage_gameOver_menu_onDisplay)
                 {
                     audio_source.PlayOneShot(audio_sound_gameOver);
-                    audio_source.PlayOneShot(audio_sound_hit);
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
-                    Universal_DistortionDynamic.SingleOnScene.GameOver();
                     Main_AppScreen_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_UICanvas_GameOver_Button_Restart.SingleOnScene.GetComponent<Image>().enabled = true;
                     AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = true;

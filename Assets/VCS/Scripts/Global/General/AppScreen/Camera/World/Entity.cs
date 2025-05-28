@@ -11,19 +11,14 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
     private const float         POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX = 3;
     float                       postProcess_profile_depthOfField_aperture_step = 0;
     float                       postProcess_profile_depthOfField_aperture_duration;
-    bool                        postProcess_profile_depthOfField_aperture_change = false;
-
-    private ChromaticAberration postProcess_profile_chromaticAberration;
-    private  bool               postProcess_profile_chromaticAberration_intensity_change = false;
-    [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.000001f;
-    [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.2f;
+    bool                        postProcess_profile_depthOfField_aperture_change = false;    
 
     private void Awake()
     {
         SingleOnScene = this;
+
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
-        postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
     }
 
     /// <summary>
@@ -37,11 +32,6 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
         postProcess_profile_depthOfField_aperture_duration = _duration;
         var _aperture_value = POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN + (POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX - POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN) * (1 - _value);
         postProcess_profile_depthOfField_aperture_step = (_aperture_value - postProcess_profile_depthOfField.aperture.value) / _duration;
-    }
-    
-    public void ChromaticAberrationEnable(bool _state)
-    {
-        postProcess_profile_chromaticAberration_intensity_change = _state;
     }
 
     private void Update()
@@ -57,15 +47,5 @@ public class AppScreen_Camera_World_Entity : MonoBehaviour
                 postProcess_profile_depthOfField_aperture_change = false;
             }
         }
-
-        if (postProcess_profile_chromaticAberration_intensity_change)
-        {
-            postProcess_profile_chromaticAberration.intensity.value += postProcess_profile_chromaticAberration_speed;
-            postProcess_profile_chromaticAberration.intensity.value = Mathf.Clamp(postProcess_profile_chromaticAberration.intensity.value, 0, postProcess_profile_chromaticAberration_max);
-        } 
-        else
-        {
-            postProcess_profile_chromaticAberration.intensity.value = 0;
-        }        
     }
 }
