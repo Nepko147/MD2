@@ -11,8 +11,8 @@ public class AppScreen_Camera_Background_Entity : MonoBehaviour
 
     private ChromaticAberration postProcess_profile_chromaticAberration;
     private  bool               postProcess_profile_chromaticAberration_intensity_change = false;
-    [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.00001f;
-    [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.3f;
+    [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.0001f;
+    [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.4f;
 
     private void Awake()
     {
