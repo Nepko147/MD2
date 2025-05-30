@@ -6,14 +6,14 @@ public class ControlPers_AudioMixer : MonoBehaviour
 
     public void Pause()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.AudioSource.Pause();
-        ControlPers_AudioMixer_Music.SingleOnScene.AudioSource.Pause();
+        ControlPers_AudioMixer_Sounds.SingleOnScene.audioSource.Pause();
+        ControlPers_AudioMixer_Music.SingleOnScene.audioSource.Pause();
     }
 
     public void UnPause()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.AudioSource.UnPause();
-        ControlPers_AudioMixer_Music.SingleOnScene.AudioSource.UnPause();
+        ControlPers_AudioMixer_Sounds.SingleOnScene.audioSource.UnPause();
+        ControlPers_AudioMixer_Music.SingleOnScene.audioSource.UnPause();
     }
 
     public void Stop()
@@ -22,18 +22,8 @@ public class ControlPers_AudioMixer : MonoBehaviour
         ControlPers_AudioMixer_Music.SingleOnScene.Stop();
     }
 
-    public void SetVolume(float _volume)
-    {
-        //Настройка громкости через условный слайдер на спрайте громкости
-    }
-
     private void Awake()
     {
         SingleOnScene = this;     
-    }
-
-    private void Start()
-    {
-        //float _volume = (float)ControlPers_DataHandler.SingleOnScene.Settings_Volume_Get() / 10;
     }
 }

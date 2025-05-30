@@ -1,8 +1,6 @@
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.UI;
 
-public class AppScreen_UICanvas_Menu_Settings_Button_Menu : MonoBehaviour
+public class AppScreen_UICanvas_Menu_Settings_Button_Menu : AppScreen_UICanvas_Parent
 {
     public static AppScreen_UICanvas_Menu_Settings_Button_Menu SingleOnScene { get; private set; }
 
@@ -16,8 +14,10 @@ public class AppScreen_UICanvas_Menu_Settings_Button_Menu : MonoBehaviour
         Pressed = true;
     }
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
         Pressed = false;

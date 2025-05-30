@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class AppScreen_UICanvas_Menu_Entity_Parent : MonoBehaviour
+public class AppScreen_UICanvas_Menu_Entity_Parent : AppScreen_UICanvas_Parent
 {
-    protected RectTransform rectTransform;
-
     private bool        shift = false;
     private float       shift_time = 0;
     private float       shift_time_max;
@@ -36,11 +34,6 @@ public class AppScreen_UICanvas_Menu_Entity_Parent : MonoBehaviour
     public void Shift_toDestination(float _time)
     {
         Shift_toTarget(shift_pos_destination, _time);
-    }
-
-    protected void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
     }
 
     private void Update()

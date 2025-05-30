@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_UICanvas_Menu_Main_Button_Upgrades : MonoBehaviour
+public class AppScreen_UICanvas_Menu_Main_Button_Upgrades : AppScreen_UICanvas_Parent
 {
     public static AppScreen_UICanvas_Menu_Main_Button_Upgrades SingleOnScene { get; private set; }
 
-    public bool Pressed { get; private set; }
+    public bool Pressed { get; set; }
 
-    [SerializeField] private AudioClip pressSound;
-    Image image;
+    private Image image;
+
+    private AudioSource audioSource;
 
     public bool Visible
     {
@@ -18,14 +19,21 @@ public class AppScreen_UICanvas_Menu_Main_Button_Upgrades : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
+        Pressed = true;
+
+        audioSource.Play();
     }
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
         Pressed = false;
+
         image = GetComponent<Image>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 }

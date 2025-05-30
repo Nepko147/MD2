@@ -14,10 +14,9 @@ public class ControlScene_Entity_Main : MonoBehaviour
     private float                   stage_gameOver_menu_timer;
     [SerializeField] private float  stage_gameOver_menu_timer_init = 1.5f;
 
-    [SerializeField] private AudioClip audio_mainTheme;
-    [SerializeField] private AudioClip audio_crickets;
-
     private AudioSource audio_source;
+    [SerializeField] private AudioClip audio_music_mainTheme;
+    [SerializeField] private AudioClip audio_music_crickets;
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
     [SerializeField] private AudioClip audio_sound_crash;
@@ -108,8 +107,6 @@ public class ControlScene_Entity_Main : MonoBehaviour
         AppScreen_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(true);
         AppScreen_UICanvas_Indicators.SingleOnScene.Show();
         AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);        
-
-        audio_source.volume = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
 
         GameObjectsActiveState(true);
     }
@@ -212,7 +209,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 {
                     ControlPers_AudioMixer.SingleOnScene.Stop();
                     ControlPers_DataHandler.SingleOnScene.SaveProgress();
-                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
+                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
                     SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
                 }
             }              
@@ -240,7 +237,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
             if (AppScreen_UICanvas_GameOver_Button_Restart.SingleOnScene.Pressed)
             {
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
+                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_mainTheme);
                 SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MAIN);
             }
             else
@@ -248,7 +245,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (AppScreen_UICanvas_Button_Menu.SingleOnScene.Pressed)
                 {
                     ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
+                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
                     SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
                 }
             }                        

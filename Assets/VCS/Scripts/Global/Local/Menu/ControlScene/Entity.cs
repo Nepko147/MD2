@@ -9,7 +9,8 @@ public class ControlScene_Entity_Menu : MonoBehaviour
     bool stage_init = true;
     bool stage_start = false;
     bool stage_settings = false;
-    float stage_settings_slider_sound_value_last;
+    float stage_settings_slider_soundValue_last;
+    float stage_settings_slider_musicValue_last;
 
     [SerializeField] private float sceneSwitchTime = 1f;
     [SerializeField] private float menuShiftTime = 0.2f;
@@ -25,8 +26,31 @@ public class ControlScene_Entity_Menu : MonoBehaviour
     {
         ControlPers_FogHandler.Color_Load();
 
-        AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
-        stage_settings_slider_sound_value_last = AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value;
+        var _soundValue = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
+        AppScreen_UICanvas_Menu_Settings_Audio_Slider_Sound.SingleOnScene.Value = _soundValue;
+        stage_settings_slider_soundValue_last = _soundValue;
+
+        if (_soundValue == 0)
+        {
+            AppScreen_UICanvas_Menu_Settings_Audio_Button_Sound.SingleOnScene.Mute_On(_soundValue);
+        }
+        else
+        {
+            AppScreen_UICanvas_Menu_Settings_Audio_Button_Sound.SingleOnScene.ImageRefresh(_soundValue);
+        }
+
+        var _musicValue = ControlPers_DataHandler.SingleOnScene.Settings_MusicValue;
+        AppScreen_UICanvas_Menu_Settings_Audio_Slider_Music.SingleOnScene.Value = _musicValue;
+        stage_settings_slider_musicValue_last = _musicValue;
+
+        if (_musicValue == 0)
+        {
+            AppScreen_UICanvas_Menu_Settings_Audio_Button_Music.SingleOnScene.Mute_On(_musicValue);
+        }
+        else
+        {
+            AppScreen_UICanvas_Menu_Settings_Audio_Button_Music.SingleOnScene.ImageRefresh(_musicValue);
+        }
     }
 
     public void Update()
@@ -106,12 +130,20 @@ public class ControlScene_Entity_Menu : MonoBehaviour
         {
             ControlPers_FogHandler.Move();
 
-            var _sound_value = AppScreen_UICanvas_Menu_Settings_Slider_Sound.SingleOnScene.Value;
+            var _soundValue = AppScreen_UICanvas_Menu_Settings_Audio_Slider_Sound.SingleOnScene.Value;
 
-            if (stage_settings_slider_sound_value_last != _sound_value)
+            if (stage_settings_slider_soundValue_last != _soundValue)
             {
-                ControlPers_DataHandler.SingleOnScene.Settings_SoundValue = _sound_value;
-                stage_settings_slider_sound_value_last = _sound_value;
+                ControlPers_DataHandler.SingleOnScene.Settings_SoundValue = _soundValue;
+                stage_settings_slider_soundValue_last = _soundValue;
+            }
+
+            var _musicValue = AppScreen_UICanvas_Menu_Settings_Audio_Slider_Music.SingleOnScene.Value;
+
+            if (stage_settings_slider_musicValue_last != _musicValue)
+            {
+                ControlPers_DataHandler.SingleOnScene.Settings_MusicValue = _musicValue;
+                stage_settings_slider_musicValue_last = _musicValue;
             }
 
             if (AppScreen_UICanvas_Menu_Settings_Button_Menu.SingleOnScene.Pressed)

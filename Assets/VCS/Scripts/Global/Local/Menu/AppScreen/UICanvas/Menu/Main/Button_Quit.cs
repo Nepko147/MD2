@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_UICanvas_Menu_Main_Button_Quit : MonoBehaviour
+public class AppScreen_UICanvas_Menu_Main_Button_Quit : AppScreen_UICanvas_Parent
 {
     public static AppScreen_UICanvas_Menu_Main_Button_Quit SingleOnScene { get; private set; }
 
     public bool Pressed { get; private set; }
 
-    [SerializeField] private AudioClip pressSound;
     Image image;
 
     public bool Visible
@@ -18,15 +17,17 @@ public class AppScreen_UICanvas_Menu_Main_Button_Quit : MonoBehaviour
 
     public void OnClick()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
         Pressed = true;
     }
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
         Pressed = false;
+
         image = GetComponent<Image>();
     }
 }
