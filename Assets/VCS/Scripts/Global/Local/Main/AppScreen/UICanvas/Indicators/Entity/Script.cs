@@ -57,6 +57,8 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
             if (canvasGroup.alpha >= 1)
             {
                 canvasGroup.alpha = 1;
+                sr_ups.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 1);
+                sr_coin.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 1);
                 show = false;
             }
         }
@@ -70,6 +72,8 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
             if (canvasGroup.alpha <= 0)
             {
                 canvasGroup.alpha = 0;
+                sr_ups.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 0);
+                sr_coin.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 0);
                 hide = false;
             }
         }
