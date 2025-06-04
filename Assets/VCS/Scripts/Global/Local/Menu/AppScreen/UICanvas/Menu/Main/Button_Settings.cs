@@ -24,7 +24,7 @@ public class AppScreen_UICanvas_Menu_Main_Button_Settings : AppScreen_UICanvas_P
         audioSource.Play();
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

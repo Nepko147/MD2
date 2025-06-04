@@ -176,7 +176,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
             {
                 audio_source.PlayOneShot(audio_sound_crash);
                 Universal_DistortionDynamic.SingleOnScene.GameOver();
-                ControlPers_DataHandler.SingleOnScene.SaveProgress();
+                ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                 ControlPers_AudioMixer.SingleOnScene.Stop();
                 AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
                 AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
@@ -221,7 +221,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (AppScreen_UICanvas_Button_Menu.SingleOnScene.Pressed)
                 {
                     ControlPers_AudioMixer.SingleOnScene.Stop();
-                    ControlPers_DataHandler.SingleOnScene.SaveProgress();
+                    ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
                     SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
                 }

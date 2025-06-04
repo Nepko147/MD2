@@ -29,12 +29,13 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         set
         {
             coins_visual = value;
+
             var _string = TEXT_X + coins_visual.ToString();
             AppScreen_UICanvas_Indicators_Coins_String.SingleOnScene.UpdateText(_string);
         }
     }
 
-    const string TEXT_DISTANCEREMAIN = "Distance ramain: ";
+    const string TEXT_DISTANCEREMAIN = "Distance remain: ";
     const string TEXT_COMPLETE = "COMPLETE: ";
     const string TEXT_GAMEOVER = "GAME OVER";
     const string TEXT_PAUSE = "PAUSE";

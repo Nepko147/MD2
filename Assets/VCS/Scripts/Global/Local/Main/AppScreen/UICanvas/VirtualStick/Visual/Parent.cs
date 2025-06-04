@@ -19,7 +19,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Visual_Parent : MonoBehaviour
         }
     }
     
-    protected void Awake()
+    protected virtual void Awake()
     {
         canvasRenderer = GetComponent<CanvasRenderer>();
         canvasRenderer.SetAlpha(0);

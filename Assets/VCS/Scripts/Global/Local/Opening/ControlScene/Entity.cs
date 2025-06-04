@@ -12,28 +12,6 @@ public class ControlScene_Entity_Opening : MonoBehaviour
     private void Start()
     {
         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
-
-        var _soundValue = ControlPers_DataHandler.SingleOnScene.Settings_SoundValue;
-
-        if (_soundValue == 0)
-        {
-            ControlPers_AudioMixer_Sounds.SingleOnScene.Volume_Mute();
-        }
-        else
-        {
-            ControlPers_AudioMixer_Sounds.SingleOnScene.Volume_Set(_soundValue);
-        }
-
-        var _musicValue = ControlPers_DataHandler.SingleOnScene.Settings_MusicValue;
-
-        if (_musicValue == 0)
-        {
-            ControlPers_AudioMixer_Music.SingleOnScene.Volume_Mute();
-        }
-        else
-        {
-            ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(_musicValue);
-        }
     }
 
     private void Update()

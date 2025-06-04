@@ -23,7 +23,7 @@ public class AppScreen_UICanvas_Menu_Main_Button_Play : AppScreen_UICanvas_Paren
         Pressed = true;        
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

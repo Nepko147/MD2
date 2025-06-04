@@ -9,7 +9,7 @@ public class AppScreen_GeneralCanvas_VirtualStick_Visual_Inner : AppScreen_Gener
         set { rectTransform.position = value; }
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
         rectTransform = GetComponent<RectTransform>();

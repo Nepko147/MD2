@@ -20,7 +20,7 @@ public class AppScreen_UICanvas_Menu_Main_Button_Quit : AppScreen_UICanvas_Paren
         Pressed = true;
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
