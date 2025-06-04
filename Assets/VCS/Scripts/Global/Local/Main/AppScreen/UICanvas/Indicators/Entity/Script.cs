@@ -8,13 +8,6 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
     [SerializeField] float alpha_init = 0.0f;
     [SerializeField] float aplha_delta = 1.0f;
 
-    SpriteRenderer  sr_ups;
-    SpriteRenderer  sr_coin;
-    Color           sr_color_delta;
-
-    bool show;
-    bool hide;
-
     private void Awake()
     {
         SingleOnScene = this;
@@ -25,57 +18,68 @@ public class AppScreen_UICanvas_Indicators : MonoBehaviour
 
     private void Start()
     {
-        var _newColor = new Color(1, 1, 1, alpha_init);
-        sr_ups = AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.GetComponent<SpriteRenderer>();
-        sr_ups.color *= _newColor;
-
-        sr_coin = AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.GetComponent<SpriteRenderer>();
-        sr_coin.color *= _newColor;
-        sr_color_delta = new Color(1, 1, 1, aplha_delta);
+        AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(alpha_init);
+        AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(alpha_init);
     }
+
+    enum OnDisplay
+    {
+        show,
+        hide,
+        none
+    }
+
+    OnDisplay state;
 
     public void Show()
     {
-        show = true;
-        hide = false;
+        state = OnDisplay.show;
     }
 
     public void Hide()
     {
-        show = false;
-        hide = true;
+        state = OnDisplay.hide;
     }
 
     private void Update()
     {
-        if (show)
+        switch (state)
         {
-            canvasGroup.alpha += aplha_delta * Time.deltaTime;           
-            sr_ups.color += sr_color_delta * Time.deltaTime;
-            sr_coin.color += sr_color_delta * Time.deltaTime;
+            case OnDisplay.show:
+                
+                var _newAlpha = canvasGroup.alpha + aplha_delta * Time.deltaTime;
+                canvasGroup.alpha = _newAlpha;
+                AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
 
-            if (canvasGroup.alpha >= 1)
-            {
-                canvasGroup.alpha = 1;
-                sr_ups.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 1);
-                sr_coin.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 1);
-                show = false;
-            }
-        }
+                if (canvasGroup.alpha >= 1)
+                {
+                    _newAlpha = 1;
+                    canvasGroup.alpha = _newAlpha;
+                    AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    state = OnDisplay.none;
+                }
 
-        if (hide)
-        {
-            canvasGroup.alpha -= aplha_delta * Time.deltaTime;
-            sr_ups.color -= sr_color_delta * Time.deltaTime;
-            sr_coin.color -= sr_color_delta * Time.deltaTime;
+                break;
 
-            if (canvasGroup.alpha <= 0)
-            {
-                canvasGroup.alpha = 0;
-                sr_ups.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 0);
-                sr_coin.color = new Color(sr_ups.color.r, sr_ups.color.g, sr_ups.color.b, 0);
-                hide = false;
-            }
+            case OnDisplay.hide:
+
+                _newAlpha = canvasGroup.alpha - aplha_delta * Time.deltaTime;
+                canvasGroup.alpha = _newAlpha;
+                AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+
+                if (canvasGroup.alpha <= 0)
+                {
+                    _newAlpha = 0;
+                    canvasGroup.alpha = _newAlpha;
+                    AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    state = OnDisplay.none;
+                }
+
+                break;
         }
     }
 }

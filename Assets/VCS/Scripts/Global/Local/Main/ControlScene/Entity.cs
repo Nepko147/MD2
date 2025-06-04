@@ -126,15 +126,28 @@ public class ControlScene_Entity_Main : MonoBehaviour
                     var _distortionPos = Universal_DistortionDynamic.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_WorldPos;
                     var _distance_ofDistortion = Universal_DistortionDynamic.SingleOnScene.CoinRush_Distance_Get();
                     float _distance_toDistortion;
+                    var _distance_toDistortion_correction = 0.8f; // Чем меньше, тем раньше сработает эффект дисторшена
 
                     foreach (World_Enemy _item in _world_enemy_array)
                     {
                         _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortionPos);
                         
-                        if (_distance_ofDistortion >= _distance_toDistortion)
+                        if (_distance_ofDistortion >= _distance_toDistortion * _distance_toDistortion_correction)
                         {
                             Instantiate(prefab_world_bonus_coin, _item.transform.position, new Quaternion());
                             Destroy(_item.gameObject);
+                        }
+                    }
+
+                    var _world_coin_array = FindObjectsByType<World_Bonus_Coin>(FindObjectsSortMode.None);                    
+
+                    foreach (World_Bonus_Coin _item in _world_coin_array)
+                    {
+                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortionPos);
+
+                        if (_distance_ofDistortion >= _distance_toDistortion * _distance_toDistortion_correction)
+                        {
+                            _item.MakeVisible();
                         }
                     }
                 }

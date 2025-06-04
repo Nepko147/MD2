@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class World_Bonus_CoinRush : MonoBehaviour
 {
