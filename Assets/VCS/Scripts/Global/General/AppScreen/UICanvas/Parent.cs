@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class AppScreen_UICanvas_Parent : MonoBehaviour
 {
+    #region General
+
     protected RectTransform rectTransform;
     /// <summary>
     /// Возвращает экранные координаты левого нижнего угла Rect Transform
@@ -27,39 +29,6 @@ public class AppScreen_UICanvas_Parent : MonoBehaviour
         return (_pos_screen);
     }
 
-    private static Color image_color_pointed = new Color(1f, 1f, 1f);
-    private static Color image_color_notPointed = new Color(0.85f, 0.85f, 0.85f);
-    /// <summary>
-    /// Возвращает экранные координаты левого нижнего угла Image
-    /// </summary>
-    protected Vector2 Image_ScreenPoint_Min(Image _image)
-    {
-        var _local_ofs = new Vector2(_image.raycastPadding.x , _image.raycastPadding.y);
-        return (RectTransform_ScreenPoint_Min(_local_ofs));
-    }
-    /// <summary>
-    /// Возвращает экранные координаты правого верхнего угла Image
-    /// </summary>
-    protected Vector2 Image_ScreenPoint_Max(Image _image)
-    {
-        var _local_ofs = new Vector2(-_image.raycastPadding.z, -_image.raycastPadding.w);
-        return (RectTransform_ScreenPoint_Max(_local_ofs));
-    }
-    /// <summary>
-    /// Выполнение общего поведения компонента Image
-    /// </summary>
-    protected void Image_Behaviour(Image _image, Vector2 _image_min, Vector2 _image_max)
-    {
-        if (Pointed(_image_min, _image_max))
-        {
-            _image.color = image_color_pointed;
-        }
-        else
-        {
-            _image.color = image_color_notPointed;
-        }
-    }
-
     /// <summary>
     /// Возвращает попадание позиции ввода на экране в указанные координаты
     /// </summary>
@@ -80,7 +49,46 @@ public class AppScreen_UICanvas_Parent : MonoBehaviour
         }
     }
 
-    protected void Awake()
+    #endregion
+
+    #region Image
+
+    /// <summary>
+    /// Возвращает экранные координаты левого нижнего угла Image
+    /// </summary>
+    protected Vector2 Image_ScreenPoint_Min(Image _image)
+    {
+        var _local_ofs = new Vector2(_image.raycastPadding.x , _image.raycastPadding.y);
+        return (RectTransform_ScreenPoint_Min(_local_ofs));
+    }
+    /// <summary>
+    /// Возвращает экранные координаты правого верхнего угла Image
+    /// </summary>
+    protected Vector2 Image_ScreenPoint_Max(Image _image)
+    {
+        var _local_ofs = new Vector2(-_image.raycastPadding.z, -_image.raycastPadding.w);
+        return (RectTransform_ScreenPoint_Max(_local_ofs));
+    }
+    private static Color image_highlight_color_pointed = new Color(1f, 1f, 1f);
+    private static Color image_highlight_color_notPointed = new Color(0.85f, 0.85f, 0.85f);
+    /// <summary>
+    /// Выполнение общего поведения визуального выделения компонента Image
+    /// </summary>
+    protected void Image_Highlight_Behaviour(Image _image, Vector2 _image_min, Vector2 _image_max)
+    {
+        if (Pointed(_image_min, _image_max))
+        {
+            _image.color = image_highlight_color_pointed;
+        }
+        else
+        {
+            _image.color = image_highlight_color_notPointed;
+        }
+    }
+
+    #endregion
+
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }

@@ -31,7 +31,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         set
         {
             coins_visual = value;
-            coins_string_text.text = TEXT_X + coins_visual.ToString();
+            coins_string_text.text = coins_visual.ToString();
         }
     }
 
@@ -39,7 +39,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
     private Text midScreenBigString_text;
     private Text midScreenSmallString_text;
 
-    const string TEXT_DISTANCEREMMAIN = "Distance ramain: ";
+    const string TEXT_DISTANCEREMAIN = "Distance remain: ";
     const string TEXT_COMPLETE = "COMPLETE: ";
     const string TEXT_GAMEOVER = "GAME OVER";
     const string TEXT_PAUSE = "PAUSE";
@@ -54,7 +54,7 @@ public class Main_AppScreen_UICanvas_Entity : MonoBehaviour
         midScreenBigString_text.enabled = true;
         midScreenBigString_text.text = TEXT_GAMEOVER;
         midScreenSmallString_text.enabled = true;
-        midScreenSmallString_text.text = TEXT_DISTANCEREMMAIN + (int)World_Player.SingleOnScene.Player_Complete + TEXT_METERS;
+        midScreenSmallString_text.text = TEXT_DISTANCEREMAIN + (int)World_Player.SingleOnScene.Player_Complete + TEXT_METERS;
     }
 
     public void SetPause(bool _pause)

@@ -7,7 +7,7 @@ public class World_MovingBackground_Parent : MonoBehaviour
     protected float Speed { get; set; }    
     
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         Active = false;
     }

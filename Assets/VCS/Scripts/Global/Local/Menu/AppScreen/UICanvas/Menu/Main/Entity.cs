@@ -4,7 +4,7 @@ public class AppScreen_UICanvas_Menu_Main_Entity : AppScreen_UICanvas_Menu_Entit
 {
     public static AppScreen_UICanvas_Menu_Main_Entity SingleOnScene { get; private set; }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

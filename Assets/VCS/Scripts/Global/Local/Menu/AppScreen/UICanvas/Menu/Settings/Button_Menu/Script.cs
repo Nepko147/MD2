@@ -14,7 +14,7 @@ public class AppScreen_UICanvas_Menu_Settings_Button_Menu : AppScreen_UICanvas_P
         Pressed = true;
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

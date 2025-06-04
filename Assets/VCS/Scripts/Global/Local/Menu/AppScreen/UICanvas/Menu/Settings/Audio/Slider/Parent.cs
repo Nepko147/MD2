@@ -35,7 +35,7 @@ public class AppScreen_UICanvas_Menu_Settings_Audio_Slider_Parent : AppScreen_UI
         audioSource.Play();
     }
 
-    protected new void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
@@ -44,7 +44,7 @@ public class AppScreen_UICanvas_Menu_Settings_Audio_Slider_Parent : AppScreen_UI
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         image_min = Image_ScreenPoint_Min(image);
         image_max = Image_ScreenPoint_Max(image);
@@ -53,6 +53,6 @@ public class AppScreen_UICanvas_Menu_Settings_Audio_Slider_Parent : AppScreen_UI
 
     private void Update()
     {
-        Image_Behaviour(image, image_min, image_max);
+        Image_Highlight_Behaviour(image, image_min, image_max);
     }
 }
