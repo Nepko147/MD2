@@ -4,6 +4,8 @@ public class AppScreen_Camera_World_Shake : MonoBehaviour
 {
     public static AppScreen_Camera_World_Shake SingleOnScene { get; private set; }
 
+    public bool Active { get; set; }
+
     Vector3 startPosition;
 
     private bool shake = false;
@@ -28,7 +30,8 @@ public class AppScreen_Camera_World_Shake : MonoBehaviour
    
     void FixedUpdate()
     {
-        if (shake)
+        if (Active
+        && shake)
         {
 			var _shake_ofs_scale = shake_steps / shake_steps_init;
             shake_ofs_vec3.x = startPosition.x + Random.Range(-shake_ofs_x, shake_ofs_x) * _shake_ofs_scale;

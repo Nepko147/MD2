@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class Universal_DistortionDynamic : MonoBehaviour
 {
     public static Universal_DistortionDynamic SingleOnScene { get; private set; }
+
+    public bool Active { get; set; }
 
     private float screenWidth;
     private float screenHeight;
@@ -69,6 +72,8 @@ public class Universal_DistortionDynamic : MonoBehaviour
     {
         SingleOnScene = this;
 
+        Active = true;
+
         screenWidth = Screen.width;
         screenHeight = Screen.height;
 
@@ -88,42 +93,45 @@ public class Universal_DistortionDynamic : MonoBehaviour
 
     private void OnRenderImage(RenderTexture _source, RenderTexture _destination)
     {
-        if (normalMapMix_material_normalMap_gameOver_Active)
+        if (Active)
         {
-            if (!normalMapMix_material_normalMap_gameOver_updated)
+            if (normalMapMix_material_normalMap_gameOver_Active)
             {
-                distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_gameOver); //Помещаем нормаль искажения Game Over'а в шейдер искажения
-                normalMapMix_material_normalMap_gameOver_updated = true;
-            }
-        }
-        else
-        {
-            if (NormalMapMix_Material_NormalMap_CoinRush_Active)
-            {
-                normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_normalMap_coinRush_texture);
-                float _alpha = 1f - normalMapMix_material_normalMap_coinRush_scale / NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_MAX;
-                _alpha = Mathf.Clamp(_alpha, 0, 1f);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA, _alpha);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, normalMapMix_material_normalMap_coinRush_screenPos_x);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, normalMapMix_material_normalMap_coinRush_screenPos_y);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_normalMap_coinRush_scale);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTX, screenWidth);
-                normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTY, screenHeight);
-                Graphics.Blit(normalMapMix_material_normalMap_clear, normalMapMix_material_normalMap_output_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения Coin Rush'а через шейдер совмещения нормалей. Затем, помещаем результат в подготовленную рендер-тектуру 
-
-                normalMapMix_material_normalMap_output_texture2d.ReadPixels(normalMapMix_material_normalMap_output_rect, 0, 0, false); //Помещаем пиксели с подготовленной рендер-текстуры в поле Colors подготовленной 2D-текстуры
-                normalMapMix_material_normalMap_output_texture2d.Apply(); //Отрисовываем на подготовленной 2D-текстуре, помещённые в её поле Colors пиксели, с получением нормали для шейдера искажения, которая совмещает в себе пустую нормаль и нормаль искажения Coin Rush'а
-
-                distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_output_texture2d); //Помещаем нормаль из подготовленной 2D-текстуры в шейдер искажения
-
-                normalMapMix_material_normalMap_coinRush_scale += NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_STEP * Time.deltaTime;
-                normalMapMix_material_normalMap_coinRush_time += Time.deltaTime;
-
-                if (normalMapMix_material_normalMap_coinRush_time >= NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_TIME_MAX)
+                if (!normalMapMix_material_normalMap_gameOver_updated)
                 {
-                    normalMapMix_material_normalMap_coinRush_scale = 0;
-                    normalMapMix_material_normalMap_coinRush_time = 0;
-                    NormalMapMix_Material_NormalMap_CoinRush_Active = false;
+                    distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_gameOver); //Помещаем нормаль искажения Game Over'а в шейдер искажения
+                    normalMapMix_material_normalMap_gameOver_updated = true;
+                }
+            }
+            else
+            {
+                if (NormalMapMix_Material_NormalMap_CoinRush_Active)
+                {
+                    normalMapMix_material.SetTexture(NORMALMAPMIX_MATERIAL_OVERLAYTEX, normalMapMix_material_normalMap_coinRush_texture);
+                    float _alpha = 1f - normalMapMix_material_normalMap_coinRush_scale / NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_MAX;
+                    _alpha = Mathf.Clamp(_alpha, 0, 1f);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXALPHA, _alpha);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSX, normalMapMix_material_normalMap_coinRush_screenPos_x);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXPOSY, normalMapMix_material_normalMap_coinRush_screenPos_y);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_OVERLAYTEXSCALE, normalMapMix_material_normalMap_coinRush_scale);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTX, screenWidth);
+                    normalMapMix_material.SetFloat(NORMALMAPMIX_MATERIAL_ASPECTY, screenHeight);
+                    Graphics.Blit(normalMapMix_material_normalMap_clear, normalMapMix_material_normalMap_output_renderTexture, normalMapMix_material); //Совмещаем пустую нормаль с нормалью искажения Coin Rush'а через шейдер совмещения нормалей. Затем, помещаем результат в подготовленную рендер-тектуру 
+
+                    normalMapMix_material_normalMap_output_texture2d.ReadPixels(normalMapMix_material_normalMap_output_rect, 0, 0, false); //Помещаем пиксели с подготовленной рендер-текстуры в поле Colors подготовленной 2D-текстуры
+                    normalMapMix_material_normalMap_output_texture2d.Apply(); //Отрисовываем на подготовленной 2D-текстуре, помещённые в её поле Colors пиксели, с получением нормали для шейдера искажения, которая совмещает в себе пустую нормаль и нормаль искажения Coin Rush'а
+
+                    distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMapMix_material_normalMap_output_texture2d); //Помещаем нормаль из подготовленной 2D-текстуры в шейдер искажения
+
+                    normalMapMix_material_normalMap_coinRush_scale += NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_SCALE_STEP * Time.deltaTime;
+                    normalMapMix_material_normalMap_coinRush_time += Time.deltaTime;
+
+                    if (normalMapMix_material_normalMap_coinRush_time >= NORMALMAPMIX_MATERIAL_NORMALMAP_COINRUSH_TIME_MAX)
+                    {
+                        normalMapMix_material_normalMap_coinRush_scale = 0;
+                        normalMapMix_material_normalMap_coinRush_time = 0;
+                        NormalMapMix_Material_NormalMap_CoinRush_Active = false;
+                    }
                 }
             }
         }

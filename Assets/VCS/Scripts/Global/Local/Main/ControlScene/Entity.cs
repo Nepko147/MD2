@@ -28,7 +28,7 @@ public class ControlScene_Entity_Main : MonoBehaviour
     [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(4f, -1.15f);
     [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(4f, -1.45f);
     
-    private void GameObjectsActiveState(bool _state)
+    private void ActiveState_General(bool _state)
     {
         var _world_enemy_array = FindObjectsByType<World_Enemy>(FindObjectsSortMode.None);
         foreach (World_Enemy _item in _world_enemy_array)
@@ -72,9 +72,18 @@ public class ControlScene_Entity_Main : MonoBehaviour
             _item.Active = _state;
         }
 
-        World_Player.SingleOnScene.Active = _state;
         World_EnemySpawner.SingleOnScene.Active = _state;
         World_BonusSpawner.SingleOnScene.Active = _state;
+        AppScreen_Camera_Background_Entity.SingleOnScene.Active = _state;
+        AppScreen_Camera_World_Slope.SingleOnScene.Active = _state;
+        AppScreen_Camera_World_Zoom.SingleOnScene.Active = _state;
+    }
+
+    private void ActiveState_Local_Pause(bool _state)
+    {
+        World_Player.SingleOnScene.Active = _state;
+        AppScreen_Camera_World_Shake.SingleOnScene.Active = _state;
+        Universal_DistortionDynamic.SingleOnScene.Active = _state;
     }
 
     private void Awake()
@@ -101,14 +110,12 @@ public class ControlScene_Entity_Main : MonoBehaviour
         World_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_MovingBackground_Entity.SingleOnScene.Position_Load();
 
-        AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
-        AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
-        AppScreen_Camera_Background_Entity.SingleOnScene.Active = true;
         AppScreen_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(true);
         AppScreen_UICanvas_Indicators.SingleOnScene.Show();
         AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 0);        
 
-        GameObjectsActiveState(true);
+        ActiveState_General(true);
+        ActiveState_Local_Pause(true);
     }
 
     private void Update()
@@ -155,9 +162,6 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Backspace))
                 {
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
-                    AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
-                    AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
-                    AppScreen_Camera_Background_Entity.SingleOnScene.Active = false;
                     AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = true;
@@ -166,7 +170,8 @@ public class ControlScene_Entity_Main : MonoBehaviour
                     audio_source.PlayOneShot(audio_sound_pause);
                     ControlPers_AudioMixer.SingleOnScene.Pause();
 
-                    GameObjectsActiveState(false);
+                    ActiveState_General(false);
+                    ActiveState_Local_Pause(false);
 
                     stage_pause = true;
                     stage_road = false;
@@ -175,15 +180,13 @@ public class ControlScene_Entity_Main : MonoBehaviour
             else
             {
                 audio_source.PlayOneShot(audio_sound_crash);
-                Universal_DistortionDynamic.SingleOnScene.GameOver();
                 ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                 ControlPers_AudioMixer.SingleOnScene.Stop();
-                AppScreen_Camera_World_Slope.SingleOnScene.Active = false;
-                AppScreen_Camera_World_Zoom.SingleOnScene.Active = false;
                 AppScreen_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(false);
                 AppScreen_UICanvas_Indicators.SingleOnScene.Hide();
+                Universal_DistortionDynamic.SingleOnScene.GameOver();
 
-                GameObjectsActiveState(false);
+                ActiveState_General(false);
 
                 stage_road = false;
                 stage_gameOver = true;                
@@ -200,9 +203,6 @@ public class ControlScene_Entity_Main : MonoBehaviour
             if (AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed)
             {                
                 AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 1f);
-                AppScreen_Camera_World_Slope.SingleOnScene.Active = true;
-                AppScreen_Camera_World_Zoom.SingleOnScene.Active = true;
-                AppScreen_Camera_Background_Entity.SingleOnScene.Active = true;
                 AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = false;
@@ -211,7 +211,8 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 Main_AppScreen_UICanvas_Entity.SingleOnScene.SetPause(false);
                 ControlPers_AudioMixer.SingleOnScene.UnPause();
                 
-                GameObjectsActiveState(true);
+                ActiveState_General(true);
+                ActiveState_Local_Pause(true);
 
                 stage_pause = false;
                 stage_road = true;
