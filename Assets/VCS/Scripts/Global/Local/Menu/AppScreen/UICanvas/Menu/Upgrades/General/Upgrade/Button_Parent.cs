@@ -11,13 +11,13 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
     private void Price_Spawn()
     {
         price_instance = Instantiate(price_prefab, Vector3.zero, transform.rotation, transform.parent);
-        price_instance.Position_Set(rectTransform.localPosition);
+        price_instance.LocalPosition_Set(rectTransform.localPosition);
     }
 
     private Image image;
     private Vector2 image_min;
     private Vector2 image_max;
-    private bool image_isPointed = false;
+    private bool image_pointsRefresh = false;
     protected Sprite image_idle;
     protected Sprite image_pointed;
     [SerializeField] protected Sprite image_idle_buy;
@@ -25,26 +25,21 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
     [SerializeField] protected Sprite image_pointed_buy;
     [SerializeField] protected Sprite image_pointed_improve;
     [SerializeField] protected Sprite image_received;
-    
+
+    private Vector3 position_last;
+
     protected void Image_Set(Sprite _idle, Sprite _pointed)
     {
         image_idle = _idle;
         image_pointed = _pointed;
 
-        if (!image_isPointed)
-        {
-            image.sprite = image_idle;
-        }
-        else
-        {
-            image.sprite = image_pointed;
-        }
+        image.sprite = image_idle;
 
-        image_min = Image_ScreenPoint_Min(image);
-        image_max = Image_ScreenPoint_Max(image);
+        image_pointsRefresh = true;
 
-        var _image_scale = image_idle.pixelsPerUnit;
-        rectTransform.sizeDelta = new Vector2(image_idle.bounds.size.x * _image_scale, image_idle.bounds.size.y * _image_scale);
+        var _sizeInPixels = image.sprite.bounds.size * image.sprite.pixelsPerUnit;
+        rectTransform.sizeDelta = new Vector2(_sizeInPixels.x, _sizeInPixels.y);
+        rectTransform.localPosition += new Vector3(_sizeInPixels.x - image.sprite.pivot.x, 0, 0);
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
     }
@@ -74,7 +69,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
 
                 Image_Set(image_idle_improve, image_pointed_improve);
 
-                price_instance.Position_Set(rectTransform.localPosition + price_offset);
+                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                 price_instance.Coins_Set(price_coins_improve);
             }
         }
@@ -110,13 +105,18 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
 
     private void Start()
     {
+        image_min = Image_ScreenPoint_Min(image);
+        image_max = Image_ScreenPoint_Max(image);
+
+        position_last = transform.position;
+
         if (!IsBought())
         {
             Price_Spawn();
 
             Image_Set(image_idle_buy, image_pointed_buy);
 
-            price_instance.Position_Set(rectTransform.localPosition + price_offset);
+            price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             price_instance.Coins_Set(price_coins_buy);
         }
         else
@@ -127,7 +127,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
 
                 Image_Set(image_idle_improve, image_pointed_improve);
 
-                price_instance.Position_Set(rectTransform.localPosition + price_offset);
+                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                 price_instance.Coins_Set(price_coins_improve);
             }
             else
@@ -139,21 +139,36 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Button_Parent : AppScreen_
 
     private void Update()
     {
-        if (Pointed(image_min, image_max))
+        if (transform.position != position_last)
         {
-            if (!image_isPointed)
+            image_pointsRefresh = true;
+            position_last = transform.position;
+        }
+
+        if (!Pointed(image_min, image_max))
+        {
+            if (image.sprite != image_idle)
             {
-                image.sprite = image_pointed;
-                image_isPointed = true;
+                image.sprite = image_idle;
             }
         }
         else
         {
-            if (image_isPointed)
+            if (image.sprite != image_pointed)
             {
-                image.sprite = image_idle;
-                image_isPointed = false;
+                image.sprite = image_pointed;
             }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (image_pointsRefresh)
+        {
+            image_min = Image_ScreenPoint_Min(image);
+            image_max = Image_ScreenPoint_Max(image);
+
+            image_pointsRefresh = false;
         }
     }
 }
