@@ -1,24 +1,94 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AppScreen_UICanvas_Button_Parent : AppScreen_UICanvas_Parent
 {
-    public bool Pressed { get; set; }
+    private bool pressed = false;
+    public bool Pressed 
+    {
+        get 
+        { 
+            return (pressed);
+        }
+        set 
+        { 
+            pressed = value;
 
-    private AudioSource audioSource;
+            if (value)
+            {
+                image.sprite = image_pressed;
+            }
+        }
+    }
+
+    private Image image;
+    private Vector2 image_min;
+    private Vector2 image_max;
+    [SerializeField] private Sprite image_idle;
+    [SerializeField] private Sprite image_pointed;
+    [SerializeField] private Sprite image_pressed;
+    private void Image_PointsRefresh()
+    {
+        image_min = Image_ScreenPoint_Min(image);
+        image_max = Image_ScreenPoint_Max(image);
+    }
+
+    [SerializeField] private AudioClip sound_press;
+
+    private Vector3 position_last;
+
+    public bool Visible
+    {
+        get { return (image.enabled); }
+        set { image.enabled = value; }
+    }
 
     public void OnClick()
     {
-        Pressed = true;
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_press);
 
-        audioSource.Play();
+        Pressed = true;
     }
 
     protected override void Awake()
     {
         base.Awake();
 
-        Pressed = false;
+        image = GetComponent<Image>();
+    }
 
-        audioSource = GetComponent<AudioSource>();
+    private void Start()
+    {
+        Image_PointsRefresh();
+
+        position_last = transform.position;
+    }
+
+    private void Update()
+    {
+        if (!pressed)
+        {
+            if (transform.position != position_last)
+            {
+                Image_PointsRefresh();
+
+                position_last = transform.position;
+            }
+
+            if (!Pointed(image_min, image_max))
+            {
+                if (image.sprite != image_idle)
+                {
+                    image.sprite = image_idle;
+                }
+            }
+            else
+            {
+                if (image.sprite != image_pointed)
+                {
+                    image.sprite = image_pointed;
+                }
+            }
+        }
     }
 }

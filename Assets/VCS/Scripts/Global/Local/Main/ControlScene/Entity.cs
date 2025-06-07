@@ -164,8 +164,8 @@ public class ControlScene_Entity_Main : MonoBehaviour
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.Pause();
                     AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.Pause();
-                    AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = true;
-                    AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = true;
+                    AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Visible = true;
+                    AppScreen_UICanvas_Button_Menu.SingleOnScene.Visible = true;
                     Main_AppScreen_UICanvas_Entity.SingleOnScene.SetPause(true);
                     audio_source.PlayOneShot(audio_sound_pause);
                     ControlPers_AudioMixer.SingleOnScene.Pause();
@@ -205,9 +205,9 @@ public class ControlScene_Entity_Main : MonoBehaviour
                 AppScreen_Camera_World_Entity.SingleOnScene.Blur(0, 1f);
                 AppScreen_UICanvas_Indicators_Ups_Sprite.SingleOnScene.UnPause();
                 AppScreen_UICanvas_Indicators_Coins_Sprite.SingleOnScene.UnPause();
-                AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.GetComponent<Image>().enabled = false;
+                AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Visible = false;
                 AppScreen_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed = false;
-                AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = false;
+                AppScreen_UICanvas_Button_Menu.SingleOnScene.Visible = false;
                 Main_AppScreen_UICanvas_Entity.SingleOnScene.SetPause(false);
                 ControlPers_AudioMixer.SingleOnScene.UnPause();
                 
@@ -242,8 +242,8 @@ public class ControlScene_Entity_Main : MonoBehaviour
                     audio_source.PlayOneShot(audio_sound_gameOver);
                     AppScreen_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     Main_AppScreen_UICanvas_Entity.SingleOnScene.ShowGameOver();
-                    AppScreen_UICanvas_GameOver_Button_Restart.SingleOnScene.GetComponent<Image>().enabled = true;
-                    AppScreen_UICanvas_Button_Menu.SingleOnScene.GetComponent<Image>().enabled = true;
+                    AppScreen_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
+                    AppScreen_UICanvas_Button_Menu.SingleOnScene.Visible = true;
                     stage_gameOver_menu_onDisplay = true;
                 }                               
             }

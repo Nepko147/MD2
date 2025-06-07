@@ -2,26 +2,16 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class AppScreen_UICanvas_Button_Menu : MonoBehaviour
+public class AppScreen_UICanvas_Button_Menu : AppScreen_UICanvas_Button_Parent
 {
     public static AppScreen_UICanvas_Button_Menu SingleOnScene { get; private set; }
 
-    public bool Pressed { get; set; }
-
-    [SerializeField] private AudioClip pressSound;
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
-        Pressed = false;
-
-        GetComponent<Image>().enabled = false;
-    }
-
-    public void OnClick()
-    {
-        Pressed = true;
-        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(pressSound);
+        Visible = false;
     }
 }
