@@ -13,7 +13,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         price_instance = Instantiate(price_prefab, Vector3.zero, transform.rotation, transform.parent);
         price_instance.LocalPosition_Set(rectTransform.localPosition);
     }
-
+    
     private Image image;
     private Vector2 image_min;
     private Vector2 image_max;
@@ -25,6 +25,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     [SerializeField] protected Sprite image_pointed_buy;
     [SerializeField] protected Sprite image_pointed_improve;
     [SerializeField] protected Sprite image_received;
+
+    [SerializeField] private AudioClip sound_upgrade;
 
     private Vector3 position_last;
 
@@ -51,6 +53,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     protected delegate void StateAction();
     protected StateAction Buy;
     protected StateAction Improve;
+    protected StateAction Animation;
 
     public void OnClick()
     {
@@ -63,6 +66,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
             else
             {
                 Buy();
+                Animation();
 
                 ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_buy;
                 ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
@@ -71,6 +75,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                 price_instance.Coins_Set(price_coins_improve);
+
+                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
             }
         }
         else
@@ -84,6 +90,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                 else
                 {
                     Improve();
+                    Animation();
 
                     ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_improve;
                     ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
@@ -91,6 +98,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                     Image_Set(image_received, image_received);
 
                     Destroy(price_instance.gameObject);
+
+                    ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
                 }
             }
         }
@@ -103,7 +112,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         image = GetComponent<Image>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         image_min = Image_ScreenPoint_Min(image);
         image_max = Image_ScreenPoint_Max(image);
