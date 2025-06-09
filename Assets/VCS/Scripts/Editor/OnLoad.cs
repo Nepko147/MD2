@@ -3,11 +3,10 @@
 
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 
 namespace Editor
 {
-    public class OnLoad : MonoBehaviour
+    public class OnLoad
     {
         //Загрузка первой сцены из списка сцен при запуске любой сцены в редакторе
         [InitializeOnLoadMethod]
