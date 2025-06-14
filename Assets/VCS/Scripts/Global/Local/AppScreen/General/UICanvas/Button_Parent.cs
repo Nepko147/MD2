@@ -14,7 +14,7 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         { 
             pressed = value;
 
-            if (value)
+            if (pressed)
             {
                 image.sprite = image_pressed;
             }

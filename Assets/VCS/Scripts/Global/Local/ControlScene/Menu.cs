@@ -58,7 +58,7 @@ public class ControlScene_Menu : MonoBehaviour
             {
                 if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades.SingleOnScene.Pressed)
                 {
-                    AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades.SingleOnScene.Pressed = false;
+                    AppScreen_Local_SceneMneu_UICanvas_Menu_Local_Upgrades_Button_Menu.SingleOnScene.Pressed = false;
 
                     World_Local_SceneMenu_UI_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
                     AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
@@ -72,7 +72,7 @@ public class ControlScene_Menu : MonoBehaviour
                 {
                     if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Settings.SingleOnScene.Pressed)
                     {
-                        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Settings.SingleOnScene.Pressed = false;
+                        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Button_Menu.SingleOnScene.Pressed = false;
 
                         World_Local_SceneMenu_UI_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
                         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
@@ -112,7 +112,7 @@ public class ControlScene_Menu : MonoBehaviour
 
             if (AppScreen_Local_SceneMneu_UICanvas_Menu_Local_Upgrades_Button_Menu.SingleOnScene.Pressed)
             {
-                AppScreen_Local_SceneMneu_UICanvas_Menu_Local_Upgrades_Button_Menu.SingleOnScene.Pressed = false;
+                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades.SingleOnScene.Pressed = false;
 
                 World_Local_SceneMenu_UI_Title.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
@@ -130,7 +130,7 @@ public class ControlScene_Menu : MonoBehaviour
 
             if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Button_Menu.SingleOnScene.Pressed)
             {
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Button_Menu.SingleOnScene.Pressed = false;
+                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Settings.SingleOnScene.Pressed = false;
 
                 ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
 
