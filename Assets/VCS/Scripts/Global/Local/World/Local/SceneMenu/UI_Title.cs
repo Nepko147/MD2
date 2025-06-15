@@ -5,12 +5,13 @@ public class World_Local_SceneMenu_UI_Title : MonoBehaviour
     public static World_Local_SceneMenu_UI_Title SingleOnScene { get; private set; }
 
     private SpriteRenderer spriteRenderer;
+    
     public bool Visible 
     {
         get { return (spriteRenderer.enabled); }
         set { spriteRenderer.enabled = value; } 
     }
-
+    
     private bool    shift = false;
     private float   shift_time = 0;
     private float   shift_time_max;

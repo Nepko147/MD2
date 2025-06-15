@@ -26,9 +26,12 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     [SerializeField] protected Sprite image_pointed_improve;
     [SerializeField] protected Sprite image_received;
 
+    [SerializeField] private AudioClip sound_button;
     [SerializeField] private AudioClip sound_upgrade;
 
     private Vector3 position_last;
+
+    private const string POPUPMESSAGE_TEXT = "NOT ENOUGH COINS";
 
     protected void Image_Set(Sprite _idle, Sprite _pointed)
     {
@@ -57,49 +60,58 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
     public void OnClick()
     {
-        if (!IsBought())
+        if (!AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_IsActive)
         {
-            if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins < price_coins_buy)
+            if (!IsBought())
             {
-                //сообщение о нехватке монет
-            }
-            else
-            {
-                Buy();
-                Animation();
-
-                ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_buy;
-                ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
-
-                Image_Set(image_idle_improve, image_pointed_improve);
-
-                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
-                price_instance.Coins_Set(price_coins_improve);
-
-                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
-            }
-        }
-        else
-        {
-            if (!IsImproved())
-            {
-                if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins < price_coins_improve)
+                if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins < price_coins_buy)
                 {
-                    //сообщение о нехватке монет
+                    ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
+
+                    AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(POPUPMESSAGE_TEXT);
                 }
                 else
                 {
-                    Improve();
+                    Buy();
                     Animation();
 
-                    ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_improve;
+                    ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_buy;
                     ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
 
-                    Image_Set(image_received, image_received);
-
-                    Destroy(price_instance.gameObject);
-
+                    ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
+
+                    Image_Set(image_idle_improve, image_pointed_improve);
+
+                    price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
+                    price_instance.Coins_Set(price_coins_improve);
+                }
+            }
+            else
+            {
+                if (!IsImproved())
+                {
+                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins < price_coins_improve)
+                    {
+                        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
+
+                        AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(POPUPMESSAGE_TEXT);
+                    }
+                    else
+                    {
+                        Improve();
+                        Animation();
+
+                        ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= price_coins_improve;
+                        ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
+
+                        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
+                        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
+
+                        Image_Set(image_received, image_received);
+
+                        Destroy(price_instance.gameObject);
+                    }
                 }
             }
         }
@@ -148,24 +160,27 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
     private void Update()
     {
-        if (transform.position != position_last)
+        if (!AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_IsActive)
         {
-            image_pointsRefresh = true;
-            position_last = transform.position;
-        }
-
-        if (!Pointed(image_min, image_max))
-        {
-            if (image.sprite != image_idle)
+            if (transform.position != position_last)
             {
-                image.sprite = image_idle;
+                image_pointsRefresh = true;
+                position_last = transform.position;
             }
-        }
-        else
-        {
-            if (image.sprite != image_pointed)
+
+            if (!Pointed(image_min, image_max))
             {
-                image.sprite = image_pointed;
+                if (image.sprite != image_idle)
+                {
+                    image.sprite = image_idle;
+                }
+            }
+            else
+            {
+                if (image.sprite != image_pointed)
+                {
+                    image.sprite = image_pointed;
+                }
             }
         }
     }

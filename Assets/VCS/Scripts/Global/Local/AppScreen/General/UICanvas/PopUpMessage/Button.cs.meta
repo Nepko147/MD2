@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9b59bae79e62df84da9feda92ac79207
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - price_prefab: {instanceID: 0}
+  - image_idle_buy: {instanceID: 0}
+  - image_idle_improve: {instanceID: 0}
+  - image_pointed_buy: {instanceID: 0}
+  - image_pointed_improve: {instanceID: 0}
+  - image_received: {instanceID: 0}
+  - sound_upgrade: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -43,11 +43,42 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         set { image.enabled = value; }
     }
 
+    protected bool ActiveOnPopUpMessage = false;
+
+    private bool Pressable()
+    {
+        if (pressed)
+        {
+            return (false);
+        }
+        else
+        {
+            if (ActiveOnPopUpMessage)
+            {
+                return (true);
+            }
+            else
+            {
+                if (AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_IsActive)
+                {
+                    return (false);
+                }
+                else
+                {
+                    return (true);
+                }
+            }
+        }
+    }
+
     public void OnClick()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_press);
+        if (Pressable())
+        {
+            ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_press);
 
-        Pressed = true;
+            Pressed = true;
+        }
     }
 
     protected override void Awake()
@@ -66,7 +97,7 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
 
     private void Update()
     {
-        if (!pressed)
+        if (Pressable())
         {
             if (transform.position != position_last)
             {
