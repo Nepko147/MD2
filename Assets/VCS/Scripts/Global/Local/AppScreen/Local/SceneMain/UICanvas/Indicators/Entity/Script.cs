@@ -41,6 +41,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
     {
         AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(alpha_init);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(alpha_init);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.SetAlpha(alpha_init);
     }
 
     private void Update()
@@ -53,6 +54,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                 canvasGroup.alpha = _newAlpha;
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.SetAlpha(_newAlpha);
 
                 if (canvasGroup.alpha >= 1)
                 {
@@ -60,6 +62,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                     canvasGroup.alpha = _newAlpha;
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.SetAlpha(_newAlpha);
                     state = OnDisplay.none;
                 }
 
@@ -71,6 +74,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                 canvasGroup.alpha = _newAlpha;
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.SetAlpha(_newAlpha);
 
                 if (canvasGroup.alpha <= 0)
                 {
@@ -78,6 +82,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                     canvasGroup.alpha = _newAlpha;
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
+                    AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.SetAlpha(_newAlpha);
                     state = OnDisplay.none;
                 }
 
