@@ -14,6 +14,28 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     private bool                    enemy_isDamaged = false;
     private PolygonCollider2D       enemy_collider;
 
+    public void SetSortingOrder(int _currentLineNumber)
+    {        
+        switch (_currentLineNumber)
+        {
+            case 1:
+                GetComponent<SpriteRenderer>().sortingOrder = LINE_1_SORTINGORDER;
+                break;
+
+            case 2:
+                GetComponent<SpriteRenderer>().sortingOrder = LINE_2_SORTINGORDER;
+                break;
+
+            case 3:
+                GetComponent<SpriteRenderer>().sortingOrder = LINE_3_SORTINGORDER;
+                break;
+
+            case 4:
+                GetComponent<SpriteRenderer>().sortingOrder = LINE_4_SORTINGORDER;
+                break;
+        }
+    }
+
     private void Awake()
     {
         Active = true;

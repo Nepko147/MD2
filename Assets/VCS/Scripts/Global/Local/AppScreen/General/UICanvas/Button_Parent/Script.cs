@@ -81,6 +81,11 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         }
     }
 
+    public void SetAlpha(float _newAlpha)
+    {
+        image.color = new Color(image.color.r, image.color.g, image.color.b, _newAlpha);
+    }
+
     protected override void Awake()
     {
         base.Awake();

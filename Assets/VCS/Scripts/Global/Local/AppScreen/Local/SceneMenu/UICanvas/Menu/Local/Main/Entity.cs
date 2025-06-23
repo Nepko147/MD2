@@ -7,8 +7,15 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity : AppScre
     protected override void Awake()
     {
         base.Awake();
-
+        
         SingleOnScene = this;
+    }
+
+    public void PrepareToGameStart()
+    {
+        var _source = new Vector3(0, 0, 0);
+        var _destination = new Vector2(transform.position.x - 3600.0f, 0); new Vector2(3600f, 0);
+        Shift_Positions_Set(_source, _destination);
     }
 
     private void Start()

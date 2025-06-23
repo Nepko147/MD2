@@ -4,7 +4,7 @@ public class World_Local_SceneMain_Bonus_Coin : MonoBehaviour
 {
     public bool Active { get; set; }    
 
-    [SerializeField] private float speed = 10f;
+    private float speed = 8f;
     [SerializeField] private World_Local_SceneMain_PopUp popUp;
     [SerializeField] private AudioClip sound;
     private new Animator animation;
