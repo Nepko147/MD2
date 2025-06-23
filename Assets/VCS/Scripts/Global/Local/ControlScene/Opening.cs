@@ -38,7 +38,7 @@ public class ControlScene_Opening : MonoBehaviour
                 && World_Local_SceneOpening_UICanvas_TitleAnimation.SingleOnScene.Done)
             {
                 ControlPers_FogHandler.Color_Save();
-                SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
+                SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
             }
         }
     }

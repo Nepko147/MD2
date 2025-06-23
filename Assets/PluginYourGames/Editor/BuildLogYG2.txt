@@ -1,0 +1,3 @@
+Build path: E:/Dev/Project MDv2.0/Build/Web_YandexGames_DefaultPlayer
+Build number: 2
+PluginYG version: 2.0032
