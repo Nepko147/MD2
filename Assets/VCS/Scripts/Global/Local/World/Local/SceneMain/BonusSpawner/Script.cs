@@ -6,6 +6,9 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
 
     public bool Active { get; set; }
 
+    public int          InaccessibleLine { get; set; }
+    private const int   INACCESSIBLELINE_INIT = 0;
+
     [SerializeField] private GameObject[] bonusArray;
 
     public Vector2 BonusSpawn_SpawnPoint_Line_1 { get; set; }
@@ -68,7 +71,9 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
         SingleOnScene = this;
 
         Active = true;
-        CoinRush = false;        
+        CoinRush = false;
+        InaccessibleLine = 0;
+
         //Контроль МинМакса. Будет глупо, если минимум будет больше, чем максимум
         bonusSpawn_delay_min = bonusSpawn_delay_min >= bonusSpawn_delay_max ? bonusSpawn_delay_max - 1 : bonusSpawn_delay_min;
         bonusSpawn_delay_max = bonusSpawn_delay_max <= bonusSpawn_delay_min ? bonusSpawn_delay_min + 1 : bonusSpawn_delay_max;
@@ -152,8 +157,18 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
 
                     case BonusSpawnerMode.standart:
 
-                        bonusSpawn_currentLine = Random.Range(1, 5); 
+                        bool _needToUpdateLineNumber = true;
 
+                        while (_needToUpdateLineNumber)
+                        {
+                            bonusSpawn_currentLine = Random.Range(1, 5);
+                            _needToUpdateLineNumber = false;
+                            if (bonusSpawn_currentLine == InaccessibleLine)
+                            {
+                                _needToUpdateLineNumber = true;
+                            }
+                        }
+                        
                         _bonusArray_index = Random.Range(0, bonusArray.Length);
 
                         switch (_bonusArray_index)
@@ -192,14 +207,16 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
 
                 for (int _i = 0; _i < bonusSpawn_amount; ++_i)
                 {
-                    var _offsetPosition = _newPosition + Vector2.right * bonusSpawn_offset * _i;
-                    var _bonus = Instantiate(bonusArray[_bonusArray_index], _offsetPosition, new Quaternion());
+                    var _offsetPosition = _newPosition + Vector2.left * bonusSpawn_offset * _i;
+                    var _bonus = Instantiate(bonusArray[_bonusArray_index], _offsetPosition, new Quaternion(), transform.parent);
                     if (AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_Active)
                     {
                         _bonus.GetComponent<World_Local_SceneMain_Bonus_Coin>().MakeInvisible();
                     }
                 }
 
+                InaccessibleLine = INACCESSIBLELINE_INIT;
+                World_Local_SceneMain_EnemySpawner.SingleOnScene.InaccessibleLine = bonusSpawn_currentLine;
                 BonusSpawn_Delay_Reset();
             }
         }
