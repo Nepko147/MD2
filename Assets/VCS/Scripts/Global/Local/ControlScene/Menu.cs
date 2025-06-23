@@ -102,7 +102,7 @@ public class ControlScene_Menu : MonoBehaviour
             {
                 ControlPers_FogHandler.Color_Save();
                 World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Save();
-                SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MAIN);
+                SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MAIN);
             }
         }
 

@@ -224,7 +224,7 @@ public class ControlScene_Main : MonoBehaviour
                     ControlPers_AudioMixer.SingleOnScene.Stop();
                     ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
-                    SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
+                    SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
                 }
             }              
         }
@@ -252,7 +252,7 @@ public class ControlScene_Main : MonoBehaviour
             {
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_mainTheme);
-                SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MAIN);
+                SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MAIN);
             }
             else
             {
@@ -260,7 +260,7 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
-                    SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
+                    SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
                 }
             }                        
         }

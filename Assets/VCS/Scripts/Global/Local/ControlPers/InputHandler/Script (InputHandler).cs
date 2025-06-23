@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using InputActions;
 
 public class ControlPers_InputHandler : MonoBehaviour
 {
     public static ControlPers_InputHandler SingleOnScene { get; private set; }
 
-    InputActions inputActions;
+    InputHandler inputActions_inputHandler;
 
     public Vector2 Screen_Position { get; private set; }
 
@@ -22,7 +23,6 @@ public class ControlPers_InputHandler : MonoBehaviour
             if (_context.canceled)
             {
                 Screen_Pressed = false;
-                
             }
         }
     }
@@ -34,12 +34,12 @@ public class ControlPers_InputHandler : MonoBehaviour
 
     void Start()
     {
-        inputActions = new InputActions();
-        inputActions.VirtualStick.Enable();
+        inputActions_inputHandler = new InputHandler();
+        inputActions_inputHandler.VirtualStick.Enable();
     }
 
     void Update()
     {
-        Screen_Position = inputActions.VirtualStick.Screen_Position.ReadValue<Vector2>();
+        Screen_Position = inputActions_inputHandler.VirtualStick.Screen_Position.ReadValue<Vector2>();
     }
 }
