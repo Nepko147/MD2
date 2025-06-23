@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneMenu_UI_Title : MonoBehaviour
+public class World_Local_SceneMenu_UICanvas_Title : MonoBehaviour
 {
-    public static World_Local_SceneMenu_UI_Title SingleOnScene { get; private set; }
+    public static World_Local_SceneMenu_UICanvas_Title SingleOnScene { get; private set; }
 
     private SpriteRenderer spriteRenderer;
     
@@ -46,7 +46,7 @@ public class World_Local_SceneMenu_UI_Title : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         shift_pos_source = transform.position;
-        shift_pos_destination = new Vector3(transform.position.x - 6f, transform.position.y, transform.position.z);
+        shift_pos_destination = new Vector3(transform.position.x - 36f, transform.position.y, transform.position.z);
     }
 
     private void Update()

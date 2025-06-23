@@ -6,13 +6,18 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     
     public bool Active { get; set; }
 
+    public int          InaccessibleLine { get; set; }
+    private const int   INACCESSIBLELINE_INIT = 0;
+
     [SerializeField] private GameObject[] enemyArray;
 
     public Vector2 EnemySpawn_SpawnPoint_Line_1 { get; set; }
     public Vector2 EnemySpawn_SpawnPoint_Line_2 { get; set; }
     public Vector2 EnemySpawn_SpawnPoint_Line_3 { get; set; }
-    public Vector2 EnemySpawn_SpawnPoint_Line_4 { get; set; } 
-    
+    public Vector2 EnemySpawn_SpawnPoint_Line_4 { get; set; }
+
+    private int enemySpawn_currentLineNumber;
+
     private float                  enemySpawn_wave_enemyDelay;
     [SerializeField] private float enemySpawn_wave_enemyDelay_init;
     [SerializeField] private float enemySpawn_wave_enemyDelay_init_decreaseCf;
@@ -31,36 +36,63 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
 
     public void spawnEnemy()
     {
-        int _lineNumber = Random.Range(1, 5);
-        var _sortingOrder = 0;
+        int _newLineNumber = 1;
+        bool _needToUpdateLineNumber = true;
+        
+        while (_needToUpdateLineNumber)
+        {
+            _newLineNumber = Random.Range(1, 5);
+            _needToUpdateLineNumber = false;
+
+            switch (enemySpawn_currentLineNumber)
+            {
+                case 2:
+                    if (_newLineNumber == 1)
+                    {
+                        _needToUpdateLineNumber = true;
+                    }
+                break;
+                case 3:
+                    if (_newLineNumber == 4)
+                    {
+                        _needToUpdateLineNumber = true;
+                    }
+                break;
+            }
+            if (_newLineNumber == InaccessibleLine)
+            {
+                _needToUpdateLineNumber = true;
+            }
+        }        
+
+        enemySpawn_currentLineNumber = _newLineNumber;
+       
         Vector2 _position = new Vector2();
 
-        switch (_lineNumber)
+        switch (enemySpawn_currentLineNumber)
         {
             case 1:
                 _position = EnemySpawn_SpawnPoint_Line_1;
-                _sortingOrder = World_Local_SceneMain_Enemy_Entity.LINE_1_SORTINGORDER;
             break;
 
             case 2:
                 _position = EnemySpawn_SpawnPoint_Line_2;
-                _sortingOrder = World_Local_SceneMain_Enemy_Entity.LINE_2_SORTINGORDER;
             break;
 
             case 3:
                 _position = EnemySpawn_SpawnPoint_Line_3;
-                _sortingOrder = World_Local_SceneMain_Enemy_Entity.LINE_3_SORTINGORDER;
             break;
 
             case 4:
                 _position = EnemySpawn_SpawnPoint_Line_4;
-                _sortingOrder = World_Local_SceneMain_Enemy_Entity.LINE_4_SORTINGORDER;
             break;
         }
         
         int _enemyArray_index = Random.Range(0, enemyArray.Length);
         var _newEnemy = Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
-        _newEnemy.GetComponent<SpriteRenderer>().sortingOrder = _sortingOrder;
+        _newEnemy.GetComponent<World_Local_SceneMain_Enemy_Entity>().SetSortingOrder(enemySpawn_currentLineNumber);
+        InaccessibleLine = INACCESSIBLELINE_INIT;
+        World_Local_SceneMain_BonusSpawner.SingleOnScene.InaccessibleLine = enemySpawn_currentLineNumber;
     }
 
     private void Awake()
@@ -68,6 +100,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
         SingleOnScene = this;
 
         Active = true;
+        InaccessibleLine = 0;
 
         enemySpawn_wave_size = enemySpawn_wave_size_init;
         enemySpawn_wave_size_counter = enemySpawn_wave_size_init;
@@ -80,7 +113,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
         {
             if (enemySpawn_wave_delay > 0)
             {
-                enemySpawn_wave_delay -= Time.deltaTime;                
+                enemySpawn_wave_delay -= Time.deltaTime;
             } 
             else
             {

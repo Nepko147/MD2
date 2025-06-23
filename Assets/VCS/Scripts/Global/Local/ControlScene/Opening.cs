@@ -23,7 +23,7 @@ public class ControlScene_Opening : MonoBehaviour
             if (Input.anyKey)
             {
                 AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Activate();
-                World_Local_SceneOpening_UI_TitleAnimation.SingleOnScene.PlayAnimation();
+                World_Local_SceneOpening_UICanvas_TitleAnimation.SingleOnScene.PlayAnimation();
 
                 stage_pressAnyKey = false;
                 stage_titleAnimation = true;                
@@ -35,7 +35,7 @@ public class ControlScene_Opening : MonoBehaviour
             ControlPers_FogHandler.Move();
 
             if (AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Done
-                && World_Local_SceneOpening_UI_TitleAnimation.SingleOnScene.Done)
+                && World_Local_SceneOpening_UICanvas_TitleAnimation.SingleOnScene.Done)
             {
                 ControlPers_FogHandler.Color_Save();
                 SceneManager.LoadScene(ControlPers_Entity.SCENEINDEX_MENU);
