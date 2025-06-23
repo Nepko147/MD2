@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneOpening_UI_TitleAnimation : MonoBehaviour
+public class World_Local_SceneOpening_UICanvas_TitleAnimation : MonoBehaviour
 {
-    public static World_Local_SceneOpening_UI_TitleAnimation SingleOnScene { get; private set; }
+    public static World_Local_SceneOpening_UICanvas_TitleAnimation SingleOnScene { get; private set; }
 
     public bool Done { get; private set; }
 

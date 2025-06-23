@@ -6,7 +6,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
 
     CanvasGroup canvasGroup;
     [SerializeField] float alpha_init = 0.0f;
-    [SerializeField] float aplha_delta = 1.0f;
+    [SerializeField] float aplha_delta_show = 1.0f;
+    [SerializeField] float aplha_delta_hide = 100.0f;
 
     enum OnDisplay
     {
@@ -50,7 +51,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
         {
             case OnDisplay.show:
                 
-                var _newAlpha = canvasGroup.alpha + aplha_delta * Time.deltaTime;
+                var _newAlpha = canvasGroup.alpha + aplha_delta_show * Time.deltaTime;
                 canvasGroup.alpha = _newAlpha;
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
@@ -66,11 +67,11 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                     state = OnDisplay.none;
                 }
 
-                break;
+            break;
 
             case OnDisplay.hide:
 
-                _newAlpha = canvasGroup.alpha - aplha_delta * Time.deltaTime;
+                _newAlpha = canvasGroup.alpha - aplha_delta_hide * Time.deltaTime;
                 canvasGroup.alpha = _newAlpha;
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.SetAlpha(_newAlpha);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.SetAlpha(_newAlpha);
@@ -86,7 +87,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
                     state = OnDisplay.none;
                 }
 
-                break;
+            break;
         }
     }
 }
