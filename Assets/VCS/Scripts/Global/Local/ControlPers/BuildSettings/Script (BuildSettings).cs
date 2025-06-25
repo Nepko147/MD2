@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class ControlPers_BuildSettings : MonoBehaviour
 {
+    public static ControlPers_BuildSettings SingleOnScene { get; private set; }
+
     private enum BuildCompilationType
     {
         windows_standalone,
@@ -12,16 +14,21 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
     [SerializeField] private BuildCompilationType buildCompilationType;
 
-    private enum CurrentPlatformType
+    public enum CurrentPlatformType
     {
         windows,
         web_yandexGames_desktop,
         web_yandexGames_mobile
     }
 
-    private CurrentPlatformType currentPlatformType;
+    public CurrentPlatformType currentPlatformType { get; private set; }
 
     [SerializeField] private Text currentPlatformType_Hint; //Отладка
+
+    private const int RESOLUTION_ORIGIN_WIDTH = 640;
+    private const int RESOLUTION_ORIGIN_HEIGHT = 360;
+
+    public const int FRAMERATE = 60;
 
     public const int SCENEINDEX_OPENING = 0;
     public const int SCENEINDEX_MENU = 1;
@@ -29,24 +36,33 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
     void Awake()
     {
-        Application.targetFrameRate = 60;
+        SingleOnScene = this;
+
+        Application.targetFrameRate = FRAMERATE;
 
         switch (buildCompilationType)
         {
             case BuildCompilationType.windows_standalone:
+                Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, true);
+
                 currentPlatformType = CurrentPlatformType.windows;
+
                 currentPlatformType_Hint.text = "Platform: WINDOWS"; //Отладка
             break;
 
             case BuildCompilationType.web_yandexGames:
+                Screen.SetResolution(RESOLUTION_ORIGIN_WIDTH, RESOLUTION_ORIGIN_HEIGHT, true);
+
                 if (YG2.envir.isMobile)
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_mobile;
+
                     currentPlatformType_Hint.text = "Platform: MOBILE"; //Отладка
                 }
                 else
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_desktop;
+
                     currentPlatformType_Hint.text = "Platform: DESKTOP"; //Отладка
                 }
             break;

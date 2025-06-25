@@ -80,7 +80,3 @@ crashlytics-build.properties
 # Cloud Assets
 /Assets/Cloud/
 /Assets/Cloud.meta
-/Assets/PluginYourGames/
-/Assets/PluginYourGames.meta
-/Assets/WebGLTemplates/
-/Assets/WebGLTemplates.meta
