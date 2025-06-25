@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneOpening_UICanvas_Bushes : MonoBehaviour
+public class AppScreen_Local_SceneOpening_UICanvas_Bushes : MonoBehaviour
 {
-    public static World_Local_SceneOpening_UICanvas_Bushes SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneOpening_UICanvas_Bushes SingleOnScene { get; private set; }
 
     [SerializeField] private float bushes_speed = 0.325f;
 

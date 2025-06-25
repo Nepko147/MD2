@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneMenu_UICanvas_Title : MonoBehaviour
+public class AppScreen_Local_SceneMenu_UICanvas_Title : MonoBehaviour
 {
-    public static World_Local_SceneMenu_UICanvas_Title SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMenu_UICanvas_Title SingleOnScene { get; private set; }
 
     private SpriteRenderer spriteRenderer;
     

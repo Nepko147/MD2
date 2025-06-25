@@ -37,10 +37,10 @@ public class ControlScene_Menu : MonoBehaviour
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
                 World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
                 World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
-                World_Local_SceneOpening_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
+                AppScreen_Local_SceneOpening_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);                
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.PrepareToGameStart();
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
-                World_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
+                AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
 
                 AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, sceneSwitchTime);
 
@@ -59,7 +59,7 @@ public class ControlScene_Menu : MonoBehaviour
                 {
                     AppScreen_Local_SceneMneu_UICanvas_Menu_Local_Upgrades_Button_Menu.SingleOnScene.Pressed = false;
 
-                    World_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
+                    AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
                     AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
                     AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
                     AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity.SingleOnScene.Show(menuShiftTime);
@@ -73,7 +73,7 @@ public class ControlScene_Menu : MonoBehaviour
                     {
                         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Button_Menu.SingleOnScene.Pressed = false;
 
-                        World_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
+                        AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
                         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
                         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
 
@@ -113,7 +113,7 @@ public class ControlScene_Menu : MonoBehaviour
             {
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades.SingleOnScene.Pressed = false;
 
-                World_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toSource(menuShiftTime);
+                AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity.SingleOnScene.Hide(menuShiftTime);
@@ -133,7 +133,7 @@ public class ControlScene_Menu : MonoBehaviour
 
                 ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
 
-                World_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toSource(menuShiftTime);
+                AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
 
