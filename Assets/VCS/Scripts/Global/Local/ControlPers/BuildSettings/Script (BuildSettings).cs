@@ -28,7 +28,7 @@ public class ControlPers_BuildSettings : MonoBehaviour
     private const int RESOLUTION_ORIGIN_WIDTH = 640;
     private const int RESOLUTION_ORIGIN_HEIGHT = 360;
 
-    public const int FRAMERATE = 60;
+    private const int FRAMERATE = 60;
 
     public const int SCENEINDEX_OPENING = 0;
     public const int SCENEINDEX_MENU = 1;
