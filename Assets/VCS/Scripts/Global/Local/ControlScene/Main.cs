@@ -23,10 +23,10 @@ public class ControlScene_Main : MonoBehaviour
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
-    [SerializeField] private Vector2 spawnPoint_line_1 = new Vector2(4f, -0.55f);
-    [SerializeField] private Vector2 spawnPoint_line_2 = new Vector2(4f, -0.85f);
-    [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(4f, -1.15f);
-    [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(4f, -1.45f);
+    [SerializeField] private Vector2 spawnPoint_line_1 = new Vector2(4.7f, -0.55f);
+    [SerializeField] private Vector2 spawnPoint_line_2 = new Vector2(4.7f, -0.85f);
+    [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(4.7f, -1.15f);
+    [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(4.7f, -1.45f);
     
     private void ActiveState_General(bool _state)
     {

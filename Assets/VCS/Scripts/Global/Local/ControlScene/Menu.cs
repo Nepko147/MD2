@@ -37,7 +37,7 @@ public class ControlScene_Menu : MonoBehaviour
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
                 World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
                 World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
-                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);                
+                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.PrepareToGameStart();
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
                 AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);

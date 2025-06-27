@@ -16,8 +16,6 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
 
     private new Camera camera;
 
-    private float pivotLeftOffset_x;
-
     public void Activate()
     {
         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_car);
@@ -30,6 +28,8 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
         base.Awake();
 
         SingleOnScene = this;
+
+        rectTransform = GetComponent<RectTransform>();
     }
 
     private void Start()
@@ -39,12 +39,6 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
         var _screenToWorldPosition = new Vector3(0, _worldToScreenPosition.y, _worldToScreenPosition.z);
         
         transform.position = camera.ScreenToWorldPoint(_screenToWorldPosition);
-
-        var _rectTransform = GetComponent<RectTransform>();
-        var _referenceResolution_x = AppScreen_Local_SceneOpening_UICanvas_Entity.Singltone.GetComponent<CanvasScaler>().referenceResolution.x;
-        var _offset = (_rectTransform.rect.width * _rectTransform.pivot.x * _rectTransform.localScale.x) * camera.pixelWidth / _referenceResolution_x + camera.pixelWidth;        
-        var _vec3 = new Vector3(_offset, 0, 0);
-        pivotLeftOffset_x = camera.ScreenToWorldPoint(_vec3).x;
     }
 
     private void Update()
@@ -54,8 +48,8 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
         { 
             transform.position += Vector3.right * car_speed * Time.deltaTime;
 
-            if (transform.position.x >= pivotLeftOffset_x)
-            {                
+            if (RectTransform_ScreenPoint_Min().x >= Screen.width)
+            {
                 Done = true;
             }
         }        
