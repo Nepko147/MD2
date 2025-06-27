@@ -18,7 +18,7 @@ public class ControlPers_BuildSettings : MonoBehaviour
     {
         windows,
         web_yandexGames_desktop,
-        web_yandexGames_mobile
+        web_yandexGames_mobile_android
     }
 
     public CurrentPlatformType currentPlatformType { get; private set; }
@@ -55,9 +55,9 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
                 if (YG2.envir.isMobile)
                 {
-                    currentPlatformType = CurrentPlatformType.web_yandexGames_mobile;
+                    currentPlatformType = CurrentPlatformType.web_yandexGames_mobile_android;
 
-                    currentPlatformType_Hint.text = "Platform: MOBILE"; //Отладка
+                    currentPlatformType_Hint.text = "Platform: MOBILE (ANDROID)"; //Отладка
                 }
                 else
                 {

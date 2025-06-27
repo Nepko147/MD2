@@ -14,14 +14,14 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     {
         display = true;
         textComponent.text = "+1 UP";
-        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.transform.position;
+        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Up;
     }
     public void Display_AsCoin()
     {
         display = true;
         textComponent.text = "+1 Coin";
-        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.transform.position;
+        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Coin;
     }
     public void Display_AsCoinRush()

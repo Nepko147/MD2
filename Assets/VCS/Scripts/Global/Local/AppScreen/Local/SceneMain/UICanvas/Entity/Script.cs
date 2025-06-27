@@ -14,8 +14,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         set 
         {
             ups_visual = value;
-            var _string = TEXT_X + ups_visual.ToString();
-            AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_String.SingleOnScene.UpdateText(_string);
+            var _string = TEXT_X + " " + ups_visual.ToString();
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.UpdateText(_string);
         }
     }
         
@@ -30,8 +30,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         {
             coins_visual = value;
 
-            var _string = TEXT_X + coins_visual.ToString();
-            AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_String.SingleOnScene.UpdateText(_string);
+            var _string = coins_visual.ToString() + " " + TEXT_X;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.UpdateText(_string);
         }
     }
 
@@ -44,9 +44,9 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
 
     public void ShowGameOver()
     {
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_String.SingleOnScene.Enable(false);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_String.SingleOnScene.Enable(false);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_String.SingleOnScene.Enable(false);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.Enable(false);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.Enable(false);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.Enable(false);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(true);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(TEXT_GAMEOVER);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.Enable(true);
@@ -74,6 +74,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     private void FixedUpdate()
     {
         var _string = TEXT_COMPLETE + (int)World_Local_SceneMain_Player.SingleOnScene.Player_Complete + TEXT_METERS;
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_String.SingleOnScene.UpdateText(_string);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.UpdateText(_string);
     }
 }

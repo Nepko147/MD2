@@ -164,8 +164,8 @@ public class ControlScene_Main : MonoBehaviour
                     || AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed)
                 {
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
-                    AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.Pause();
-                    AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.Pause();
+                    AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();
+                    AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.Pause();
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
                     AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Visible = true;
                     AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
@@ -206,8 +206,8 @@ public class ControlScene_Main : MonoBehaviour
             if (AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed)
             {                
                 AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
-                AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Sprite.SingleOnScene.UnPause();
-                AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Sprite.SingleOnScene.UnPause();
+                AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.UnPause();
+                AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.UnPause();
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed = false;
                 AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Visible = false;

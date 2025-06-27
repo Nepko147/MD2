@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_String : AppScreen_General_UICanvas_Parent
+public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text : AppScreen_General_UICanvas_Parent
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_String SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text SingleOnScene { get; private set; }
 
     Text text;
 

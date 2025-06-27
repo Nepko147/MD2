@@ -23,6 +23,6 @@ public class AppScreen_Local_SceneOpening_UICanvas_Title : MonoBehaviour
     {
         SingleOnScene = this;
 
-        Done = false;        
+        Done = false;
     }
 }
