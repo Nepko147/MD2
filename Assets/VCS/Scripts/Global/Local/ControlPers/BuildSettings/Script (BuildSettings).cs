@@ -25,9 +25,6 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
     [SerializeField] private Text currentPlatformType_Hint; //Отладка
 
-    private const int RESOLUTION_ORIGIN_WIDTH = 640;
-    private const int RESOLUTION_ORIGIN_HEIGHT = 360;
-
     private const int FRAMERATE = 60;
 
     public const int SCENEINDEX_OPENING = 0;
@@ -43,16 +40,12 @@ public class ControlPers_BuildSettings : MonoBehaviour
         switch (buildCompilationType)
         {
             case BuildCompilationType.windows_standalone:
-                Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, true);
-
                 currentPlatformType = CurrentPlatformType.windows;
 
                 currentPlatformType_Hint.text = "Platform: WINDOWS"; //Отладка
             break;
 
             case BuildCompilationType.web_yandexGames:
-                Screen.SetResolution(RESOLUTION_ORIGIN_WIDTH, RESOLUTION_ORIGIN_HEIGHT, true);
-
                 if (YG2.envir.isMobile)
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_mobile_android;

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_General_Camera_World_Slope : MonoBehaviour    
+public class AppScreen_General_Camera_World_Entity_Slope : MonoBehaviour    
 {
-    public static AppScreen_General_Camera_World_Slope SingleOnScene { get; private set; }
+    public static AppScreen_General_Camera_World_Entity_Slope SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
     

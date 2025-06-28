@@ -33,7 +33,7 @@ MonoBehaviour:
     testFailAds: 0
   Templates:
     logoImageFormat: 0
-    backgroundImgFormat: 0
+    backgroundImgFormat: 3
     gradientBackgroundByLoadGame:
       radial: 0
       angleInclination: 140
@@ -45,9 +45,9 @@ MonoBehaviour:
       roundAngle: 10
       width: 30
       height: 24
-      color1: {r: 1, g: 0.23113209, b: 0.5995211, a: 1}
+      color1: {r: 0.23137254, g: 1, b: 0.99121016, a: 1}
       color2: {r: 1, g: 1, b: 1, a: 0.7}
-    fixedAspectRatio: 1
+    fixedAspectRatio: 0
     aspectRatio: 16/9
     fillBackground: 1
     gradientBackgroundByAspectRatio:

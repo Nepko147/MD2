@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class AppScreen_General_Camera_World_Entity : MonoBehaviour    
+public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Parent
 {
     public static AppScreen_General_Camera_World_Entity SingleOnScene { get; private set; }
 
@@ -11,15 +11,7 @@ public class AppScreen_General_Camera_World_Entity : MonoBehaviour
     private const float         POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX = 3;
     float                       postProcess_profile_depthOfField_aperture_step = 0;
     float                       postProcess_profile_depthOfField_aperture_duration;
-    bool                        postProcess_profile_depthOfField_aperture_change = false;    
-
-    private void Awake()
-    {
-        SingleOnScene = this;
-
-        postProcess_volume = GetComponent<PostProcessVolume>();
-        postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
-    }
+    bool                        postProcess_profile_depthOfField_aperture_change = false;
 
     /// <summary>
     /// <para> _value - Нормализованная величина Блюра (0..1) </para>
@@ -34,8 +26,20 @@ public class AppScreen_General_Camera_World_Entity : MonoBehaviour
         postProcess_profile_depthOfField_aperture_step = (_aperture_value - postProcess_profile_depthOfField.aperture.value) / _duration;
     }
 
-    private void Update()
-    { 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SingleOnScene = this;
+
+        postProcess_volume = GetComponent<PostProcessVolume>();
+        postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
         if (postProcess_profile_depthOfField_aperture_change)
         {
             postProcess_profile_depthOfField_aperture_duration -= Time.deltaTime;            

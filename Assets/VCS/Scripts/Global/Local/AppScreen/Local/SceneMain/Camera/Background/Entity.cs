@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class AppScreen_Local_SceneMain_Camera_Background_Entity : MonoBehaviour    
+public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_General_Camera_Parent
 {
     public static AppScreen_Local_SceneMain_Camera_Background_Entity SingleOnScene { get; private set; }
 
@@ -14,22 +14,27 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : MonoBehaviour
     [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.0001f;
     [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.4f;
 
-    private void Awake()
-    {
-        SingleOnScene = this;
-
-        Active = false;
-        postProcess_volume = GetComponent<PostProcessVolume>();
-        postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
-    }
-    
     public void ChromaticAberrationEnable(bool _state)
     {
         postProcess_profile_chromaticAberration_intensity_change = _state;
     }
 
-    private void Update()
+    protected override void Awake()
     {
+        base.Awake();
+
+        SingleOnScene = this;
+
+        Active = false;
+
+        postProcess_volume = GetComponent<PostProcessVolume>();
+        postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
         if (Active)
         {
             if (postProcess_profile_chromaticAberration_intensity_change)

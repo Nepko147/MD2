@@ -199,7 +199,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
         Player_Invul = true;
         player_invul_timer = player_invul_timer_init;
-        AppScreen_General_Camera_World_Shake.SingleOnScene.Shake();
+        AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Shake();
 
         if (Player_Ups <= 0)
         {

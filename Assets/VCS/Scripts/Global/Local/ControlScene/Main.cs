@@ -75,14 +75,14 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_EnemySpawner.SingleOnScene.Active = _state;
         World_Local_SceneMain_BonusSpawner.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
-        AppScreen_General_Camera_World_Slope.SingleOnScene.Active = _state;
-        AppScreen_General_Camera_World_Zoom.SingleOnScene.Active = _state;
+        AppScreen_General_Camera_World_Entity_Slope.SingleOnScene.Active = _state;
+        AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
     }
 
     private void ActiveState_Local_Pause(bool _state)
     {
         World_Local_SceneMain_Player.SingleOnScene.Active = _state;
-        AppScreen_General_Camera_World_Shake.SingleOnScene.Active = _state;
+        AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Active = _state;
     }
 

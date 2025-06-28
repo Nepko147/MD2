@@ -5,29 +5,44 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    [SerializeField] private Text textComponent;
+    private bool display = false;
+
+    private Text text;
+
+    private Image image;
+    [SerializeField] private Sprite image_sprite_up;
+    [SerializeField] private Sprite image_sprite_coin;
+    [SerializeField] private Sprite image_sprite_coinRush;
+    private void Image_Sprite_Set(Sprite _sprite)
+    {
+        image.sprite = _sprite;
+        image.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(_sprite.textureRect.width, _sprite.textureRect.height);
+    }
+
     private Vector2 destinationPos = Vector2.zero;
     private const float SPEED = 0.1f;
     
-    private bool display = false;
     public void Display_AsUp()
     {
         display = true;
-        textComponent.text = "+1 UP";
+        text.text = "+1 UP";
+        Image_Sprite_Set(image_sprite_up);
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Up;
     }
     public void Display_AsCoin()
     {
         display = true;
-        textComponent.text = "+1 Coin";
+        text.text = "+1 Coin";
+        Image_Sprite_Set(image_sprite_coin);
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Coin;
     }
     public void Display_AsCoinRush()
     {
         display = true;
-        textComponent.text = "Coin Rush!";
+        text.text = "Coin Rush!";
+        Image_Sprite_Set(image_sprite_coinRush);
         Behaviour = Behaviour_CoinRush;
     }
 
@@ -71,6 +86,10 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private void Awake()
     {
         Active = true;
+
+        text = GetComponentInChildren<Text>();
+
+        image = GetComponentInChildren<Image>();
     }
     
     void FixedUpdate()

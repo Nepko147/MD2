@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_General_Camera_World_Shake : MonoBehaviour
+public class AppScreen_General_Camera_World_Entity_Shake : MonoBehaviour
 {
-    public static AppScreen_General_Camera_World_Shake SingleOnScene { get; private set; }
+    public static AppScreen_General_Camera_World_Entity_Shake SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
 
