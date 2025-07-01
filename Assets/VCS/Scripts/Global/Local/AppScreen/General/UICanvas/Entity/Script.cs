@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AppScreen_General_UICanvas_Entity : MonoBehaviour
+public class AppScreen_General_UICanvas_Entity : AppScreen_General_UICanvas_Parent
 {
     public static AppScreen_General_UICanvas_Entity SingleOnScene { get; private set; }
     
@@ -31,8 +31,10 @@ public class AppScreen_General_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
         Camera = GetComponent<Canvas>().worldCamera;

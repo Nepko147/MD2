@@ -49,7 +49,7 @@ public class World_Local_SceneMain_Bonus_Coin : MonoBehaviour
 
                 World_Local_SceneMain_Player.SingleOnScene.TakeCoin();
 
-                var _popUp = Instantiate(popUp, transform.position, transform.rotation);
+                var _popUp = Instantiate(popUp, transform.position, transform.rotation, transform.parent);
                 _popUp.Display_AsCoin();
 
                 Destroy(gameObject);

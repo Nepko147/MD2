@@ -11,7 +11,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     /// <para> Возвращает экранные координаты левого нижнего угла Rect Transform </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
-    protected Vector2 RectTransform_ScreenPoint_Min(Vector2 _local_ofs = default(Vector2))
+    public Vector2 RectTransform_ScreenPoint_Min(Vector2 _local_ofs = default(Vector2))
     {
         var _pos_local = new Vector3(rectTransform.offsetMin.x - rectTransform.anchoredPosition.x + _local_ofs.x, rectTransform.offsetMin.y - rectTransform.anchoredPosition.y + _local_ofs.y, 0);
         var _pos_world = rectTransform.localToWorldMatrix.MultiplyPoint(_pos_local);
@@ -24,7 +24,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     /// </para> Возвращает экранные координаты правого верхнего угла Rect Transform </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
-    protected Vector2 RectTransform_ScreenPoint_Max(Vector2 _local_ofs = default(Vector2))
+    public Vector2 RectTransform_ScreenPoint_Max(Vector2 _local_ofs = default(Vector2))
     {
         var _pos_local = new Vector3(rectTransform.offsetMax.x - rectTransform.anchoredPosition.x + _local_ofs.x, rectTransform.offsetMax.y - rectTransform.anchoredPosition.y + _local_ofs.y, 0);
         var _pos_world = rectTransform.localToWorldMatrix.MultiplyPoint(_pos_local);

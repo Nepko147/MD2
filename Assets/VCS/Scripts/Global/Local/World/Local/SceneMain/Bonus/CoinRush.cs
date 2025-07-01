@@ -35,8 +35,8 @@ public class World_Local_SceneMain_Bonus_CoinRush : MonoBehaviour
                 World_Local_SceneMain_BonusSpawner.SingleOnScene.BonusSpawn_Delay_Reset();
                 AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.CoinRush(transform.position);
 
-                var _inst = Instantiate(popUp, transform.position, transform.rotation);
-                _inst.Display_AsCoinRush();
+                var _popUp = Instantiate(popUp, transform.position, transform.rotation, transform.parent);
+                _popUp.Display_AsCoinRush();
                 
                 Destroy(gameObject);
             }

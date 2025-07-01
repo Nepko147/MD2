@@ -33,7 +33,7 @@ public class World_Local_SceneMain_Bonus_Up : MonoBehaviour
 
                 World_Local_SceneMain_Player.SingleOnScene.TakeUp();
 
-                var _popUp = Instantiate(popUp, transform.position, transform.rotation);
+                var _popUp = Instantiate(popUp, transform.position, transform.rotation, transform.parent);
                 _popUp.Display_AsUp();
 
                 Destroy(gameObject);
