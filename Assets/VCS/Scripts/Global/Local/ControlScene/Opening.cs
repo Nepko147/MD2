@@ -3,11 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class ControlScene_Opening : MonoBehaviour
 {
-    bool stage_pressAnyKey = true;
-    bool stage_titleAnimation = true;
+    public static ControlScene_Opening SingleOnScene { get; private set; }
+
+    private bool stage_pressAnyKey = true;
+    public bool Stage_PressAnyKey_Pressed { get; private set; }
+    private bool stage_titleAnimation = true;
 
     [SerializeField] private AudioClip audio_crickets;
 
+    private void Awake()
+    {
+        SingleOnScene = this;
+
+        Stage_PressAnyKey_Pressed = false;
+    }
 
     private void Start()
     {
@@ -20,13 +29,22 @@ public class ControlScene_Opening : MonoBehaviour
         {
             ControlPers_FogHandler.Move();
 
-            if (Input.anyKey)
+            if (!Stage_PressAnyKey_Pressed)
             {
-                AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Activate();
+                if (Input.anyKey)
+                {
+                    Stage_PressAnyKey_Pressed = true;
+                }
+            }
+
+            if (Stage_PressAnyKey_Pressed
+            && ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
+            {
+                AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Move();
                 AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.PlayAnimation();
 
                 stage_pressAnyKey = false;
-                stage_titleAnimation = true;                
+                stage_titleAnimation = true;
             }
         }
 
@@ -35,7 +53,7 @@ public class ControlScene_Opening : MonoBehaviour
             ControlPers_FogHandler.Move();
 
             if (AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Done
-                && AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.Done)
+            && AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.Done)
             {
                 ControlPers_FogHandler.Color_Save();
                 SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);

@@ -4,12 +4,11 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
 {
     public static AppScreen_Local_SceneOpening_UICanvas_Car SingleOnScene { get; private set; }
 
-    private bool active = false;
-
     public bool Done { get; set; }
 
     private Camera uiCamera;
     
+    private bool move = false;
     [SerializeField] private float move_time = 1f;
     private Vector3 move_pos_screen_start;
     private Vector3 move_pos_screen_final;
@@ -18,12 +17,12 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
     [SerializeField] private AudioClip  sound_car;
     [SerializeField] private AudioClip  sound_ding;
 
-    public void Activate()
+    public void Move()
     {
         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_car);
         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_ding);
 
-        active = true;
+        move = true;
     }
 
     protected override void Awake()
@@ -42,7 +41,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_Car : AppScreen_General_UICan
 
     private void Update()
     {
-        if (!active)
+        if (!move)
         {
             var _pos_screen_init = uiCamera.WorldToScreenPoint(transform.position);
 

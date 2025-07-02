@@ -22,7 +22,7 @@ public class ControlPers_BuildSettings : MonoBehaviour
     }
 
     public CurrentPlatformType currentPlatformType { get; private set; }
-
+    
     [SerializeField] private Text currentPlatformType_Hint; //Отладка
 
     private const int FRAMERATE = 60;
@@ -36,12 +36,11 @@ public class ControlPers_BuildSettings : MonoBehaviour
         SingleOnScene = this;
 
         Application.targetFrameRate = FRAMERATE;
-
+        
         switch (buildCompilationType)
         {
             case BuildCompilationType.windows_standalone:
                 currentPlatformType = CurrentPlatformType.windows;
-
                 currentPlatformType_Hint.text = "Platform: WINDOWS"; //Отладка
             break;
 
@@ -49,13 +48,11 @@ public class ControlPers_BuildSettings : MonoBehaviour
                 if (YG2.envir.isMobile)
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_mobile_android;
-
                     currentPlatformType_Hint.text = "Platform: MOBILE (ANDROID)"; //Отладка
                 }
                 else
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_desktop;
-
                     currentPlatformType_Hint.text = "Platform: DESKTOP"; //Отладка
                 }
             break;
