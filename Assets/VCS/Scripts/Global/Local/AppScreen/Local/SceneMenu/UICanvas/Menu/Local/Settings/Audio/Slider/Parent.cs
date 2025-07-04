@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Parent : AppScreen_General_UICanvas_Parent
 {
     private Image image;
-    private Vector2 image_min;
     private Vector2 image_max;
     private float image_width;
     
@@ -44,15 +43,12 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider
         audioSource = GetComponent<AudioSource>();
     }
 
-    protected virtual void Start()
-    {
-        image_min = Image_ScreenPoint_Min(image);
-        image_max = Image_ScreenPoint_Max(image);
-        image_width = image_max.x - image_min.x;
-    }
-
     private void Update()
     {
-        Image_Highlight_Behaviour(image, image_min, image_max);
+        var _image_min = Image_ScreenPoint_Min(image);
+        image_max = Image_ScreenPoint_Max(image);
+        image_width = image_max.x - _image_min.x;
+
+        Image_Highlight_Behaviour(image, _image_min, image_max);
     }
 }

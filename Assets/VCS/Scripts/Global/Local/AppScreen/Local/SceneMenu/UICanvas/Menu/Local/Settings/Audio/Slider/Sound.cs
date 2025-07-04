@@ -21,10 +21,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider
         SingleOnScene = this;
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
         Value = ControlPers_DataHandler.SingleOnScene.SettingsData_SoundValue;
     }
 }

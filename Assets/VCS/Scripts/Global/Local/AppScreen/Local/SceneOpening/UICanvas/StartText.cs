@@ -15,7 +15,9 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
     private Text text;
     private Color text_color;
     private bool text_color_anim_state = false;
-    [SerializeField] private float text_color_anim_timeCf = 1.25f;
+    [SerializeField] private float text_color_anim_timeCf = 1.1f;
+    private float text_color_alpha_min = 0.25f;
+    private float text_color_alpha_max = 1f;
 
     private void Awake()
     {
@@ -30,7 +32,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
         {
             text_color.a -= text_color_anim_timeCf * Time.deltaTime;
 
-            if (text_color.a <=0)
+            if (text_color.a <= text_color_alpha_min)
             {
                 text_color_anim_state = true;
             }
@@ -39,7 +41,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
         {
             text_color.a += text_color_anim_timeCf * Time.deltaTime;
 
-            if (text_color.a >= 1)
+            if (text_color.a >= text_color_alpha_max)
             {
                 text_color_anim_state = false;
             }
