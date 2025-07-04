@@ -35,8 +35,8 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
 
     private Vector3 screenPosition = new Vector3(0, 0, 1);
 
-    [SerializeField] private float inner_position_magnitude_edge = 0.25f;
-    [SerializeField] private float inner_position_offset_max = 15f;
+    [SerializeField] private float inner_position_magnitude_edge = 0.15f;
+    [SerializeField] private float inner_position_offset_max = 0.325f;
 
     public float Inner_Direction { get; private set; }
 
