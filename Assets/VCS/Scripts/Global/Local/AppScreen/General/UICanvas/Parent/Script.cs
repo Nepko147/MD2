@@ -101,7 +101,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     #region ElementOnDisplayMode
 
     private float hide_delay;
-    private float alpha_delta = 0.01f;
+    private float alpha_delta = 0.02f;
     private protected CanvasRenderer canvasRenderer;
 
     enum OnDisplayMode
