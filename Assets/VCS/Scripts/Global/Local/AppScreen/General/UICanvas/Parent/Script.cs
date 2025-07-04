@@ -98,8 +98,112 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
 
     #endregion
 
+    #region ElementOnDisplayMode
+
+    private float hide_delay;
+    private float alpha_delta = 0.01f;
+    private protected CanvasRenderer canvasRenderer;
+
+    enum OnDisplayMode
+    {
+        idle,
+        prepareToHide,
+        hide,
+        show,
+        showtemporally
+    }
+
+    OnDisplayMode elementOnDisplayMode;
+
+    public void ShowElement()
+    {
+        elementOnDisplayMode = OnDisplayMode.show;
+    }
+
+    public void ShowElementTemporally(float _timeOnDisplay)
+    {
+        elementOnDisplayMode = OnDisplayMode.showtemporally;
+        hide_delay = _timeOnDisplay;
+    }
+
+    public void HideElementWithDelay(float _delay)
+    {
+        elementOnDisplayMode = OnDisplayMode.prepareToHide;
+        hide_delay = _delay;
+    }
+
+    #endregion
+
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        canvasRenderer = GetComponent<CanvasRenderer>();
+    }
+
+    private void Update()
+    {
+        switch (elementOnDisplayMode)
+        {
+            case OnDisplayMode.prepareToHide:
+
+                hide_delay -= Time.deltaTime;
+
+                if (hide_delay <= 0)
+                {
+                    elementOnDisplayMode = OnDisplayMode.hide;
+                }
+
+                break;
+
+            case OnDisplayMode.hide:
+
+                var _currentAlpha = canvasRenderer.GetAlpha();
+
+                if (_currentAlpha >= 0)
+                {
+                    float _newAlpha = _currentAlpha - alpha_delta;
+                    canvasRenderer.SetAlpha(_newAlpha);
+                }
+                else
+                {
+                    canvasRenderer.SetAlpha(0);
+                    elementOnDisplayMode = OnDisplayMode.idle;
+                }
+
+                break;
+
+            case OnDisplayMode.show:
+
+                _currentAlpha = canvasRenderer.GetAlpha();
+
+                if (_currentAlpha <= 1)
+                {
+                    float _newAlpha = _currentAlpha + alpha_delta;
+                    canvasRenderer.SetAlpha(_newAlpha);
+                }
+                else
+                {
+                    canvasRenderer.SetAlpha(1);
+                    elementOnDisplayMode = OnDisplayMode.idle;
+                }
+
+                break;
+            case OnDisplayMode.showtemporally:
+
+                _currentAlpha = canvasRenderer.GetAlpha();
+
+                if (_currentAlpha <= 1)
+                {
+                    float _newAlpha = _currentAlpha + alpha_delta;
+                    canvasRenderer.SetAlpha(_newAlpha);
+                }
+                else
+                {
+                    canvasRenderer.SetAlpha(1);
+                    elementOnDisplayMode = OnDisplayMode.prepareToHide;
+                }
+
+                break;
+        }
     }
 }

@@ -32,9 +32,12 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     public int                      Player_Ups { get; set; }
     [SerializeField] private int    player_ups_init;    
 
-    public float                    Player_Complete { get; set; }
-    [SerializeField] private float  player_complete_init;
-
+    public float                    Player_KilometersLeft { get; set; }
+    [SerializeField] private float  player_KilometersLeft_init = 25;
+    
+    private float                   player_KilometersLeft_delta_timer;
+    [SerializeField]                private float player_KilometersLeft_delta_timer_init = 30; // Через сколько проедим километр, без учёта ускорения
+    
     public int                      Player_Coins { get; set; }
 
     Animator                        player_animation;
@@ -53,7 +56,8 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         Active = true;
         Player_Invul = false;
         Player_Ups = player_ups_init;
-        Player_Complete = player_complete_init;
+        Player_KilometersLeft = player_KilometersLeft_init;
+        player_KilometersLeft_delta_timer = player_KilometersLeft_delta_timer_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();
         Player_BoxCollider = GetComponent<BoxCollider2D>();
@@ -95,7 +99,17 @@ public class World_Local_SceneMain_Player : MonoBehaviour
             {
                 player_animation.speed = 1;
 
-                Player_Complete -= World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+                if (player_KilometersLeft_delta_timer >= 0)
+                {
+                    // Вычитаем из таймера с учётом ускорения
+                    player_KilometersLeft_delta_timer -= Time.deltaTime * (1 + World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale);
+                } 
+                else
+                {
+                    Player_KilometersLeft -= 1;
+                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.ShowElementTemporally(2);
+                    player_KilometersLeft_delta_timer = player_KilometersLeft_delta_timer_init;
+                }
 
                 if (!player_moving)
                 {

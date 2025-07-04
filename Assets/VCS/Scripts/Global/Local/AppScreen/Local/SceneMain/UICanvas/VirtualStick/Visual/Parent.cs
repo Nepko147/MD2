@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Parent : AppScreen_General_UICanvas_Parent
 {
-    protected CanvasRenderer canvasRenderer;
-
     public bool Visible
     {
         set 
@@ -23,7 +21,6 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Parent : App
     {
         base.Awake();
 
-        canvasRenderer = GetComponent<CanvasRenderer>();
         canvasRenderer.SetAlpha(0);
     }
 }

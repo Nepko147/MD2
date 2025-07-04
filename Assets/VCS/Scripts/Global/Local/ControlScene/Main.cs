@@ -113,6 +113,7 @@ public class ControlScene_Main : MonoBehaviour
 
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(true);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.HideElementWithDelay(3);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);        
 
