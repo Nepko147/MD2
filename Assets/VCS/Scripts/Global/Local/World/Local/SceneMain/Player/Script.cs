@@ -90,7 +90,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     private readonly Vector3 headlights_forward_rotation_down = new Vector3(35, 90f, 0);
     [SerializeField] private GameObject headlights_backward;
     private const float HEADLIGHTS_BACKWARD_LOCALPOSITION_UP_Y = -0.1f;
-    private const float HEADLIGHTS_BACKWARD_LOCALPOSITION_STRAIGHT_Y = 0.05f;
+    private const float HEADLIGHTS_BACKWARD_LOCALPOSITION_STRAIGHT_Y = -0.05f;
     private const float HEADLIGHTS_BACKWARD_LOCALPOSITION_DOWN_Y = 0.1f;
     private readonly Vector3 headlights_backward_rotation_up = new Vector3(35, -90f, 0);
     private readonly Vector3 headlights_backward_rotation_straight = new Vector3(0, -90f, 0);

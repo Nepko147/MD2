@@ -1,3 +1,3 @@
 Build path: E:/Dev/Project MDv2.0/Build/Web_YandexGames
-Build number: 36
+Build number: 37
 PluginYG version: 2.0032
