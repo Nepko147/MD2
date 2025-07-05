@@ -35,22 +35,23 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    const string TEXT_DISTANCEREMAIN = "Distance remain: ";
-    const string TEXT_GAMEOVER = "GAME OVER";
+    const string TEXT_GAMEOVER_MAIN = "GAME OVER";
+    const string TEXT_GAMEOVER_DISTANCEREMAIN_PREF = "Distance remain: ";
+    const string TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " km";
+    
     const string TEXT_PAUSE = "PAUSE";
-    const string TEXT_KILOMETERSLEFT = " KILOMETERS LEFT";
-    const string TEXT_KM = " km";
+
     const string TEXT_X = "x";
 
     public void ShowGameOver()
     {
         AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.Enable(false);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.Enable(false);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.Enable(false);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Enable(false);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(true);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(TEXT_GAMEOVER);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(TEXT_GAMEOVER_MAIN);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.Enable(true);
-        var _string = TEXT_DISTANCEREMAIN + (int)World_Local_SceneMain_Player.SingleOnScene.Player_KilometersLeft + TEXT_KM;
+        var _string = TEXT_GAMEOVER_DISTANCEREMAIN_PREF + World_Local_SceneMain_Player.SingleOnScene.Player_KilometersLeft.ToString() + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF;
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(_string);
     }
 
@@ -69,11 +70,5 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     {
         Ups_Visual = World_Local_SceneMain_Player.SingleOnScene.Player_Ups;
         Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
-    }
-
-    private void FixedUpdate()
-    {
-        var _string = (int)World_Local_SceneMain_Player.SingleOnScene.Player_KilometersLeft + TEXT_KILOMETERSLEFT;
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Text.SingleOnScene.UpdateText(_string);
     }
 }
