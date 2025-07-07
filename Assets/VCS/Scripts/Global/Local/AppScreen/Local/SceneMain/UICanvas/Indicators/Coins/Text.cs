@@ -7,11 +7,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text : AppScree
 
     Text text;
 
-    public void Enable(bool _state)
-    {
-        text.enabled = _state;
-    }
-
     public void UpdateText(string _string)
     {
         text.text = _string;

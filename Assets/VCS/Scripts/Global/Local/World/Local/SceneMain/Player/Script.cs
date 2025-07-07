@@ -14,7 +14,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
     private const float LINE_4_POSITION_Y = -1.45f;
 
-    [SerializeField] private float  player_controlls;
+    [SerializeField] private float player_controlls;
 
     private Vector3 player_newPosition;
     private bool player_moving = false;
@@ -48,11 +48,10 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     [SerializeField] private float  player_invul_timer_init = 1.2f;
     private float                   player_invul_timer;    
 
-    public int                      Player_Ups { get; set; }
-    [SerializeField] private int    player_ups_init;
+    public int Player_Ups { get; set; }
 
-    private int                     player_kilometersLeft;
-    public int                      Player_KilometersLeft 
+    private int player_kilometersLeft;
+    public int Player_KilometersLeft 
     { 
         get 
         {
@@ -64,10 +63,10 @@ public class World_Local_SceneMain_Player : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = player_kilometersLeft.ToString();
         }
     }
-    [SerializeField] private int    player_kilometersLeft_init = 25;
+    [SerializeField] private int player_kilometersLeft_init = 25;
     
-    private float                   player_kilometersLeft_delta_timer;
-    [SerializeField] private float  player_kilometersLeft_delta_timer_init = 30; // Через сколько проедим километр, без учёта ускорения
+    private float player_kilometersLeft_delta_timer;
+    [SerializeField] private float player_kilometersLeft_delta_timer_init = 30; // Через сколько проедим километр, без учёта ускорения
     
     public int                      Player_Coins { get; set; }
 
@@ -98,7 +97,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
         Active = true;
         Player_Invul = false;
-        Player_Ups = player_ups_init;
+        Player_Ups = 1;
         Player_KilometersLeft = player_kilometersLeft_init;
         player_kilometersLeft_delta_timer = player_kilometersLeft_delta_timer_init;
         player_animation = GetComponent<Animator>();

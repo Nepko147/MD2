@@ -78,6 +78,7 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_General_Camera_World_Entity_Slope.SingleOnScene.Active = _state;
         AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Active = _state;
     }
 
     private void ActiveState_Local_Pause(bool _state)

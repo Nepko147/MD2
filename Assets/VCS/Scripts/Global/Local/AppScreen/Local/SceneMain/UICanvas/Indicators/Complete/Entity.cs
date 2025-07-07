@@ -6,6 +6,21 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 {
     public static AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity SingleOnScene { get; private set; }
 
+    private bool active = true;
+    public bool Active 
+    {
+        get 
+        { 
+            return (active); 
+        }
+        set 
+        { 
+            active = value;
+            text_number.enabled = value;
+            text_kmLeft.enabled = value;
+        }
+    }
+
     [SerializeField] private Text text_number;
     public string Text_Number
     {
@@ -29,12 +44,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private const float STATE_TIME_APPEAR = 1f;
     private const float STATE_TIME_WAIT = 2f;
     private const float STATE_TIME_HIDE = 1f;
-
-    public void Enable(bool _state)
-    {
-        text_number.enabled = _state;
-        text_kmLeft.enabled = _state;
-    }
 
     public void Show(float _delay = 0)
     {
@@ -65,40 +74,43 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     private void Update()
     {
-        switch (state)
+        if (active)
         {
-            case State.appear:
-                state_time -= Time.deltaTime;
+            switch (state)
+            {
+                case State.appear:
+                    state_time -= Time.deltaTime;
 
-                canvasGroup.alpha = 1f - state_time / STATE_TIME_APPEAR;
+                    canvasGroup.alpha = 1f - state_time / STATE_TIME_APPEAR;
 
-                if (state_time <= 0)
-                {
-                    state_time = STATE_TIME_WAIT;
-                    state = State.wait;
-                }
-            break;
+                    if (state_time <= 0)
+                    {
+                        state_time = STATE_TIME_WAIT;
+                        state = State.wait;
+                    }
+                break;
 
-            case State.wait:
-                state_time -= Time.deltaTime;
+                case State.wait:
+                    state_time -= Time.deltaTime;
 
-                if (state_time <= 0)
-                {
-                    state_time = STATE_TIME_HIDE;
-                    state = State.hide;
-                }
-            break;
+                    if (state_time <= 0)
+                    {
+                        state_time = STATE_TIME_HIDE;
+                        state = State.hide;
+                    }
+                break;
 
-            case State.hide:
-                state_time -= Time.deltaTime;
+                case State.hide:
+                    state_time -= Time.deltaTime;
 
-                canvasGroup.alpha = state_time / STATE_TIME_HIDE;
+                    canvasGroup.alpha = state_time / STATE_TIME_HIDE;
 
-                if (state_time <= 0)
-                {
-                    state = State.hiden;
-                }
-            break;
+                    if (state_time <= 0)
+                    {
+                        state = State.hiden;
+                    }
+                break;
+            }
         }
     }
 }

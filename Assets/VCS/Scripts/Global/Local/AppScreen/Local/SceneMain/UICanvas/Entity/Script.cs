@@ -19,8 +19,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         }
     }
         
-    private int     coins_visual;
-    public int      Coins_Visual
+    private int coins_visual;
+    public int  Coins_Visual
     {
         get
         {
@@ -45,9 +45,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
 
     public void ShowGameOver()
     {
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.Enable(false);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.Enable(false);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Enable(false);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(true);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(TEXT_GAMEOVER_MAIN);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.Enable(true);
