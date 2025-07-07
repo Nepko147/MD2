@@ -8,16 +8,19 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
 
     private new Camera camera;
 
+    private const string SCREEN_WIDTH = "_Screen_widht";
+    private const string SCREEN_HEIGHT = "_Screen_height";
+
     [SerializeField] private Material distortion_material;
-    private const string DISTORION_MATERIAL_U_ASPECT = "_MainNormalMap_aspect";
     private const string DISTORION_MATERIAL_U_TEXNORMALMAP = "_MainNormalMap";
+    private const string DISTORION_MATERIAL_U_ASPECT = "_MainNormalMap_aspect";
 
     private const string OVERLAYNORMALMAP = "_OverlayNormalMap";
     private const string OVERLAYNORMALMAP_ALPHA = "_OverlayNormalMap_aplha";
     private const string OVERLAYNORMALMAP_POS_X = "_OverlayNormalMap_pos_X";
     private const string OVERLAYNORMALMAP_POS_Y = "_OverlayNormalMap_pos_Y";
     private const string OVERLAYNORMALMAP_SCALE = "_OverlayNormalMap_Scale";
-    [SerializeField] private Sprite overlayNormalMap_sprite;
+    [SerializeField] private Sprite overlayNormalMap_coinRush_sprite;
     [SerializeField] private float overlayNormalMap_coinRush_visualDiameterInPixels = 120f;
     private float overlayNormalMap_coinRush_scale = 0;
     private const float OVERLAYNORMALMAP_COINRUSH_SCALE_MAX = 4f;
@@ -26,9 +29,6 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
     private const float OVERLAYNORMALMAP_COINRUSH_TIME_MAX = 2f;
     private float overlayNormalMap_coinRush_screenPos_x;
     private float overlayNormalMap_coinRush_screenPos_y;
-
-    private const string SCREEN_WIDTH = "_Screen_widht";
-    private const string SCREEN_HEIGHT = "_Screen_height";
 
     [SerializeField] private Texture2D normalMap_clear;
     [SerializeField] private Texture2D normalMap_gameOver;
@@ -50,7 +50,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
 
     public float CoinRush_Distance_Get()
     {
-        var _visualDiameterInWorld = overlayNormalMap_coinRush_visualDiameterInPixels / overlayNormalMap_sprite.pixelsPerUnit;
+        var _visualDiameterInWorld = overlayNormalMap_coinRush_visualDiameterInPixels / overlayNormalMap_coinRush_sprite.pixelsPerUnit;
         return (_visualDiameterInWorld * overlayNormalMap_coinRush_scale);
     }
 
@@ -72,9 +72,8 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
     private void Start()
     {
         distortion_material.SetTexture(DISTORION_MATERIAL_U_TEXNORMALMAP, normalMap_clear); //ѕомещаем пустую нормаль в шейдере искажени€
-        distortion_material.SetTexture(OVERLAYNORMALMAP, overlayNormalMap_sprite.texture);
-        var _distortion_material_aspect = (float)normalMap_clear.height / normalMap_clear.width;
-        distortion_material.SetFloat(DISTORION_MATERIAL_U_ASPECT, _distortion_material_aspect);
+        distortion_material.SetTexture(OVERLAYNORMALMAP, overlayNormalMap_coinRush_sprite.texture);
+        distortion_material.SetFloat(DISTORION_MATERIAL_U_ASPECT, camera.aspect);
         distortion_material.SetFloat(OVERLAYNORMALMAP_SCALE, overlayNormalMap_coinRush_scale);
     }
 

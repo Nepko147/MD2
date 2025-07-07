@@ -5,9 +5,11 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     public bool Active { get; set; }
 
     public const int LINE_1_SORTINGORDER = 80;
-    public const int LINE_2_SORTINGORDER = 100;
-    public const int LINE_3_SORTINGORDER = 120;
-    public const int LINE_4_SORTINGORDER = 140;
+    public const int LINE_2_SORTINGORDER = 90;
+    public const int LINE_3_SORTINGORDER = 100;
+    public const int LINE_4_SORTINGORDER = 110;
+
+    private SpriteRenderer spriteRenderer;
 
     [SerializeField] private float  enemy_speed = 8f;
     private AudioSource             enemy_audioSource;
@@ -19,26 +21,28 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
         switch (_currentLineNumber)
         {
             case 1:
-                GetComponent<SpriteRenderer>().sortingOrder = LINE_1_SORTINGORDER;
-                break;
+                spriteRenderer.sortingOrder = LINE_1_SORTINGORDER;
+            break;
 
             case 2:
-                GetComponent<SpriteRenderer>().sortingOrder = LINE_2_SORTINGORDER;
-                break;
+                spriteRenderer.sortingOrder = LINE_2_SORTINGORDER;
+            break;
 
             case 3:
-                GetComponent<SpriteRenderer>().sortingOrder = LINE_3_SORTINGORDER;
-                break;
+                spriteRenderer.sortingOrder = LINE_3_SORTINGORDER;
+            break;
 
             case 4:
-                GetComponent<SpriteRenderer>().sortingOrder = LINE_4_SORTINGORDER;
-                break;
+                spriteRenderer.sortingOrder = LINE_4_SORTINGORDER;
+            break;
         }
     }
 
     private void Awake()
     {
         Active = true;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         enemy_audioSource = GetComponent<AudioSource>();
         enemy_collider = GetComponent<PolygonCollider2D>();

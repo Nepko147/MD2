@@ -1,7 +1,7 @@
 using UnityEngine;
+using System;
 using System.IO;
 using System.Xml;
-using System;
 using YG;
 using YG.Insides;
 
@@ -448,14 +448,6 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 YGInsides.LoadProgress();
             break;
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            YG2.SetDefaultSaves();
         }
     }
 }

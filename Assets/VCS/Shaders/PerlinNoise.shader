@@ -1,9 +1,7 @@
-Shader "Custom/PerlinNoise"
+Shader "Custom/Perlin Noise"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
-
         u_scope ("Scope", Float) = 0.25
         u_color ("Color", Vector) = (0.5, 0.5, 0.5, 0.5)
         u_offset ("Offset", Vector) = (10, 10, 0, 0)
@@ -24,49 +22,68 @@ Shader "Custom/PerlinNoise"
 
             #include "UnityCG.cginc"
             
-            sampler2D _MainTex;
             float4 _MainTex_ST;
 
             half u_scope;
             float4 u_color;
             float2 u_offset;
 
-            float cos_interpolate(float _y1, float _y2, float _r1)
+            float Rand(fixed2 _vec1, float _seed)
             {
-	            float _r2 = (1.0 - cos(_r1 * 3.1415926)) / 2.0;
+                fixed2 _vec2 = fixed2(12.9898, 78.233);
+                float _dot = dot(_vec1, _vec2);
+                float _dot_sin = sin(_dot);
+
+	            return (frac(_dot_sin * (43758.5453 + _seed)));
+            }
+
+            float CosInterpolate(float _y1, float _y2, float _r1)
+            {
+                float _r1_cos = cos(_r1 * 3.1415926);
+	            float _r2 = (1.0 - _r1_cos) / 2.0;
+
 	            return (_y1 * (1.0 - _r2) + _y2 * _r2);
             }
 
-            float rand(fixed2 _v, float _seed)
+            float Noise(fixed2 _vec1, float _seed, fixed2 _freq)
             {
-                float _dot = dot(_v, fixed2(12.9898, 78.233));
-	            return frac(sin(_dot) * (43758.5453 + _seed));
+                fixed2 _vec1_feeq_floor = floor(_vec1 * _freq);
+                fixed2 _vec2;
+                
+	            float _fl1 = Rand(_vec1_feeq_floor, _seed);
+
+                _vec2 = fixed2(1.0, 0.0);
+	            float _fl2 = Rand(_vec1_feeq_floor + _vec2, _seed);
+
+                _vec2 = fixed2(0.0, 1.0);
+	            float _fl3 = Rand(_vec1_feeq_floor + _vec2, _seed);
+
+                _vec2 = fixed2(1.0, 1.0);
+	            float _fl4 = Rand(_vec1_feeq_floor + _vec2, _seed);
+
+	            fixed2 _vec1_freq_frac = frac(_vec1 * _freq);
+
+	            float _r1 = CosInterpolate(_fl1, _fl2, _vec1_freq_frac.x);
+	            float _r2 = CosInterpolate(_fl3, _fl4, _vec1_freq_frac.x);
+
+	            return CosInterpolate(_r1, _r2, _vec1_freq_frac.y);
             }
 
-            float noise(fixed2 _v, float _seed, fixed2 _freq)
-            {
-	            float _fl1 = rand(floor(_v * _freq), _seed);
-	            float _fl2 = rand(floor(_v * _freq) + fixed2(1.0, 0.0), _seed);
-	            float _fl3 = rand(floor(_v * _freq) + fixed2(0.0, 1.0), _seed);
-	            float _fl4 = rand(floor(_v * _freq) + fixed2(1.0, 1.0), _seed);
-	            fixed2 _fr = frac(_v * _freq);
-
-	            float _r1 = cos_interpolate(_fl1, _fl2, _fr.x);
-	            float _r2 = cos_interpolate(_fl3, _fl4, _fr.x);
-	            return cos_interpolate(_r1, _r2, _fr.y);
-            }
-
-            float perlin_noise(fixed2 _pos, float _seed, float _freq_start, float _amp_start, float _amp_ratio)
+            float PerlinNoise(fixed2 _pos, float _seed, float _freq_start, float _amp_start, float _amp_ratio)
             {
 	            float _freq = _freq_start;
-	            float _amp = _amp_start;
-	            float _pn = noise(_pos, _seed, fixed2(_freq, _freq)) * _amp;
+                fixed2 _freq_fixed2 = fixed2(_freq, _freq);
+                float _amp = _amp_start;
+
+	            float _pn = Noise(_pos, _seed, _freq_fixed2) * _amp;
 	
-	            for (int i=0; i<4; i++)
+	            for (int i = 0; i < 4; ++i)
 	            {
 		            _freq *= 2.0;
+                    _freq_fixed2 = fixed2(_freq, _freq);
 		            _amp *= _amp_ratio;
-		            _pn += (noise(_pos, _seed, fixed2(_freq, _freq)) * 2.0 - 1.0) * _amp;
+
+		            _pn += (Noise(_pos, _seed, _freq_fixed2) * 2.0 - 1.0) * _amp;
 	            }
 	
 	            return _pn;
@@ -87,6 +104,7 @@ Shader "Custom/PerlinNoise"
             fragment_data vert (vertex_data _input_vd)
             {
                 fragment_data _output_fd;
+
                 _output_fd.vertex = UnityObjectToClipPos(_input_vd.vertex);
                 _output_fd.uv = TRANSFORM_TEX(_input_vd.uv, _MainTex);
 
@@ -95,10 +113,9 @@ Shader "Custom/PerlinNoise"
 
             fixed4 frag (fragment_data _input_fd) : SV_Target
             {
-	            float _pn = perlin_noise(_input_fd.uv / u_scope + u_offset, 0.0, 1.5, 1.0, 0.35);
-	            fixed4 _output_col =  fixed4(_pn * u_color.r, _pn * u_color.g, _pn * u_color.b, u_color.a);
+	            float _pn = PerlinNoise(_input_fd.uv / u_scope + u_offset, 0.0, 1.5, 1.0, 0.35);
 
-                return _output_col;
+                return (fixed4(_pn * u_color.r, _pn * u_color.g, _pn * u_color.b, u_color.a));
             }
 
             ENDCG

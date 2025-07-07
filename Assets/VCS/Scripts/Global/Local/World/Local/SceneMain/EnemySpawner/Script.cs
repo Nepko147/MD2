@@ -9,7 +9,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     public int          InaccessibleLine { get; set; }
     private const int   INACCESSIBLELINE_INIT = 0;
 
-    [SerializeField] private GameObject[] enemyArray;
+    [SerializeField] private World_Local_SceneMain_Enemy_Entity[] enemyArray;
 
     public Vector2 EnemySpawn_SpawnPoint_Line_1 { get; set; }
     public Vector2 EnemySpawn_SpawnPoint_Line_2 { get; set; }
@@ -33,67 +33,6 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     private float                  enemySpawn_wave_size_counter;
     [SerializeField] private float enemySpawn_wave_size_counter_increaseCf;
     [SerializeField] private int   enemySpawn_wave_size_counter_max;
-
-    public void spawnEnemy()
-    {
-        int _newLineNumber = 1;
-        bool _needToUpdateLineNumber = true;
-        
-        while (_needToUpdateLineNumber)
-        {
-            _newLineNumber = Random.Range(1, 5);
-            _needToUpdateLineNumber = false;
-
-            switch (enemySpawn_currentLineNumber)
-            {
-                case 2:
-                    if (_newLineNumber == 1)
-                    {
-                        _needToUpdateLineNumber = true;
-                    }
-                break;
-                case 3:
-                    if (_newLineNumber == 4)
-                    {
-                        _needToUpdateLineNumber = true;
-                    }
-                break;
-            }
-            if (_newLineNumber == InaccessibleLine)
-            {
-                _needToUpdateLineNumber = true;
-            }
-        }        
-
-        enemySpawn_currentLineNumber = _newLineNumber;
-       
-        Vector2 _position = new Vector2();
-
-        switch (enemySpawn_currentLineNumber)
-        {
-            case 1:
-                _position = EnemySpawn_SpawnPoint_Line_1;
-            break;
-
-            case 2:
-                _position = EnemySpawn_SpawnPoint_Line_2;
-            break;
-
-            case 3:
-                _position = EnemySpawn_SpawnPoint_Line_3;
-            break;
-
-            case 4:
-                _position = EnemySpawn_SpawnPoint_Line_4;
-            break;
-        }
-        
-        int _enemyArray_index = Random.Range(0, enemyArray.Length);
-        var _newEnemy = Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
-        _newEnemy.GetComponent<World_Local_SceneMain_Enemy_Entity>().SetSortingOrder(enemySpawn_currentLineNumber);
-        InaccessibleLine = INACCESSIBLELINE_INIT;
-        World_Local_SceneMain_BonusSpawner.SingleOnScene.InaccessibleLine = enemySpawn_currentLineNumber;
-    }
 
     private void Awake()
     {
@@ -123,7 +62,64 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
                 } 
                 else
                 {
-                    spawnEnemy();                    
+                    int _newLineNumber = 1;
+                    bool _needToUpdateLineNumber = true;
+
+                    while (_needToUpdateLineNumber)
+                    {
+                        _newLineNumber = Random.Range(1, 5);
+                        _needToUpdateLineNumber = false;
+
+                        switch (enemySpawn_currentLineNumber)
+                        {
+                            case 2:
+                            if (_newLineNumber == 1)
+                            {
+                                _needToUpdateLineNumber = true;
+                            }
+                            break;
+                            case 3:
+                            if (_newLineNumber == 4)
+                            {
+                                _needToUpdateLineNumber = true;
+                            }
+                            break;
+                        }
+                        if (_newLineNumber == InaccessibleLine)
+                        {
+                            _needToUpdateLineNumber = true;
+                        }
+                    }
+
+                    enemySpawn_currentLineNumber = _newLineNumber;
+
+                    Vector2 _position = new Vector2();
+
+                    switch (enemySpawn_currentLineNumber)
+                    {
+                        case 1:
+                        _position = EnemySpawn_SpawnPoint_Line_1;
+                        break;
+
+                        case 2:
+                        _position = EnemySpawn_SpawnPoint_Line_2;
+                        break;
+
+                        case 3:
+                        _position = EnemySpawn_SpawnPoint_Line_3;
+                        break;
+
+                        case 4:
+                        _position = EnemySpawn_SpawnPoint_Line_4;
+                        break;
+                    }
+
+                    int _enemyArray_index = Random.Range(0, enemyArray.Length);
+                    var _newEnemy = Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
+                    _newEnemy.SetSortingOrder(enemySpawn_currentLineNumber);
+                    InaccessibleLine = INACCESSIBLELINE_INIT;
+                    World_Local_SceneMain_BonusSpawner.SingleOnScene.InaccessibleLine = enemySpawn_currentLineNumber;
+
                     enemySpawn_wave_enemyDelay = enemySpawn_wave_enemyDelay_init;
 
                     --enemySpawn_wave_size;
