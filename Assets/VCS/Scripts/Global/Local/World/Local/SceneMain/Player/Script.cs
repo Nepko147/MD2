@@ -29,6 +29,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_UP_Y, headlights_backward.transform.localPosition.z);
         headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_up.x, headlights_backward_rotation_up.y, headlights_backward_rotation_up.z);
         player_newPosition = new Vector3(transform.position.x, _line_y, transform.position.z);
+        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_up);
     }
     private void Player_Moving_Start_Down(float _line_y)
     {
@@ -40,6 +41,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_DOWN_Y, headlights_backward.transform.localPosition.z);
         headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_down.x, headlights_backward_rotation_down.y, headlights_backward_rotation_down.z);
         player_newPosition = new Vector3(transform.position.x, _line_y, transform.position.z);
+        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_down);
     }
 
     public bool                     Player_Invul { get; private set; }
@@ -75,6 +77,10 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     const string                    PLAYER_ANIMATION_DOWN = "down";
 
     private SpriteRenderer          player_spriteRenderer;
+    [SerializeField] Texture2D      player_normalMap_stright;
+    [SerializeField] Texture2D      player_normalMap_up;
+    [SerializeField] Texture2D      player_normalMap_down;
+
     public BoxCollider2D            Player_BoxCollider { get; private set; }
 
     [SerializeField] private GameObject headlights_forward;
@@ -102,6 +108,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         player_kilometersLeft_delta_timer = player_kilometersLeft_delta_timer_init;
         player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();
+        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_stright);
         Player_BoxCollider = GetComponent<BoxCollider2D>();
 
         transform.position = new Vector3(transform.position.x, LINE_2_POSITION_Y, transform.position.z);
@@ -210,6 +217,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                         headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_straight.x, headlights_forward_rotation_straight.y, headlights_forward_rotation_straight.z);
                         headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_STRAIGHT_Y, headlights_backward.transform.localPosition.z);
                         headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_straight.x, headlights_backward_rotation_straight.y, headlights_backward_rotation_straight.z);
+                        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_stright);
 
                         player_moving_end = false;
                     }

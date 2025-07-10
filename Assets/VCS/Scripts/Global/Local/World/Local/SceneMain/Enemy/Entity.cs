@@ -10,6 +10,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     public const int LINE_4_SORTINGORDER = 110;
 
     private SpriteRenderer spriteRenderer;
+    [SerializeField] Texture2D normalMap;
 
     [SerializeField] private float  enemy_speed = 8f;
     private AudioSource             enemy_audioSource;
@@ -43,6 +44,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
         Active = true;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.material.SetTexture("_BumpMap", normalMap);
 
         enemy_audioSource = GetComponent<AudioSource>();
         enemy_collider = GetComponent<PolygonCollider2D>();
