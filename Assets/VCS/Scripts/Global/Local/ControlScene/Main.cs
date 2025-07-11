@@ -75,7 +75,7 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_EnemySpawner.SingleOnScene.Active = _state;
         World_Local_SceneMain_BonusSpawner.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
-        AppScreen_General_Camera_World_Entity_Slope.SingleOnScene.Active = _state;
+        AppScreen_General_Camera_Entity_Slope.SingleOnScene.Active = _state;
         AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
         AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Active = _state;
@@ -85,7 +85,7 @@ public class ControlScene_Main : MonoBehaviour
     {
         World_Local_SceneMain_Player.SingleOnScene.Active = _state;
         AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = _state;
-        AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Active = _state;
+        AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = _state;
     }
 
     private void Awake()
@@ -131,21 +131,20 @@ public class ControlScene_Main : MonoBehaviour
                 ControlPers_FogHandler.Move();
 
                 if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
-                    && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_Active)
+                && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
                 {
                     var _world_enemy_array = FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None);
-                    var _distortionPos = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_WorldPos;
-                    var _distance_ofDistortion = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.CoinRush_Distance_Get();
+                    var _distortion_pos = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_WorldPos;
+                    var _distance_ofDistortion = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Distance_Get();
                     float _distance_toDistortion;
-                    var _distance_toDistortion_correction = 0.8f; // Чем меньше, тем раньше сработает эффект дисторшена
 
                     foreach (World_Local_SceneMain_Enemy_Entity _item in _world_enemy_array)
                     {
-                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortionPos);
+                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
                         
-                        if (_distance_ofDistortion >= _distance_toDistortion * _distance_toDistortion_correction)
+                        if (_distance_ofDistortion >= _distance_toDistortion)
                         {
-                            Instantiate(prefab_world_bonus_coin, _item.transform.position, new Quaternion());
+                            Instantiate(prefab_world_bonus_coin, _item.transform.position, new Quaternion(), _item.transform.parent);
                             Destroy(_item.gameObject);
                         }
                     }
@@ -154,9 +153,9 @@ public class ControlScene_Main : MonoBehaviour
 
                     foreach (World_Local_SceneMain_Bonus_Coin _item in _world_coin_array)
                     {
-                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortionPos);
+                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
 
-                        if (_distance_ofDistortion >= _distance_toDistortion * _distance_toDistortion_correction)
+                        if (_distance_ofDistortion >= _distance_toDistortion)
                         {
                             _item.MakeVisible();
                         }
@@ -190,7 +189,7 @@ public class ControlScene_Main : MonoBehaviour
                 ControlPers_AudioMixer.SingleOnScene.Stop();
                 AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(false);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
-                AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.GameOver();
+                AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
 
                 ActiveState_General(false);
 

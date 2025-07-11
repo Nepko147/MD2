@@ -29,7 +29,7 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
     private const int   BONUSSPAWN_AMOUNT_DEFAULT = 1; // Кол-во бонусов в группе по умолчанию
     private int         bonusSpawn_amount_coins = 3; // Кол-во монет в группе по умолчанию
 
-    public bool             CoinRush 
+    public bool CoinRush 
     {
         get 
         {
@@ -147,13 +147,14 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
                         else
                         {
                             bonusSpawn_amount = 0;
-                            if (!AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_Active)
+
+                            if (!AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
                             {                                
                                 CoinRush = false;
                             }
                         } 
 
-                        break;
+                    break;
 
                     case BonusSpawnerMode.standart:
 
@@ -168,9 +169,9 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
                                 _needToUpdateLineNumber = true;
                             }
                         }
-                        
-                        _bonusArray_index = Random.Range(0, bonusArray.Length);
 
+                        _bonusArray_index = Random.Range(0, bonusArray.Length);
+                        
                         switch (_bonusArray_index)
                         {
                             case 0:
@@ -181,7 +182,7 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
                                 break;
                         }
 
-                        break;
+                    break;
                 }
 
                 Vector2 _newPosition = Vector2.zero;
@@ -209,7 +210,8 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
                 {
                     var _offsetPosition = _newPosition + Vector2.left * bonusSpawn_offset * _i;
                     var _bonus = Instantiate(bonusArray[_bonusArray_index], _offsetPosition, new Quaternion(), transform.parent);
-                    if (AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.NormalMapMix_Material_NormalMap_CoinRush_Active)
+
+                    if (AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
                     {
                         _bonus.GetComponent<World_Local_SceneMain_Bonus_Coin>().MakeInvisible();
                     }

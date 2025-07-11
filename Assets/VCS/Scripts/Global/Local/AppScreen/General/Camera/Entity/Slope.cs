@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_General_Camera_World_Entity_Slope : MonoBehaviour    
+public class AppScreen_General_Camera_Entity_Slope : MonoBehaviour    
 {
-    public static AppScreen_General_Camera_World_Entity_Slope SingleOnScene { get; private set; }
+    public static AppScreen_General_Camera_Entity_Slope SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
     
@@ -20,7 +20,8 @@ public class AppScreen_General_Camera_World_Entity_Slope : MonoBehaviour
     {
         SingleOnScene = this;
 
-        Active = false;        
+        Active = false;
+        
         camera_leftMaxRotation = new Vector3(0, 0, 360.0f - camera_slope_maxAngle);
         camera_rightMaxRotation = new Vector3(0, 0, camera_slope_maxAngle);
     }
