@@ -71,8 +71,7 @@ public class World_General_Fog : MonoBehaviour
     {
         SingleOnScene = this;
 
-        material = GetComponent<SpriteRenderer>().material;
-
+        material = GetComponent<MeshRenderer>().material;
         material_color_val.x = material_color_red_max;
         material_color_val.y = material_color_green_min;
         material_color_val.z = MATERIAL_COLOR_BLUE;

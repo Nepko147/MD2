@@ -19,18 +19,17 @@ Shader "Custom/Perlin Noise"
             
             #pragma vertex vert
             #pragma fragment frag
-
             #include "UnityCG.cginc"
             
-            float4 _MainTex_ST;
+            fixed4 _MainTex_ST;
 
-            half u_scope;
-            float4 u_color;
-            float2 u_offset;
+            fixed u_scope;
+            fixed4 u_color;
+            half2 u_offset;
 
-            float Rand(fixed2 _vec1, float _seed)
+            float Rand(float2 _vec1, float _seed)
             {
-                fixed2 _vec2 = fixed2(12.9898, 78.233);
+                half2 _vec2 = half2(12.9898, 78.233);
                 float _dot = dot(_vec1, _vec2);
                 float _dot_sin = sin(_dot);
 
@@ -45,9 +44,9 @@ Shader "Custom/Perlin Noise"
 	            return (_y1 * (1.0 - _r2) + _y2 * _r2);
             }
 
-            float Noise(fixed2 _vec1, float _seed, fixed2 _freq)
+            float Noise(float2 _vec1, float _seed, float2 _freq)
             {
-                fixed2 _vec1_feeq_floor = floor(_vec1 * _freq);
+                float2 _vec1_feeq_floor = floor(_vec1 * _freq);
                 fixed2 _vec2;
                 
 	            float _fl1 = Rand(_vec1_feeq_floor, _seed);
@@ -61,29 +60,29 @@ Shader "Custom/Perlin Noise"
                 _vec2 = fixed2(1.0, 1.0);
 	            float _fl4 = Rand(_vec1_feeq_floor + _vec2, _seed);
 
-	            fixed2 _vec1_freq_frac = frac(_vec1 * _freq);
+	            float2 _vec1_freq_frac = frac(_vec1 * _freq);
 
-	            float _r1 = CosInterpolate(_fl1, _fl2, _vec1_freq_frac.x);
-	            float _r2 = CosInterpolate(_fl3, _fl4, _vec1_freq_frac.x);
+	            float2 _r1 = CosInterpolate(_fl1, _fl2, _vec1_freq_frac.x);
+	            float2 _r2 = CosInterpolate(_fl3, _fl4, _vec1_freq_frac.x);
 
-	            return CosInterpolate(_r1, _r2, _vec1_freq_frac.y);
+	            return (CosInterpolate(_r1, _r2, _vec1_freq_frac.y));
             }
 
-            float PerlinNoise(fixed2 _pos, float _seed, float _freq_start, float _amp_start, float _amp_ratio)
+            float PerlinNoise(float2 _pos, float _seed, float _freq_start, float _amp_start, float _amp_ratio)
             {
 	            float _freq = _freq_start;
-                fixed2 _freq_fixed2 = fixed2(_freq, _freq);
+                float2 _freq_float2 = float2(_freq, _freq);
                 float _amp = _amp_start;
 
-	            float _pn = Noise(_pos, _seed, _freq_fixed2) * _amp;
+	            float _pn = Noise(_pos, _seed, _freq_float2) * _amp;
 	
 	            for (int i = 0; i < 4; ++i)
 	            {
 		            _freq *= 2.0;
-                    _freq_fixed2 = fixed2(_freq, _freq);
+                    _freq_float2 = float2(_freq, _freq);
 		            _amp *= _amp_ratio;
 
-		            _pn += (Noise(_pos, _seed, _freq_fixed2) * 2.0 - 1.0) * _amp;
+		            _pn += (Noise(_pos, _seed, _freq_float2) * 2.0 - 1.0) * _amp;
 	            }
 	
 	            return _pn;
