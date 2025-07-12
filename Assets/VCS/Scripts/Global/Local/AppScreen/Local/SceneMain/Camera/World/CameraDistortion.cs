@@ -39,9 +39,9 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
     public void Material_Overlay_NormalMap_CoinRush_Start(Vector3 _position)
     {
         Material_Overlay_NormalMap_CoinRish_Active = true;
+        Material_Overlay_NormalMap_CoinRush_WorldPos = _position;
         material_overlay_normalMap_coinRush_time = 0;
         material_overlay_normalMap_coinRush_scale = 0;
-        Material_Overlay_NormalMap_CoinRush_WorldPos = _position;
     }
 
     public float Material_Overlay_NormalMap_CoinRush_Distance_Get()
