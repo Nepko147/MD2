@@ -1,18 +1,17 @@
 ﻿Shader "Custom/Sprites/2D Bump"
 {
     Properties
-    {
+    {        
+        _Color ("Color", Color) = (1,1,1,1)
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-        _Color ("Tint", Color) = (1,1,1,1)
         _BumpMap ("Normalmap", 2D) = "bump" {}
         _BumpIntensity ("NormalMap Intensity", Range (-1, 2)) = 1
-        _BumpIntensity ("NormalMap Intensity", Float) = 1
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-        _Cutoff ("Alpha Cutoff", Range (0,1)) = 0.5
     }
 
     SubShader
     {
+        Blend SrcAlpha OneMinusSrcAlpha
         Tags
         { 
             "Queue"="AlphaTest" 
@@ -30,7 +29,7 @@
 
         CGPROGRAM
         #pragma target 3.0
-        #pragma surface surf Lambert alpha vertex:vert  alphatest:_Cutoff fullforwardshadows
+        #pragma surface surf Lambert alpha vertex:vert
         #pragma multi_compile DUMMY PIXELSNAP_ON 
         #pragma exclude_renderers flash
 

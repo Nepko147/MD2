@@ -120,18 +120,21 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         {
             if (Player_Invul)
             {
+                var _newCoolor = player_spriteRenderer.material.GetColor("_Color");
                 if (player_invul_alpha_increase)
                 {
-                    player_spriteRenderer.color += new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
-                    if (player_spriteRenderer.color.a >= 1)
+                    _newCoolor += new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
+                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
+                    if (_newCoolor.a >= 1)
                     {
                         player_invul_alpha_increase = false;
                     }
                 }
                 else
                 {
-                    player_spriteRenderer.color -= new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
-                    if (player_spriteRenderer.color.a <= 0)
+                    _newCoolor -= new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
+                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
+                    if (_newCoolor.a <= 0)
                     {
                         player_invul_alpha_increase = true;
                     }
@@ -139,7 +142,8 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                 player_invul_timer -= Time.deltaTime;
                 if (player_invul_timer <= 0)
                 {
-                    player_spriteRenderer.color += new Color(0, 0, 0, 1);
+                    _newCoolor += new Color(0, 0, 0, 1);
+                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
                     Player_Invul = false;
                 }
             }
@@ -240,7 +244,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
         if (Player_Ups <= 0)
         {
-            player_spriteRenderer.color = Color.red;
+            player_spriteRenderer.material.SetColor("_Color", Color.red);
             crashed = true;
         }     
     }
