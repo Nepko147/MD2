@@ -6,13 +6,23 @@ public class ControlScene_Main : MonoBehaviour
 {
     public static ControlScene_Main SingleOnScene { get; private set; }
 
-    private bool                    stage_road = true;
-    private bool                    stage_drift = false;
-    private bool                    stage_pause = false;
-    private bool                    stage_gameOver = false;
-    private bool                    stage_gameOver_menu_onDisplay = false;
-    private float                   stage_gameOver_menu_timer;
-    [SerializeField] private float  stage_gameOver_menu_timer_init = 1.5f;
+    private bool stage_road = true;
+    private bool stage_road_toDrift = false;
+    private float stage_road_toDrift_timer = 15f;
+    private enum Stage_Road_ToDrift_State
+    {
+        clearing,
+        alignment,
+        braking,
+        moveDown
+    }
+    private Stage_Road_ToDrift_State stage_road_toDrift_state = Stage_Road_ToDrift_State.clearing;
+    private bool stage_drift = false;
+    private bool stage_pause = false;
+    private bool stage_gameOver = false;
+    private bool stage_gameOver_menu_onDisplay = false;
+    private float stage_gameOver_menu_timer;
+    [SerializeField] private float stage_gameOver_menu_timer_init = 1.5f;
 
     private AudioSource audio_source;
     [SerializeField] private AudioClip audio_music_mainTheme;
@@ -30,44 +40,27 @@ public class ControlScene_Main : MonoBehaviour
 
     private void ActiveState_General(bool _state)
     {
-        var _world_enemy_array = FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_Enemy_Entity _item in _world_enemy_array)
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
         {
             _item.Active = _state;
         }
 
-        var _world_lensFlare_array = FindObjectsByType<World_Local_SceneMain_Enemy_LensFlare>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_Enemy_LensFlare _item in _world_lensFlare_array)
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_LensFlare>(FindObjectsSortMode.None))
         {
             _item.Active = _state;
         }
 
-        var _world_bonus_coin_array = FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_Bonus_Coin _item in _world_bonus_coin_array)
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Parent>(FindObjectsSortMode.None))
         {
             _item.Active = _state;
         }
 
-        var _world_bonus_up_array = FindObjectsByType<World_Local_SceneMain_Bonus_Up>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_Bonus_Up _item in _world_bonus_up_array)
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
         {
             _item.Active = _state;
         }
 
-        var _world_bonus_coinRush_array = FindObjectsByType<World_Local_SceneMain_Bonus_CoinRush>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_Bonus_CoinRush _item in _world_bonus_coinRush_array)
-        {
-            _item.Active = _state;
-        }
-
-        var _world_movingBackground_parent_array = FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
-        {
-            _item.Active = _state;
-        }
-
-        var _world_bonusString_array = FindObjectsByType<World_Local_SceneMain_PopUp>(FindObjectsSortMode.None);
-        foreach (World_Local_SceneMain_PopUp _item in _world_bonusString_array)
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_PopUp>(FindObjectsSortMode.None))
         {
             _item.Active = _state;
         }
@@ -130,40 +123,91 @@ public class ControlScene_Main : MonoBehaviour
             {
                 ControlPers_FogHandler.Move();
 
-                if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
-                && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
+                if (!stage_road_toDrift)
                 {
-                    var _world_enemy_array = FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None);
-                    var _distortion_pos = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_WorldPos;
-                    var _distance_ofDistortion = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Distance_Get();
-                    float _distance_toDistortion;
-
-                    foreach (World_Local_SceneMain_Enemy_Entity _item in _world_enemy_array)
+                    if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
+                    && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
                     {
-                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
-                        
-                        if (_distance_ofDistortion >= _distance_toDistortion)
+                        var _distortion_pos = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_WorldPos;
+                        var _distance_ofDistortion = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Distance_Get();
+                        float _distance_toDistortion;
+
+                        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
                         {
-                            Instantiate(prefab_world_bonus_coin, _item.transform.position, new Quaternion(), _item.transform.parent);
-                            Destroy(_item.gameObject);
+                            _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
+
+                            if (_distance_ofDistortion >= _distance_toDistortion)
+                            {
+                                Instantiate(prefab_world_bonus_coin, _item.transform.position, new Quaternion(), _item.transform.parent);
+                                Destroy(_item.gameObject);
+                            }
+                        }
+
+                        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
+                        {
+                            _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
+
+                            if (_distance_ofDistortion >= _distance_toDistortion)
+                            {
+                                _item.MakeVisible();
+                            }
                         }
                     }
 
-                    var _world_coin_array = FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None);                    
+                    stage_road_toDrift_timer -= Time.deltaTime;
+                    Debug.Log(stage_road_toDrift_timer);
 
-                    foreach (World_Local_SceneMain_Bonus_Coin _item in _world_coin_array)
+                    if (stage_road_toDrift_timer <= 0)
                     {
-                        _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
+                        Debug.Log("clearing"); //
 
-                        if (_distance_ofDistortion >= _distance_toDistortion)
-                        {
-                            _item.MakeVisible();
-                        }
+                        World_Local_SceneMain_EnemySpawner.SingleOnScene.Active = false;
+                        World_Local_SceneMain_BonusSpawner.SingleOnScene.Active = false;
+
+                        stage_road_toDrift = true;
+                    }
+                }
+                else
+                {
+                    switch (stage_road_toDrift_state)
+                    {
+                        case Stage_Road_ToDrift_State.clearing:
+                            int _num = 0;
+
+                            foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
+                            {
+                                ++_num;
+                            }
+
+                            foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Parent>(FindObjectsSortMode.None))
+                            {
+                                ++_num;
+                            }
+
+                            if (_num == 0)
+                            {
+                                Debug.Log("alignment"); //
+
+                                stage_road_toDrift_state = Stage_Road_ToDrift_State.alignment;
+                            }
+                        break;
+
+                        case Stage_Road_ToDrift_State.alignment:
+
+                        break;
+
+                        case Stage_Road_ToDrift_State.braking:
+
+                        break;
+
+                        case Stage_Road_ToDrift_State.moveDown:
+
+                        break;
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Backspace)
-                    || AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed)
+                if (AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed
+                || Input.GetKeyDown(KeyCode.Backspace))
                 {
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();

@@ -12,7 +12,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] Texture2D normalMap;
 
-    [SerializeField] private float  enemy_speed = 8f;
+    private float enemy_speed = 8f;
     private AudioSource             enemy_audioSource;
     private bool                    enemy_isDamaged = false;
     private PolygonCollider2D       enemy_collider;

@@ -1,23 +1,7 @@
 using UnityEngine;
 
-public class World_Local_SceneMain_Bonus_Up : MonoBehaviour
+public class World_Local_SceneMain_Bonus_Up : World_Local_SceneMain_Bonus_Parent
 {
-    public bool Active { get; set; }
-
-    private float speed = 8f;
-    [SerializeField] private World_Local_SceneMain_PopUp popUp;
-    [SerializeField] private AudioClip sound;
-    private new Animator animation;
-    private BoxCollider2D boxCollider;
-
-    private void Awake()
-    {
-        Active = true;
-
-        animation = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();           
-    }
-
     private void FixedUpdate()
     {         
         if (Active)
@@ -39,8 +23,7 @@ public class World_Local_SceneMain_Bonus_Up : MonoBehaviour
                 Destroy(gameObject);
             }
 
-            //”ничтожаем объект, когда он уходит за пределы экрана
-            if (transform.position.x <= -10.0f)
+            if (transform.position.x <= DESTROYPOSITION_X)
             {
                 Destroy(gameObject);
             }            

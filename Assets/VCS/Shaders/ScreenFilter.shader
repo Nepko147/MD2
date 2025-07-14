@@ -53,7 +53,7 @@ Shader "Custom/Post Process/Screen Filter"
                 fixed _transitions = sin(PI * _input_fd.uv.y * u_lines_num * 2.0);
                 _transitions = ceil(_transitions);
                 
-                return (tex2D(_MainTex, _input_fd.uv) * clamp(_transitions + u_lines_alpha, 0.0, 1.0));
+                return (tex2D(_MainTex, _input_fd.uv) * clamp(_transitions + u_lines_alpha, u_lines_alpha, 1.0));
             }
             
             ENDCG

@@ -48,7 +48,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     private void FixedUpdate()
     {
         if (Active 
-            && !World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush)
+        && !World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush)
         {
             if (enemySpawn_wave_delay > 0)
             {
