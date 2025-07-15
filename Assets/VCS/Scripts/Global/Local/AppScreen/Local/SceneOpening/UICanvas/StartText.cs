@@ -22,7 +22,18 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
     private void Awake()
     {
         text = GetComponent<Text>();
-        text.text = "PRESS ANY KEY";
+        
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                text.text = "PRESS ANY KEY";
+            break;
+            
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                text.text = "Õ¿∆Ã»“≈ Àﬁ¡”ﬁ  À¿¬»ÿ”";
+            break;
+        }
+
         text_color = text.color;
     }
 
@@ -56,7 +67,16 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
             {
                 if (!ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
                 {
-                    text.text = "LOADING CLOUD DATA";
+                    switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+                    {
+                        case ControlPers_LanguageHandler.GameLanguage.english:
+                            text.text = "LOADING CLOUD DATA";
+                            break;
+
+                        case ControlPers_LanguageHandler.GameLanguage.russian:
+                            text.text = "«¿√–”« ¿ ƒ¿ÕÕ€’";
+                            break;
+                    }
                     stage = Stage.LoadData;
                 }
                 else

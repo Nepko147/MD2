@@ -26,13 +26,27 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     [SerializeField] protected Sprite image_pointed_improve;
     [SerializeField] protected Sprite image_received;
 
+    [SerializeField] protected Sprite image_ru_idle_buy;
+    [SerializeField] protected Sprite image_ru_idle_improve;
+    [SerializeField] protected Sprite image_ru_pointed_buy;
+    [SerializeField] protected Sprite image_ru_pointed_improve;
+    [SerializeField] protected Sprite image_ru_received;
+
+    protected Sprite image_current_idle_buy;
+    protected Sprite image_current_idle_improve;
+    protected Sprite image_current_pointed_buy;
+    protected Sprite image_current_pointed_improve;
+    protected Sprite image_current_received;
+
     [SerializeField] private AudioClip sound_button;
     [SerializeField] private AudioClip sound_upgrade;
 
     private Vector3 position_last;
 
-    private const string POPUPMESSAGE_TEXT = "NOT ENOUGH COINS";
+    private const string POPUPMESSAGE_TEXT_EN = "NOT ENOUGH COINS";
+    private const string POPUPMESSAGE_TEXT_RU = "Õ≈ƒŒ—“¿“Œ◊ÕŒ ÃŒÕ≈“";
 
+    private string popupMessege_text;
     protected void Image_Set(Sprite _idle, Sprite _pointed)
     {
         image_idle = _idle;
@@ -47,6 +61,17 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         rectTransform.localPosition += new Vector3(_sizeInPixels.x - image.sprite.pivot.x, 0, 0);
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
+
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                popupMessege_text = POPUPMESSAGE_TEXT_EN;
+                break;
+
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                popupMessege_text = POPUPMESSAGE_TEXT_RU;
+                break;
+        }
     }
 
     protected delegate bool IsState();
@@ -68,7 +93,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                 {
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
 
-                    AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(POPUPMESSAGE_TEXT);
+                    AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(popupMessege_text);
                 }
                 else
                 {
@@ -81,7 +106,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
 
-                    Image_Set(image_idle_improve, image_pointed_improve);
+                    Image_Set(image_current_idle_improve, image_current_idle_improve);
 
                     price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                     price_instance.Coins_Set(price_coins_improve);
@@ -95,7 +120,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                     {
                         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
 
-                        AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(POPUPMESSAGE_TEXT);
+                        AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Show(popupMessege_text);
                     }
                     else
                     {
@@ -108,7 +133,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
                         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
 
-                        Image_Set(image_received, image_received);
+                        Image_Set(image_current_received, image_current_received);
 
                         Destroy(price_instance.gameObject);
                     }
@@ -122,6 +147,25 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         base.Awake();
 
         image = GetComponent<Image>();
+
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                image_current_idle_buy = image_idle_buy;
+                image_current_idle_improve = image_idle_improve;
+                image_current_pointed_buy = image_pointed_buy;
+                image_current_pointed_improve = image_pointed_improve;
+                image_current_received = image_received;
+            break;
+
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                image_current_idle_buy = image_ru_idle_buy;
+                image_current_idle_improve = image_ru_idle_improve;
+                image_current_pointed_buy = image_ru_pointed_buy;
+                image_current_pointed_improve = image_ru_pointed_improve;
+                image_current_received = image_ru_received;
+                break;
+        }
     }
 
     protected virtual void Start()
@@ -135,7 +179,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         {
             Price_Spawn();
 
-            Image_Set(image_idle_buy, image_pointed_buy);
+            Image_Set(image_current_idle_buy, image_current_pointed_buy);
 
             price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             price_instance.Coins_Set(price_coins_buy);
@@ -146,14 +190,14 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
             {
                 Price_Spawn();
 
-                Image_Set(image_idle_improve, image_pointed_improve);
+                Image_Set(image_current_idle_improve, image_current_pointed_improve);
 
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                 price_instance.Coins_Set(price_coins_improve);
             }
             else
             {
-                Image_Set(image_received, image_received);
+                Image_Set(image_current_received, image_current_received);
             }
         }
     }

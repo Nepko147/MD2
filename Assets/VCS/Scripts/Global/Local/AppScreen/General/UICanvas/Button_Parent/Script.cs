@@ -16,7 +16,7 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
 
             if (pressed)
             {
-                image.sprite = image_pressed;
+                image.sprite = image_currennt_pressed;
             }
         }
     }
@@ -27,6 +27,15 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
     [SerializeField] private Sprite image_idle;
     [SerializeField] private Sprite image_pointed;
     [SerializeField] private Sprite image_pressed;
+
+    [SerializeField] private Sprite image_ru_idle;
+    [SerializeField] private Sprite image_ru_pointed;
+    [SerializeField] private Sprite image_ru_pressed;
+
+    private Sprite image_currennt_idle;
+    private Sprite image_currennt_pointed;
+    private Sprite image_currennt_pressed;
+
     private void Image_PointsRefresh()
     {
         image_min = Image_ScreenPoint_Min(image);
@@ -98,6 +107,23 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         Image_PointsRefresh();
 
         position_last = transform.position;
+
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                image_currennt_idle = image_idle;
+                image_currennt_pointed = image_pointed;
+                image_currennt_pressed = image_pressed;
+                break;
+
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                image_currennt_idle = image_ru_idle;
+                image_currennt_pointed = image_ru_pointed;
+                image_currennt_pressed = image_ru_pressed;
+                break;
+        }
+
+        GetComponent<RectTransform>().sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
     }
 
     private void Update()
@@ -113,16 +139,16 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
 
             if (!Pointed(image_min, image_max))
             {
-                if (image.sprite != image_idle)
+                if (image.sprite != image_currennt_idle)
                 {
-                    image.sprite = image_idle;
+                    image.sprite = image_currennt_idle;
                 }
             }
             else
             {
-                if (image.sprite != image_pointed)
+                if (image.sprite != image_currennt_pointed)
                 {
-                    image.sprite = image_pointed;
+                    image.sprite = image_currennt_pointed;
                 }
             }
         }
