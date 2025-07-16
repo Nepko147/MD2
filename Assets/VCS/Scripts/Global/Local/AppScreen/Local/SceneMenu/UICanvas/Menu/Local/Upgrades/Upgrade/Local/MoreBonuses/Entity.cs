@@ -13,16 +13,19 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
         base.Awake();
 
         SingleOnScene = this;
+    }
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+    private void Start()
+    {
+        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 text_bonusName.text = "MORE BONUSES";
-                break;
+            break;
 
             case ControlPers_LanguageHandler.GameLanguage.russian:
                 text_bonusName.text = "анкэье анмсянб";
-                break;
+            break;
         }
     }
 }

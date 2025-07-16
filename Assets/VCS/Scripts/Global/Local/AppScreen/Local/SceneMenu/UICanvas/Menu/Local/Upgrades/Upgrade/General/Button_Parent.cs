@@ -15,9 +15,9 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     }
     
     private Image image;
-    private Vector2 image_min;
-    private Vector2 image_max;
-    private bool image_pointsRefresh = false;
+    private Vector2 image_min = Vector2.zero;
+    private Vector2 image_max = Vector2.zero;
+    private bool image_pointsRefresh = true;
     protected Sprite image_idle;
     protected Sprite image_pointed;
     [SerializeField] protected Sprite image_idle_buy;
@@ -62,15 +62,15 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 popupMessege_text = POPUPMESSAGE_TEXT_EN;
-                break;
+            break;
 
             case ControlPers_LanguageHandler.GameLanguage.russian:
                 popupMessege_text = POPUPMESSAGE_TEXT_RU;
-                break;
+            break;
         }
     }
 
@@ -147,8 +147,11 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         base.Awake();
 
         image = GetComponent<Image>();
+    }
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+    protected virtual void Start()
+    {
+        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 image_current_idle_buy = image_idle_buy;
@@ -164,14 +167,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                 image_current_pointed_buy = image_ru_pointed_buy;
                 image_current_pointed_improve = image_ru_pointed_improve;
                 image_current_received = image_ru_received;
-                break;
+            break;
         }
-    }
-
-    protected virtual void Start()
-    {
-        image_min = Image_ScreenPoint_Min(image);
-        image_max = Image_ScreenPoint_Max(image);
 
         position_last = transform.position;
 

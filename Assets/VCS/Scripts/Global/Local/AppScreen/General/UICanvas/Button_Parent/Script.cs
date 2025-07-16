@@ -104,26 +104,25 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
 
     private void Start()
     {
-        Image_PointsRefresh();
-
         position_last = transform.position;
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 image_currennt_idle = image_idle;
                 image_currennt_pointed = image_pointed;
                 image_currennt_pressed = image_pressed;
-                break;
+            break;
 
             case ControlPers_LanguageHandler.GameLanguage.russian:
                 image_currennt_idle = image_ru_idle;
                 image_currennt_pointed = image_ru_pointed;
                 image_currennt_pressed = image_ru_pressed;
-                break;
+            break;
         }
 
-        GetComponent<RectTransform>().sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
+        rectTransform.sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
+        Image_PointsRefresh();
     }
 
     private void Update()

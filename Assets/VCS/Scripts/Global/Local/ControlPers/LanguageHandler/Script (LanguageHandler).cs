@@ -10,14 +10,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         russian
     }
 
-    public GameLanguage CurrentGameLanguage { get; private set; }
+    public GameLanguage GameLanguage_Current { get; private set; }
 
-    [SerializeField] private GameLanguage gameLanguageInit;
+    [SerializeField] private GameLanguage gameLanguage_init;
 
     private void Awake()
     {
         SingleOnScene = this;
 
-        CurrentGameLanguage = gameLanguageInit;
+        GameLanguage_Current = gameLanguage_init;
     }
 }

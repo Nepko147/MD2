@@ -68,19 +68,22 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         text_number.font.material.mainTexture.filterMode = FilterMode.Point;
         text_kmLeft.font.material.mainTexture.filterMode = FilterMode.Point;
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0;
+    }
+
+    private void Start()
+    {
+        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 text_kmLeft.text = "KILOMETERS LEFT";
-                break;
+            break;
 
             case ControlPers_LanguageHandler.GameLanguage.russian:
                 text_kmLeft.text = "КМ ДО ЦЕЛИ"; // ДА-ДА имненно "КМ ДО ЦЕЛИ". Шоб не было кринжа с падежами
-                break;
+            break;
         }
-
-        canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 0;
     }
 
     private void Update()
