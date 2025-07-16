@@ -1,24 +1,30 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Utils;
 
 public class ControlScene_Main : MonoBehaviour
 {
     public static ControlScene_Main SingleOnScene { get; private set; }
 
     private bool stage_road = true;
-    private bool stage_road_toDrift = false;
-    private float stage_road_toDrift_timer = 15f;
-    private enum Stage_Road_ToDrift_State
+    private float stage_road_toDrift_timer = 5f;
+    private bool stage_road_toDrift_clearing = false;
+    private bool stage_road_toDrift_cutscene = false;
+    private enum Stage_Road_ToDrift_Cutscene_State
     {
-        clearing,
         alignment,
         braking,
         moveDown
     }
-    private Stage_Road_ToDrift_State stage_road_toDrift_state = Stage_Road_ToDrift_State.clearing;
+    private Stage_Road_ToDrift_Cutscene_State stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.alignment;
+    private float stage_road_toDrift_state_braking_time = 2f;
+    private float stage_road_toDrift_state_braking_scale = 1f;
+    private float stage_road_toDrift_state_braking_movingBackground_speedScale_buffer;
+
     private bool stage_drift = false;
+
     private bool stage_pause = false;
+
     private bool stage_gameOver = false;
     private bool stage_gameOver_menu_onDisplay = false;
     private float stage_gameOver_menu_timer;
@@ -33,10 +39,10 @@ public class ControlScene_Main : MonoBehaviour
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
-    [SerializeField] private Vector2 spawnPoint_line_1 = new Vector2(4.7f, -0.55f);
-    [SerializeField] private Vector2 spawnPoint_line_2 = new Vector2(4.7f, -0.85f);
-    [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(4.7f, -1.15f);
-    [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(4.7f, -1.45f);
+    [SerializeField] private Vector2 spawnPoint_line_1 = new Vector2(5.7f, -0.55f);
+    [SerializeField] private Vector2 spawnPoint_line_2 = new Vector2(5.7f, -0.85f);
+    [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(5.7f, -1.15f);
+    [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(5.7f, -1.45f);
 
     private void ActiveState_General(bool _state)
     {
@@ -65,8 +71,10 @@ public class ControlScene_Main : MonoBehaviour
             _item.Active = _state;
         }
 
-        World_Local_SceneMain_EnemySpawner.SingleOnScene.Active = _state;
-        World_Local_SceneMain_BonusSpawner.SingleOnScene.Active = _state;
+        World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_General = _state;
+        World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_General = _state;
+        World_Local_SceneMain_Cops_Entity.SingleOnScene.Active= _state;
+
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
         AppScreen_General_Camera_Entity_Slope.SingleOnScene.Active = _state;
         AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
@@ -94,6 +102,7 @@ public class ControlScene_Main : MonoBehaviour
     {
         ControlPers_FogHandler.Color_Load();
 
+        World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_1 = spawnPoint_line_1;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_2 = spawnPoint_line_2;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_3 = spawnPoint_line_3;
@@ -102,8 +111,8 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_2 = spawnPoint_line_2;
         World_Local_SceneMain_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_3 = spawnPoint_line_3;
         World_Local_SceneMain_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_4 = spawnPoint_line_4;
-        World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Load();
+        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
 
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.ChromaticAberrationEnable(true);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
@@ -123,7 +132,7 @@ public class ControlScene_Main : MonoBehaviour
             {
                 ControlPers_FogHandler.Move();
 
-                if (!stage_road_toDrift)
+                if (!stage_road_toDrift_cutscene)
                 {
                     if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
                     && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRish_Active)
@@ -154,54 +163,79 @@ public class ControlScene_Main : MonoBehaviour
                         }
                     }
 
-                    stage_road_toDrift_timer -= Time.deltaTime;
-                    Debug.Log(stage_road_toDrift_timer);
-
-                    if (stage_road_toDrift_timer <= 0)
+                    if (stage_road_toDrift_timer > 0)
                     {
-                        Debug.Log("clearing"); //
+                        stage_road_toDrift_timer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        if (!stage_road_toDrift_clearing)
+                        {
+                            World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = false;
+                            World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = false;
 
-                        World_Local_SceneMain_EnemySpawner.SingleOnScene.Active = false;
-                        World_Local_SceneMain_BonusSpawner.SingleOnScene.Active = false;
-
-                        stage_road_toDrift = true;
+                            stage_road_toDrift_clearing = true;
+                        }
+                        else
+                        {
+                            if (!InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Enemy_Entity>()
+                            && !InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Bonus_Parent>())
+                            {
+                                World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_alignment;
+                                
+                                stage_road_toDrift_clearing = false;
+                                stage_road_toDrift_cutscene = true;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    switch (stage_road_toDrift_state)
+                    switch (stage_road_toDrift_cutscene_state)
                     {
-                        case Stage_Road_ToDrift_State.clearing:
-                            int _num = 0;
-
-                            foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
+                        case Stage_Road_ToDrift_Cutscene_State.alignment:
+                            if (World_Local_SceneMain_Player.SingleOnScene.State_Current == World_Local_SceneMain_Player.State.road_toDrift_braking)
                             {
-                                ++_num;
-                            }
+                                World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(0, stage_road_toDrift_state_braking_time);
+                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
+                                stage_road_toDrift_state_braking_movingBackground_speedScale_buffer = World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+                                World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Start();
 
-                            foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Parent>(FindObjectsSortMode.None))
-                            {
-                                ++_num;
-                            }
-
-                            if (_num == 0)
-                            {
-                                Debug.Log("alignment"); //
-
-                                stage_road_toDrift_state = Stage_Road_ToDrift_State.alignment;
+                                stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.braking;
                             }
                         break;
 
-                        case Stage_Road_ToDrift_State.alignment:
+                        case Stage_Road_ToDrift_Cutscene_State.braking:
+                            stage_road_toDrift_state_braking_scale -= Time.deltaTime / stage_road_toDrift_state_braking_time;
+                            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = stage_road_toDrift_state_braking_movingBackground_speedScale_buffer * stage_road_toDrift_state_braking_scale;
+                            
+                            if (stage_road_toDrift_state_braking_scale <=0)
+                            {
+                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
+                                World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_moveDown;
+                                //спрайт гг вниз
 
+                                stage_road_toDrift_state_braking_scale = 1f;
+
+                                stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
+                            }
                         break;
 
-                        case Stage_Road_ToDrift_State.braking:
+                        case Stage_Road_ToDrift_Cutscene_State.moveDown:
+                            //камера за гг, движение вниз
 
-                        break;
+                            if (true) //по окончании стадии
+                            {
+                                //World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
+                                //World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
 
-                        case Stage_Road_ToDrift_State.moveDown:
+                                //деактивация не нужных объектов
 
+                                //stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.alignment;
+                                //stage_road_toDrift_cutscene = false;
+                                //stage_road = false;
+                                //stage_drift = true;
+                            }
                         break;
                     }
                 }
@@ -244,7 +278,13 @@ public class ControlScene_Main : MonoBehaviour
 
         if (stage_drift)
         {
-            
+            //стадия дрифта
+
+            if (true) //по окончании стадии
+            {
+                //World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
+                //World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
+            }
         }
         
         if (stage_pause)
@@ -275,7 +315,7 @@ public class ControlScene_Main : MonoBehaviour
                     ControlPers_AudioMixer.SingleOnScene.Stop();
                     ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
-                    SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
+                    SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
                 }
             }              
         }
@@ -303,7 +343,7 @@ public class ControlScene_Main : MonoBehaviour
             {
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_mainTheme);
-                SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MAIN);
+                SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
             }
             else
             {
@@ -311,7 +351,7 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                     ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
-                    SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
+                    SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
                 }
             }                        
         }

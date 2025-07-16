@@ -4,8 +4,9 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    protected float Speed { get; set; }    
-    
+    protected float Speed { get; set; }
+
+    private const float WIDTH = 12.8f;
 
     protected virtual void Awake()
     {
@@ -19,10 +20,9 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
             transform.position += Vector3.left * Speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
 
             //Город занимается СамоВоспроизводством
-            if (transform.position.x <= -11f)
+            if (transform.position.x <= -WIDTH)
             {
-                Vector2 position = new Vector2(transform.position.x + (12.8f * 2), transform.position.y);
-                transform.position = position;
+                transform.position = new Vector2(transform.position.x + (WIDTH * 2), transform.position.y);
             }
         }        
     }

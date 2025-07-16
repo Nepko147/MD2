@@ -2,7 +2,7 @@
 {
     Properties
     {        
-        _Color ("Color", Color) = (1,1,1,1)
+        _Color ("Color", Color) = (1, 1, 1, 1)
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _BumpMap ("Normalmap", 2D) = "bump" {}
         _BumpIntensity ("NormalMap Intensity", Range (-1, 2)) = 1
@@ -11,7 +11,6 @@
 
     SubShader
     {
-        Blend SrcAlpha OneMinusSrcAlpha
         Tags
         { 
             "Queue"="AlphaTest" 
@@ -20,14 +19,17 @@
             "PreviewType"="Plane"
             "CanUseSpriteAtlas"="True"
         }
+
         LOD 300
 
+        Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
         Lighting On
         ZWrite On
         Fog { Mode Off }
 
         CGPROGRAM
+
         #pragma target 3.0
         #pragma surface surf Lambert alpha vertex:vert
         #pragma multi_compile DUMMY PIXELSNAP_ON 
@@ -67,8 +69,9 @@
             o.Normal.z = o.Normal.z * _BumpIntensity;
             o.Normal = normalize((half3)o.Normal);
         }
+
         ENDCG
     }
 
-Fallback "Transparent/Cutout/Diffuse"
+    Fallback "Transparent/Cutout/Diffuse"
 }

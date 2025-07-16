@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Utils
 {
-    public class MathHandler
+    public class AngleHandler
     {
         //Исходное направление от которого считаются углы (угол равный ноль градусов)
         static Vector2 initialVector = new Vector2(1f, 0);

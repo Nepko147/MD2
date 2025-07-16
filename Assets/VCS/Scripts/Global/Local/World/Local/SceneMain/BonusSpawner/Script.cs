@@ -4,8 +4,9 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
 {
     public static World_Local_SceneMain_BonusSpawner SingleOnScene { get; private set; }
 
-    public bool Active { get; set; }
-
+    public bool Active_General { get; set; }
+    public bool Active_Local_Road { get; set; }
+    
     public int          InaccessibleLine { get; set; }
     private const int   INACCESSIBLELINE_INIT = 0;
 
@@ -70,8 +71,11 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
     {
         SingleOnScene = this;
 
-        Active = true;
+        Active_General = true;
+        Active_Local_Road = true;
+
         CoinRush = false;
+
         InaccessibleLine = 0;
 
         //Контроль МинМакса. Будет глупо, если минимум будет больше, чем максимум
@@ -99,7 +103,8 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Active)
+        if (Active_General
+        && Active_Local_Road)
         {
             if (bonusSpawn_delay > 0)
             {
