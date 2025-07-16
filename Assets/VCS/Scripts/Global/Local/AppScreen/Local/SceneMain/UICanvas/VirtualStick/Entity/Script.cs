@@ -77,7 +77,7 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
 
                     if (_inner_position_offset_clamp.magnitude > inner_position_magnitude_edge)
                     {
-                        Inner_Direction = MathHandler.VectorToAngle(_inner_position_offset_clamp);
+                        Inner_Direction = AngleHandler.VectorToAngle(_inner_position_offset_clamp);
                     }
                     else
                     {

@@ -56,7 +56,7 @@ public class ControlScene_Opening : MonoBehaviour
             && AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.Done)
             {
                 ControlPers_FogHandler.Color_Save();
-                SceneManager.LoadScene(ControlPers_BuildSettings.SCENEINDEX_MENU);
+                SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
             }
         }
     }

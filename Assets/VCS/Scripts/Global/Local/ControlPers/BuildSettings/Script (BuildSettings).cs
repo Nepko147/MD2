@@ -25,17 +25,11 @@ public class ControlPers_BuildSettings : MonoBehaviour
     
     [SerializeField] private Text currentPlatformType_Hint; //Отладка
 
-    private const int FRAMERATE = 60;
-
-    public const int SCENEINDEX_OPENING = 0;
-    public const int SCENEINDEX_MENU = 1;
-    public const int SCENEINDEX_MAIN = 2;
-
     void Awake()
     {
         SingleOnScene = this;
 
-        Application.targetFrameRate = FRAMERATE;
+        Application.targetFrameRate = Constants.TARGETFRAMERATE;
         
         switch (buildCompilationType)
         {

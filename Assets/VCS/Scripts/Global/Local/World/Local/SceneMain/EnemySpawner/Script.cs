@@ -4,7 +4,8 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
 {
     public static World_Local_SceneMain_EnemySpawner SingleOnScene { get; private set; }
     
-    public bool Active { get; set; }
+    public bool Active_General { get; set; }
+    public bool Active_Local_Road { get; set; }
 
     public int          InaccessibleLine { get; set; }
     private const int   INACCESSIBLELINE_INIT = 0;
@@ -38,16 +39,19 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     {
         SingleOnScene = this;
 
-        Active = true;
+        Active_General = true;
+        Active_Local_Road = true;
+
         InaccessibleLine = 0;
 
         enemySpawn_wave_size = enemySpawn_wave_size_init;
         enemySpawn_wave_size_counter = enemySpawn_wave_size_init;
     }
-
+    
     private void FixedUpdate()
     {
-        if (Active 
+        if (Active_General
+        && Active_Local_Road
         && !World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush)
         {
             if (enemySpawn_wave_delay > 0)
@@ -85,6 +89,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
                             }
                             break;
                         }
+
                         if (_newLineNumber == InaccessibleLine)
                         {
                             _needToUpdateLineNumber = true;
@@ -115,8 +120,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
                     }
 
                     int _enemyArray_index = Random.Range(0, enemyArray.Length);
-                    var _newEnemy = Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
-                    _newEnemy.SetSortingOrder(enemySpawn_currentLineNumber);
+                    Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
                     InaccessibleLine = INACCESSIBLELINE_INIT;
                     World_Local_SceneMain_BonusSpawner.SingleOnScene.InaccessibleLine = enemySpawn_currentLineNumber;
 

@@ -4,7 +4,27 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 {
     public static World_Local_SceneMain_Player SingleOnScene { get; private set; }
 
-    public bool Active { get; set; }
+    private bool active = true;
+    public bool Active 
+    { 
+        get
+        {
+            return (active);
+        }
+        set
+        {
+            active = value;
+
+            if (value)
+            {
+                player_animation.speed = 1;
+            }
+            else
+            {
+                player_animation.speed = 0;
+            }
+        }
+    }
 
     private const float LINE_1_POSITION_Y = -0.55f;
 
@@ -14,34 +34,63 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
     private const float LINE_4_POSITION_Y = -1.45f;
 
-    [SerializeField] private float player_controlls;
+    [SerializeField] private float player_moving_maxDistanceDelta = 0.03f;
 
     private Vector3 player_newPosition;
     private bool player_moving = false;
-    private bool player_moving_end = false;
+    private bool player_moving_ending = false;
     private void Player_Moving_Start_Up(float _line_y)
     {
         player_moving = true;
-        player_moving_end = true;
+        player_moving_ending = true;
         player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
         player_animation.SetBool(PLAYER_ANIMATION_UP, true);
         headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_up.x, headlights_forward_rotation_up.y, headlights_forward_rotation_up.z);
         headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_UP_Y, headlights_backward.transform.localPosition.z);
         headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_up.x, headlights_backward_rotation_up.y, headlights_backward_rotation_up.z);
         player_newPosition = new Vector3(transform.position.x, _line_y, transform.position.z);
-        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_up);
+        player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_up);
     }
     private void Player_Moving_Start_Down(float _line_y)
     {
         player_moving = true;
-        player_moving_end = true;
+        player_moving_ending = true;
         player_animation.SetBool(PLAYER_ANIMATION_UP, false);
         player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
         headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_down.x, headlights_forward_rotation_down.y, headlights_forward_rotation_down.z);
         headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_DOWN_Y, headlights_backward.transform.localPosition.z);
         headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_down.x, headlights_backward_rotation_down.y, headlights_backward_rotation_down.z);
         player_newPosition = new Vector3(transform.position.x, _line_y, transform.position.z);
-        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_down);
+        player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_down);
+    }
+    private bool Player_Moving()
+    {
+        if (player_moving)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player_newPosition, player_moving_maxDistanceDelta);
+
+            if (transform.position == player_newPosition)
+            {
+                transform.position = player_newPosition; // Гаранитруем, что игрок будет в нужной точке. ВНЕЗАПНО: "transform.position == player_newPosition" и "Vector3.MoveTowards(...)" не грантируют!
+                player_moving = false;
+            }
+        }
+        else
+        {
+            if (player_moving_ending)
+            {
+                player_animation.SetBool(PLAYER_ANIMATION_UP, false);
+                player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
+                headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_straight.x, headlights_forward_rotation_straight.y, headlights_forward_rotation_straight.z);
+                headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_STRAIGHT_Y, headlights_backward.transform.localPosition.z);
+                headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_straight.x, headlights_backward_rotation_straight.y, headlights_backward_rotation_straight.z);
+                player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_stright);
+
+                player_moving_ending = false;
+            }
+        }
+
+        return (player_moving_ending);
     }
 
     public bool                     Player_Invul { get; private set; }
@@ -68,7 +117,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     [SerializeField] private int player_kilometersLeft_init = 25;
     
     private float player_kilometersLeft_delta_timer;
-    [SerializeField] private float player_kilometersLeft_delta_timer_init = 30; // Через сколько проедим километр, без учёта ускорения
+    [SerializeField] private float player_kilometersLeft_delta_timer_init = 30; // Через сколько проедем километр, без учёта ускорения
     
     public int                      Player_Coins { get; set; }
 
@@ -80,6 +129,8 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     [SerializeField] Texture2D      player_normalMap_stright;
     [SerializeField] Texture2D      player_normalMap_up;
     [SerializeField] Texture2D      player_normalMap_down;
+
+    private Color player_color = Color.white;
 
     public BoxCollider2D            Player_BoxCollider { get; private set; }
 
@@ -97,18 +148,47 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
     private bool crashed = false;
 
+    public enum State
+    {
+        road,
+        road_toDrift_alignment,
+        road_toDrift_braking,
+        road_toDrift_moveDown
+    }
+    private State state_current = State.road;
+    public State State_Current 
+    { 
+        get
+        {
+            return (state_current);
+        }
+        set
+        {
+            state_current = value;
+
+            switch (value)
+            {
+                case State.road_toDrift_alignment:
+                    player_color.a = 1f;
+                    player_spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, player_color);
+                break;
+            }
+        }
+    }
+
+    [SerializeField] private Sprite state_road_toDrift_breaking_sprite;
+
     private void Awake()
     {       
         SingleOnScene = this;
 
-        Active = true;
         Player_Invul = false;
         Player_Ups = 1;
         Player_KilometersLeft = player_kilometersLeft_init;
         player_kilometersLeft_delta_timer = player_kilometersLeft_delta_timer_init;
-        player_animation = GetComponent<Animator>();
         player_spriteRenderer = GetComponent<SpriteRenderer>();
-        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_stright);
+        player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_stright);
+        player_animation = GetComponent<Animator>();
         Player_BoxCollider = GetComponent<BoxCollider2D>();
 
         transform.position = new Vector3(transform.position.x, LINE_2_POSITION_Y, transform.position.z);
@@ -116,122 +196,138 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Active)
+        if (active)
         {
-            if (Player_Invul)
+            switch (state_current)
             {
-                var _newCoolor = player_spriteRenderer.material.GetColor("_Color");
-                if (player_invul_alpha_increase)
+                case State.road:
+                if (Player_Invul)
                 {
-                    _newCoolor += new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
-                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
-                    if (_newCoolor.a >= 1)
+                    player_color = player_spriteRenderer.material.GetColor(Constants.MATERIAL_2D_BUMP_U_COLOR);
+
+                    if (player_invul_alpha_increase)
                     {
-                        player_invul_alpha_increase = false;
-                    }
-                }
-                else
-                {
-                    _newCoolor -= new Color(0, 0, 0, player_invul_alpha_delta * Time.deltaTime);
-                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
-                    if (_newCoolor.a <= 0)
-                    {
-                        player_invul_alpha_increase = true;
-                    }
-                }
-                player_invul_timer -= Time.deltaTime;
-                if (player_invul_timer <= 0)
-                {
-                    _newCoolor += new Color(0, 0, 0, 1);
-                    player_spriteRenderer.material.SetColor("_Color", _newCoolor);
-                    Player_Invul = false;
-                }
-            }
+                        player_color.a += player_invul_alpha_delta * Time.deltaTime;
+                        player_spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, player_color);
 
-            if (!crashed)
-            {
-                player_animation.speed = 1;
-
-                if (player_kilometersLeft_delta_timer >= 0)
-                {
-                    // Вычитаем из таймера с учётом ускорения
-                    player_kilometersLeft_delta_timer -= Time.deltaTime * (1 + World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale);
-                } 
-                else
-                {
-                    Player_KilometersLeft -= 1;
-                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show();
-                    player_kilometersLeft_delta_timer = player_kilometersLeft_delta_timer_init;
-                }
-
-                if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction > 0)
-                {
-                    switch (transform.position.y)
-                    {
-                        case LINE_2_POSITION_Y:
-                        Player_Moving_Start_Up(LINE_1_POSITION_Y);
-                        break;
-
-                        case LINE_3_POSITION_Y:
-                        Player_Moving_Start_Up(LINE_2_POSITION_Y);
-                        break;
-
-                        case LINE_4_POSITION_Y:
-                        Player_Moving_Start_Up(LINE_3_POSITION_Y);
-                        break;
-                    }
-                }
-                else
-                {
-                    if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction < 0)
-                    {
-                        switch (transform.position.y)
+                        if (player_color.a >= 1)
                         {
-                            case LINE_1_POSITION_Y:
-                            Player_Moving_Start_Down(LINE_2_POSITION_Y);
-                            break;
+                            player_invul_alpha_increase = false;
+                        }
+                    }
+                    else
+                    {
+                        player_color.a -= player_invul_alpha_delta * Time.deltaTime;
+                        player_spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, player_color);
 
-                            case LINE_2_POSITION_Y:
-                            Player_Moving_Start_Down(LINE_3_POSITION_Y);
-                            break;
+                        if (player_color.a <= 0)
+                        {
+                            player_invul_alpha_increase = true;
+                        }
+                    }
 
-                            case LINE_3_POSITION_Y:
-                            Player_Moving_Start_Down(LINE_4_POSITION_Y);
-                            break;
+                    player_invul_timer -= Time.deltaTime;
+
+                    if (player_invul_timer <= 0)
+                    {
+                        player_color.a = 1f;
+                        player_spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, player_color);
+                        Player_Invul = false;
+                    }
+                }
+
+                if (!crashed)
+                {
+                    if (player_kilometersLeft_delta_timer >= 0)
+                    {
+                        player_kilometersLeft_delta_timer -= Time.deltaTime * (1 + World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale);
+                    }
+                    else
+                    {
+                        Player_KilometersLeft -= 1;
+                        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show();
+                        player_kilometersLeft_delta_timer = player_kilometersLeft_delta_timer_init;
+                    }
+
+                    if (!Player_Moving())
+                    {
+                        if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction > 0)
+                        {
+                            switch (transform.position.y)
+                            {
+                                case LINE_2_POSITION_Y:
+                                    Player_Moving_Start_Up(LINE_1_POSITION_Y);
+                                break;
+
+                                case LINE_3_POSITION_Y:
+                                    Player_Moving_Start_Up(LINE_2_POSITION_Y);
+                                break;
+
+                                case LINE_4_POSITION_Y:
+                                    Player_Moving_Start_Up(LINE_3_POSITION_Y);
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Inner_Direction < 0)
+                            {
+                                switch (transform.position.y)
+                                {
+                                    case LINE_1_POSITION_Y:
+                                        Player_Moving_Start_Down(LINE_2_POSITION_Y);
+                                    break;
+
+                                    case LINE_2_POSITION_Y:
+                                        Player_Moving_Start_Down(LINE_3_POSITION_Y);
+                                    break;
+
+                                    case LINE_3_POSITION_Y:
+                                        Player_Moving_Start_Down(LINE_4_POSITION_Y);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
+                break;
 
-                if (player_moving)
+                case State.road_toDrift_alignment:
+                if (!Player_Moving())
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, player_newPosition, player_controlls);
-
-                    if (transform.position == player_newPosition)
+                    switch (transform.position.y)
                     {
-                        transform.position = player_newPosition; // Гаранитруем, что игрок будет в нужной точке. ВНЕЗАПНО: "transform.position == player_newPosition" и "Vector3.MoveTowards(...)" не грантируют!
-                        player_moving = false;
+                        case LINE_1_POSITION_Y:
+                            Player_Moving_Start_Down(LINE_2_POSITION_Y);
+                        break;
+
+                        case LINE_3_POSITION_Y:
+                            Player_Moving_Start_Up(LINE_2_POSITION_Y);
+                        break;
+
+                        case LINE_4_POSITION_Y:
+                            Player_Moving_Start_Up(LINE_3_POSITION_Y);
+                        break;
+
+                        case LINE_2_POSITION_Y:
+                            player_animation.SetBool(PLAYER_ANIMATION_UP, false);
+                            player_animation.SetBool(PLAYER_ANIMATION_DOWN, true);
+                            headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_down.x, headlights_forward_rotation_down.y, headlights_forward_rotation_down.z);
+                            headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_DOWN_Y, headlights_backward.transform.localPosition.z);
+                            headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_down.x, headlights_backward_rotation_down.y, headlights_backward_rotation_down.z);
+                            player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_down);
+
+                            state_current = State.road_toDrift_braking;
+                        break;
                     }
                 }
-                else
-                {
-                    if (player_moving_end)
-                    {
-                        player_animation.SetBool(PLAYER_ANIMATION_UP, false);
-                        player_animation.SetBool(PLAYER_ANIMATION_DOWN, false);
-                        headlights_forward.transform.rotation = Quaternion.Euler(headlights_forward_rotation_straight.x, headlights_forward_rotation_straight.y, headlights_forward_rotation_straight.z);
-                        headlights_backward.transform.localPosition = new Vector3(headlights_backward.transform.localPosition.x, HEADLIGHTS_BACKWARD_LOCALPOSITION_STRAIGHT_Y, headlights_backward.transform.localPosition.z);
-                        headlights_backward.transform.rotation = Quaternion.Euler(headlights_backward_rotation_straight.x, headlights_backward_rotation_straight.y, headlights_backward_rotation_straight.z);
-                        player_spriteRenderer.material.SetTexture("_BumpMap", player_normalMap_stright);
+                break;
 
-                        player_moving_end = false;
-                    }
-                }
+                case State.road_toDrift_moveDown:
+                    
+                break;
             }
-        }
-        else
-        {
-            player_animation.speed = 0;
-        }                  
+        }                
     }    
     
     public void LoseUp()
@@ -244,7 +340,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
         if (Player_Ups <= 0)
         {
-            player_spriteRenderer.material.SetColor("_Color", Color.red);
+            player_spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, Color.red);
             crashed = true;
         }     
     }

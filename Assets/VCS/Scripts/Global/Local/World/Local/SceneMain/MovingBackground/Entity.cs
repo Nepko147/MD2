@@ -4,34 +4,33 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
 {
     public static World_Local_SceneMain_MovingBackground_Entity SingleOnScene { get; private set; }
 
-    public bool Active { private get; set; }
+    public bool SpeedScale_Active { get; set; }
+    public float SpeedScale { get; set; }
+    public const float SPEEDSCALE_INIT = 0.01f;
+    [SerializeField] private float speedScale_increment = 0.000001f;
+    [SerializeField] private float speedScale_max = 0.02f;
 
-    public float SpeedScale { get; private set; }
-    [SerializeField] private float speedScale_max;
-    [SerializeField] private float speedScale_increment;
-    [SerializeField] private float speedScale_init;
+    [SerializeField] private GameObject city_3;
+    [SerializeField] private GameObject city_3_1;
+    [SerializeField] private GameObject city_2;
+    [SerializeField] private GameObject city_2_1;
+    [SerializeField] private GameObject city_1;
+    [SerializeField] private GameObject city_1_1;
+    [SerializeField] private GameObject bushes;
+    [SerializeField] private GameObject bushes_1;
+    [SerializeField] private GameObject road;
+    [SerializeField] private GameObject road_1;
 
-    [SerializeField] GameObject city_3;
-    [SerializeField] GameObject city_3_1;
-    [SerializeField] GameObject city_2;
-    [SerializeField] GameObject city_2_1;
-    [SerializeField] GameObject city_1;
-    [SerializeField] GameObject city_1_1;
-    [SerializeField] GameObject bushes;
-    [SerializeField] GameObject bushes_1;
-    [SerializeField] GameObject road;
-    [SerializeField] GameObject road_1;
-    
-    static Vector3 position_city_3;
-    static Vector3 position_city_3_1;
-    static Vector3 position_city_2;
-    static Vector3 position_city_2_1;
-    static Vector3 position_city_1;
-    static Vector3 position_city_1_1;
-    static Vector3 position_bushes;
-    static Vector3 position_bushes_1;
-    static Vector3 position_road;
-    static Vector3 position_road_1;
+    private static Vector3 position_city_3;
+    private static Vector3 position_city_3_1;
+    private static Vector3 position_city_2;
+    private static Vector3 position_city_2_1;
+    private static Vector3 position_city_1;
+    private static Vector3 position_city_1_1;
+    private static Vector3 position_bushes;
+    private static Vector3 position_bushes_1;
+    private static Vector3 position_road;
+    private static Vector3 position_road_1;
 
     public void Position_Save()
     {
@@ -65,15 +64,22 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
     {
         SingleOnScene = this;
 
-        SpeedScale = speedScale_init;
-        Active = false;
+        SpeedScale_Active = false;
+
+        SpeedScale = SPEEDSCALE_INIT; 
     }
 
     private void FixedUpdate()
     {
-        if (Active)
+        if (SpeedScale_Active)
         {
             SpeedScale += speedScale_increment;
+
+            if (SpeedScale >= speedScale_max)
+            {
+                SpeedScale = speedScale_max;
+                SpeedScale_Active = false;
+            }
         }
     }
 }
