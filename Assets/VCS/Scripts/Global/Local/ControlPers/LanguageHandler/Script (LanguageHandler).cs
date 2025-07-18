@@ -14,10 +14,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     [SerializeField] private GameLanguage gameLanguageInit;
 
+    public void SetGameLanguage(GameLanguage _language)
+    {
+        CurrentGameLanguage = _language;
+    }
+
     private void Awake()
     {
         SingleOnScene = this;
 
-        CurrentGameLanguage = gameLanguageInit;
+        SetGameLanguage(gameLanguageInit);
     }
 }
