@@ -22,6 +22,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
     private void Awake()
     {
         text = GetComponent<Text>();
+
         text_color = text.color;
     }
 

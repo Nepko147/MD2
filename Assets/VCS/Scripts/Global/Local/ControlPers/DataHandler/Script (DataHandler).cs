@@ -323,6 +323,14 @@ public class ControlPers_DataHandler : MonoBehaviour
                 public static float value = DEFAULTVALUE;
             }
         }
+
+        public struct Language
+        {
+            public const string NODE = "Language";
+            public const string PATH = ORIGINNODE + "/" + NODE;
+            public const ControlPers_LanguageHandler.GameLanguage DEFAULTVALUE = ControlPers_LanguageHandler.GameLanguage.english;
+            public static ControlPers_LanguageHandler.GameLanguage value = DEFAULTVALUE;
+        }
     }
 
     private XmlDocument settingsData_file;
@@ -331,6 +339,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public const float SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE = SettingsData.Audio.Sound.DEFAULTVALUE;
     public const float SETTINGSDATA_AUDIO_MUSIC_DEFAULTVALUE = SettingsData.Audio.Music.DEFAULTVALUE;
+    public const ControlPers_LanguageHandler.GameLanguage SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
 
     public void SettingsData_Load()
     {
@@ -356,6 +365,10 @@ public class ControlPers_DataHandler : MonoBehaviour
                     _node_musicValue.InnerText = SettingsData.Audio.Music.DEFAULTVALUE.ToString(); //Записываем значение в раздел Music
                     _node_audio.AppendChild(_node_musicValue); //Записываем раздел Music в раздел Audio
 
+                    var _node_language = settingsData_file.CreateElement(SettingsData.Language.NODE); //Создаем раздел Language для XML документа
+                    _node_language.InnerText = SettingsData.Language.DEFAULTVALUE.ToString(); //Записываем значение в раздел Language
+                    _originNode.AppendChild(_node_language); //Записываем раздел Language в исходный раздел
+
                     settingsData_file.Save(settingsData_file_path); //Создаем файл XML документа
                 }
                 else
@@ -367,6 +380,9 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                     var _audio_musicValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText;
                     SettingsData.Audio.Music.value = float.Parse(_audio_musicValue_text);
+
+                    var _languageValue_text = settingsData_file.SelectSingleNode(SettingsData.Language.PATH).InnerText;
+                    Enum.TryParse(_languageValue_text, out SettingsData.Language.value);
                 }
             break;
 
@@ -374,6 +390,7 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
                 SettingsData.Audio.Sound.value = YG2.saves.SettingsData_Audio_Sound;
                 SettingsData.Audio.Music.value = YG2.saves.SettingsData_Audio_Music;
+                SettingsData.Language.value = YG2.saves.SettingsData_Language;
             break;
         }
     }
@@ -387,6 +404,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText = SettingsData.Audio.Sound.value.ToString(); //Перезаписываем значение в разделе Audio/Sound
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText = SettingsData.Audio.Music.value.ToString(); //Перезаписываем значение в разделе Audio/Music
+                settingsData_file.SelectSingleNode(SettingsData.Language.PATH).InnerText = SettingsData.Language.value.ToString(); //Перезаписываем значение в разделе Audio/Music
 
                 settingsData_file.Save(settingsData_file_path); //Создаем или перезаписываем файл XML документа
             break;
@@ -395,6 +413,7 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
                 YG2.saves.SettingsData_Audio_Sound = SettingsData.Audio.Sound.value;
                 YG2.saves.SettingsData_Audio_Music = SettingsData.Audio.Music.value;
+                YG2.saves.SettingsData_Language = SettingsData.Language.value;
 
                 YG2.SaveProgress();
             break;
@@ -411,6 +430,12 @@ public class ControlPers_DataHandler : MonoBehaviour
     {
         get { return (SettingsData.Audio.Music.value); }
         set { SettingsData.Audio.Music.value = Mathf.Clamp(value, 0, 1f); }
+    }
+
+    public ControlPers_LanguageHandler.GameLanguage SettingsData_LanguageValue
+    {
+        get { return (SettingsData.Language.value); }
+        set { SettingsData.Language.value = value; }
     }
 
     #endregion

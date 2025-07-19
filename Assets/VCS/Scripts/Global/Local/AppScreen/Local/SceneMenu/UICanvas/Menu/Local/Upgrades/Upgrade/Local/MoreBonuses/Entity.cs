@@ -8,14 +8,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
 
     [SerializeField] private Text text_bonusName;
 
-    protected override void Awake()
-    {
-        base.Awake();
-
-        SingleOnScene = this;
-    }
-
-    private void Start()
+    public void Text_LanguageRefresh()
     {
         switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
         {
@@ -27,5 +20,17 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
                 text_bonusName.text = "анкэье анмсянб";
             break;
         }
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SingleOnScene = this;
+    }
+
+    private void Start()
+    {
+        Text_LanguageRefresh();
     }
 }
