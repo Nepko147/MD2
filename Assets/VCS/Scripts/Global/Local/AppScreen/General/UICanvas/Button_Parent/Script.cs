@@ -42,6 +42,26 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         image_max = Image_ScreenPoint_Max(image);
     }
 
+    public void Image_LanguageRefresh()
+    {
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                image_currennt_idle = image_idle;
+                image_currennt_pointed = image_pointed;
+                image_currennt_pressed = image_pressed;
+                break;
+
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                image_currennt_idle = image_ru_idle;
+                image_currennt_pointed = image_ru_pointed;
+                image_currennt_pressed = image_ru_pressed;
+                break;
+        }
+
+        GetComponent<RectTransform>().sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
+    }
+
     [SerializeField] private AudioClip sound_press;
 
     private Vector3 position_last;
@@ -105,25 +125,8 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
     private void Start()
     {
         Image_PointsRefresh();
-
-        position_last = transform.position;
-
-        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                image_currennt_idle = image_idle;
-                image_currennt_pointed = image_pointed;
-                image_currennt_pressed = image_pressed;
-                break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                image_currennt_idle = image_ru_idle;
-                image_currennt_pointed = image_ru_pointed;
-                image_currennt_pressed = image_ru_pressed;
-                break;
-        }
-
-        GetComponent<RectTransform>().sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
+        Image_LanguageRefresh();
+        position_last = transform.position;        
     }
 
     private void Update()

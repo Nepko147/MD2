@@ -47,6 +47,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     private const string POPUPMESSAGE_TEXT_RU = "меднярюрнвмн лнмер";
 
     private string popupMessege_text;
+
     protected void Image_Set(Sprite _idle, Sprite _pointed)
     {
         image_idle = _idle;
@@ -142,6 +143,47 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         }
     }
     
+    public void Image_LanguageRefresh()
+    {
+        switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
+        {
+            case ControlPers_LanguageHandler.GameLanguage.english:
+                image_current_idle_buy = image_idle_buy;
+                image_current_idle_improve = image_idle_improve;
+                image_current_pointed_buy = image_pointed_buy;
+                image_current_pointed_improve = image_pointed_improve;
+                image_current_received = image_received;
+            break;
+
+            case ControlPers_LanguageHandler.GameLanguage.russian:
+                image_current_idle_buy = image_ru_idle_buy;
+                image_current_idle_improve = image_ru_idle_improve;
+                image_current_pointed_buy = image_ru_pointed_buy;
+                image_current_pointed_improve = image_ru_pointed_improve;
+                image_current_received = image_ru_received;
+            break;
+        }
+        
+        if (IsImproved())
+        {
+            Image_Set(image_current_received, image_current_received);
+            rectTransform.localPosition -= new Vector3(image_current_received.rect.width - image_current_received.pivot.x, 0, 0);
+        }
+        else
+        {
+            if (IsBought())
+            {
+                Image_Set(image_current_idle_improve, image_current_idle_improve);
+                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
+            }
+            else
+            {
+                Image_Set(image_current_idle_buy, image_current_idle_buy);
+                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
+            }
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();

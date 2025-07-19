@@ -22,19 +22,22 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
     private void Awake()
     {
         text = GetComponent<Text>();
-        
+
+        text_color = text.color;
+    }
+
+    private void Start()
+    {
         switch (ControlPers_LanguageHandler.SingleOnScene.CurrentGameLanguage)
         {
             case ControlPers_LanguageHandler.GameLanguage.english:
                 text.text = "PRESS ANY KEY";
-            break;
-            
+                break;
+
             case ControlPers_LanguageHandler.GameLanguage.russian:
                 text.text = "Õ¿∆Ã»“≈ Àﬁ¡”ﬁ  À¿¬»ÿ”";
-            break;
+                break;
         }
-
-        text_color = text.color;
     }
 
     private void Update()
