@@ -103,6 +103,7 @@ public class ControlScene_Main : MonoBehaviour
         ControlPers_FogHandler.Color_Load();
 
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
+        World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_1 = spawnPoint_line_1;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_2 = spawnPoint_line_2;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_3 = spawnPoint_line_3;
@@ -243,6 +244,7 @@ public class ControlScene_Main : MonoBehaviour
                 if (AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed
                 || Input.GetKeyDown(KeyCode.Backspace))
                 {
+                    World_General_Sky.SingleOnScene.Active = false;
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();
                     AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.Pause();
@@ -290,7 +292,8 @@ public class ControlScene_Main : MonoBehaviour
         if (stage_pause)
         {
             if (AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed)
-            {                
+            {
+                World_General_Sky.SingleOnScene.Active = true;
                 AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.UnPause();
                 AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.UnPause();
@@ -331,6 +334,7 @@ public class ControlScene_Main : MonoBehaviour
                 if (!stage_gameOver_menu_onDisplay)
                 {
                     audio_source.PlayOneShot(audio_sound_gameOver);
+                    World_General_Sky.SingleOnScene.Active = false;
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
