@@ -40,17 +40,14 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     private string  text_gameOver_main_current;
 
     const string    TEXT_GAMEOVER_DISTANCEREMAIN_PREF_EN = "Distance remain: ";
-    const string    TEXT_GAMEOVER_DISTANCEREMAIN_PREF_RU = "ОСТАЛОСЬ ДО ЦЕЛИ: "; // Да-да - капсом. В шрифте нет маленьких русских букв
-    private string  text_gameover_distanceremain_pref_current;
+    const string    TEXT_GAMEOVER_DISTANCEREMAIN_PREF_RU = "Осталось до цели: ";
+    private string text_gameover_distanceremain_pref_current;
 
-    const string    TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM";
-    
+    const string    TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM";    
 
     const string    TEXT_PAUSE_EN = "PAUSE";
     const string    TEXT_PAUSE_RU = "ПАУЗА";
     private string  text_pause_current;
-
-    private const string TEXT_PAUSE = "PAUSE";
 
     private const string TEXT_X = "x";
 
