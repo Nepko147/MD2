@@ -4,8 +4,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
 {
     public static AppScreen_Local_SceneMain_UICanvas_Entity SingleOnScene { get; private set; }
 
-    private int     ups_visual;
-    public int      Ups_Visual
+    private int ups_visual;
+    public int Ups_Visual
     {
         get 
         {
@@ -20,7 +20,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     }
         
     private int coins_visual;
-    public int  Coins_Visual
+    public int Coins_Visual
     {
         get
         {
@@ -35,21 +35,20 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    const string TEXT_GAMEOVER_MAIN = "GAME OVER";
-    const string TEXT_GAMEOVER_DISTANCEREMAIN_PREF = "Distance remain: ";
-    const string TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " km";
-    
-    const string TEXT_PAUSE = "PAUSE";
+    private const string TEXT_GAMEOVER_MAIN = "GAME OVER";
+    private const string TEXT_GAMEOVER_DISTANCEREMAIN_PREF = "Distance remain: ";
+    private const string TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " km";
 
-    const string TEXT_X = "x";
+    private const string TEXT_PAUSE = "PAUSE";
+
+    private const string TEXT_X = "x";
 
     public void ShowGameOver()
     {
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(true);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(TEXT_GAMEOVER_MAIN);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.Enable(true);
-        var _string = TEXT_GAMEOVER_DISTANCEREMAIN_PREF + World_Local_SceneMain_Player.SingleOnScene.Player_KilometersLeft.ToString() + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF;
-        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(_string);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(TEXT_GAMEOVER_DISTANCEREMAIN_PREF + AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF);
     }
 
     public void SetPause(bool _pause)
@@ -65,7 +64,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
 
     private void Start()
     {
-        Ups_Visual = World_Local_SceneMain_Player.SingleOnScene.Player_Ups;
+        Ups_Visual = World_Local_SceneMain_Player.SingleOnScene.Up_Count;
         Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
     }
 }

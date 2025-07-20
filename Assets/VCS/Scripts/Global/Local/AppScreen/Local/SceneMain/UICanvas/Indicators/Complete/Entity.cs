@@ -65,6 +65,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
         SingleOnScene = this;
 
+        Text_Number = "25";
         text_number.font.material.mainTexture.filterMode = FilterMode.Point;
         text_kmLeft.font.material.mainTexture.filterMode = FilterMode.Point;
 

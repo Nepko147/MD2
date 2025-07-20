@@ -20,6 +20,8 @@ public class ControlScene_Main : MonoBehaviour
     private float stage_road_toDrift_state_braking_time = 2f;
     private float stage_road_toDrift_state_braking_scale = 1f;
     private float stage_road_toDrift_state_braking_movingBackground_speedScale_buffer;
+    private bool stage_road_toDrift_state_braking_playerMoveDown_start = true;
+    private const float STAGE_ROAD_TODRIFT_STATE_BRAKING_PLAYERMOVEDOWN_SCALE = 0.5f;
 
     private bool stage_drift = false;
 
@@ -128,7 +130,7 @@ public class ControlScene_Main : MonoBehaviour
     {
         if (stage_road)
         {
-            if (World_Local_SceneMain_Player.SingleOnScene.Player_Ups > 0)
+            if (World_Local_SceneMain_Player.SingleOnScene.Up_Count > 0)
             {
                 ControlPers_FogHandler.Move();
 
@@ -209,15 +211,22 @@ public class ControlScene_Main : MonoBehaviour
                             stage_road_toDrift_state_braking_scale -= Time.deltaTime / stage_road_toDrift_state_braking_time;
                             World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = stage_road_toDrift_state_braking_movingBackground_speedScale_buffer * stage_road_toDrift_state_braking_scale;
                             
-                            if (stage_road_toDrift_state_braking_scale <=0)
+                            if (stage_road_toDrift_state_braking_scale < STAGE_ROAD_TODRIFT_STATE_BRAKING_PLAYERMOVEDOWN_SCALE)
                             {
-                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
-                                World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_moveDown;
-                                //спрайт гг вниз
+                                if (stage_road_toDrift_state_braking_playerMoveDown_start)
+                                {
+                                    World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_moveDown;
+                                    stage_road_toDrift_state_braking_playerMoveDown_start = false;
+                                }
 
-                                stage_road_toDrift_state_braking_scale = 1f;
+                                if (stage_road_toDrift_state_braking_scale <=0)
+                                {
+                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
+                                    
+                                    stage_road_toDrift_state_braking_scale = 1f;
 
-                                stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
+                                    stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
+                                }
                             }
                         break;
 

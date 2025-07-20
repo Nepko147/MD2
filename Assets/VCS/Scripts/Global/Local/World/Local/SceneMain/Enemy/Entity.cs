@@ -37,12 +37,12 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
 
             //Проверка на контакт с игроком
             if (!isDamaged
-            && !World_Local_SceneMain_Player.SingleOnScene.Player_Invul
-            && collider2d.bounds.Intersects(World_Local_SceneMain_Player.SingleOnScene.Player_BoxCollider.bounds))
+            && !World_Local_SceneMain_Player.SingleOnScene.Invul
+            && collider2d.bounds.Intersects(World_Local_SceneMain_Player.SingleOnScene.BoxCollider.bounds))
             {
                 audioSource.Play();
                 isDamaged = true;
-                World_Local_SceneMain_Player.SingleOnScene.LoseUp();
+                World_Local_SceneMain_Player.SingleOnScene.Up_Lose();
             }
 
             if (transform.position.x <= DESTROYPOSITION_X)
