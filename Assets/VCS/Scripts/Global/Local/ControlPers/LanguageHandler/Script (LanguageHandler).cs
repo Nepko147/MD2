@@ -30,6 +30,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Local_MoreBonuses_Entity.SingleOnScene.Text_LanguageRefresh();
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Local_CoinMagnet_Entity.SingleOnScene.Text_LanguageRefresh();
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Local_Revive_Entity.SingleOnScene.Text_LanguageRefresh();
+        AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Text_LanguageRefresh();
 
         ControlPers_DataHandler.SingleOnScene.SettingsData_LanguageValue = GameLanguage_Current;
     }

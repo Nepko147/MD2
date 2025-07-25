@@ -6,6 +6,7 @@ public class ControlScene_Menu : MonoBehaviour
     public static ControlScene_Menu SingleOnScene { get; private set; }
 
     bool stage_init = true;
+    bool stage_cutscene = true;
     bool stage_start = false;
     bool stage_upgrades = false;
     bool stage_settings = false;
@@ -32,25 +33,15 @@ public class ControlScene_Menu : MonoBehaviour
             ControlPers_FogHandler.Move();
 
             if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Play.SingleOnScene.Pressed)
-            {
-                ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
-                World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
-                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
+            {                
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.PrepareToGameStart();
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
                 AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
 
-                AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, sceneSwitchTime);
-
-                var _world_movingBackground_parent_array = FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None);
-                foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
-                {
-                    _item.Active = true;
-                }
+                AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Show();
 
                 stage_init = false;
-                stage_start = true;
+                stage_cutscene = true;
             }
             else
             {
@@ -88,6 +79,27 @@ public class ControlScene_Menu : MonoBehaviour
                     }
                 }
             }                    
+        }
+
+        if (stage_cutscene)
+        {
+            if (AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Done)
+            {
+                ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
+                World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
+                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
+                AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, sceneSwitchTime);
+
+                var _world_movingBackground_parent_array = FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None);
+                foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
+                {
+                    _item.Active = true;
+                }
+
+                stage_cutscene = false;
+                stage_start = true;
+            }            
         }
 
         if (stage_start)
