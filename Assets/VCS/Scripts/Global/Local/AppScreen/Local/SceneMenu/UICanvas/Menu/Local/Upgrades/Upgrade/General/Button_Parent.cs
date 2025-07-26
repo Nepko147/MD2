@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Button_Parent : AppScreen_General_UICanvas_Parent
 {
+    private Vector3 rectTransform_localPosition_init;
+
     [SerializeField] private AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Price price_prefab;
     private AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Price price_instance;
     protected int price_coins_buy;
@@ -15,11 +17,9 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     }
     
     private Image image;
-    private Vector2 image_min = Vector2.zero;
-    private Vector2 image_max = Vector2.zero;
-    private bool image_pointsRefresh = true;
     protected Sprite image_idle;
     protected Sprite image_pointed;
+
     [SerializeField] protected Sprite image_idle_buy;
     [SerializeField] protected Sprite image_idle_improve;
     [SerializeField] protected Sprite image_pointed_buy;
@@ -41,11 +41,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     [SerializeField] private AudioClip sound_button;
     [SerializeField] private AudioClip sound_upgrade;
 
-    private Vector3 position_last;
-
     private const string POPUPMESSAGE_TEXT_EN = "NOT ENOUGH COINS";
     private const string POPUPMESSAGE_TEXT_RU = "Õ≈ƒŒ—“¿“Œ◊ÕŒ ÃŒÕ≈“";
-
     private string popupMessege_text;
 
     protected void Image_Set(Sprite _idle, Sprite _pointed)
@@ -55,11 +52,9 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
         image.sprite = image_idle;
 
-        image_pointsRefresh = true;
-
         var _sizeInPixels = image.sprite.bounds.size * image.sprite.pixelsPerUnit;
         rectTransform.sizeDelta = new Vector2(_sizeInPixels.x, _sizeInPixels.y);
-        rectTransform.localPosition += new Vector3(_sizeInPixels.x - image.sprite.pivot.x, 0, 0);
+        rectTransform.localPosition = rectTransform_localPosition_init + new Vector3(_sizeInPixels.x - image.sprite.pivot.x, 0, 0);
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
 
@@ -167,18 +162,17 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         if (IsImproved())
         {
             Image_Set(image_current_received, image_current_received);
-            rectTransform.localPosition -= new Vector3(image_current_received.rect.width - image_current_received.pivot.x, 0, 0);
         }
         else
         {
             if (IsBought())
             {
-                Image_Set(image_current_idle_improve, image_current_idle_improve);
+                Image_Set(image_current_idle_improve, image_current_pointed_improve);
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             }
             else
             {
-                Image_Set(image_current_idle_buy, image_current_idle_buy);
+                Image_Set(image_current_idle_buy, image_current_pointed_buy);
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             }
         }
@@ -187,6 +181,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     protected override void Awake()
     {
         base.Awake();
+
+        rectTransform_localPosition_init = rectTransform.localPosition;
 
         image = GetComponent<Image>();
     }
@@ -211,8 +207,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                 image_current_received = image_ru_received;
             break;
         }
-
-        position_last = transform.position;
 
         if (!IsBought())
         {
@@ -245,13 +239,10 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     {
         if (!AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_IsActive)
         {
-            if (transform.position != position_last)
-            {
-                image_pointsRefresh = true;
-                position_last = transform.position;
-            }
+            var _image_min = Image_ScreenPoint_Min(image);
+            var _image_max = Image_ScreenPoint_Max(image);
 
-            if (!Pointed(image_min, image_max))
+            if (!Pointed(_image_min, _image_max))
             {
                 if (image.sprite != image_idle)
                 {
@@ -265,17 +256,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                     image.sprite = image_pointed;
                 }
             }
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (image_pointsRefresh)
-        {
-            image_min = Image_ScreenPoint_Min(image);
-            image_max = Image_ScreenPoint_Max(image);
-
-            image_pointsRefresh = false;
         }
     }
 }

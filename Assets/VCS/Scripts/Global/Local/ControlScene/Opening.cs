@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 public class ControlScene_Opening : MonoBehaviour
 {

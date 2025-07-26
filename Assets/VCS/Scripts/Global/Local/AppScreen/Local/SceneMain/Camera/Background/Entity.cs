@@ -4,19 +4,23 @@ using UnityEngine.Rendering.PostProcessing;
 public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_General_Camera_Parent
 {
     public static AppScreen_Local_SceneMain_Camera_Background_Entity SingleOnScene { get; private set; }
-
+    
     public bool Active { get; set; }
 
     private PostProcessVolume   postProcess_volume;
 
     private ChromaticAberration postProcess_profile_chromaticAberration;
-    private  bool               postProcess_profile_chromaticAberration_intensity_change = false;
+    private  bool               postProcess_profile_chromaticAberration_started = false;
     [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.0001f;
     [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.4f;
-
-    public void ChromaticAberrationEnable(bool _state)
+    public void PostProcess_Profile_ChromaticAberration_Start()
     {
-        postProcess_profile_chromaticAberration_intensity_change = _state;
+        postProcess_profile_chromaticAberration_started = true;
+    }
+    public void PostProcess_Profile_ChromaticAberration_Discard()
+    {
+        postProcess_profile_chromaticAberration_started = false;
+        postProcess_profile_chromaticAberration.intensity.value = 0;
     }
 
     protected override void Awake()
@@ -35,17 +39,11 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
     {
         base.Update();
 
-        if (Active)
+        if (Active
+        && postProcess_profile_chromaticAberration_started)
         {
-            if (postProcess_profile_chromaticAberration_intensity_change)
-            {
-                postProcess_profile_chromaticAberration.intensity.value += postProcess_profile_chromaticAberration_speed;
-                postProcess_profile_chromaticAberration.intensity.value = Mathf.Clamp(postProcess_profile_chromaticAberration.intensity.value, 0, postProcess_profile_chromaticAberration_max);
-            }
-            else
-            {
-                postProcess_profile_chromaticAberration.intensity.value = 0;
-            }
+            postProcess_profile_chromaticAberration.intensity.value += postProcess_profile_chromaticAberration_speed;
+            postProcess_profile_chromaticAberration.intensity.value = Mathf.Clamp(postProcess_profile_chromaticAberration.intensity.value, 0, postProcess_profile_chromaticAberration_max);
         }            
     }
 }

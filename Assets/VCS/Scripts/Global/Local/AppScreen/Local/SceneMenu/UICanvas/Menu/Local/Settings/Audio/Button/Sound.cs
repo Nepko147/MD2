@@ -34,10 +34,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
         base.Awake();
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
         if (ControlPers_DataHandler.SingleOnScene.SettingsData_SoundValue == 0)
         {
             Mute_On(ControlPers_DataHandler.SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE);

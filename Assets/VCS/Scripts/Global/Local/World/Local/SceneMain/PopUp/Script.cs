@@ -75,7 +75,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
         destinationPos.y = transform.position.y + SPEED * 3f;
         transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
 
-        behaviour_CoinRush_time -= Time.fixedDeltaTime;
+        behaviour_CoinRush_time -= Time.deltaTime;
 
         if (behaviour_CoinRush_time <= 0)
         {
@@ -92,10 +92,10 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
         image = GetComponentInChildren<Image>();
     }
     
-    void FixedUpdate()
+    void Update()
     {
         if (Active
-            && display)
+        && display)
         {
             Behaviour();
         }        
