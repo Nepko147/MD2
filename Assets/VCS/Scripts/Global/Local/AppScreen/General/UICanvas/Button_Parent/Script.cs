@@ -103,7 +103,7 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         }
     }
 
-    public void OnClick()
+    public virtual void OnClick()
     {
         if (Pressable())
         {
