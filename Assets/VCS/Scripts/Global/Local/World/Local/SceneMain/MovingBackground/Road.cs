@@ -1,4 +1,5 @@
 using UnityEngine;
+using Utils;
 
 public class World_Local_SceneMain_MovingBackground_Road : World_Local_SceneMain_MovingBackground_Parent
 {

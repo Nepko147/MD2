@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using Utils;
 
 public class World_Local_SceneMain_Cops_Entity : MonoBehaviour
 {

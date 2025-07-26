@@ -21,7 +21,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     }
 
     /// <summary>
-    /// </para> Возвращает экранные координаты правого верхнего угла Rect Transform </para>
+    /// <para> Возвращает экранные координаты правого верхнего угла Rect Transform </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
     public Vector2 RectTransform_ScreenPoint_Max(Vector2 _local_ofs = default(Vector2))
@@ -34,7 +34,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     }
 
     /// <summary>
-    /// </para> Возвращает попадание позиции ввода на экране в указанные координаты </para>
+    /// <para> Возвращает попадание позиции ввода на экране в указанные координаты </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
     protected bool Pointed(Vector2 _min, Vector2 _max)
@@ -59,7 +59,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     #region Image
 
     /// <summary>
-    ///</para> Возвращает экранные координаты левого нижнего угла Image (Raycast Padding) </para>
+    /// <para> Возвращает экранные координаты левого нижнего угла Image (Raycast Padding) </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
     protected Vector2 Image_ScreenPoint_Min(Image _image)
@@ -69,7 +69,7 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     }
 
     /// <summary>
-    /// </para> Возвращает экранные координаты правого верхнего угла Image (Raycast Padding) </para>
+    /// <para> Возвращает экранные координаты правого верхнего угла Image (Raycast Padding) </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
     protected Vector2 Image_ScreenPoint_Max(Image _image)
@@ -81,9 +81,19 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     private static Color image_highlight_color_idle = new Color(0.85f, 0.85f, 0.85f);
     private static Color image_highlight_color_pointed = new Color(1f, 1f, 1f);
     /// <summary>
-    /// </para> Выполнение общего поведения визуального выделения компонента Image </para>
+    /// <para> Выполнение общего поведения подсветки компонента Image при наведении </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
+    protected void Image_Highlight_Behaviour(Image _image)
+    {
+        var _image_min = Image_ScreenPoint_Min(_image);
+        var _image_max = Image_ScreenPoint_Max(_image);
+        Image_Highlight_Behaviour(_image, _image_min, _image_max);
+    }
+    ///<summary>
+    /// <para> Выполнение общего поведения подсветки компонента Image при наведении, с явной передачей координат Image </para>
+    /// <para> Вызывать после Awake() </para>
+    ///</summary>
     protected void Image_Highlight_Behaviour(Image _image, Vector2 _image_min, Vector2 _image_max)
     {
         if (!Pointed(_image_min, _image_max))

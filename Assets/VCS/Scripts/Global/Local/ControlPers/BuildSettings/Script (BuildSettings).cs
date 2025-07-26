@@ -1,6 +1,7 @@
 using UnityEngine;
 using YG;
 using UnityEngine.UI;
+using Utils;
 
 public class ControlPers_BuildSettings : MonoBehaviour
 {

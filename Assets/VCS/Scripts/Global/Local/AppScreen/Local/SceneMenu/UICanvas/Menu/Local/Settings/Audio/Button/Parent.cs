@@ -21,8 +21,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
     }
     
     private Image image;
-    private Vector2 image_min;
-    private Vector2 image_max;
 
     public void ImageRefresh(float _sliderValue)
     {
@@ -58,14 +56,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
         audioSource = GetComponent<AudioSource>();
     }
 
-    protected virtual void Start()
-    {
-        image_min = Image_ScreenPoint_Min(image);
-        image_max = Image_ScreenPoint_Max(image);
-    }
-
     private void Update()
     {
-        Image_Highlight_Behaviour(image, image_min, image_max);
+        Image_Highlight_Behaviour(image);
     }
 }

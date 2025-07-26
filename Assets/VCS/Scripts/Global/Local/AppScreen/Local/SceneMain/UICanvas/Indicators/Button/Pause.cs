@@ -38,7 +38,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause : AppScr
 
     public void OnClick()
     {
-        
         ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_press);
 
         Pressed = true;
@@ -55,5 +54,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause : AppScr
         SingleOnScene = this;
 
         image = GetComponent<Image>();
+    }
+
+    private void Update()
+    {
+        Image_Highlight_Behaviour(image);
     }
 }

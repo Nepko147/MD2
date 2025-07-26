@@ -125,7 +125,7 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         image = GetComponent<Image>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         Image_LanguageRefresh();
     }

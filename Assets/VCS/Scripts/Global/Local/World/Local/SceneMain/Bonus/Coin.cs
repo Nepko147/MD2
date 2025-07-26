@@ -26,7 +26,7 @@ public class World_Local_SceneMain_Bonus_Coin : World_Local_SceneMain_Bonus_Pare
             transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale; 
             
             if (boxCollider.bounds.Intersects(World_Local_SceneMain_Player.SingleOnScene.BoxCollider.bounds)
-                && visible)
+            && visible)
             {
                 Active = false;
 
