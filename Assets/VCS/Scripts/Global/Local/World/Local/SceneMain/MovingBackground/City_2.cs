@@ -5,6 +5,6 @@ public class World_Local_SceneMain_MovingBackground_City_2 : World_Local_SceneMa
     protected override void Awake()
     {
         base.Awake();
-        Speed = 4;
+        Speed = 200;
     }
 }

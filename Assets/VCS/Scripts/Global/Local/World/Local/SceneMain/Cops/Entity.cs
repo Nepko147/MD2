@@ -57,13 +57,13 @@ public class World_Local_SceneMain_Cops_Entity : MonoBehaviour
         move_position_init = transform.position;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (active)
         {
             if (move)
             {
-                transform.position += Vector3.left * World_Local_SceneMain_MovingBackground_Road.SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+                transform.position += Vector3.left * World_Local_SceneMain_MovingBackground_Road.SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
             }
         }
     }

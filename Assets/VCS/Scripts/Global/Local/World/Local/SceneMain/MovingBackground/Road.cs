@@ -6,7 +6,7 @@ public class World_Local_SceneMain_MovingBackground_Road : World_Local_SceneMain
     SpriteRenderer spriteRenderer;
     [SerializeField] Texture2D normalMap;
 
-    public const float SPEED = 10f;
+    public const float SPEED = 500f;
 
     protected override void Awake()
     {

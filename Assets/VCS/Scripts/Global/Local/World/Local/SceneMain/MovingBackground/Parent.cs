@@ -13,11 +13,11 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
         Active = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (Active)
         {
-            transform.position += Vector3.left * Speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+            transform.position += Vector3.left * Speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             //Город занимается СамоВоспроизводством
             if (transform.position.x <= -WIDTH)

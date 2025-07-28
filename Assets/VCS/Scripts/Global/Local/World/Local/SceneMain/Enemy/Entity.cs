@@ -8,7 +8,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] Texture2D normalMap;
 
-    private float speed = 8f;
+    private float speed = 400f;
 
     private AudioSource audioSource;
 
@@ -30,11 +30,11 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
         collider2d = GetComponent<PolygonCollider2D>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {     
         if (Active)
         {
-            transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+            transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             //Проверка на контакт с игроком
             if (!isDamaged

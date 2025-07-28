@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class World_Local_SceneMain_Bonus_CoinRush : World_Local_SceneMain_Bonus_Parent
 {
-    private void FixedUpdate()
+    private void Update()
     {         
         if (Active)
         {
             animation.speed = 1;
-            transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale; 
+            transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime; 
             
             if (boxCollider.bounds.Intersects(World_Local_SceneMain_Player.SingleOnScene.BoxCollider.bounds))
             {
