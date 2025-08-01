@@ -125,6 +125,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     {
         Text_LanguageRefresh();
         UpdateDialogue();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -206,5 +207,10 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
             break;
         }               
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

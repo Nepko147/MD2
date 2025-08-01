@@ -24,13 +24,6 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
     private Image image;
     private Vector2 image_min;
     private Vector2 image_max;
-    [SerializeField] private Sprite image_idle;
-    [SerializeField] private Sprite image_pointed;
-    [SerializeField] private Sprite image_pressed;
-
-    [SerializeField] private Sprite image_ru_idle;
-    [SerializeField] private Sprite image_ru_pointed;
-    [SerializeField] private Sprite image_ru_pressed;
 
     private Sprite image_currennt_idle;
     private Sprite image_currennt_pointed;
@@ -42,23 +35,15 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         image_max = Image_ScreenPoint_Max(image);
     }
 
-    public void Image_LanguageRefresh()
+    public void Image_LanguageRefresh(string _buttonName)
     {
         position_last = transform.position;
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                image_currennt_idle = image_idle;
-                image_currennt_pointed = image_pointed;
-                image_currennt_pressed = image_pressed;
-                break;
 
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                image_currennt_idle = image_ru_idle;
-                image_currennt_pointed = image_ru_pointed;
-                image_currennt_pressed = image_ru_pressed;
-                break;
-        }
+        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.GetSprites(_buttonName, 3);
+        
+        image_currennt_idle = _spriteArray[0];
+        image_currennt_pointed = _spriteArray[1];
+        image_currennt_pressed = _spriteArray[2];
 
         rectTransform.sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
         Image_PointsRefresh();
@@ -123,11 +108,6 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
         base.Awake();
 
         image = GetComponent<Image>();
-    }
-
-    protected virtual void Start()
-    {
-        Image_LanguageRefresh();
     }
 
     private void Update()

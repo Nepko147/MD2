@@ -4,11 +4,9 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_But
 {
     public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_En SingleOnScene { get; private set; }
 
-    protected override void Awake()
+    private void ImageRefresh()
     {
-        base.Awake();
-
-        SingleOnScene = this;
+        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_SWITCH_EN);
     }
 
     public override void OnClick()
@@ -17,5 +15,23 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_But
         ControlPers_LanguageHandler.SingleOnScene.SetGameLanguage(ControlPers_LanguageHandler.GameLanguage.english);
 
         base.OnClick();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SingleOnScene = this;
+    }
+        
+    private void Start()
+    {
+        ImageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
     }
 }

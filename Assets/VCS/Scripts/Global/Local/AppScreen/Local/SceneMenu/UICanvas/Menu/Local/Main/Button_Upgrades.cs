@@ -5,10 +5,26 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades 
 {
     public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades SingleOnScene { get; private set; }
 
+    private void ImageRefresh()
+    {       
+        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_UPGRADES);
+    }
+
     protected override void Awake()
     {
         base.Awake();
 
         SingleOnScene = this;
+    }
+
+    private void Start()
+    {        
+        ImageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
     }
 }

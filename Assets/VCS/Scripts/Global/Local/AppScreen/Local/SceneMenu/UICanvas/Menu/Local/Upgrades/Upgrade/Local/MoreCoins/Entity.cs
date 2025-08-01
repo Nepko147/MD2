@@ -32,5 +32,11 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
     private void Start()
     {
         Text_LanguageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

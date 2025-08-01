@@ -20,18 +20,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     protected Sprite image_idle;
     protected Sprite image_pointed;
 
-    [SerializeField] protected Sprite image_idle_buy;
-    [SerializeField] protected Sprite image_idle_improve;
-    [SerializeField] protected Sprite image_pointed_buy;
-    [SerializeField] protected Sprite image_pointed_improve;
-    [SerializeField] protected Sprite image_received;
-
-    [SerializeField] protected Sprite image_ru_idle_buy;
-    [SerializeField] protected Sprite image_ru_idle_improve;
-    [SerializeField] protected Sprite image_ru_pointed_buy;
-    [SerializeField] protected Sprite image_ru_pointed_improve;
-    [SerializeField] protected Sprite image_ru_received;
-
     protected Sprite image_current_idle_buy;
     protected Sprite image_current_idle_improve;
     protected Sprite image_current_pointed_buy;
@@ -138,27 +126,16 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         }
     }
     
-    public void Image_LanguageRefresh()
+    public void Image_LanguageRefresh(string _buttonName)
     {
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                image_current_idle_buy = image_idle_buy;
-                image_current_idle_improve = image_idle_improve;
-                image_current_pointed_buy = image_pointed_buy;
-                image_current_pointed_improve = image_pointed_improve;
-                image_current_received = image_received;
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                image_current_idle_buy = image_ru_idle_buy;
-                image_current_idle_improve = image_ru_idle_improve;
-                image_current_pointed_buy = image_ru_pointed_buy;
-                image_current_pointed_improve = image_ru_pointed_improve;
-                image_current_received = image_ru_received;
-            break;
-        }
+        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.GetSprites(_buttonName, 5);
         
+        image_current_idle_buy = _spriteArray[0];
+        image_current_idle_improve = _spriteArray[1];
+        image_current_pointed_buy = _spriteArray[2];
+        image_current_pointed_improve = _spriteArray[3];
+        image_current_received = _spriteArray[4];
+                
         if (IsImproved())
         {
             Image_Set(image_current_received, image_current_received);
@@ -188,33 +165,10 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     }
 
     protected virtual void Start()
-    {
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                image_current_idle_buy = image_idle_buy;
-                image_current_idle_improve = image_idle_improve;
-                image_current_pointed_buy = image_pointed_buy;
-                image_current_pointed_improve = image_pointed_improve;
-                image_current_received = image_received;
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                image_current_idle_buy = image_ru_idle_buy;
-                image_current_idle_improve = image_ru_idle_improve;
-                image_current_pointed_buy = image_ru_pointed_buy;
-                image_current_pointed_improve = image_ru_pointed_improve;
-                image_current_received = image_ru_received;
-            break;
-        }
-
+    {     
         if (!IsBought())
         {
             Price_Spawn();
-
-            Image_Set(image_current_idle_buy, image_current_pointed_buy);
-
-            price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             price_instance.Coins_Set(price_coins_buy);
         }
         else
@@ -222,15 +176,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
             if (!IsImproved())
             {
                 Price_Spawn();
-
-                Image_Set(image_current_idle_improve, image_current_pointed_improve);
-
-                price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                 price_instance.Coins_Set(price_coins_improve);
-            }
-            else
-            {
-                Image_Set(image_current_received, image_current_received);
             }
         }
     }

@@ -4,10 +4,26 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit : Ap
 {
     public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit SingleOnScene { get; private set; }
 
+    private void ImageRefresh()
+    {        
+        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_QUIT);
+    }
+
     protected override void Awake()
     {
         base.Awake();
 
         SingleOnScene = this;
+    }
+
+    private void Start()
+    {
+        ImageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
     }
 }
