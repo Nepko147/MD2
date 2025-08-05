@@ -75,11 +75,20 @@ public class ControlScene_Main : MonoBehaviour
         
         private void Stage_Pause_Event_On_FromRoad()
         {
+            World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
+            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
         }
         private void Stage_Pause_Event_Off_ToRoad()
         {
+            World_General_Sky.SingleOnScene.Active = true;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
+            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+            
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = true;
+            }
 
             stage_road = true;
         }
@@ -124,11 +133,6 @@ public class ControlScene_Main : MonoBehaviour
         {
             World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_General = _state;
             World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_General = _state;
-            AppScreen_General_Camera_Entity.SingleOnScene.Active = _state;
-            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
-            AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
-            AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
-            AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Active = _state;
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
             {
@@ -145,26 +149,32 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = _state;
             }
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
-            {
-                _item.Active = _state;
-            }
-
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_PopUp>(FindObjectsSortMode.None))
             {
                 _item.Active = _state;
             }
+
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = _state;
+            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
+            AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
+            AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Active = _state;
         }
 
         Stage_Pause_Event_On += () =>
         {
-            _GeneralActiveState(false);
-
             audio_source.PlayOneShot(audio_sound_pause);
 
+            _GeneralActiveState(false);
+
             ControlPers_AudioMixer.SingleOnScene.Pause();
-            World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Player.SingleOnScene.Active = false;
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = false;
+            }
+
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
             AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = false;
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = false;
@@ -182,7 +192,6 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
-            World_General_Sky.SingleOnScene.Active = true;
             World_Local_SceneMain_Player.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
             AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
@@ -200,14 +209,21 @@ public class ControlScene_Main : MonoBehaviour
 
         Stage_GameOver_Event_On += () =>
         {
-            _GeneralActiveState(false);
-
             audio_source.PlayOneShot(audio_sound_crash);
+
+            _GeneralActiveState(false);
 
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
+            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = false;
+            }
+
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
@@ -232,6 +248,12 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_BonusSpawner.SingleOnScene.BonusSpawn_SpawnPoint_Line_4 = spawnPoint_line_4;
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Load();
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
+
+        foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+        {
+            _item.Active = true;
+        }
+
         AppScreen_General_Camera_Entity.SingleOnScene.Slope = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
@@ -240,11 +262,6 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
-
-        foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
-        {
-            _item.Active = true;
-        }
     }
 
     private void Update()
@@ -339,6 +356,7 @@ public class ControlScene_Main : MonoBehaviour
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
                                     stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer = World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Start();
+                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = true;
 
                                     stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.braking;
                                 }
@@ -378,15 +396,18 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToDrift;
 
                                     World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.drift;
+                                    World_General_Sky.SingleOnScene.Active = false;
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
+                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
                                     AppScreen_General_Camera_Entity.SingleOnScene.Move_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
-
                                     AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
 
                                     foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
                                         _item.Active = false;
+                                        _item.Position_Reset();
                                     }
 
                                     stage_road = false;

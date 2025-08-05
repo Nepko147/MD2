@@ -5,9 +5,6 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
 {
     public static AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity SingleOnScene { get; private set; }
 
-    public AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
-    public AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
-
     private bool active = true;
     public bool Active 
     {
@@ -24,29 +21,30 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
                 Visual_Outer.Visible = false;
                 Visual_Inner.Visible = false;
 
-                Inner_Direction = 0;
-
                 pressed = false;
             }
         } 
     }
 
-    private bool pressed = false;
+    public bool pressed = false;
 
     private Vector3 screenPosition = new Vector3(0, 0, 1);
 
-    [SerializeField] private float inner_position_magnitude_edge = 0.15f;
-    [SerializeField] private float inner_position_offset_max = 0.325f;
+    public AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Outer Visual_Outer { private get; set; }
 
-    public float Inner_Direction { get; private set; }
-
+    public AppScreen_Local_SceneMain_UICanvas_VirtualStick_Visual_Inner Visual_Inner { private get; set; }
+    [SerializeField] private float visual_inner_position_offset_max = 0.325f;
+    public bool Visual_Inner_Magnitude_Active { get; private set; }
+    [SerializeField] private float visual_inner_magnitude_active_edge = 0.15f;
+    public float Visual_Inner_Direction { get; private set; }
+    
     protected override void Awake()
     {
         base.Awake();
 
         SingleOnScene = this;
 
-        Inner_Direction = 0;
+        Visual_Inner_Direction = 0;
     }
 
     private void Update()
@@ -62,26 +60,26 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
 
                 if (!pressed)
                 {
+                    rectTransform.position = _worldPosition;
+
                     Visual_Outer.Visible = true;
                     Visual_Inner.Visible = true;
-
-                    rectTransform.position = _worldPosition;
 
                     pressed = true;
                 }
                 else
                 {
-                    var _inner_position_offset = _worldPosition - rectTransform.position;
-                    var _inner_position_offset_clamp = Vector3.ClampMagnitude(_inner_position_offset, inner_position_offset_max);
-                    Visual_Inner.RectTransform_Position_Set = rectTransform.position + _inner_position_offset_clamp;
+                    var _visual_inner_position_offset = Vector3.ClampMagnitude(_worldPosition - rectTransform.position, visual_inner_position_offset_max);
+                    Visual_Inner.RectTransform_Position_Set = rectTransform.position + _visual_inner_position_offset;
 
-                    if (_inner_position_offset_clamp.magnitude > inner_position_magnitude_edge)
+                    if (_visual_inner_position_offset.magnitude > visual_inner_magnitude_active_edge)
                     {
-                        Inner_Direction = AngleHandler.VectorToAngle(_inner_position_offset_clamp);
+                        Visual_Inner_Magnitude_Active = true;
+                        Visual_Inner_Direction = AngleHandler.Vector_ToAngle(_visual_inner_position_offset);
                     }
                     else
                     {
-                        Inner_Direction = 0;
+                        Visual_Inner_Magnitude_Active = false;
                     }
                 }
             }
@@ -91,8 +89,7 @@ public class AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity : AppScreen_
                 {
                     Visual_Outer.Visible = false;
                     Visual_Inner.Visible = false;
-
-                    Inner_Direction = 0;
+                    Visual_Inner_Magnitude_Active = false;
 
                     pressed = false;
                 }

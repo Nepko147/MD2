@@ -1,4 +1,4 @@
-﻿Shader "Custom/Post Process/Camera Distortion"
+﻿Shader "Custom/Camera Distortion"
 {
     Properties
     {

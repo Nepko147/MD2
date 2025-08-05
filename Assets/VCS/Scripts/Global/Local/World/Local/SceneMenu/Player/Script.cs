@@ -9,6 +9,6 @@ public class World_Local_SceneMenu_Player : MonoBehaviour
     private void Awake()
     {
         player_spriteRenderer = GetComponent<SpriteRenderer>();
-        player_spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, player_normalMap_stright);
+        player_spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, player_normalMap_stright);
     }
 }

@@ -1,4 +1,4 @@
-Shader "Custom/Post Process/Screen Filter"
+Shader "Custom/Screen Filter"
 {
     Properties
     {
