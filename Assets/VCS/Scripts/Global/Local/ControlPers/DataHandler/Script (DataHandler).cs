@@ -29,19 +29,12 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private struct ProgressData
     {
-        public const string ORIGINNODE = "Progress";
-
-        public struct Coins
-        {
-            public const string NODE = "Coins";
-            public const string PATH = ORIGINNODE + "/" + NODE;
-            public const int DEFAULTVALUE = 0;
-            public static int value = DEFAULTVALUE;
-        }
+        public const string ORIGINNODE = "Progress";        
 
         public struct Upgrades
         {
             public const string NODE = "Upgrades";
+            public const string PATH = ORIGINNODE + "/" + NODE;
 
             public struct MoreCoins
             {
@@ -75,6 +68,14 @@ public class ControlPers_DataHandler : MonoBehaviour
                 public static ProgressData_Upgrades_State value = DEFAULTVALUE;
             }
         }
+
+        public struct Coins
+        {
+            public const string NODE = "Coins";
+            public const string PATH = ORIGINNODE + "/" + NODE;
+            public const int DEFAULTVALUE = 0;
+            public static int value = DEFAULTVALUE;
+        }
     }
 
     public enum ProgressData_Upgrades_State
@@ -88,6 +89,60 @@ public class ControlPers_DataHandler : MonoBehaviour
     private const string PROGRESSDATA_FILE_NAME = "Progress.xml";
     private string progressData_file_path;
 
+    private void ProgressData_File_Check()
+    {
+        var _originNode = progressData_file.SelectSingleNode(ProgressData.ORIGINNODE); //Объявляем исходный раздел
+
+        if (progressData_file.SelectSingleNode(ProgressData.ORIGINNODE) == null) //Проверяем наличие исходного раздела
+        {
+            _originNode = progressData_file.CreateElement(ProgressData.ORIGINNODE); //Создаем исходный раздел для XML документа
+            progressData_file.AppendChild(_originNode); //Записываем исходный раздел в XML документ
+        }
+
+        var _node_upgrades = progressData_file.SelectSingleNode(ProgressData.Upgrades.PATH); //Берём раздел "Upgrades"
+
+        if (_node_upgrades == null) //Проверяем наличие раздела Upgrades в документе
+        {
+            _node_upgrades = progressData_file.CreateElement(ProgressData.Upgrades.NODE); //Создаем раздел Upgrades для XML документа
+            _originNode.AppendChild(_node_upgrades); //Записываем раздел Upgrades в исходный раздел
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH) == null) //Проверяем наличие узла MoreCoins в документе
+        {
+            var _node_moreCoins = progressData_file.CreateElement(ProgressData.Upgrades.MoreCoins.NODE); //Создаем раздел MoreCoins для XML документа
+            _node_moreCoins.InnerText = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString(); //Записываем значение в раздел MoreCoins
+            _node_upgrades.AppendChild(_node_moreCoins); //Записываем раздел MoreCoins в раздел Upgrades                    
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreBonuses.PATH) == null) //Проверяем наличие узла MoreBonuses в документе
+        {
+            var _node_moreBonuses = progressData_file.CreateElement(ProgressData.Upgrades.MoreBonuses.NODE); //Создаем раздел MoreBonuses для XML документа
+            _node_moreBonuses.InnerText = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString(); //Записываем значение в раздел MoreBonuses
+            _node_upgrades.AppendChild(_node_moreBonuses); //Записываем раздел MoreBonuses в раздел Upgrades                    
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH) == null) //Проверяем наличие узла CoinMagnet в документе
+        {
+            var _node_coinMagnet = progressData_file.CreateElement(ProgressData.Upgrades.CoinMagnet.NODE); //Создаем раздел CoinMagnet для XML документа
+            _node_coinMagnet.InnerText = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString(); //Записываем значение в раздел CoinMagnet
+            _node_upgrades.AppendChild(_node_coinMagnet); //Записываем раздел CoinMagnet в раздел Upgrades
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH) == null) //Проверяем наличие узла Revive в документе
+        {
+            var _node_revive = progressData_file.CreateElement(ProgressData.Upgrades.Revive.NODE); //Создаем раздел Revive для XML документа
+            _node_revive.InnerText = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString(); //Записываем значение в раздел Revive
+            _node_upgrades.AppendChild(_node_revive); //Записываем раздел Revive в раздел Upgrades
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Coins.PATH) == null) //Проверяем наличие узла Coins в документе
+        {
+            var _node_coins = progressData_file.CreateElement(ProgressData.Coins.NODE); //Создаем раздел Coins для XML документа
+            _node_coins.InnerText = ProgressData.Coins.value.ToString(); //Записываем значение в раздел Coins
+            _originNode.AppendChild(_node_coins); //Записываем раздел Coins в исходный раздел
+        }
+    }
+
     public void ProgressData_Load()
     {
         switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
@@ -95,56 +150,29 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.CurrentPlatformType.windows:
                 progressData_file = new XmlDocument();
                 progressData_file_path = directory_path + PROGRESSDATA_FILE_NAME;
-
-                if (!File.Exists(progressData_file_path))
+                
+                try //Прробуем загрузить файл
                 {
-                    var _originNode = progressData_file.CreateElement(ProgressData.ORIGINNODE); //Создаем исходный раздел для XML документа
-                    progressData_file.AppendChild(_originNode); //Записываем исходный раздел в XML документ
-
-                    var _node_coins = progressData_file.CreateElement(ProgressData.Coins.NODE); //Создаем раздел Coins для XML документа
-                    _node_coins.InnerText = ProgressData.Coins.value.ToString(); //Записываем значение в раздел Coins
-                    _originNode.AppendChild(_node_coins); //Записываем раздел Coins в исходный раздел
-
-                    var _node_upgrades = progressData_file.CreateElement(ProgressData.Upgrades.NODE); //Создаем раздел Upgrades для XML документа
-                    _originNode.AppendChild(_node_upgrades); //Записываем раздел Upgrades в исходный раздел
-
-                    var _node_moreCoins = progressData_file.CreateElement(ProgressData.Upgrades.MoreCoins.NODE); //Создаем раздел MoreCoins для XML документа
-                    _node_moreCoins.InnerText = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString(); //Записываем значение в раздел MoreCoins
-                    _node_upgrades.AppendChild(_node_moreCoins); //Записываем раздел MoreCoins в раздел Upgrades
-
-                    var _node_moreBonuses = progressData_file.CreateElement(ProgressData.Upgrades.MoreBonuses.NODE); //Создаем раздел MoreBonuses для XML документа
-                    _node_moreBonuses.InnerText = ProgressData.Upgrades.MoreBonuses.DEFAULTVALUE.ToString(); //Записываем значение в раздел MoreBonuses
-                    _node_upgrades.AppendChild(_node_moreBonuses); //Записываем раздел MoreBonuses в раздел Upgrades
-
-                    var _node_coinMagnet = progressData_file.CreateElement(ProgressData.Upgrades.CoinMagnet.NODE); //Создаем раздел CoinMagnet для XML документа
-                    _node_coinMagnet.InnerText = ProgressData.Upgrades.CoinMagnet.DEFAULTVALUE.ToString(); //Записываем значение в раздел CoinMagnet
-                    _node_upgrades.AppendChild(_node_coinMagnet); //Записываем раздел CoinMagnet в раздел Upgrades
-
-                    var _node_revive = progressData_file.CreateElement(ProgressData.Upgrades.Revive.NODE); //Создаем раздел Revive для XML документа
-                    _node_revive.InnerText = ProgressData.Upgrades.Revive.DEFAULTVALUE.ToString(); //Записываем значение в раздел Revive
-                    _node_upgrades.AppendChild(_node_revive); //Записываем раздел Revive в раздел Upgrades
-
-                    progressData_file.Save(progressData_file_path); //Создаем файл XML документа
+                    progressData_file.Load(progressData_file_path); //Если файл в порядке, то всё загрузится
                 }
-                else
-                {
-                    progressData_file.Load(progressData_file_path);
+                catch { } //Если нет, то будет нулевой прогресс. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
 
-                    var _coins_text = progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText;
-                    ProgressData.Coins.value = int.Parse(_coins_text);
+                ProgressData_File_Check();                
 
-                    var _upgrades_moreCoins_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH).InnerText;
-                    Enum.TryParse(_upgrades_moreCoins_text, out ProgressData.Upgrades.MoreCoins.value);
+                var _upgrades_moreCoins_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH).InnerText; //Считываем данные из файла
+                Enum.TryParse(_upgrades_moreCoins_text, out ProgressData.Upgrades.MoreCoins.value); //Грузиим состояние апгрейда "Больше монет"
 
-                    var _upgrades_moreBonuses_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreBonuses.PATH).InnerText;
-                    Enum.TryParse(_upgrades_moreBonuses_text, out ProgressData.Upgrades.MoreBonuses.value);
+                var _upgrades_moreBonuses_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreBonuses.PATH).InnerText; //Считываем данные из файла
+                Enum.TryParse(_upgrades_moreBonuses_text, out ProgressData.Upgrades.MoreBonuses.value); //Грузиим состояние апгрейда "Больше бонусов"
 
-                    var _upgrades_coinMagnet_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText;
-                    Enum.TryParse(_upgrades_coinMagnet_text, out ProgressData.Upgrades.CoinMagnet.value);
+                var _upgrades_coinMagnet_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText; //Считываем данные из файла
+                Enum.TryParse(_upgrades_coinMagnet_text, out ProgressData.Upgrades.CoinMagnet.value); //Грузиим состояние апгрейда "Магнит для монет"
 
-                    var _upgrades_revive_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText;
-                    Enum.TryParse(_upgrades_revive_text, out ProgressData.Upgrades.Revive.value);
-                }
+                var _upgrades_revive_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText; //Считываем данные из файла
+                Enum.TryParse(_upgrades_revive_text, out ProgressData.Upgrades.Revive.value); //Грузиим состояние апгрейда "Да не умер он"
+
+                var _coins_text = progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Coins.value = int.Parse(_coins_text); //Грузиим монетки
             break;
 
             case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
@@ -164,6 +192,9 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             case ControlPers_BuildSettings.CurrentPlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
+
+                progressData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
+                ProgressData_File_Check(); //Перезаполняем структуру файла
 
                 progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText = ProgressData.Coins.value.ToString(); //Перезаписываем значение в разделе Coins
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH).InnerText = ProgressData.Upgrades.MoreCoins.value.ToString(); //Перезаписываем значение в разделе Upgrades/MoreCoins
@@ -306,6 +337,7 @@ public class ControlPers_DataHandler : MonoBehaviour
         public struct Audio
         {
             public const string NODE = "Audio";
+            public const string PATH = ORIGINNODE + "/" + NODE;
 
             public struct Sound
             {
@@ -337,6 +369,46 @@ public class ControlPers_DataHandler : MonoBehaviour
     private const string SETTINGSDATA_FILE_NAME = "Settings.xml";
     private string settingsData_file_path;
 
+    private void SettingsData_File_Check()
+    {
+        var _originNode = settingsData_file.SelectSingleNode(SettingsData.ORIGINNODE); // Считываем исходный радел; //Объявляем исходный раздел
+
+        if (_originNode == null) //Проверяем наличие исходного раздела
+        {
+            _originNode = settingsData_file.CreateElement(SettingsData.ORIGINNODE); //Создаем исходный раздел для XML документа
+            settingsData_file.AppendChild(_originNode); //Записываем исходный раздел в XML документ
+        }
+
+        var _node_audio = settingsData_file.SelectSingleNode(SettingsData.Audio.PATH); //Берём раздел "Audio"
+
+        if (_node_audio == null) //Проверяем наличие раздела Audio
+        {
+            _node_audio = settingsData_file.CreateElement(SettingsData.Audio.NODE); //Создаем раздел Audio для XML документа
+            _originNode.AppendChild(_node_audio); //Записываем раздел Audio в исходный раздел
+        }
+
+        if (settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH) == null) //Проверяем наличие узла Sound в документе                 
+        {
+            var _node_sound = settingsData_file.CreateElement(SettingsData.Audio.Sound.NODE); //Создаем раздел Sound для XML документа
+            _node_sound.InnerText = SettingsData.Audio.Sound.DEFAULTVALUE.ToString(); //Записываем значение в раздел Sound
+            _node_audio.AppendChild(_node_sound); //Записываем в него раздел Sound                    
+        }
+
+        if (settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH) == null) //Проверяем наличие узла Music в документе                 
+        {
+            var _node_musicValue = settingsData_file.CreateElement(SettingsData.Audio.Music.NODE); //Создаем раздел Music для XML документа
+            _node_musicValue.InnerText = SettingsData.Audio.Music.DEFAULTVALUE.ToString(); //Записываем значение в раздел Music
+            _node_audio.AppendChild(_node_musicValue); //Записываем в него раздел Music                    
+        }
+
+        if (settingsData_file.SelectSingleNode(SettingsData.Language.PATH) == null) //Проверяем наличие узла Language в документе 
+        {
+            var _node_language = settingsData_file.CreateElement(SettingsData.Language.NODE); //Создаем раздел Language для XML документа
+            _node_language.InnerText = SettingsData.Language.DEFAULTVALUE.ToString(); //Записываем значение в раздел Language
+            _originNode.AppendChild(_node_language); //Записываем в него раздел Language                    
+        }
+    }
+
     public const float SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE = SettingsData.Audio.Sound.DEFAULTVALUE;
     public const float SETTINGSDATA_AUDIO_MUSIC_DEFAULTVALUE = SettingsData.Audio.Music.DEFAULTVALUE;
     public const ControlPers_LanguageHandler.GameLanguage SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
@@ -349,41 +421,22 @@ public class ControlPers_DataHandler : MonoBehaviour
                 settingsData_file = new XmlDocument();
                 settingsData_file_path = directory_path + SETTINGSDATA_FILE_NAME;
 
-                if (!File.Exists(settingsData_file_path))
+                try //Прробуем загрузить файл
                 {
-                    var _originNode = settingsData_file.CreateElement(SettingsData.ORIGINNODE); //Создаем раздел исходный раздел для XML документа
-                    settingsData_file.AppendChild(_originNode); //Записываем раздел исходный раздел в XML документ
-
-                    var _node_audio = settingsData_file.CreateElement(SettingsData.Audio.NODE); //Создаем раздел Audio для XML документа
-                    _originNode.AppendChild(_node_audio); //Записываем раздел Audio в исходный раздел
-
-                    var _node_sound = settingsData_file.CreateElement(SettingsData.Audio.Sound.NODE); //Создаем раздел Sound для XML документа
-                    _node_sound.InnerText = SettingsData.Audio.Sound.DEFAULTVALUE.ToString(); //Записываем значение в раздел Sound
-                    _node_audio.AppendChild(_node_sound); //Записываем раздел Sound в раздел Audio
-
-                    var _node_musicValue = settingsData_file.CreateElement(SettingsData.Audio.Music.NODE); //Создаем раздел MusicValue для XML документа
-                    _node_musicValue.InnerText = SettingsData.Audio.Music.DEFAULTVALUE.ToString(); //Записываем значение в раздел Music
-                    _node_audio.AppendChild(_node_musicValue); //Записываем раздел Music в раздел Audio
-
-                    var _node_language = settingsData_file.CreateElement(SettingsData.Language.NODE); //Создаем раздел Language для XML документа
-                    _node_language.InnerText = SettingsData.Language.DEFAULTVALUE.ToString(); //Записываем значение в раздел Language
-                    _originNode.AppendChild(_node_language); //Записываем раздел Language в исходный раздел
-
-                    settingsData_file.Save(settingsData_file_path); //Создаем файл XML документа
+                    settingsData_file.Load(settingsData_file_path); //Если файл в порядке, то всё загрузится
                 }
-                else
-                {
-                    settingsData_file.Load(settingsData_file_path);
+                catch { } //Если нет, то будут настройки по умолчанию. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
 
-                    var _audio_soundValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText;
-                    SettingsData.Audio.Sound.value = float.Parse(_audio_soundValue_text);
+                SettingsData_File_Check(); //Проверяем структуру файла                
 
-                    var _audio_musicValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText;
-                    SettingsData.Audio.Music.value = float.Parse(_audio_musicValue_text);
+                var _audio_soundValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText; //Считываем данные из файла
+                SettingsData.Audio.Sound.value = float.Parse(_audio_soundValue_text); //Грузим громкость звуков
 
-                    var _languageValue_text = settingsData_file.SelectSingleNode(SettingsData.Language.PATH).InnerText;
-                    Enum.TryParse(_languageValue_text, out SettingsData.Language.value);
-                }
+                var _audio_musicValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText; //Считываем данные из файла
+                SettingsData.Audio.Music.value = float.Parse(_audio_musicValue_text); //Грузим громкость музыки
+
+                var _languageValue_text = settingsData_file.SelectSingleNode(SettingsData.Language.PATH).InnerText; //Считываем данные из файла
+                Enum.TryParse(_languageValue_text, out SettingsData.Language.value); //Грузим язык
             break;
 
             case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
@@ -401,6 +454,9 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             case ControlPers_BuildSettings.CurrentPlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
+                                
+                settingsData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
+                SettingsData_File_Check(); //Перезаполняем структуру файла
 
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText = SettingsData.Audio.Sound.value.ToString(); //Перезаписываем значение в разделе Audio/Sound
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText = SettingsData.Audio.Music.value.ToString(); //Перезаписываем значение в разделе Audio/Music
