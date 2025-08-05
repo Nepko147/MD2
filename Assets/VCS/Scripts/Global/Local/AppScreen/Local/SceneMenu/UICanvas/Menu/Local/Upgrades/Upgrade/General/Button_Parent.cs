@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Button_Parent : AppScreen_General_UICanvas_Parent
 {
     private Vector3 rectTransform_localPosition_init;
-
+    
     [SerializeField] private AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Price price_prefab;
     private AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Price price_instance;
     protected int price_coins_buy;

@@ -4,7 +4,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
 {
     public bool Active { get; set; }
 
-    protected float speed = 400f;
+    protected float speed = 500f;
 
     [SerializeField] protected World_Local_SceneMain_PopUp popUp;
 

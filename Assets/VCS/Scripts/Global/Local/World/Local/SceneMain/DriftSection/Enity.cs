@@ -15,12 +15,12 @@ public class World_Local_SceneMain_DriftSection_Enity : MonoBehaviour
         Active = true;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (Active
         && Move)
         {
-            transform.position += Vector3.left * World_Local_SceneMain_MovingBackground_Road.SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+            transform.position += Vector3.left * World_Local_SceneMain_MovingBackground_Road.SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
         }
     }
 }
