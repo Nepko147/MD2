@@ -1,4 +1,4 @@
-﻿Shader "Custom/Sprites/Sky"
+﻿Shader "Custom/Sky"
 {
     Properties
     {

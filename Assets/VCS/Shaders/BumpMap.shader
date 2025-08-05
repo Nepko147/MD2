@@ -1,4 +1,4 @@
-﻿Shader "Custom/Sprites/2D Bump"
+﻿Shader "Custom/BumpMap"
 {
     Properties
     {        

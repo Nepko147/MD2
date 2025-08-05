@@ -4,81 +4,86 @@ namespace Utils
 {
     public class AngleHandler
     {
-        //»сходное направление от которого считаютс€ углы (угол равный ноль градусов)
-        static Vector2 initialVector = new Vector2(1f, 0);
+        //ƒанный класс работает с диапазоном значений углов от -180f до 180f
 
-        //ѕреобразование вектора в угол
-        public static float VectorToAngle(Vector2 _vector)
+        private static readonly Vector2 vector_origin = new Vector2(1f, 0); //»сходное направление соответствующее углу в ноль градусов
+
+        ///<summary>
+        ///ѕреобразование вектора в угол.
+        ///</summary>
+        public static float Vector_ToAngle(Vector2 _vector)
         {
             if (_vector.magnitude != 0)
             {
-                var _scalar = initialVector.x * _vector.x + initialVector.y * _vector.y;
-                var _angle_cos = _scalar / (initialVector.magnitude * _vector.magnitude);
+                var _scalar = vector_origin.x * _vector.x + vector_origin.y * _vector.y;
+                var _angle_cos = _scalar / (vector_origin.magnitude * _vector.magnitude);
                 var _angle_rad = Mathf.Acos(_angle_cos);
-                var _angle = _angle_rad * Mathf.Rad2Deg;
-                return _angle * Mathf.Sign(_vector.y);
+                var _angle = _angle_rad * Mathf.Rad2Deg * Mathf.Sign(_vector.y);
+                
+                return (Angle_ToSupportedRange(_angle));
             }
             else
             {
-                return 0;
+                return (0);
             }
         }
 
-        //ѕреобразование угла в вектор
-        public static Vector2 AngleToVector(float _angle, float _length)
+        ///<summary>
+        ///ѕреобразование угла в диапазон от -180f до 180f.
+        ///</summary>
+        public static float Angle_ToSupportedRange(float _angle) 
+        {
+            var _offset = _angle + 180f;
+
+            return (_offset - (Mathf.Floor(_offset / 360f ) * 360f) - 180f);
+        }
+
+        ///<summary>
+        ///ѕреобразование угла в вектор.
+        ///</summary>
+        public static Vector2 Angle_ToVector(float _angle, float _length)
         {
             var _angle_rad = _angle * Mathf.Deg2Rad;
-            var _x = initialVector.x * Mathf.Cos(_angle_rad) - initialVector.y * Mathf.Sin(_angle_rad);
-            var _y = initialVector.x * Mathf.Sin(_angle_rad) + initialVector.y * Mathf.Cos(_angle_rad);
-            var _vector = new Vector2(_x, _y) * _length;
-            return _vector;
+            var _x = vector_origin.x * Mathf.Cos(_angle_rad) - vector_origin.y * Mathf.Sin(_angle_rad);
+            var _y = vector_origin.x * Mathf.Sin(_angle_rad) + vector_origin.y * Mathf.Cos(_angle_rad);
+
+            return (new Vector2(_x, _y) * _length);
         }
 
-        //ѕреобразование исходного угла (_srcVal) в другой угол, повернутый в направлении заданного угла (_destVal) на величину
-        //завис€щую от коэффициента плавного поворота (_stepCf), что позвол€ет при каждом вызове функции плавно поворачивать
-        //исходный угол к заданному.
-        //¬озвращаемое значение угла лежит в диапазоне от -180 до 180
-        public static float AngleSmoothStep(float _srcVal, float _destVal, float _stepCf)
+        ///<summary>
+        ///ѕреобразование исходного угла (_src_ang) в другой угол, повернутый в направлении заданного угла (_dest_ang) на величину
+        ///завис€щую от коэффициента плавного поворота (_smoothStepCf), что позвол€ет при каждом вызове функции плавно поворачивать
+        ///исходный угол к заданному.
+        ///</summary>
+        public static float Angle_SmoothStep(float _src_ang, float _dest_ang, float _smoothStepCf)
         {
-            float _smoothVal;
-            var _srcVal_abs = Mathf.Abs(_srcVal);
-            var _destVal_abs = Mathf.Abs(_destVal);
+            _src_ang = Angle_ToSupportedRange(_src_ang);
+            _dest_ang = Angle_ToSupportedRange(_dest_ang);
 
-            if (_srcVal * _destVal < 0
-            && _srcVal_abs + _destVal_abs > 180f)
+            var _src_ang_abs = Mathf.Abs(_src_ang);
+            var _dest_ang_abs = Mathf.Abs(_dest_ang);
+            float _smooth_ang;
+
+            if (_src_ang * _dest_ang < 0
+            && _src_ang_abs + _dest_ang_abs > 180f)
             {
-                var _diff = 360f - _srcVal_abs - _destVal_abs;
-                var _smoothStep = _diff * _stepCf;
-                _smoothVal = _srcVal + _smoothStep * Mathf.Sign(_srcVal);
-
-                if (_smoothVal < -180f)
-                {
-                    _smoothVal = 360f + _smoothVal;
-                }
-                else
-                {
-                    if (_smoothVal > 180f)
-                    {
-                        _smoothVal = -360f + _smoothVal;
-                    }
-                }
+                _smooth_ang = _src_ang + (360f - _src_ang_abs - _dest_ang_abs) * _smoothStepCf * Mathf.Sign(_src_ang);
             }
             else
             {
-                var _diff = _srcVal - _destVal;
-                var _smoothStep = _diff * _stepCf;
-                _smoothVal = _srcVal - _smoothStep;
+                _smooth_ang = _src_ang - (_src_ang - _dest_ang) * _smoothStepCf;
             }
 
-            return _smoothVal;
+            return (Angle_ToSupportedRange(_smooth_ang));
         }
 
-        //ѕолучение случайного направлени€
         /*
-        public static Vector2 GetRandomDirection()
+        ///<summary>
+        ///ѕолучение вектора со случайным направлением и длинной 1.
+        ///</summary>
+        public static Vector2 Vector_RandomDirection()
         {
-            var _dir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            return _dir;
+            return (new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized);
         }
         */
     }

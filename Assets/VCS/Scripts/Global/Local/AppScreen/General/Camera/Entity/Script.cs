@@ -14,28 +14,19 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
     #region Move
 
-    private float move_speed = 0.1f;
+    [SerializeField] private float move_speed = 10f;
     public float Move_YMax { get; set; }
-    private bool Move(Vector2 _position)
+    private void Move(Vector3 _position)
     {
-        var _step = _position - new Vector2(transform.position.x, transform.position.y);
+        var _position_ofs = _position - transform.position;
+        var _position_smooth = transform.position + new Vector3(_position_ofs.x, _position_ofs.y, 0) * move_speed * Time.deltaTime;
 
-        if (transform.position.y + _step.y > Move_YMax)
+        if (_position_smooth.y > Move_YMax)
         {
-            _step.y = 0;
+            _position_smooth.y = Move_YMax;
         }
-
-        transform.position += new Vector3(_step.x, _step.y, 0) * move_speed;
-
-        if (_step.magnitude > move_speed)
-        {
-            return (false);
-        }
-        else
-        {
-            transform.position = new Vector3(_position.x, _position.y, transform.position.z);
-            return (true);
-        }
+        
+        transform.position = new Vector3(_position_smooth.x, _position_smooth.y, transform.position.z);
     }
 
     private enum Move_State
@@ -54,6 +45,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     }
 
     private Vector3 move_destination_position;
+    private float move_destination_magnitude_edge = 0.001f;
     public void Move_Destination(Vector3 _position)
     {
         move_destination_position = _position;
@@ -92,7 +84,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
         slope_rotation_max_right = new Vector3(0, 0, slope_rotation_max_ofs);
     }
 
-    private void Update()
+    private void LateUpdate()
     {        
         if (Active)
         {
@@ -103,7 +95,11 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
                 break;
 
                 case Move_State.destination:
-                    if (Move(move_destination_position))
+                    Move(move_destination_position);
+
+                    var _position_ofs = move_destination_position - transform.position;
+
+                    if (_position_ofs.magnitude <= move_destination_magnitude_edge)
                     {
                         move_state = Move_State.idle;
                     }

@@ -23,7 +23,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
         Active = true;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.material.SetTexture(Constants.MATERIAL_2D_BUMP_U_BUMPMAP, normalMap);
+        spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, normalMap);
 
         audioSource = GetComponent<AudioSource>();
 

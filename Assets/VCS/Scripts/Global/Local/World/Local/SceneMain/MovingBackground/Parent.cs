@@ -8,9 +8,17 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
 
     private const float WIDTH = 12.8f;
 
+    private Vector3 position_init;
+    public void Position_Reset()
+    {
+        transform.position = position_init;
+    }
+
     protected virtual void Awake()
     {
         Active = false;
+
+        position_init = transform.position;
     }
 
     private void Update()
