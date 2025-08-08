@@ -5,7 +5,7 @@ public class AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart : AppScr
 {
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_RESTART);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.restart);
     }
 
     public static AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart SingleOnScene { get; private set; }

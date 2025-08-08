@@ -4,7 +4,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Button_Menu : AppScreen_General_
 {
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_MENU);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.menu);
     }
 
     public static AppScreen_Local_SceneMain_UICanvas_Button_Menu SingleOnScene { get; private set; }

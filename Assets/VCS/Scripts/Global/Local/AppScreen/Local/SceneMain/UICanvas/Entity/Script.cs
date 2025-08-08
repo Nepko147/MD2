@@ -35,34 +35,28 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    const string    TEXT_GAMEOVER_MAIN_EN = "GAME OVER";
-    const string    TEXT_GAMEOVER_MAIN_RU = " ŒÕ≈÷ »√–€";
-    private string  text_gameOver_main_current;
-
-    const string    TEXT_GAMEOVER_DISTANCEREMAIN_PREF_EN = "Distance remain: ";
-    const string    TEXT_GAMEOVER_DISTANCEREMAIN_PREF_RU = "ŒÒÚ‡ÎÓÒ¸ ‰Ó ˆÂÎË: ";
-    private string text_gameover_distanceremain_pref_current;
-
-    const string    TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM";    
-
-    const string    TEXT_PAUSE_EN = "PAUSE";
-    const string    TEXT_PAUSE_RU = "œ¿”«¿";
-    private string  text_pause_current;
-
-    private const string TEXT_X = "x";
+    const string            TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM"; 
+    private const string    TEXT_X = "x";
 
     public void ShowGameOver()
     {
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(true);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(text_gameOver_main_current);
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.Enable(true);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(text_gameover_distanceremain_pref_current + AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF);
+
+        var _text_gameOver = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_gameOver);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(_text_gameOver);
+        
+        var _text_distanceRemain = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_distanceRemain) 
+            + AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number 
+            + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF;
+        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(_text_distanceRemain);
     }
 
     public void SetPause(bool _pause)
     {
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.Enable(_pause);
-        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(text_pause_current);
+        var _text_pause = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_pause);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(_text_pause);
     }
 
     private void Awake()
@@ -74,20 +68,5 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     {
         Ups_Visual = World_Local_SceneMain_Player.SingleOnScene.Up_Count;
         Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
-
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                text_gameOver_main_current = TEXT_GAMEOVER_MAIN_EN;
-                text_gameover_distanceremain_pref_current = TEXT_GAMEOVER_DISTANCEREMAIN_PREF_EN;
-                text_pause_current = TEXT_PAUSE_EN;
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                text_gameOver_main_current = TEXT_GAMEOVER_MAIN_RU;
-                text_gameover_distanceremain_pref_current = TEXT_GAMEOVER_DISTANCEREMAIN_PREF_RU;
-                text_pause_current = TEXT_PAUSE_RU;
-            break;
-        }
     }
 }

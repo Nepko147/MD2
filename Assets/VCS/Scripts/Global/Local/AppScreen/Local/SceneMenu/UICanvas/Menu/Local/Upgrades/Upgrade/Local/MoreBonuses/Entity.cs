@@ -10,16 +10,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
 
     public void Text_LanguageRefresh()
     {
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                text_bonusName.text = "MORE BONUSES";
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                text_bonusName.text = "анкэье анмсянб";
-            break;
-        }
+        text_bonusName.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.upgrade_moreBonuses);
     }
 
     protected override void Awake()

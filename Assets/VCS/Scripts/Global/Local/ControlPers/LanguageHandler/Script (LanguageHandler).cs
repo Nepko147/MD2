@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ControlPers_LanguageHandler : MonoBehaviour
 {
@@ -6,17 +7,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     #region Buttons
 
-    public const string BUTTON_NAME_PLAY = "play";
-    public const string BUTTON_NAME_UPGRADES = "upgrades";
-    public const string BUTTON_NAME_SETTINGS = "settings";
-    public const string BUTTON_NAME_QUIT = "quit";
-    public const string BUTTON_NAME_SWITCH_EN = "switch en";
-    public const string BUTTON_NAME_SWITCH_RU = "switch ru";
-    public const string BUTTON_NAME_UPGRADE = "upgrede";
-    public const string BUTTON_NAME_MENU = "menu";
-    public const string BUTTON_NAME_RESUME = "resume";
-    public const string BUTTON_NAME_REVIVE = "revive";
-    public const string BUTTON_NAME_RESTART = "restart";
+    public enum ButtonName
+    {
+        play,
+        upgrades,
+        settings,
+        quit,
+        switch_en,
+        switch_ru,
+        upgrade,
+        ok,
+        menu,
+        resume,
+        revive,
+        restart
+    }
 
     #region English
 
@@ -46,9 +51,13 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     [SerializeField] private Sprite button_en_idle_buy;
     [SerializeField] private Sprite button_en_idle_improve;
-    [SerializeField] private Sprite button_en_pointed_buy;    
+    [SerializeField] private Sprite button_en_pointed_buy;
     [SerializeField] private Sprite button_en_pointed_improve;
     [SerializeField] private Sprite button_en_received;
+
+    [SerializeField] private Sprite button_en_ok_idle;
+    [SerializeField] private Sprite button_en_ok_pointed;
+    [SerializeField] private Sprite button_en_ok_pressed;
 
     [SerializeField] private Sprite button_en_menu_idle;
     [SerializeField] private Sprite button_en_menu_pointed;
@@ -100,6 +109,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_ru_pointed_improve;
     [SerializeField] private Sprite button_ru_received;
 
+    [SerializeField] private Sprite button_ru_ok_idle;
+    [SerializeField] private Sprite button_ru_ok_pointed;
+    [SerializeField] private Sprite button_ru_ok_pressed;
+
     [SerializeField] private Sprite button_ru_menu_idle;
     [SerializeField] private Sprite button_ru_menu_pointed;
     [SerializeField] private Sprite button_ru_menu_pressed;
@@ -117,6 +130,120 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_ru_restart_pressed;
 
     #endregion
+
+    #endregion
+
+    #region Text
+
+    public enum Text_Key
+    {
+        startText,
+        loadingCloudData,
+        upgrade_moreCoins,
+        upgrade_moreBonuses,
+        upgrade_coinMagnet,
+        upgrade_heDidNotDie,
+        popup_notEnoughCoins,
+        indicators_complete,
+        midscreen_gameOver,
+        midscreen_pause,
+        midscreen_distanceRemain
+    }
+
+    private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "PRESS ANY KEY",
+        [Text_Key.loadingCloudData] = "LOADING CLOUD DATA",
+        [Text_Key.upgrade_moreCoins] = "MORE COINS",
+        [Text_Key.upgrade_moreBonuses] = "MORE BONUSES",
+        [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
+        [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
+        [Text_Key.popup_notEnoughCoins] = "NOT ENOUGH COINS",
+        [Text_Key.indicators_complete] = "KILOMETERS LEFT",
+        [Text_Key.midscreen_gameOver] = "GAME OVER",
+        [Text_Key.midscreen_pause] = "PAUSE",
+        [Text_Key.midscreen_distanceRemain] = "Distance remain: "
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "Õ¿∆Ã»“≈ Àﬁ¡”ﬁ  À¿¬»ÿ”",
+        [Text_Key.loadingCloudData] = "«¿√–”« ¿ ƒ¿ÕÕ€’",
+        [Text_Key.upgrade_moreCoins] = "¡ŒÀ‹ÿ≈ ÃŒÕ≈“",
+        [Text_Key.upgrade_moreBonuses] = "¡ŒÀ‹ÿ≈ ¡ŒÕ”—Œ¬",
+        [Text_Key.upgrade_coinMagnet] = "Ã¿√Õ»“ ƒÀﬂ ÃŒÕ≈“",
+        [Text_Key.upgrade_heDidNotDie] = "ƒ¿ Õ≈ ”Ã≈– ŒÕ",
+        [Text_Key.popup_notEnoughCoins] = "Õ≈ƒŒ—“¿“Œ◊ÕŒ ÃŒÕ≈“",
+        [Text_Key.indicators_complete] = " Ã ƒŒ ÷≈À»",
+        [Text_Key.midscreen_gameOver] = " ŒÕ≈÷ »√–€",
+        [Text_Key.midscreen_pause] = "œ¿”«¿",
+        [Text_Key.midscreen_distanceRemain] = "ŒÒÚ‡ÎÓÒ¸ ‰Ó ˆÂÎË: "
+    };
+
+    public string Text_Get(Text_Key _key)
+    {
+        var _text = string.Empty;
+
+        switch (GameLanguage_Current)
+        {
+            case GameLanguage.english:
+                _text = text_dictionary_en[_key];
+                break;
+            case GameLanguage.russian:
+                _text = text_dictionary_ru[_key];
+                break;
+        }
+
+        return _text;
+    }
+
+    #endregion
+
+    #region Dialogue    
+
+    public List<string[]> Dialogue_Get(string _actor_player, string _actor_npc)
+    {  
+        var _dialogue = new List<string[]>();
+
+        switch (GameLanguage_Current)
+        {
+            case GameLanguage.english:
+                string[][] _dialogue_array_en = new string[][]
+                {
+                    new[] { _actor_player, "Hello." },
+                    new[] { _actor_npc, "Hey, handsome." },
+                    new[] { _actor_npc, "I got an extra box of toothpicks on sale. You can just..." },
+                    new[] { _actor_npc, "Come and take it..." },
+                    new[] { _actor_npc, "Interested?" },
+                    new[] { _actor_player, "Already driving." }
+                };
+
+                foreach (var _string in _dialogue_array_en)
+                {
+                    _dialogue.Add(_string);
+                }               
+            break;
+            case GameLanguage.russian:
+
+                string[][] _dialogue_array_ru = new string[][]
+                {
+                    new[] { _actor_player, "¿ÎÓ." },
+                    new[] { _actor_npc, "œË‚ÂÚ Í‡Ò‡‚˜ËÍ." },
+                    new[] { _actor_npc, "ﬂ ÚÛÚ ÔÓÎÛ˜ËÎ‡ ÎË¯Ì˛˛ ÍÓÓ·ÍÛ ÁÛ·Ó˜ËÒÚÓÍ ÔÓ ‡ÍˆËË. ÃÓÊÂ¯¸ ÔÓÒÚÓ..." },
+                    new[] { _actor_npc, "œËÈÚË Ë ‚ÁˇÚ¸ Â∏..." },
+                    new[] { _actor_npc, "»ÌÚÂÂÒÛÂÚ?" },
+                    new[] { _actor_player, "”ÊÂ Â‰Û." }
+                };
+
+                foreach (var _string in _dialogue_array_ru)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+        }
+
+        return _dialogue;
+    }
 
     #endregion
 
@@ -140,7 +267,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     public delegate void GameLanguage_Update();
     public event GameLanguage_Update GameLanguage_OnUpdate;
 
-    public Sprite[] GetSprites(string _buttonName, int _numberOfSprites)
+    public Sprite[] GetSprites(ButtonName _buttonName, int _numberOfSprites)
     {
         Sprite[] _spriteArray = new Sprite[_numberOfSprites];
 
@@ -150,7 +277,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                 
                 switch (_buttonName)
                 {
-                    case BUTTON_NAME_PLAY:
+                    case ButtonName.play:
 
                         _spriteArray[0] = button_en_play_idle;
                         _spriteArray[1] = button_en_play_pointed;
@@ -158,7 +285,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_UPGRADES:
+                    case ButtonName.upgrades:
 
                         _spriteArray[0] = button_en_upgrades_idle;
                         _spriteArray[1] = button_en_upgrades_pointed;
@@ -166,7 +293,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SETTINGS:
+                    case ButtonName.settings:
 
                         _spriteArray[0] = button_en_settings_idle;
                         _spriteArray[1] = button_en_settings_pointed;
@@ -174,7 +301,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_QUIT:
+                    case ButtonName.quit:
 
                         _spriteArray[0] = button_en_quit_idle;
                         _spriteArray[1] = button_en_quit_pointed;
@@ -182,7 +309,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SWITCH_EN:
+                    case ButtonName.switch_en:
 
                         _spriteArray[0] = button_en_switch_en_idle;
                         _spriteArray[1] = button_en_switch_en_pointed;
@@ -190,7 +317,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SWITCH_RU:
+                    case ButtonName.switch_ru:
 
                         _spriteArray[0] = button_en_switch_ru_idle;
                         _spriteArray[1] = button_en_switch_ru_pointed;
@@ -198,7 +325,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_UPGRADE:
+                    case ButtonName.upgrade:
 
                         _spriteArray[0] = button_en_idle_buy;
                         _spriteArray[1] = button_en_idle_improve;
@@ -208,7 +335,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_MENU:
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_en_ok_idle;
+                        _spriteArray[1] = button_en_ok_pointed;
+                        _spriteArray[2] = button_en_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
 
                         _spriteArray[0] = button_en_menu_idle;
                         _spriteArray[1] = button_en_menu_pointed;
@@ -216,7 +351,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_RESUME:
+                    case ButtonName.resume:
                         
                         _spriteArray[0] = button_en_resume_idle;
                         _spriteArray[1] = button_en_resume_pointed;
@@ -224,7 +359,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         
                     break;
 
-                    case BUTTON_NAME_REVIVE:
+                    case ButtonName.revive:
 
                         _spriteArray[0] = button_en_revive_idle;
                         _spriteArray[1] = button_en_revive_pointed;
@@ -232,7 +367,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_RESTART:
+                    case ButtonName.restart:
 
                         _spriteArray[0] = button_en_restart_idle;
                         _spriteArray[1] = button_en_restart_pointed;
@@ -247,7 +382,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                 switch (_buttonName)
                 {
-                    case BUTTON_NAME_PLAY:
+                    case ButtonName.play:
 
                         _spriteArray[0] = button_ru_play_idle;
                         _spriteArray[1] = button_ru_play_pointed;
@@ -255,7 +390,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_UPGRADES:
+                    case ButtonName.upgrades:
 
                         _spriteArray[0] = button_ru_upgrades_idle;
                         _spriteArray[1] = button_ru_upgrades_pointed;
@@ -263,7 +398,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SETTINGS:
+                    case ButtonName.settings:
 
                         _spriteArray[0] = button_ru_settings_idle;
                         _spriteArray[1] = button_ru_settings_pointed;
@@ -271,7 +406,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_QUIT:
+                    case ButtonName.quit:
 
                         _spriteArray[0] = button_ru_quit_idle;
                         _spriteArray[1] = button_ru_quit_pointed;
@@ -279,7 +414,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SWITCH_EN:
+                    case ButtonName.switch_en:
 
                         _spriteArray[0] = button_ru_switch_en_idle;
                         _spriteArray[1] = button_ru_switch_en_pointed;
@@ -287,7 +422,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_SWITCH_RU:
+                    case ButtonName.switch_ru:
 
                         _spriteArray[0] = button_ru_switch_ru_idle;
                         _spriteArray[1] = button_ru_switch_ru_pointed;
@@ -295,7 +430,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_UPGRADE:
+                    case ButtonName.upgrade:
 
                         _spriteArray[0] = button_ru_idle_buy;
                         _spriteArray[1] = button_ru_idle_improve;
@@ -305,7 +440,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_MENU:
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_ru_ok_idle;
+                        _spriteArray[1] = button_ru_ok_pointed;
+                        _spriteArray[2] = button_ru_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
 
                         _spriteArray[0] = button_ru_menu_idle;
                         _spriteArray[1] = button_ru_menu_pointed;
@@ -313,7 +456,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_RESUME:
+                    case ButtonName.resume:
 
                         _spriteArray[0] = button_ru_resume_idle;
                         _spriteArray[1] = button_ru_resume_pointed;
@@ -321,7 +464,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_REVIVE:
+                    case ButtonName.revive:
 
                         _spriteArray[0] = button_ru_revive_idle;
                         _spriteArray[1] = button_ru_revive_pointed;
@@ -329,7 +472,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
-                    case BUTTON_NAME_RESTART:
+                    case ButtonName.restart:
 
                         _spriteArray[0] = button_ru_restart_idle;
                         _spriteArray[1] = button_ru_restart_pointed;
@@ -343,7 +486,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
         return _spriteArray;
     }
-
+        
     private void Awake()
     {
         SingleOnScene = this;

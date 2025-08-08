@@ -18,7 +18,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
     [SerializeField] private Text text;
     
-    private List<string[]> dialogue;
+    private List<string[]>  dialogue;
     private int             dialogue_string_number = 0;
     private string          dialogue_string_current = "";
 
@@ -37,8 +37,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     private float   onScreenText_charecters_updateTimer;
     private int     onScreenText_characters_number = 0;
 
-    private const string PLAYER = "player";
-    private const string NPC = "npc";
+    public const string PLAYER = "player";
+    public const string NPC = "npc";
 
     public bool Done { get; private set; }
 
@@ -50,33 +50,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     public void Text_LanguageRefresh()
     {
         dialogue.Clear();
-        string[] _messegeString;
-
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                _messegeString = new[] { PLAYER,  "Hello." };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { NPC, "Hi handsome." };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { NPC, "Do you need a toothpick?" };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { PLAYER, "Sure..." };
-                dialogue.Add(_messegeString);
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                _messegeString = new[] { PLAYER, "Ало." };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { NPC, "Привет красавчик." };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { NPC, "Зубочистка нужна?" };
-                dialogue.Add(_messegeString);
-                _messegeString = new[] { PLAYER, "Можно..." };
-                dialogue.Add(_messegeString);
-            break;
-        }
-
+        dialogue = ControlPers_LanguageHandler.SingleOnScene.Dialogue_Get(PLAYER, NPC);
         dialogue_string_current = dialogue[0][1];
     }
 
@@ -92,11 +66,15 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
             case PLAYER:
                 image_player.color = image_color_active;
                 image_npc.color = image_color_inactive;
+                text.alignment = TextAnchor.UpperLeft;
+                text.text = "";
             break;
 
             case NPC:
                 image_player.color = image_color_inactive;
                 image_npc.color = image_color_active;
+                text.alignment = TextAnchor.UpperRight;
+                text.text = "";
             break;
         }
 

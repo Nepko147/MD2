@@ -10,6 +10,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     protected int price_coins_buy;
     protected int price_coins_improve;
     private Vector3 price_offset;
+
     private void Price_Spawn()
     {
         price_instance = Instantiate(price_prefab, Vector3.zero, transform.rotation, transform.parent);
@@ -29,8 +30,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     [SerializeField] private AudioClip sound_button;
     [SerializeField] private AudioClip sound_upgrade;
 
-    private const string POPUPMESSAGE_TEXT_EN = "NOT ENOUGH COINS";
-    private const string POPUPMESSAGE_TEXT_RU = "меднярюрнвмн лнмер";
     private string popupMessege_text;
 
     protected void Image_Set(Sprite _idle, Sprite _pointed)
@@ -46,16 +45,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
 
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                popupMessege_text = POPUPMESSAGE_TEXT_EN;
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                popupMessege_text = POPUPMESSAGE_TEXT_RU;
-            break;
-        }
+        popupMessege_text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popup_notEnoughCoins);        
     }
 
     protected delegate bool IsState();
@@ -90,7 +80,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
 
-                    Image_Set(image_current_idle_improve, image_current_idle_improve);
+                    Image_Set(image_current_idle_improve, image_current_pointed_improve);
 
                     price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                     price_instance.Coins_Set(price_coins_improve);
@@ -126,7 +116,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         }
     }
     
-    public void Image_LanguageRefresh(string _buttonName)
+    public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
     {
         var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.GetSprites(_buttonName, 5);
         

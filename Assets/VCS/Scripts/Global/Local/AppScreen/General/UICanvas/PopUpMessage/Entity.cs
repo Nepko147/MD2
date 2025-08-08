@@ -44,7 +44,7 @@ public class AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
             }
         }
 
-        if (AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button.SingleOnScene.Pressed)
+        if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button.SingleOnScene.Pressed)
         {
             AppScreen_General_UICanvas_Entity.SingleOnScene.PopUpMessage_Remove();
         }

@@ -6,7 +6,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_But
 
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_SWITCH_EN);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.switch_en);
     }
 
     public override void OnClick()

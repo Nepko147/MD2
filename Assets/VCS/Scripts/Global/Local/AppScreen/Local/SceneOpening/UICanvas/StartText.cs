@@ -28,16 +28,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 
     private void Start()
     {
-        switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-        {
-            case ControlPers_LanguageHandler.GameLanguage.english:
-                text.text = "PRESS ANY KEY";
-            break;
-
-            case ControlPers_LanguageHandler.GameLanguage.russian:
-                text.text = "Õ¿∆Ã»“≈ Àﬁ¡”ﬁ  À¿¬»ÿ”";
-            break;
-        }
+        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText);
     }
 
     private void Update()
@@ -70,17 +61,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
             {
                 if (!ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
                 {
-                    switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)
-                    {
-                        case ControlPers_LanguageHandler.GameLanguage.english:
-                            text.text = "LOADING CLOUD DATA";
-                        break;
-
-                        case ControlPers_LanguageHandler.GameLanguage.russian:
-                            text.text = "«¿√–”« ¿ ƒ¿ÕÕ€’";
-                        break;
-                    }
-
+                    text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.loadingCloudData);
                     stage = Stage.LoadData;
                 }
                 else

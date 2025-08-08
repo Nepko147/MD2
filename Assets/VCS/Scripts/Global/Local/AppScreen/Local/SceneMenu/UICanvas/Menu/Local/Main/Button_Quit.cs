@@ -6,7 +6,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit : Ap
 
     private void ImageRefresh()
     {        
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_QUIT);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.quit);
     }
 
     protected override void Awake()

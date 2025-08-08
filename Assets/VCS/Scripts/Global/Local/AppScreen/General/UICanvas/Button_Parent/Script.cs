@@ -29,13 +29,13 @@ public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanv
     private Sprite image_currennt_pointed;
     private Sprite image_currennt_pressed;
 
-    private void Image_PointsRefresh()
+    public void Image_PointsRefresh()
     {
         image_min = Image_ScreenPoint_Min(image);
         image_max = Image_ScreenPoint_Max(image);
     }
 
-    public void Image_LanguageRefresh(string _buttonName)
+    public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
     {
         position_last = transform.position;
 

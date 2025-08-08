@@ -5,7 +5,7 @@ public class AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Loca
 {
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_UPGRADE);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.upgrade);
     }
 
     protected override void Start()

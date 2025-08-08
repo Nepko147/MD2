@@ -7,7 +7,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Upgrades 
 
     private void ImageRefresh()
     {       
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_UPGRADES);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.upgrades);
     }
 
     protected override void Awake()

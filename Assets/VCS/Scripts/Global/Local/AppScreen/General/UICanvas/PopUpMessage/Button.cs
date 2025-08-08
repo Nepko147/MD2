@@ -1,9 +1,14 @@
 using UnityEngine;
+using System.Collections;
 
-public class AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button
-: AppScreen_General_UICanvas_Button_Parent
+public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button : AppScreen_General_UICanvas_Button_Parent
 {
-    public static AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Button SingleOnScene { get; private set; }
+
+    private void ImageRefresh()
+    {
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.ok);
+    }
 
     protected override void Awake()
     {
@@ -13,4 +18,28 @@ public class AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
         SingleOnScene = this;
     }
+
+    private void Start()
+    {
+        ImageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+
+        var _delay = 0.2f;
+
+        IEnumerator _coroutine(float _delay)
+        {
+            yield return new WaitForSeconds(_delay);
+
+            Image_PointsRefresh();
+        }
+
+        var _routine = _coroutine(_delay);
+        StartCoroutine(_routine);
+    }
+    
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
+    }
+
 }

@@ -4,7 +4,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume : AppScreen_
 {
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.BUTTON_NAME_RESUME);
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.resume);
     }
 
     public static AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume SingleOnScene { get; private set; }
