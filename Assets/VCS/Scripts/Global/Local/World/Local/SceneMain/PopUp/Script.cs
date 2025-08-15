@@ -27,7 +27,6 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
         display = true;
         text.text = "+1 UP";
         Image_Sprite_Set(image_sprite_up);
-        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Up;
     }
     public void Display_AsCoin()
@@ -35,7 +34,6 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
         display = true;
         text.text = "+1 Coin";
         Image_Sprite_Set(image_sprite_coin);
-        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
         Behaviour = Behaviour_Coin;
     }
     public void Display_AsCoinRush()
@@ -50,6 +48,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private Behaviour_Delegate Behaviour;
     private void Behaviour_Up()
     {
+        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
         transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
@@ -60,6 +59,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     }
     private void Behaviour_Coin()
     {
+        destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
         transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)

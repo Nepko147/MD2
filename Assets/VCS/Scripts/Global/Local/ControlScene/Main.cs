@@ -11,7 +11,6 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private AudioClip audio_music_crickets;
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
-    [SerializeField] private AudioClip audio_sound_crash;
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
@@ -62,8 +61,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool Stage_Pause_Condition()
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed
-            || Input.GetKeyDown(KeyCode.Backspace))
+            if (AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Pressed)
             {
                 return (true);
             }
@@ -111,7 +109,7 @@ public class ControlScene_Main : MonoBehaviour
         
         private bool Stage_GameOver_Condition()
         {
-            if (World_Local_SceneMain_Player.SingleOnScene.Up_Count <= 0)
+            if (World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count <= 0)
             {
                 return (true);
             }
@@ -149,6 +147,11 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = _state;
             }
 
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_DriftSection_Coin>(FindObjectsSortMode.None))
+            {
+                _item.Active = _state;
+            }
+
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_PopUp>(FindObjectsSortMode.None))
             {
                 _item.Active = _state;
@@ -168,7 +171,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer.SingleOnScene.Pause();
-            World_Local_SceneMain_Player.SingleOnScene.Active = false;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
@@ -192,7 +195,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
-            World_Local_SceneMain_Player.SingleOnScene.Active = true;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
             AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
@@ -209,8 +212,6 @@ public class ControlScene_Main : MonoBehaviour
 
         Stage_GameOver_Event_On += () =>
         {
-            audio_source.PlayOneShot(audio_sound_crash);
-
             _GeneralActiveState(false);
 
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
@@ -237,7 +238,7 @@ public class ControlScene_Main : MonoBehaviour
         ControlPers_FogHandler.Color_Load();
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
-        World_Local_SceneMain_Player.SingleOnScene.Active = true;
+        World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_1 = spawnPoint_line_1;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_2 = spawnPoint_line_2;
         World_Local_SceneMain_EnemySpawner.SingleOnScene.EnemySpawn_SpawnPoint_Line_3 = spawnPoint_line_3;
@@ -337,7 +338,7 @@ public class ControlScene_Main : MonoBehaviour
                                 if (!InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Enemy_Entity>()
                                 && !InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Bonus_Parent>())
                                 {
-                                    World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_alignment;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
                                 
                                     stage_road_toDrift_clearing = false;
                                     stage_road_toDrift_cutscene = true;
@@ -350,7 +351,7 @@ public class ControlScene_Main : MonoBehaviour
                         switch (stage_road_toDrift_cutscene_state)
                         {
                             case Stage_Road_ToDrift_Cutscene_State.alignment:
-                                if (World_Local_SceneMain_Player.SingleOnScene.State_Current == World_Local_SceneMain_Player.State.road_toDrift_braking)
+                                if (World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current == World_Local_SceneMain_Player_Entity.State.road_toDrift_braking)
                                 {
                                     World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(0, stage_road_toDrift_cutscene_state_braking_time);
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
@@ -370,8 +371,8 @@ public class ControlScene_Main : MonoBehaviour
                                 {
                                     if (stage_road_toDrift_cutscene_state_braking_playerMoveDown_start)
                                     {
-                                        World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.road_toDrift_moveDown;
-                                        AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow(World_Local_SceneMain_Player.SingleOnScene.gameObject);
+                                        World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_moveDown;
+                                        AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow(World_Local_SceneMain_Player_Entity.SingleOnScene.gameObject);
                                         stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = false;
                                     }
 
@@ -395,12 +396,13 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToRoad;
                                     Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToDrift;
 
-                                    World_Local_SceneMain_Player.SingleOnScene.State_Current = World_Local_SceneMain_Player.State.drift;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.drift;
                                     World_General_Sky.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
                                     World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = true;
                                     AppScreen_General_Camera_Entity.SingleOnScene.Move_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
                                     AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
 
@@ -448,6 +450,7 @@ public class ControlScene_Main : MonoBehaviour
 
                     //World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
                     //World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
+                    //World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
                     //активация остальных объектов деактивированных при переходе из road в drift
 
                     //stage_drift = false;
@@ -458,8 +461,7 @@ public class ControlScene_Main : MonoBehaviour
         
         if (stage_pause)
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed
-            || Input.GetKeyDown(KeyCode.Backspace))
+            if (AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed)
             {
                 Stage_Pause_Event_Off();
 

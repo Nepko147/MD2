@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
-public class AppScreen_General_UICanvas_Parent : MonoBehaviour
+public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
 {
     #region General
 
@@ -84,12 +85,14 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
     /// <para> Выполнение общего поведения подсветки компонента Image при наведении </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
+    
     protected void Image_Highlight_Behaviour(Image _image)
     {
         var _image_min = Image_ScreenPoint_Min(_image);
         var _image_max = Image_ScreenPoint_Max(_image);
         Image_Highlight_Behaviour(_image, _image_min, _image_max);
     }
+
     ///<summary>
     /// <para> Выполнение общего поведения подсветки компонента Image при наведении, с явной передачей координат Image </para>
     /// <para> Вызывать после Awake() </para>
@@ -104,6 +107,64 @@ public class AppScreen_General_UICanvas_Parent : MonoBehaviour
         {
             _image.color = image_highlight_color_pointed;
         }
+    }
+
+    #endregion
+
+    #region Shift
+
+    private float   shift_time = 0;
+    private float   shift_time_max;
+    private Vector3 shift_pos_target;
+    private Vector3 shift_pos_source;
+    private Vector3 shift_pos_destination;
+    private Vector3 shift_pos_speed;
+
+    protected void Shift_Positions_Set(Vector3 _source, Vector3 _destination)
+    {
+        shift_pos_source = _source;
+        shift_pos_destination = _destination;
+        rectTransform.localPosition = shift_pos_source;
+    }
+
+    private void Shift_toTarget(Vector3 _targetPos, float _time)
+    {
+        shift_pos_target = _targetPos;
+        shift_time = 0;
+        shift_time_max = _time;
+        shift_pos_speed = (_targetPos - rectTransform.localPosition) / _time;
+
+        IEnumerator _coroutine()
+        {
+            while (true)
+            {
+                rectTransform.localPosition += shift_pos_speed * Time.deltaTime;
+                shift_time += Time.deltaTime;
+            
+                if (shift_time < shift_time_max)
+                {
+                    yield return null;
+                }
+                else
+                {
+                    rectTransform.localPosition = shift_pos_target;
+                    break;
+                }
+            }
+        }
+
+        var _routine = _coroutine();
+        StartCoroutine(_routine);
+    }
+
+    public void Shift_toSource(float _time)
+    {
+        Shift_toTarget(shift_pos_source, _time);
+    }
+
+    public void Shift_toDestination(float _time)
+    {
+        Shift_toTarget(shift_pos_destination, _time);
     }
 
     #endregion

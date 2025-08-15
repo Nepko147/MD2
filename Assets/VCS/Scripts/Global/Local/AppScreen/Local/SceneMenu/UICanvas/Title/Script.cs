@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Title : MonoBehaviour
+public class AppScreen_Local_SceneMenu_UICanvas_Title : AppScreen_General_UICanvas_Parent
 {
     public static AppScreen_Local_SceneMenu_UICanvas_Title SingleOnScene { get; private set; }
 
@@ -11,56 +11,19 @@ public class AppScreen_Local_SceneMenu_UICanvas_Title : MonoBehaviour
         get { return (spriteRenderer.enabled); }
         set { spriteRenderer.enabled = value; } 
     }
-    
-    private bool    shift = false;
-    private float   shift_time = 0;
-    private float   shift_time_max;
-    private Vector3 shift_pos_target;
-    private Vector3 shift_pos_source;
-    private Vector3 shift_pos_destination;
-    private Vector3 shift_pos_stepInSec;
 
-    private void Shift_toTarget(Vector3 _targetPos, float _time)
+    protected override void Awake()
     {
-        shift_pos_target = _targetPos;
-        shift_time = 0;
-        shift_time_max = _time;
-        shift_pos_stepInSec = (_targetPos - transform.position) / _time;
-        shift = true;
-    }
+        base.Awake();
 
-    public void Shift_toSource(float _time)
-    {
-        Shift_toTarget(shift_pos_source, _time);
-    }
-
-    public void Shift_toDestination(float _time)
-    {
-        Shift_toTarget(shift_pos_destination, _time);
-    }
-
-    private void Awake()
-    {
         SingleOnScene = this;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        shift_pos_source = transform.position;
-        shift_pos_destination = new Vector3(transform.position.x - 36f, transform.position.y, transform.position.z);
     }
 
-    private void Update()
+    private void Start()
     {
-        if (shift)
-        {
-            transform.position += shift_pos_stepInSec * Time.deltaTime;
-            shift_time += Time.deltaTime;
-
-            if (shift_time >= shift_time_max)
-            {
-                transform.position = shift_pos_target;
-                shift = false;
-            }
-        }
+        var _destination = new Vector3(rectTransform.localPosition.x - 640f, rectTransform.localPosition.y, rectTransform.localPosition.z);
+        Shift_Positions_Set(rectTransform.localPosition, _destination);
     }
 }

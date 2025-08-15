@@ -59,5 +59,12 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause : AppScr
     private void Update()
     {
         Image_Highlight_Behaviour(image);
+
+        if (Input.GetKeyDown(KeyCode.Escape)
+        || Input.GetKeyDown(KeyCode.P)
+        || Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Pressed = true;
+        }
     }
 }

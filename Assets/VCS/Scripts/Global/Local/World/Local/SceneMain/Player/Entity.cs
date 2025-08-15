@@ -1,11 +1,11 @@
 using UnityEngine;
 using Utils;
 
-public class World_Local_SceneMain_Player : MonoBehaviour
+public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 {
     #region General
     
-    public static World_Local_SceneMain_Player SingleOnScene { get; private set; }
+    public static World_Local_SceneMain_Player_Entity SingleOnScene { get; private set; }
     
     private bool active = true;
     public bool Active 
@@ -35,7 +35,8 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         road_toDrift_alignment,
         road_toDrift_braking,
         road_toDrift_moveDown,
-        drift
+        drift,
+        drift_toRoad
     }
     private State state_current = State.road;
     public State State_Current
@@ -62,6 +63,10 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                 case State.drift:
                     moving_drift_speed_current = MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX;
                 break;
+
+                case State.drift_toRoad:
+                    animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
+                break;
             }
         }
     }
@@ -70,6 +75,18 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     private Color spriteRenderer_material_color = Color.white;
     
     private Animator animator;
+    private const string ANIMATOR_PARAM_SPEED = "Speed";
+
+    private AudioSource audio_source;
+    [SerializeField] private AudioClip audio_sound_hit;
+    [SerializeField] private AudioClip audio_sound_crash;
+    [SerializeField] private AudioClip[] audio_sound_brake;
+
+    private void Audio_Sound_Brake_Play()
+    {
+        var _ind = Random.Range(0,4);
+        audio_source.PlayOneShot(audio_sound_brake[_ind]);
+    }
 
     [SerializeField] private GameObject lights_front_1;
     [SerializeField] private GameObject lights_front_2;
@@ -103,27 +120,84 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     public void Up_Lose()
     {
         --Up_Count;
-
         --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
 
         Invul = true;
-        invul_timer = invul_timer_init;
 
         AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Shake();
 
-        if (Up_Count <= 0)
+        if (Up_Count > 0)
+        {
+            audio_source.PlayOneShot(audio_sound_hit);
+        }
+        else
         {
             spriteRenderer_material_color = Color.red;
             animator.speed = 0;
+
+            audio_source.PlayOneShot(audio_sound_crash);
+
             crashed = true;
         }
     }
 
-    public bool Invul { get; private set; }
+    private bool invul = false;
+    public bool Invul 
+    { 
+        get 
+        { 
+            return (invul); 
+        }
+        private set 
+        { 
+            if (value
+            && !invul)
+            {
+               invul_timer = invul_timer_init; 
+            }
+
+            invul = value;
+        } 
+    }
     private float invul_timer;
     [SerializeField] private float invul_timer_init = 1.2f;
     private bool invul_alpha_state = false;
     [SerializeField] private float invul_alpha_step = 12; //Чем больше значение, тем быстрее моргает
+    private void Invul_Behaviour()
+    {
+        if (Invul)
+        {
+            if (invul_alpha_state)
+            {
+                spriteRenderer_material_color.a += invul_alpha_step * Time.deltaTime;
+                spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+
+                if (spriteRenderer_material_color.a >= 1f)
+                {
+                    invul_alpha_state = false;
+                }
+            }
+            else
+            {
+                spriteRenderer_material_color.a -= invul_alpha_step * Time.deltaTime;
+                spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+
+                if (spriteRenderer_material_color.a <= 0)
+                {
+                    invul_alpha_state = true;
+                }
+            }
+
+            invul_timer -= Time.deltaTime;
+
+            if (invul_timer <= 0)
+            {
+                spriteRenderer_material_color.a = 1f;
+                spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+                Invul = false;
+            }
+        }
+    }
 
     private bool crashed = false;
 
@@ -255,12 +329,22 @@ public class World_Local_SceneMain_Player : MonoBehaviour
         private float moving_drift_input_angle = 270f;
 
         private float moving_drift_speed_current;
-        [SerializeField] private float moving_drift_speed_min = 2f;
-        [SerializeField] private float moving_drift_speed_step_up = 1.5f;
-        [SerializeField] private float moving_drift_speed_max = 3f;
+        private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
+        private const float MOVING_DRIFT_SPEED_STEP_UP = 1.5f;
+        private const float MOVING_DRIFT_SPEED_STEP_DOWN = 0.5f;
+        private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
         private float moving_drift_angle_current;
-        [SerializeField] private float moving_drift_angle_step = 0.03f;
-        private Vector2 moving_drift_ofs = Vector2.zero;
+        [SerializeField] private float moving_drift_angle_step = 0.02f;
+        private Vector2 moving_drift_moveVector = Vector2.zero;
+        private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
+        private Vector2 moving_drift_hitVector = Vector2.zero;
+        private float moving_drift_hitVector_size = 0;
+        private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 6f;
+        private const float MOVING_DRIFT_HITVECTOR_TIME = 1.5f;
+        private bool moving_drift_braking = true;
+        private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.33f;
+        private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
+        private bool moving_drift_braking_swap = true;
         
         #endregion
 
@@ -364,48 +448,57 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                     animator.SetTrigger(VISUALSTATE_LEFT_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_lights_front_1, visualState_left_lights_front_2, visualState_left_lights_rear_1, visualState_left_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(180f, 0.76f, 0.24f);
                 break;
 
                 case VisualState.left_up:
                     animator.SetTrigger(VISUALSTATE_LEFT_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_up_lights_front_1, visualState_left_up_lights_front_2, visualState_left_up_lights_rear_1, visualState_left_up_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(162f, 0.7f, 0.3f);
                 break;
             
                 case VisualState.left_down:
                     animator.SetTrigger(VISUALSTATE_LEFT_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_down_lights_front_1, visualState_left_down_lights_front_2, visualState_left_down_lights_rear_1, visualState_left_down_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(208f, 0.7f, 0.3f);
                 break;
             
                 case VisualState.right:
                     animator.SetTrigger(VISUALSTATE_RIGHT_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_lights_front_1, visualState_right_lights_front_2, visualState_right_lights_rear_1, visualState_right_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(0, 0.76f, 0.24f);
                 break;
 
                 case VisualState.right_up:
                     animator.SetTrigger(VISUALSTATE_RIGHT_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_up_lights_front_1, visualState_right_up_lights_front_2, visualState_right_up_lights_rear_1, visualState_right_up_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(27f, 0.7f, 0.3f);
                 break;
 
                 case VisualState.right_down:
                     animator.SetTrigger(VISUALSTATE_RIGHT_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_down_lights_front_1, visualState_right_down_lights_front_2, visualState_right_down_lights_rear_1, visualState_right_down_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(332f, 0.7f, 0.3f);
                 break;
 
                 case VisualState.up:
                     animator.SetTrigger(VISUALSTATE_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_up_lights_front_1, visualState_up_lights_front_2, visualState_up_lights_rear_1, visualState_up_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(90f, 0.5f, 0.36f);
+
                 break;
 
                 case VisualState.down:
                     animator.SetTrigger(VISUALSTATE_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_down_lights_front_1, visualState_down_lights_front_2, visualState_down_lights_rear_1, visualState_down_lights_rear_2);
+                    World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(90f, 0.5f, 0.36f);
                 break;
             }
         }
@@ -437,9 +530,11 @@ public class World_Local_SceneMain_Player : MonoBehaviour
     #region Physics
 
     private Rigidbody2D rigidBody;
-    public BoxCollider2D BoxCollider { get; private set; }
 
-    bool collisionTrigger = false;
+    public CircleCollider2D Collision_Hit { get; set; }
+    public BoxCollider2D Collision_Bonus { get; set; }
+
+    private bool collision_on = false;
 
     #endregion
 
@@ -453,13 +548,11 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
+        audio_source = GetComponent<AudioSource>();
+
         rigidBody = GetComponent<Rigidbody2D>();
 
-        BoxCollider = GetComponent<BoxCollider2D>();
-
-        Up_Count = 1;
-
-        Invul = false;
+        Up_Count = 2;
 
         transform.position = new Vector3(transform.position.x, MOVING_ROAD_LINE_2_POSITION_Y, transform.position.z);
         moving_road_newPosition = transform.position;
@@ -491,38 +584,7 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                         }
                     }
 
-                    if (Invul)
-                    {
-                        if (invul_alpha_state)
-                        {
-                            spriteRenderer_material_color.a += invul_alpha_step * Time.deltaTime;
-                            spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-
-                            if (spriteRenderer_material_color.a >= 1f)
-                            {
-                                invul_alpha_state = false;
-                            }
-                        }
-                        else
-                        {
-                            spriteRenderer_material_color.a -= invul_alpha_step * Time.deltaTime;
-                            spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-
-                            if (spriteRenderer_material_color.a <= 0)
-                            {
-                                invul_alpha_state = true;
-                            }
-                        }
-
-                        invul_timer -= Time.deltaTime;
-
-                        if (invul_timer <= 0)
-                        {
-                            spriteRenderer_material_color.a = 1f;
-                            spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-                            Invul = false;
-                        }
-                    }
+                    Invul_Behaviour();
                 break;
 
                 case State.road_toDrift_alignment:
@@ -541,6 +603,8 @@ public class World_Local_SceneMain_Player : MonoBehaviour
 
                             case Moving_Road_State.lnie_2:
                                 VisualState_Set(VisualState.right_down);
+                                Audio_Sound_Brake_Play();
+
                                 state_current = State.road_toDrift_braking;
                             break;
                         }
@@ -554,44 +618,87 @@ public class World_Local_SceneMain_Player : MonoBehaviour
                 case State.road_toDrift_moveDown:
                     transform.position += Vector3.down * moving_road_todrift_movedown_speed * Time.deltaTime;
 
-                    if (moving_road_todrift_movedown_speed < MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX)
+                    if (moving_road_todrift_movedown_speed < MOVING_DRIFT_SPEED_MAX)
                     {
                         moving_road_todrift_movedown_speed += MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_INC;
                     }
                 break;
 
                 case State.drift:
-                    if (collisionTrigger)
+                    if (!crashed)
                     {
-                        moving_drift_speed_current = moving_drift_speed_min;
-                    }
-                    else
-                    {
-                        moving_drift_speed_current = moving_drift_speed_max;
-                        
-                        if (moving_drift_speed_current < moving_drift_speed_max)
+                        if (collision_on)
                         {
-                            moving_drift_speed_current += moving_drift_speed_step_up * Time.deltaTime;
-
-                            if (moving_drift_speed_current > moving_drift_speed_max)
-                            {
-                                moving_drift_speed_current = moving_drift_speed_max;
-                            }
+                            moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
                         }
+                        else
+                        {
+                            switch (visual_state_current)
+                            {
+                                case VisualState.left_up:
+                                case VisualState.left_down:
+                                case VisualState.right_up:
+                                case VisualState.right_down:
+                                    if (moving_drift_braking)
+                                    {
+                                        if (moving_drift_braking_swap)
+                                        {
+                                            animator.SetFloat(ANIMATOR_PARAM_SPEED, 0);
+                                            Audio_Sound_Brake_Play();
+
+                                            moving_drift_braking_swap = false;
+                                        }
+
+                                        //TODO: отрисовка следов от шин
+
+                                        moving_drift_speed_current -= MOVING_DRIFT_SPEED_STEP_DOWN * Time.deltaTime;
+                                        moving_drift_braking_time -= Time.deltaTime;
+
+                                        if (moving_drift_braking_time <= 0)
+                                        {
+                                            animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
+
+                                            moving_drift_braking = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP_UP * Time.deltaTime;
+                                    }
+                                break;
+
+                                default:
+                                    moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP_UP * Time.deltaTime;
+
+                                    if (!moving_drift_braking_swap)
+                                    {
+                                        animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
+
+                                        moving_drift_braking = true;
+                                        moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
+
+                                        moving_drift_braking_swap = true;
+                                    }
+                                break;
+                            }
+
+                            moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
+                        }
+
+                        if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Magnitude_Active)
+                        {
+                            moving_drift_input_angle = AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Direction;
+                        }
+
+                        moving_drift_angle_current = AngleHandler.Angle_SmoothStep(moving_drift_angle_current, moving_drift_input_angle, moving_drift_angle_step);
+
+                        VisualState_FromAngle(moving_drift_angle_current);
                     }
 
-                    if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Magnitude_Active)
-                    {
-                        moving_drift_input_angle = AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Direction;
-                    }
-
-                    moving_drift_angle_current = AngleHandler.Angle_SmoothStep(moving_drift_angle_current, moving_drift_input_angle, moving_drift_angle_step);
-                    moving_drift_ofs = AngleHandler.Angle_ToVector(moving_drift_angle_current, moving_drift_speed_current);
-                    
-                    VisualState_FromAngle(moving_drift_angle_current);
+                    Invul_Behaviour();
                 break;
             }
-        }                
+        }
     }
 
     private void FixedUpdate()
@@ -601,26 +708,48 @@ public class World_Local_SceneMain_Player : MonoBehaviour
             switch (state_current)
             {
                 case State.drift:
-                    rigidBody.MovePosition(rigidBody.position + moving_drift_ofs * Time.fixedDeltaTime);
-                    
+                    if (!crashed)
+                    {
+                        moving_drift_moveVector = AngleHandler.Angle_ToVector(moving_drift_angle_current, moving_drift_speed_current);
+
+                        if (moving_drift_hitVector_size > 0)
+                        {
+                            moving_drift_hitVector_size -= MOVING_DRIFT_HITVECTOR_SIZE_MAX / MOVING_DRIFT_HITVECTOR_TIME * Time.deltaTime;
+                            moving_drift_moveVector += moving_drift_hitVector * moving_drift_hitVector_size;
+                            moving_drift_moveVector = Vector2.ClampMagnitude(moving_drift_moveVector, MOVING_DRIFT_MOVEVECTOR_SIZE_MAX);
+                        }
+
+                        rigidBody.MovePosition(rigidBody.position + moving_drift_moveVector * Time.fixedDeltaTime);
+                    }
+
                     #if UNITY_EDITOR
 
-                    var _line_scale = 10f;
-                    DebugHandler.DrawLine2D(rigidBody.position.x, rigidBody.position.y, rigidBody.position.x + moving_drift_ofs.x * _line_scale, rigidBody.position.y + moving_drift_ofs.y * _line_scale, Color.green);
-                    
+                    var _line_scale = 1f;
+                    DebugHandler.DrawLine2D(rigidBody.position.x, rigidBody.position.y, rigidBody.position.x + moving_drift_moveVector.x * _line_scale, rigidBody.position.y + moving_drift_moveVector.y * _line_scale, Color.green);
+                    DebugHandler.DrawLine2D(rigidBody.position.x, rigidBody.position.y, rigidBody.position.x + moving_drift_hitVector.x * _line_scale, rigidBody.position.y + moving_drift_hitVector.y * _line_scale, Color.red);
+
                     #endif
                 break;
             }
         }
     }
 
-    private void OnCollisionStay2D(Collision2D _collision)
+    private void OnCollisionEnter2D(Collision2D _collision)
     {
-        collisionTrigger = true;
+        if (!collision_on)
+        {
+            collision_on = true;
+
+            Up_Lose();
+
+            moving_drift_hitVector = (Vector2)transform.position - (Vector2)_collision.gameObject.transform.position;
+            moving_drift_hitVector = moving_drift_hitVector.normalized;
+            moving_drift_hitVector_size = MOVING_DRIFT_HITVECTOR_SIZE_MAX;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D _collision)
     {
-        collisionTrigger = false;
+        collision_on = false;
     }
 }

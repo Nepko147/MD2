@@ -10,11 +10,4 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Entity : App
 
         SingleOnScene = this;
     }
-
-    private void Start()
-    {
-        var _source = new Vector3(0, -360, 0);
-        var _destination = new Vector3(0, 0, 0);
-        Shift_Positions_Set(_source, _destination);
-    }
 }

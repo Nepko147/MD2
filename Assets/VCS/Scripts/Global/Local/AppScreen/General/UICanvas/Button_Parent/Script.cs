@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanvas_Parent
+public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_General_UICanvas_Parent
 {
     private bool pressed = false;
     public bool Pressed 
