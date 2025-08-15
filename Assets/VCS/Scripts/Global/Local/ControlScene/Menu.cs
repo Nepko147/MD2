@@ -6,13 +6,15 @@ public class ControlScene_Menu : MonoBehaviour
 {
     public static ControlScene_Menu SingleOnScene { get; private set; }
 
-    bool stage_init = true;
-    bool stage_cutscene = true;
-    bool stage_start = false;
-    bool stage_upgrades = false;
-    bool stage_settings = false;
+    private bool stage_init = true;
+    private const float STAGE_INIT_TOCUTSCENE_TIME = 0.2f;
+    private bool stage_cutscene = true;
+    private const float STAGE_CUTSCENE_TOSTART_TIME = 1f;
+    private bool stage_start = false;
+    private float stage_start_time = STAGE_CUTSCENE_TOSTART_TIME;
+    private bool stage_upgrades = false;
+    private bool stage_settings = false;
 
-    [SerializeField] private float sceneSwitchTime = 1f;
     [SerializeField] private float menuShiftTime = 0.2f;
 
     [SerializeField] private AudioClip audio_mainTheme;
@@ -34,12 +36,10 @@ public class ControlScene_Menu : MonoBehaviour
             ControlPers_FogHandler.Move();
 
             if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Play.SingleOnScene.Pressed)
-            {                
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.PrepareToGameStart();
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
-                AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
-
-                AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Show();
+            {
+                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(STAGE_INIT_TOCUTSCENE_TIME);
+                AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(STAGE_INIT_TOCUTSCENE_TIME);
+                AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Show(STAGE_INIT_TOCUTSCENE_TIME);
 
                 stage_init = false;
                 stage_cutscene = true;
@@ -88,9 +88,9 @@ public class ControlScene_Menu : MonoBehaviour
             {
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
-                World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, sceneSwitchTime);
-                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(sceneSwitchTime * 2);
-                AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, sceneSwitchTime);
+                World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, STAGE_CUTSCENE_TOSTART_TIME);
+                AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(STAGE_CUTSCENE_TOSTART_TIME);
+                AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, STAGE_CUTSCENE_TOSTART_TIME);
 
                 var _world_movingBackground_parent_array = FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None);
                 foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
@@ -107,9 +107,9 @@ public class ControlScene_Menu : MonoBehaviour
         {
             ControlPers_FogHandler.Move();
 
-            sceneSwitchTime -= Time.deltaTime;             
+            stage_start_time -= Time.deltaTime;             
 
-            if (sceneSwitchTime < 0)
+            if (stage_start_time <= 0)
             {
                 ControlPers_FogHandler.Color_Save();
                 World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Save();

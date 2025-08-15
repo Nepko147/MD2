@@ -72,7 +72,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
 
     private void Start()
     {
-        Ups_Visual = World_Local_SceneMain_Player.SingleOnScene.Up_Count;
+        Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
         Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
 
         switch (ControlPers_LanguageHandler.SingleOnScene.GameLanguage_Current)

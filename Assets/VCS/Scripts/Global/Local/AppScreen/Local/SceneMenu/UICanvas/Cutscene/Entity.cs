@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 {
     public static AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity SingleOnScene { get; private set; }
 
     private CanvasGroup canvasGroup;
-    private float canvasGroup_deltaApha = 4;
+    private float canvasGroup_deltaApha = 4f;
 
     [SerializeField] private AudioClip sound;
 
@@ -42,10 +43,19 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
     public bool Done { get; private set; }
 
-    public void Show()
+    public void Show(float _delay)
     {
-        dialogue_state_currnet = dialogue_state.onDisplay; 
-    }    
+        IEnumerator _coroutine(float _delay)
+        {
+            yield return new WaitForSeconds(_delay);
+
+            dialogue_state_currnet = dialogue_state.onDisplay; 
+        }
+
+        var _routine = _coroutine(_delay);
+        StartCoroutine(_routine);
+        
+    }
 
     public void Text_LanguageRefresh()
     {

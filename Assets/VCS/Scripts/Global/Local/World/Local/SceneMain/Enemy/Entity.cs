@@ -10,8 +10,6 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
 
     private float speed = 400f;
 
-    private AudioSource audioSource;
-
     private bool isDamaged = false;
 
     private PolygonCollider2D collider2d;
@@ -25,8 +23,6 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, normalMap);
 
-        audioSource = GetComponent<AudioSource>();
-
         collider2d = GetComponent<PolygonCollider2D>();
     }
 
@@ -38,12 +34,11 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
 
             //Проверка на контакт с игроком
             if (!isDamaged
-            && !World_Local_SceneMain_Player.SingleOnScene.Invul
-            && collider2d.bounds.Intersects(World_Local_SceneMain_Player.SingleOnScene.BoxCollider.bounds))
+            && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul
+            && collider2d.bounds.Intersects(World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit.bounds))
             {
-                audioSource.Play();
                 isDamaged = true;
-                World_Local_SceneMain_Player.SingleOnScene.Up_Lose();
+                World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose();
             }
 
             if (transform.position.x <= DESTROYPOSITION_X)
