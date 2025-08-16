@@ -1,3 +1,3 @@
-Build path: D:/Games/Midnight Drive/Build web
-Build number: 66
+Build path: E:/Dev/Project MDv2.0/Build/Web_YandexGames
+Build number: 67
 PluginYG version: 2.0032

@@ -23,8 +23,8 @@ public class ControlPers_BuildSettings : MonoBehaviour
     }
 
     public CurrentPlatformType currentPlatformType { get; private set; }
-    
-    [SerializeField] private Text currentPlatformType_Hint; //Отладка
+
+    [SerializeField] private Text currentPlatformType_Hint;
 
     void Awake()
     {
@@ -36,19 +36,19 @@ public class ControlPers_BuildSettings : MonoBehaviour
         {
             case BuildCompilationType.windows_standalone:
                 currentPlatformType = CurrentPlatformType.windows;
-                currentPlatformType_Hint.text = "Platform: WINDOWS"; //Отладка
+                currentPlatformType_Hint.text = "Platform: WINDOWS";
             break;
 
             case BuildCompilationType.web_yandexGames:
                 if (YG2.envir.isMobile)
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_mobile_android;
-                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_MOBILE_ANDROID"; //Отладка
+                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_MOBILE_ANDROID";
                 }
                 else
                 {
                     currentPlatformType = CurrentPlatformType.web_yandexGames_desktop;
-                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_DESKTOP"; //Отладка
+                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_DESKTOP";
                 }
             break;
         }

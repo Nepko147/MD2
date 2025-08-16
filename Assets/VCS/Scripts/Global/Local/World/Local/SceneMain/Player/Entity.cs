@@ -330,8 +330,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         private float moving_drift_speed_current;
         private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
-        private const float MOVING_DRIFT_SPEED_STEP_UP = 1.5f;
-        private const float MOVING_DRIFT_SPEED_STEP_DOWN = 0.5f;
+        private const float MOVING_DRIFT_SPEED = 1.5f;
         private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
         private float moving_drift_angle_current;
         [SerializeField] private float moving_drift_angle_step = 0.02f;
@@ -345,6 +344,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.33f;
         private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
         private bool moving_drift_braking_swap = true;
+        private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
         
         #endregion
 
@@ -651,7 +651,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                                         //TODO: отрисовка следов от шин
 
-                                        moving_drift_speed_current -= MOVING_DRIFT_SPEED_STEP_DOWN * Time.deltaTime;
+                                        moving_drift_speed_current -= MOVING_DRIFT_BRAKING_SPEED * Time.deltaTime;
                                         moving_drift_braking_time -= Time.deltaTime;
 
                                         if (moving_drift_braking_time <= 0)
@@ -663,12 +663,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                     }
                                     else
                                     {
-                                        moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP_UP * Time.deltaTime;
+                                        moving_drift_speed_current += MOVING_DRIFT_SPEED * Time.deltaTime;
                                     }
                                 break;
 
                                 default:
-                                    moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP_UP * Time.deltaTime;
+                                    moving_drift_speed_current += MOVING_DRIFT_SPEED * Time.deltaTime;
 
                                     if (!moving_drift_braking_swap)
                                     {

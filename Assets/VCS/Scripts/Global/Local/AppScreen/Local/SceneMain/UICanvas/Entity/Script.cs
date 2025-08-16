@@ -35,7 +35,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         }
     }
 
-    const string            TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM"; 
+    private const string    TEXT_GAMEOVER_DISTANCEREMAIN_SUFF = " KM"; 
     private const string    TEXT_X = "x";
 
     public void ShowGameOver()
@@ -47,6 +47,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString.SingleOnScene.UpdateText(_text_gameOver);
         
         var _text_distanceRemain = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_distanceRemain) 
+            + ": "
             + AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number 
             + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF;
         AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString.SingleOnScene.UpdateText(_text_distanceRemain);

@@ -25,21 +25,21 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     public void Display_AsUp()
     {
         display = true;
-        text.text = "+1 UP";
+        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_up);
         Image_Sprite_Set(image_sprite_up);
         Behaviour = Behaviour_Up;
     }
     public void Display_AsCoin()
     {
         display = true;
-        text.text = "+1 Coin";
+        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_coin);
         Image_Sprite_Set(image_sprite_coin);
         Behaviour = Behaviour_Coin;
     }
     public void Display_AsCoinRush()
     {
         display = true;
-        text.text = "Coin Rush!";
+        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_coinRush);
         Image_Sprite_Set(image_sprite_coinRush);
         Behaviour = Behaviour_CoinRush;
     }
@@ -49,7 +49,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private void Behaviour_Up()
     {
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
+        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
         {
@@ -60,7 +60,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private void Behaviour_Coin()
     {
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
+        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
         {
@@ -73,7 +73,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     {
         destinationPos.x = transform.position.x - SPEED;
         destinationPos.y = transform.position.y + SPEED * 3f;
-        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED);
+        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED * Time.deltaTime);
 
         behaviour_CoinRush_time -= Time.deltaTime;
 

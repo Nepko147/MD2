@@ -143,11 +143,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         upgrade_moreBonuses,
         upgrade_coinMagnet,
         upgrade_heDidNotDie,
-        popup_notEnoughCoins,
+        popUpMessage_notEnoughCoins,
         indicators_complete,
         midscreen_gameOver,
         midscreen_pause,
-        midscreen_distanceRemain
+        midscreen_distanceRemain,
+        popUp_up,
+        popUp_coin,
+        popUp_coinRush
     }
 
     private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
@@ -158,11 +161,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_moreBonuses] = "MORE BONUSES",
         [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
-        [Text_Key.popup_notEnoughCoins] = "NOT ENOUGH COINS",
+        [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
         [Text_Key.indicators_complete] = "KILOMETERS LEFT",
         [Text_Key.midscreen_gameOver] = "GAME OVER",
         [Text_Key.midscreen_pause] = "PAUSE",
-        [Text_Key.midscreen_distanceRemain] = "Distance remain: "
+        [Text_Key.midscreen_distanceRemain] = "Distance remain",
+        [Text_Key.popUp_up] = "+1 UP",
+        [Text_Key.popUp_coin] = "+1 Coin",
+        [Text_Key.popUp_coinRush] = "Coin Rush!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
@@ -173,11 +179,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_moreBonuses] = "БОЛЬШЕ БОНУСОВ",
         [Text_Key.upgrade_coinMagnet] = "МАГНИТ ДЛЯ МОНЕТ",
         [Text_Key.upgrade_heDidNotDie] = "ДА НЕ УМЕР ОН",
-        [Text_Key.popup_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
+        [Text_Key.popUpMessage_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
         [Text_Key.indicators_complete] = "КМ ДО ЦЕЛИ",
         [Text_Key.midscreen_gameOver] = "КОНЕЦ ИГРЫ",
         [Text_Key.midscreen_pause] = "ПАУЗА",
-        [Text_Key.midscreen_distanceRemain] = "Осталось до цели: "
+        [Text_Key.midscreen_distanceRemain] = "Осталось до цели",
+        [Text_Key.popUp_up] = "+1 Жизнь",
+        [Text_Key.popUp_coin] = "+1 Монета",
+        [Text_Key.popUp_coinRush] = "Монетная Лихорадка!"
     };
 
     public string Text_Get(Text_Key _key)

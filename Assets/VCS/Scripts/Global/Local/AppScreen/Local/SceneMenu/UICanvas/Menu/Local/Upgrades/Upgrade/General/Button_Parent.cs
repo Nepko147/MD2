@@ -45,7 +45,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
 
-        popupMessege_text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popup_notEnoughCoins);        
+        popupMessege_text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUpMessage_notEnoughCoins);
     }
 
     protected delegate bool IsState();
