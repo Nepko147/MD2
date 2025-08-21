@@ -4,12 +4,6 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
 {
     public static World_Local_SceneMain_MovingBackground_Entity SingleOnScene { get; private set; }
 
-    public bool SpeedScale_Active { get; set; }
-    public float SpeedScale { get; set; }
-    public const float SPEEDSCALE_INIT = 0.01f;
-    private const float SPEEDSCALE_INCREMENT = 0.000001f;
-    private const float SPEEDSCALE_MAX = 0.02f;
-
     [SerializeField] private GameObject city_3;
     [SerializeField] private GameObject city_3_1;
     [SerializeField] private GameObject city_2;
@@ -31,6 +25,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
     private static Vector3 position_bushes_1;
     private static Vector3 position_road;
     private static Vector3 position_road_1;
+
     public void Position_Save()
     {
         position_city_3 = city_3.transform.position;
@@ -58,6 +53,12 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
         road_1.transform.position = position_road_1;        
     }
 
+    public bool SpeedScale_Active { get; set; }
+    public float SpeedScale { get; set; }
+    public const float SPEEDSCALE_INIT = 0.008f;
+    private const float SPEEDSCALE_INCREMENT = 0.0001f;
+    private const float SPEEDSCALE_MAX = 0.02f;
+
     private void Awake()
     {
         SingleOnScene = this;
@@ -71,7 +72,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
     {
         if (SpeedScale_Active)
         {
-            SpeedScale += SPEEDSCALE_INCREMENT;
+            SpeedScale += SPEEDSCALE_INCREMENT * Time.deltaTime;
 
             if (SpeedScale >= SPEEDSCALE_MAX)
             {

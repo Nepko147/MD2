@@ -20,7 +20,7 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     }
 
     private Vector2 destinationPos = Vector2.zero;
-    private const float SPEED = 0.1f;
+    private const float SPEED = 7f;
     
     public void Display_AsUp()
     {
@@ -49,9 +49,10 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private void Behaviour_Up()
     {
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED * Time.deltaTime);
+        var _speed = SPEED * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position, destinationPos, _speed);
 
-        if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
+        if (Vector2.Distance(transform.position, destinationPos) <= _speed)
         {
             ++AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
             Destroy(gameObject);
@@ -60,9 +61,10 @@ public class World_Local_SceneMain_PopUp : MonoBehaviour
     private void Behaviour_Coin()
     {
         destinationPos = AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, destinationPos, SPEED * Time.deltaTime);
+        var _speed = SPEED * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position, destinationPos, _speed);
 
-        if (Vector2.Distance(transform.position, destinationPos) <= SPEED)
+        if (Vector2.Distance(transform.position, destinationPos) <= _speed)
         {
             ++AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual;
             Destroy(gameObject);

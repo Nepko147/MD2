@@ -25,7 +25,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     public string Text_Number
     {
         get { return (text_number.text); }
-        set { text_number.text = value; }
+        private set { text_number.text = value; }
     }
     [SerializeField] private Text text_kmLeft;
 
@@ -45,8 +45,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private const float STATE_TIME_WAIT = 2f;
     private const float STATE_TIME_HIDE = 1f;
 
-    public void Show(float _delay = 0)
+    public void Show(string _distanceLeft, float _delay = 0)
     {
+        Text_Number = _distanceLeft;
+
         IEnumerator _coroutine(float _delay)
         {
             yield return new WaitForSeconds(_delay);
@@ -65,7 +67,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
         SingleOnScene = this;
 
-        Text_Number = "25";
         text_number.font.material.mainTexture.filterMode = FilterMode.Point;
         text_kmLeft.font.material.mainTexture.filterMode = FilterMode.Point;
 

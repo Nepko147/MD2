@@ -14,21 +14,6 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
     #region Move
 
-    [SerializeField] private float move_speed = 10f;
-    public float Move_YMax { get; set; }
-    private void Move(Vector3 _position)
-    {
-        var _position_ofs = _position - transform.position;
-        var _position_smooth = transform.position + new Vector3(_position_ofs.x, _position_ofs.y, 0) * move_speed * Time.deltaTime;
-
-        if (_position_smooth.y > Move_YMax)
-        {
-            _position_smooth.y = Move_YMax;
-        }
-        
-        transform.position = new Vector3(_position_smooth.x, _position_smooth.y, transform.position.z);
-    }
-
     private enum Move_State
     {
         idle,
@@ -37,18 +22,26 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     }
     private Move_State move_state = Move_State.idle;
 
+    private float move_speed = 0;
+
     private GameObject move_follow_target;
+    private const float MOVE_FOLLOW_SPEED = 10f;
+    public float Move_Follow_YMax { get; set; }
+
     public void Move_Follow(GameObject _target)
     {
         move_follow_target = _target;
+        move_speed = MOVE_FOLLOW_SPEED;
         move_state = Move_State.follow;
     }
 
     private Vector3 move_destination_position;
-    private float move_destination_magnitude_edge = 0.001f;
+    private const float MOVE_DESTINATION_SPEED = 3f;
+
     public void Move_Destination(Vector3 _position)
     {
         move_destination_position = _position;
+        move_speed = MOVE_DESTINATION_SPEED;
         move_state = Move_State.destination;
     }
 
@@ -76,7 +69,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
         Position_Init = transform.position;
 
-        Move_YMax = transform.position.y;
+        Move_Follow_YMax = Position_Init.y;
 
         Slope = false;
 
@@ -85,21 +78,32 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     }
 
     private void LateUpdate()
-    {        
+    {
         if (Active)
         {
             switch (move_state)
             {
                 case Move_State.follow:
-                    Move(move_follow_target.transform.position);
+                    var _pos = move_follow_target.transform.position - transform.position;
+                    _pos.z = 0;
+                    _pos = transform.position + _pos * move_speed * Time.deltaTime;
+
+                    if (_pos.y > Move_Follow_YMax)
+                    {
+                        _pos.y = Move_Follow_YMax;
+                    }
+                    
+                    transform.position = _pos;
                 break;
 
                 case Move_State.destination:
-                    Move(move_destination_position);
+                    var _spd = move_speed * Time.deltaTime;
 
-                    var _position_ofs = move_destination_position - transform.position;
+                    transform.position = Vector3.MoveTowards(transform.position, move_destination_position, _spd);
 
-                    if (_position_ofs.magnitude <= move_destination_magnitude_edge)
+                    var _dif = move_destination_position - transform.position;
+
+                    if (_dif.magnitude <= _spd)
                     {
                         move_state = Move_State.idle;
                     }

@@ -19,6 +19,45 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private Vector2 spawnPoint_line_3 = new Vector2(5.7f, -1.15f);
     [SerializeField] private Vector2 spawnPoint_line_4 = new Vector2(5.7f, -1.45f);
 
+    [SerializeField] private GameObject[] driftSection_prefab;
+
+    private struct DriftSection 
+    {
+        public DriftSection(GameObject _prefab, string _distanceLeft, float _timerMult)
+        {
+            prefab = _prefab;
+            distanceLeft = _distanceLeft;
+            timerMult = _timerMult;
+        }
+
+        public GameObject prefab;
+        public string distanceLeft;
+        public float timerMult;
+    }
+    private DriftSection[] driftSection_array; 
+    private int driftSection_array_current_ind = 0;
+
+    private bool DriftSection_New()
+    {
+        if (driftSection_array_current_ind <= driftSection_array.Length)
+        {
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                Destroy(World_Local_SceneMain_DriftSection_Enity.SingleOnScene.gameObject);
+            }
+
+            Instantiate(driftSection_array[driftSection_array_current_ind].prefab, World_Entity.SingleOnScene.transform);
+
+            ++driftSection_array_current_ind;
+
+            return (true);
+        }
+        else
+        {
+            return (false);
+        }
+    }
+
     #endregion
 
     #region Stage
@@ -26,7 +65,8 @@ public class ControlScene_Main : MonoBehaviour
         #region Road
 
         private bool stage_road = true;
-        private float stage_road_toDrift_timer = 5f;
+        private const float STAGE_ROAD_TODRIFT_TIMER_INIT = 15f;
+        private float stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT;
         private bool stage_road_toDrift_clearing = false;
         private bool stage_road_toDrift_cutscene = false;
         private enum Stage_Road_ToDrift_Cutscene_State
@@ -36,7 +76,7 @@ public class ControlScene_Main : MonoBehaviour
             moveDown
         }
         private Stage_Road_ToDrift_Cutscene_State stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.alignment;
-        private float stage_road_toDrift_cutscene_state_braking_time = 2f;
+        private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME = 2f;
         private float stage_road_toDrift_cutscene_state_braking_scale = 1f;
         private float stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer;
         private bool stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
@@ -48,7 +88,11 @@ public class ControlScene_Main : MonoBehaviour
         #region Drift
 
         private bool stage_drift = false;
-
+        private bool stage_drift_toRoad_cutscene = false;
+        private bool stage_drift_toRoad_braking_swap = true;
+        private bool stage_drift_toRoad_braking_right_swap = true;
+        private const float STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE = 0.002f;
+        
         #endregion
 
         #region Pause
@@ -75,13 +119,21 @@ public class ControlScene_Main : MonoBehaviour
         {
             World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
-            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+            
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+            }
         }
         private void Stage_Pause_Event_Off_ToRoad()
         {
             World_General_Sky.SingleOnScene.Active = true;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
-            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+            
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+            }
             
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
@@ -127,6 +179,24 @@ public class ControlScene_Main : MonoBehaviour
     {
         audio_source = GetComponent<AudioSource>();
 
+        driftSection_array = new DriftSection[14]
+        {
+            new DriftSection(driftSection_prefab[0], "14", 1f),
+            new DriftSection(driftSection_prefab[1], "13.75", 1f),
+            new DriftSection(driftSection_prefab[2], "13.5", 2f),
+            new DriftSection(driftSection_prefab[3], "13", 2f),
+            new DriftSection(driftSection_prefab[4], "12.5", 3f),
+            new DriftSection(driftSection_prefab[5], "11.75", 3f),
+            new DriftSection(driftSection_prefab[6], "11", 4f),
+            new DriftSection(driftSection_prefab[7], "10", 4f),
+            new DriftSection(driftSection_prefab[8], "9", 5f),
+            new DriftSection(driftSection_prefab[9], "7.75", 5f),
+            new DriftSection(driftSection_prefab[10], "6.5", 6f),
+            new DriftSection(driftSection_prefab[11], "5", 6f),
+            new DriftSection(driftSection_prefab[12], "3.5", 7f),
+            new DriftSection(driftSection_prefab[13], "1.75", 7f)
+        };
+        
         void _GeneralActiveState(bool _state)
         {
             World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_General = _state;
@@ -218,7 +288,11 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_AudioMixer.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
-            World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+            
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+            }
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
@@ -261,7 +335,7 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(driftSection_array[driftSection_array_current_ind].distanceLeft,1f);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
     }
 
@@ -338,10 +412,18 @@ public class ControlScene_Main : MonoBehaviour
                                 if (!InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Enemy_Entity>()
                                 && !InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Bonus_Parent>())
                                 {
-                                    World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
-                                
-                                    stage_road_toDrift_clearing = false;
-                                    stage_road_toDrift_cutscene = true;
+                                    if (DriftSection_New())
+                                    {
+                                        World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
+                                        
+                                        stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult;
+                                        stage_road_toDrift_clearing = false;
+                                        stage_road_toDrift_cutscene = true;
+                                    }
+                                    else
+                                    {
+                                        //TODO: переход к конечной заставке
+                                    }
                                 }
                             }
                         }
@@ -353,7 +435,7 @@ public class ControlScene_Main : MonoBehaviour
                             case Stage_Road_ToDrift_Cutscene_State.alignment:
                                 if (World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current == World_Local_SceneMain_Player_Entity.State.road_toDrift_braking)
                                 {
-                                    World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(0, stage_road_toDrift_cutscene_state_braking_time);
+                                    World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(0, STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME);
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
                                     stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer = World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Start();
@@ -364,7 +446,7 @@ public class ControlScene_Main : MonoBehaviour
                             break;
 
                             case Stage_Road_ToDrift_Cutscene_State.braking:
-                                stage_road_toDrift_cutscene_state_braking_scale -= Time.deltaTime / stage_road_toDrift_cutscene_state_braking_time;
+                                stage_road_toDrift_cutscene_state_braking_scale -= Time.deltaTime / STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME;
                                 World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer * stage_road_toDrift_cutscene_state_braking_scale;
                             
                                 if (stage_road_toDrift_cutscene_state_braking_scale < STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_PLAYERMOVEDOWN_SCALE)
@@ -373,15 +455,19 @@ public class ControlScene_Main : MonoBehaviour
                                     {
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_moveDown;
                                         AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow(World_Local_SceneMain_Player_Entity.SingleOnScene.gameObject);
+
                                         stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = false;
                                     }
-
-                                    if (stage_road_toDrift_cutscene_state_braking_scale <=0)
+                                    else
                                     {
-                                        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
-                                        stage_road_toDrift_cutscene_state_braking_scale = 1f;
+                                        if (stage_road_toDrift_cutscene_state_braking_scale <= 0)
+                                        {
+                                            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
+                                            stage_road_toDrift_cutscene_state_braking_scale = 1f;
 
-                                        stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
+                                            stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
+                                            stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
+                                        }
                                     }
                                 }
                             break;
@@ -389,22 +475,15 @@ public class ControlScene_Main : MonoBehaviour
                             case Stage_Road_ToDrift_Cutscene_State.moveDown:
                                 if (AppScreen_General_Camera_Entity.SingleOnScene.transform.position.y <= STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX)
                                 {
-                                    stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.alignment;
-                                    stage_road_toDrift_cutscene = false;
-
                                     Stage_Pause_Event_On -= Stage_Pause_Event_On_FromRoad;
                                     Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToRoad;
                                     Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToDrift;
 
-                                    World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.drift;
                                     World_General_Sky.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
                                     World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
-                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
                                     World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = true;
-                                    AppScreen_General_Camera_Entity.SingleOnScene.Move_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
-                                    AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
 
                                     foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
@@ -412,6 +491,25 @@ public class ControlScene_Main : MonoBehaviour
                                         _item.Position_Reset();
                                     }
 
+                                    AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
+                                    AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
+
+                                    var _pos_x_ofs = World_Local_SceneMain_DriftSection_Point_End_Offset.SingleOnScene.transform.position.x - World_Local_SceneMain_Player_Entity.SingleOnScene.Position_Init.x;
+                                    
+                                    var _pos = World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position;
+                                    _pos.x -= _pos_x_ofs;
+                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position = _pos;
+
+                                    _pos = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+                                    _pos.x -= _pos_x_ofs;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position = _pos;
+
+                                    _pos = AppScreen_General_Camera_Entity.SingleOnScene.transform.position;
+                                    _pos.x -= _pos_x_ofs;
+                                    AppScreen_General_Camera_Entity.SingleOnScene.transform.position = _pos;
+
+                                    stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.alignment;
+                                    stage_road_toDrift_cutscene = false;
                                     stage_road = false;
                                     stage_drift = true;
                                 }
@@ -442,19 +540,72 @@ public class ControlScene_Main : MonoBehaviour
                 }
                 else
                 {
-                    ////по окончании стадии
+                    if (!stage_drift_toRoad_cutscene)
+                    {
+                        var _pl_pos = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+                        var _cutscene_pos = World_Local_SceneMain_DriftSection_Point_End_Cutscene.SingleOnScene.transform.position;
 
-                    //Stage_Pause_Event_On += Stage_Pause_Event_On_FromRoad;
-                    //Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
-                    //Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToDrift;
+                        if (_pl_pos.x > _cutscene_pos.x
+                        && _pl_pos.y > _cutscene_pos.y) 
+                        {
+                            World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.drift_toRoad;
+                            AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow_YMax = AppScreen_General_Camera_Entity.SingleOnScene.Position_Init.y;
 
-                    //World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
-                    //World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
-                    //World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
-                    //активация остальных объектов деактивированных при переходе из road в drift
+                            stage_drift_toRoad_cutscene = true;
+                        }
+                    }
+                    else
+                    {
+                        if (stage_drift_toRoad_braking_swap
+                        && World_Local_SceneMain_Player_Entity.SingleOnScene.Moving_Drift_ToRoad_Braking)
+                        {
+                            World_General_Sky.SingleOnScene.Active = true;
+                            AppScreen_General_Camera_Entity.SingleOnScene.Move_Destination(AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
 
-                    //stage_drift = false;
-                    //stage_road = true;
+                            stage_drift_toRoad_braking_swap = false;
+                        }
+                        else
+                        {
+                            if (stage_drift_toRoad_braking_right_swap
+                            && World_Local_SceneMain_Player_Entity.SingleOnScene.Moving_Drift_ToRoad_Braking_Right)
+                            {
+                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE;
+
+                                foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+                                {
+                                    _item.Active = true;
+                                }
+
+                                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = true;
+
+                                stage_drift_toRoad_braking_right_swap = false;
+                            }
+                            else
+                            {
+                                if (World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current == World_Local_SceneMain_Player_Entity.State.road)
+                                {
+                                    Stage_Pause_Event_On += Stage_Pause_Event_On_FromRoad;
+                                    Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
+                                    Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToDrift;
+
+                                    World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
+                                    World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
+
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
+                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
+                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(driftSection_array[driftSection_array_current_ind].distanceLeft, 1f);
+
+                                    stage_drift_toRoad_cutscene = false;
+                                    stage_drift_toRoad_braking_swap = true;
+                                    stage_drift_toRoad_braking_right_swap = true;
+
+                                    stage_drift = false;
+                                    stage_road = true;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

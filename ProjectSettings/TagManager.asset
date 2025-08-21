@@ -44,5 +44,8 @@ TagManager:
   - name: DriftSection_Bush
     uniqueID: 1992414595
     locked: 0
+  - name: PopUp
+    uniqueID: 2970066229
+    locked: 0
   m_RenderingLayers:
   - Default

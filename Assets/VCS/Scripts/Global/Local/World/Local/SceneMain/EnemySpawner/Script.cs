@@ -21,8 +21,8 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
 
     private float                  enemySpawn_wave_enemyDelay;
     [SerializeField] private float enemySpawn_wave_enemyDelay_init;
-    [SerializeField] private float enemySpawn_wave_enemyDelay_init_decreaseCf;
-    [SerializeField] private float enemySpawn_wave_enemyDelay_init_min; // ~ 0.12f
+    [SerializeField] private float enemySpawn_wave_enemyDelay_init_decrease;
+    [SerializeField] private float enemySpawn_wave_enemyDelay_init_min;
 
     private float                  enemySpawn_wave_delay;
     [SerializeField] private float enemySpawn_wave_delay_init;
@@ -32,7 +32,7 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     private int                    enemySpawn_wave_size;
     [SerializeField] private int   enemySpawn_wave_size_init;
     private float                  enemySpawn_wave_size_counter;
-    [SerializeField] private float enemySpawn_wave_size_counter_increaseCf;
+    [SerializeField] private float enemySpawn_wave_size_counter_increase;
     [SerializeField] private int   enemySpawn_wave_size_counter_max;
 
     private void Awake()
@@ -133,9 +133,9 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
                         enemySpawn_wave_delay_init = Mathf.Clamp(enemySpawn_wave_delay_init - enemySpawn_wave_delay_init_decreaseCf, enemySpawn_wave_delay_init_min, enemySpawn_wave_delay_init);
                         enemySpawn_wave_delay = enemySpawn_wave_delay_init;
 
-                        enemySpawn_wave_enemyDelay_init = Mathf.Clamp(enemySpawn_wave_enemyDelay_init - enemySpawn_wave_enemyDelay_init_decreaseCf, enemySpawn_wave_enemyDelay_init_min, enemySpawn_wave_enemyDelay);
+                        enemySpawn_wave_enemyDelay_init = Mathf.Clamp(enemySpawn_wave_enemyDelay_init - enemySpawn_wave_enemyDelay_init_decrease, enemySpawn_wave_enemyDelay_init_min, enemySpawn_wave_enemyDelay);
 
-                        enemySpawn_wave_size_counter += enemySpawn_wave_size_counter_increaseCf;
+                        enemySpawn_wave_size_counter += enemySpawn_wave_size_counter_increase;
                         var _enemySpawn_wave_size_counter_clamp = Mathf.Clamp(enemySpawn_wave_size_counter, enemySpawn_wave_size_counter, enemySpawn_wave_size_counter_max);
                         var _enemySpawn_wave_size_counter_clamp_floor = Mathf.Floor(_enemySpawn_wave_size_counter_clamp);
                         enemySpawn_wave_size = (int)_enemySpawn_wave_size_counter_clamp_floor;
