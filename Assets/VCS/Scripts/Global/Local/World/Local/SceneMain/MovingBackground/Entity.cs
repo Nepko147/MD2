@@ -56,7 +56,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
     public bool SpeedScale_Active { get; set; }
     public float SpeedScale { get; set; }
     public const float SPEEDSCALE_INIT = 0.008f;
-    private const float SPEEDSCALE_INCREMENT = 0.0001f;
+    private const float SPEEDSCALE_INCREMENT = 0.000001f;
     private const float SPEEDSCALE_MAX = 0.02f;
 
     private void Awake()
@@ -68,7 +68,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
         SpeedScale = SPEEDSCALE_INIT; 
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (SpeedScale_Active)
         {

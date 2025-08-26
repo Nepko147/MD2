@@ -5,6 +5,12 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 {
     public static AppScreen_Local_SceneOpening_UICanvas_StartText SingleOnScene { get; private set; }
 
+    public bool Enabled 
+    { 
+        get { return (text.enabled); } 
+        set { text.enabled = value; }
+    }
+
     private enum Stage
     {
         PressAnyKey,
@@ -14,16 +20,21 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 
     private Text text;
     private Color text_color;
-    private bool text_color_anim_state = false;
-    [SerializeField] private float text_color_anim_timeCf = 1.1f;
-    private float text_color_alpha_min = 0.25f;
-    private float text_color_alpha_max = 1f;
+    private bool text_color_anim_state = true;
+    private const float TEXT_COLOR_ALPHA_MIN = 0.25f;
+    private const float TEXT_COLOR_ALPHA_MAX = 1f;
+    private const float TEXT_COLOR_ALPHA_SPEED = 1f;
 
     private void Awake()
     {
-        text = GetComponent<Text>();
+        SingleOnScene = this;
 
+        text = GetComponent<Text>();
         text_color = text.color;
+        text_color.a = 0;
+        text.color = text_color;
+
+        Enabled = false;
     }
 
     private void Start()
@@ -33,50 +44,53 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 
     private void Update()
     {
-        if (!text_color_anim_state)
+        if (Enabled)
         {
-            text_color.a -= text_color_anim_timeCf * Time.deltaTime;
-
-            if (text_color.a <= text_color_alpha_min)
+            if (!text_color_anim_state)
             {
-                text_color_anim_state = true;
-            }
-        }
-        else
-        {
-            text_color.a += text_color_anim_timeCf * Time.deltaTime;
+                text_color.a -= TEXT_COLOR_ALPHA_SPEED * Time.deltaTime;
 
-            if (text_color.a >= text_color_alpha_max)
-            {
-                text_color_anim_state = false;
-            }
-        }
-        
-        text.color = text_color;
-
-        switch (stage)
-        {
-            case Stage.PressAnyKey:
-            if (ControlScene_Opening.SingleOnScene.Stage_PressAnyKey_Pressed)
-            {
-                if (!ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
+                if (text_color.a <= TEXT_COLOR_ALPHA_MIN)
                 {
-                    text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.loadingCloudData);
-                    stage = Stage.LoadData;
+                    text_color_anim_state = true;
                 }
-                else
+            }
+            else
+            {
+                text_color.a += TEXT_COLOR_ALPHA_SPEED * Time.deltaTime;
+
+                if (text_color.a >= TEXT_COLOR_ALPHA_MAX)
+                {
+                    text_color_anim_state = false;
+                }
+            }
+        
+            text.color = text_color;
+
+            switch (stage)
+            {
+                case Stage.PressAnyKey:
+                if (ControlScene_Opening.SingleOnScene.Stage_PressAnyKey_Pressed)
+                {
+                    if (!ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
+                    {
+                        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.loadingCloudData);
+                        stage = Stage.LoadData;
+                    }
+                    else
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+                break;
+
+                case Stage.LoadData:
+                if (ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
                 {
                     Destroy(gameObject);
                 }
+                break;
             }
-            break;
-
-            case Stage.LoadData:
-            if (ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
-            {
-                Destroy(gameObject);
-            }
-            break;
         }
     }
 }

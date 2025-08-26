@@ -25,7 +25,7 @@ public class World_General_Fog : MonoBehaviour
     private float material_color_green_min = 0.1f;
     private float material_color_green_max = 0.2f;
     private const float MATERIAL_COLOR_BLUE = 0.4f;
-    private const float MATERIAL_COLOR_ALPHA = 0.15f;
+    private const float MATERIAL_COLOR_ALPHA = 0.25f;
     private const float MATERIAL_COLOR_STEP = 0.00025f;
     public enum Material_Color_State
     {
