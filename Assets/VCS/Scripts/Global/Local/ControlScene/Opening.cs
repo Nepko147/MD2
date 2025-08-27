@@ -6,9 +6,13 @@ public class ControlScene_Opening : MonoBehaviour
 {
     public static ControlScene_Opening SingleOnScene { get; private set; }
 
-    private bool stage_pressAnyKey = true;
+    private bool stage_delay = true;
+
+    private bool stage_pressAnyKey = false;
+    private float stage_pressAnyKey_delay = 1f;
     public bool Stage_PressAnyKey_Pressed { get; private set; }
-    private bool stage_titleAnimation = true;
+
+    private bool stage_titleAnimation = false;
 
     [SerializeField] private AudioClip audio_crickets;
 
@@ -22,14 +26,36 @@ public class ControlScene_Opening : MonoBehaviour
     private void Start()
     {
         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
+
+        if (ControlPers_BuildSettings.SingleOnScene.currentPlatformType != ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop
+        && ControlPers_BuildSettings.SingleOnScene.currentPlatformType != ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android)
+        {
+            AppScreen_Local_SceneOpening_UICanvas_StartText.SingleOnScene.Enabled = true;
+
+            stage_delay = false;
+            stage_pressAnyKey = true;
+        }
     }
 
     private void Update()
     {
+        ControlPers_FogHandler.Move();
+
+        if (stage_delay)
+        {
+            stage_pressAnyKey_delay -= Time.deltaTime;
+
+            if (stage_pressAnyKey_delay <= 0)
+            {
+                AppScreen_Local_SceneOpening_UICanvas_StartText.SingleOnScene.Enabled = true;
+
+                stage_delay = false;
+                stage_pressAnyKey = true;
+            }
+        }
+
         if (stage_pressAnyKey)
         {
-            ControlPers_FogHandler.Move();
-
             if (!Stage_PressAnyKey_Pressed)
             {
                 if (Input.anyKey)
@@ -51,8 +77,6 @@ public class ControlScene_Opening : MonoBehaviour
 
         if (stage_titleAnimation)
         {
-            ControlPers_FogHandler.Move();
-
             if (AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Done
             && AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.Done)
             {

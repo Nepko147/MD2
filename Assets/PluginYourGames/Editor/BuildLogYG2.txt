@@ -1,3 +1,13 @@
+<<<<<<< HEAD
 Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
 Build number: 73
+=======
+<<<<<<< HEAD
+Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
+Build number: 69
+=======
+Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
+Build number: 73
+>>>>>>> nepko
+>>>>>>> main
 PluginYG version: 2.0032

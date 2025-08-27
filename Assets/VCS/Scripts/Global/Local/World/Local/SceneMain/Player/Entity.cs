@@ -68,6 +68,15 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 case State.drift_toRoad:
                     animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
                     VisualState_Set(VisualState.up);
+
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        moving_drift_toRoad_position_target.y = MOVING_ROAD_LINE_2_POSITION_Y;
+                    }
+                    else
+                    {
+                        moving_drift_toRoad_position_target.y = MOVING_ROAD_LINE_3_POSITION_Y;
+                    }
                 break;
             }
         }
@@ -344,7 +353,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
         private Vector2 moving_drift_hitVector = Vector2.zero;
         private float moving_drift_hitVector_size = 0;
-        private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 6f;
+        private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 5f;
         private const float MOVING_DRIFT_HITVECTOR_TIME = 1.5f;
         private bool moving_drift_braking = true;
         private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.5f;
@@ -352,10 +361,11 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private bool moving_drift_braking_swap = true;
         private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
 
-    #endregion
+        #endregion
 
         #region Drift_ToRoad
         
+        private Vector3 moving_drift_toRoad_position_target;
         public bool Moving_Drift_ToRoad_Braking { get; private set; }
         private const float MOVING_DRIFT_TOROAD_BRAKING_DIST = 3f;
         private const float MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP = 3f;
@@ -575,6 +585,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, MOVING_ROAD_LINE_2_POSITION_Y, transform.position.z);
         moving_road_newPosition = transform.position;
+        moving_drift_toRoad_position_target.x = Position_Init.x;
         Moving_Drift_ToRoad_Braking = false;
     }
 
@@ -730,9 +741,9 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 case State.drift_toRoad:
                     _speed = moving_drift_speed_current * Time.deltaTime;
 
-                    transform.position = Vector3.MoveTowards(transform.position, Position_Init, _speed);
+                    transform.position = Vector3.MoveTowards(transform.position, moving_drift_toRoad_position_target, _speed);
 
-                    _dif = Position_Init - transform.position;
+                    _dif = moving_drift_toRoad_position_target - transform.position;
 
                     if (!Moving_Drift_ToRoad_Braking)
                     {
@@ -765,6 +776,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                         {
                             if (_dif.magnitude <= _speed)
 					        {
+                                transform.position = moving_drift_toRoad_position_target;
+
                                 moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
                                 moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
                                 moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
@@ -793,7 +806,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                         if (moving_drift_hitVector_size > 0)
                         {
-                            moving_drift_hitVector_size -= MOVING_DRIFT_HITVECTOR_SIZE_MAX / MOVING_DRIFT_HITVECTOR_TIME * Time.deltaTime;
+                            moving_drift_hitVector_size -= MOVING_DRIFT_HITVECTOR_SIZE_MAX / MOVING_DRIFT_HITVECTOR_TIME * Time.fixedDeltaTime;
                             moving_drift_moveVector += moving_drift_hitVector * moving_drift_hitVector_size;
                             moving_drift_moveVector = Vector2.ClampMagnitude(moving_drift_moveVector, MOVING_DRIFT_MOVEVECTOR_SIZE_MAX);
                         }

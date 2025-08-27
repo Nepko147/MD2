@@ -6,9 +6,9 @@ public class World_General_Sky : MonoBehaviour
 
     public bool Active { get; set; }
 
-    [SerializeField] float y_max = 1f;
-    [SerializeField] float y_min = 0;
-    [SerializeField] float speed = 0.1f;
+    private const float Y_MAX = 1f;
+    private const float Y_MIN = 0.5f;
+    private const float SPEED = 0.15f;
 
     private bool state = true;
 
@@ -25,18 +25,18 @@ public class World_General_Sky : MonoBehaviour
         {
             if (state)
             {
-                transform.position += Vector3.up * speed * Time.deltaTime;
+                transform.position += Vector3.up * SPEED * Time.deltaTime;
 
-                if (transform.position.y >= y_max)
+                if (transform.position.y >= Y_MAX)
                 {
                     state = false;
                 }
             }
             else
             {
-                transform.position -= Vector3.up * speed * Time.deltaTime;
+                transform.position -= Vector3.up * SPEED * Time.deltaTime;
 
-                if (transform.position.y <= y_min)
+                if (transform.position.y <= Y_MIN)
                 {
                     state = true;
                 }
