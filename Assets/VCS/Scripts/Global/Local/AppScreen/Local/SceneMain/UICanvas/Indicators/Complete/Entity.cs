@@ -16,18 +16,50 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         set 
         { 
             active = value;
-            text_number.enabled = value;
-            text_kmLeft.enabled = value;
+            text.enabled = value;
         }
     }
 
-    [SerializeField] private Text text_number;
+    [SerializeField] private Text text;
+
+    private void Text_Update()
+    {
+        text.text = text_number + text_kmLeft;
+    }
+
+    public void Text_LanguageRefresh()
+    {
+        Text_Km_Left = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.indicators_complete);
+    }
+
+    private string text_number;
     public string Text_Number
     {
-        get { return (text_number.text); }
-        private set { text_number.text = value; }
+        get { return (text_number); }
+        set 
+        {
+            text_number = "<color=#" + ColorUtility.ToHtmlStringRGB(text_number_color) + ">" + value + "</color> ";
+            Text_Update();
+        }
     }
-    [SerializeField] private Text text_kmLeft;
+    [SerializeField] private Color text_number_color = Color.white;
+
+    private string text_kmLeft;
+
+    public string Text_Km_Left 
+    {
+        get 
+        {
+            return text_kmLeft;
+        }
+        set
+        {
+            text_kmLeft = "<color=#" + ColorUtility.ToHtmlStringRGB(text_kmLeft_color) + ">" + value + "</color>";
+            Text_Update();
+        }
+    }
+
+    [SerializeField] private Color text_kmLeft_color = new Color(1.000f, 0.137f, 0.451f, 1.000f);
 
     private CanvasGroup canvasGroup;
 
@@ -45,10 +77,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private const float STATE_TIME_WAIT = 2f;
     private const float STATE_TIME_HIDE = 1f;
 
-    public void Show(string _distanceLeft, float _delay = 0)
+    public void Show(float _delay = 0)
     {
-        Text_Number = _distanceLeft;
-
         IEnumerator _coroutine(float _delay)
         {
             yield return new WaitForSeconds(_delay);
@@ -67,16 +97,14 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
         SingleOnScene = this;
 
-        text_number.font.material.mainTexture.filterMode = FilterMode.Point;
-        text_kmLeft.font.material.mainTexture.filterMode = FilterMode.Point;
+        text.font.material.mainTexture.filterMode = FilterMode.Point;
+
+        Text_LanguageRefresh();
 
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
-    }
 
-    private void Start()
-    {
-        text_kmLeft.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.indicators_complete);        
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -119,5 +147,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
                 break;
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

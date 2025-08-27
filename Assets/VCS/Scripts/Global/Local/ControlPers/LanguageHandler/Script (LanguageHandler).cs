@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using System.Collections.Generic;
 
 public class ControlPers_LanguageHandler : MonoBehaviour
@@ -15,6 +15,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         quit,
         switch_en,
         switch_ru,
+        switch_es,
+        switch_pt,
+        switch_de,
+        switch_id,
         upgrade,
         ok,
         menu,
@@ -48,6 +52,22 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_en_switch_ru_idle;
     [SerializeField] private Sprite button_en_switch_ru_pointed;
     [SerializeField] private Sprite button_en_switch_ru_pressed;
+
+    [SerializeField] private Sprite button_en_switch_es_idle;
+    [SerializeField] private Sprite button_en_switch_es_pointed;
+    [SerializeField] private Sprite button_en_switch_es_pressed;
+
+    [SerializeField] private Sprite button_en_switch_pt_idle;
+    [SerializeField] private Sprite button_en_switch_pt_pointed;
+    [SerializeField] private Sprite button_en_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_en_switch_de_idle;
+    [SerializeField] private Sprite button_en_switch_de_pointed;
+    [SerializeField] private Sprite button_en_switch_de_pressed;
+
+    [SerializeField] private Sprite button_en_switch_id_idle;
+    [SerializeField] private Sprite button_en_switch_id_pointed;
+    [SerializeField] private Sprite button_en_switch_id_pressed;
 
     [SerializeField] private Sprite button_en_idle_buy;
     [SerializeField] private Sprite button_en_idle_improve;
@@ -103,6 +123,22 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_ru_switch_ru_pointed;
     [SerializeField] private Sprite button_ru_switch_ru_pressed;
 
+    [SerializeField] private Sprite button_ru_switch_es_idle;
+    [SerializeField] private Sprite button_ru_switch_es_pointed;
+    [SerializeField] private Sprite button_ru_switch_es_pressed;
+
+    [SerializeField] private Sprite button_ru_switch_pt_idle;
+    [SerializeField] private Sprite button_ru_switch_pt_pointed;
+    [SerializeField] private Sprite button_ru_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_ru_switch_de_idle;
+    [SerializeField] private Sprite button_ru_switch_de_pointed;
+    [SerializeField] private Sprite button_ru_switch_de_pressed;
+
+    [SerializeField] private Sprite button_ru_switch_id_idle;
+    [SerializeField] private Sprite button_ru_switch_id_pointed;
+    [SerializeField] private Sprite button_ru_switch_id_pressed;
+
     [SerializeField] private Sprite button_ru_idle_buy;
     [SerializeField] private Sprite button_ru_idle_improve;
     [SerializeField] private Sprite button_ru_pointed_buy;
@@ -131,152 +167,287 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     #endregion
 
-    #endregion
+    #region Spanish
 
-    #region Text
+    [SerializeField] private Sprite button_es_play_idle;
+    [SerializeField] private Sprite button_es_play_pointed;
+    [SerializeField] private Sprite button_es_play_pressed;
 
-    public enum Text_Key
-    {
-        startText,
-        loadingCloudData,
-        upgrade_moreCoins,
-        upgrade_moreBonuses,
-        upgrade_coinMagnet,
-        upgrade_heDidNotDie,
-        popUpMessage_notEnoughCoins,
-        indicators_complete,
-        midscreen_gameOver,
-        midscreen_pause,
-        midscreen_distanceRemain,
-        popUp_up,
-        popUp_coin,
-        popUp_coinRush
-    }
+    [SerializeField] private Sprite button_es_upgrades_idle;
+    [SerializeField] private Sprite button_es_upgrades_pointed;
+    [SerializeField] private Sprite button_es_upgrades_pressed;
 
-    private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
-    {
-        [Text_Key.startText] = "PRESS ANY KEY",
-        [Text_Key.loadingCloudData] = "LOADING CLOUD DATA",
-        [Text_Key.upgrade_moreCoins] = "MORE COINS",
-        [Text_Key.upgrade_moreBonuses] = "MORE BONUSES",
-        [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
-        [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
-        [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
-        [Text_Key.indicators_complete] = "KILOMETERS LEFT",
-        [Text_Key.midscreen_gameOver] = "GAME OVER",
-        [Text_Key.midscreen_pause] = "PAUSE",
-        [Text_Key.midscreen_distanceRemain] = "Distance remain",
-        [Text_Key.popUp_up] = "+1 UP",
-        [Text_Key.popUp_coin] = "+1 Coin",
-        [Text_Key.popUp_coinRush] = "Coin Rush!"
-    };
+    [SerializeField] private Sprite button_es_settings_idle;
+    [SerializeField] private Sprite button_es_settings_pointed;
+    [SerializeField] private Sprite button_es_settings_pressed;
 
-    private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
-    {
-        [Text_Key.startText] = "Õ¿∆Ã»“≈ Àﬁ¡”ﬁ  À¿¬»ÿ”",
-        [Text_Key.loadingCloudData] = "«¿√–”« ¿ ƒ¿ÕÕ€’",
-        [Text_Key.upgrade_moreCoins] = "¡ŒÀ‹ÿ≈ ÃŒÕ≈“",
-        [Text_Key.upgrade_moreBonuses] = "¡ŒÀ‹ÿ≈ ¡ŒÕ”—Œ¬",
-        [Text_Key.upgrade_coinMagnet] = "Ã¿√Õ»“ ƒÀﬂ ÃŒÕ≈“",
-        [Text_Key.upgrade_heDidNotDie] = "ƒ¿ Õ≈ ”Ã≈– ŒÕ",
-        [Text_Key.popUpMessage_notEnoughCoins] = "Õ≈ƒŒ—“¿“Œ◊ÕŒ ÃŒÕ≈“",
-        [Text_Key.indicators_complete] = " Ã ƒŒ ÷≈À»",
-        [Text_Key.midscreen_gameOver] = " ŒÕ≈÷ »√–€",
-        [Text_Key.midscreen_pause] = "œ¿”«¿",
-        [Text_Key.midscreen_distanceRemain] = "ŒÒÚ‡ÎÓÒ¸ ‰Ó ˆÂÎË",
-        [Text_Key.popUp_up] = "+1 ∆ËÁÌ¸",
-        [Text_Key.popUp_coin] = "+1 ÃÓÌÂÚ‡",
-        [Text_Key.popUp_coinRush] = "ÃÓÌÂÚÌ‡ˇ ÀËıÓ‡‰Í‡!"
-    };
+    [SerializeField] private Sprite button_es_quit_idle;
+    [SerializeField] private Sprite button_es_quit_pointed;
+    [SerializeField] private Sprite button_es_quit_pressed;
 
-    public string Text_Get(Text_Key _key)
-    {
-        var _text = string.Empty;
+    [SerializeField] private Sprite button_es_switch_en_idle;
+    [SerializeField] private Sprite button_es_switch_en_pointed;
+    [SerializeField] private Sprite button_es_switch_en_pressed;
 
-        switch (GameLanguage_Current)
-        {
-            case GameLanguage.english:
-                _text = text_dictionary_en[_key];
-                break;
-            case GameLanguage.russian:
-                _text = text_dictionary_ru[_key];
-                break;
-        }
+    [SerializeField] private Sprite button_es_switch_ru_idle;
+    [SerializeField] private Sprite button_es_switch_ru_pointed;
+    [SerializeField] private Sprite button_es_switch_ru_pressed;
 
-        return _text;
-    }
+    [SerializeField] private Sprite button_es_switch_es_idle;
+    [SerializeField] private Sprite button_es_switch_es_pointed;
+    [SerializeField] private Sprite button_es_switch_es_pressed;
+
+    [SerializeField] private Sprite button_es_switch_pt_idle;
+    [SerializeField] private Sprite button_es_switch_pt_pointed;
+    [SerializeField] private Sprite button_es_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_es_switch_de_idle;
+    [SerializeField] private Sprite button_es_switch_de_pointed;
+    [SerializeField] private Sprite button_es_switch_de_pressed;
+
+    [SerializeField] private Sprite button_es_switch_id_idle;
+    [SerializeField] private Sprite button_es_switch_id_pointed;
+    [SerializeField] private Sprite button_es_switch_id_pressed;
+
+    [SerializeField] private Sprite button_es_idle_buy;
+    [SerializeField] private Sprite button_es_idle_improve;
+    [SerializeField] private Sprite button_es_pointed_buy;
+    [SerializeField] private Sprite button_es_pointed_improve;
+    [SerializeField] private Sprite button_es_received;
+
+    [SerializeField] private Sprite button_es_ok_idle;
+    [SerializeField] private Sprite button_es_ok_pointed;
+    [SerializeField] private Sprite button_es_ok_pressed;
+
+    [SerializeField] private Sprite button_es_menu_idle;
+    [SerializeField] private Sprite button_es_menu_pointed;
+    [SerializeField] private Sprite button_es_menu_pressed;
+
+    [SerializeField] private Sprite button_es_resume_idle;
+    [SerializeField] private Sprite button_es_resume_pointed;
+    [SerializeField] private Sprite button_es_resume_pressed;
+
+    [SerializeField] private Sprite button_es_revive_idle;
+    [SerializeField] private Sprite button_es_revive_pointed;
+    [SerializeField] private Sprite button_es_revive_pressed;
+
+    [SerializeField] private Sprite button_es_restart_idle;
+    [SerializeField] private Sprite button_es_restart_pointed;
+    [SerializeField] private Sprite button_es_restart_pressed;
 
     #endregion
 
-    #region Dialogue    
+    #region Portuguese
 
-    public List<string[]> Dialogue_Get(string _actor_player, string _actor_npc)
-    {  
-        var _dialogue = new List<string[]>();
+    [SerializeField] private Sprite button_pt_play_idle;
+    [SerializeField] private Sprite button_pt_play_pointed;
+    [SerializeField] private Sprite button_pt_play_pressed;
 
-        switch (GameLanguage_Current)
-        {
-            case GameLanguage.english:
-                string[][] _dialogue_array_en = new string[][]
-                {
-                    new[] { _actor_player, "Hello." },
-                    new[] { _actor_npc, "Hey, handsome." },
-                    new[] { _actor_npc, "I got an extra box of toothpicks on sale. You can just..." },
-                    new[] { _actor_npc, "Come and take it..." },
-                    new[] { _actor_npc, "Interested?" },
-                    new[] { _actor_player, "Already driving." }
-                };
+    [SerializeField] private Sprite button_pt_upgrades_idle;
+    [SerializeField] private Sprite button_pt_upgrades_pointed;
+    [SerializeField] private Sprite button_pt_upgrades_pressed;
 
-                foreach (var _string in _dialogue_array_en)
-                {
-                    _dialogue.Add(_string);
-                }               
-            break;
-            case GameLanguage.russian:
+    [SerializeField] private Sprite button_pt_settings_idle;
+    [SerializeField] private Sprite button_pt_settings_pointed;
+    [SerializeField] private Sprite button_pt_settings_pressed;
 
-                string[][] _dialogue_array_ru = new string[][]
-                {
-                    new[] { _actor_player, "¿ÎÓ." },
-                    new[] { _actor_npc, "œË‚ÂÚ Í‡Ò‡‚˜ËÍ." },
-                    new[] { _actor_npc, "ﬂ ÚÛÚ ÔÓÎÛ˜ËÎ‡ ÎË¯Ì˛˛ ÍÓÓ·ÍÛ ÁÛ·Ó˜ËÒÚÓÍ ÔÓ ‡ÍˆËË. ÃÓÊÂ¯¸ ÔÓÒÚÓ..." },
-                    new[] { _actor_npc, "œËÈÚË Ë ‚ÁˇÚ¸ Â∏..." },
-                    new[] { _actor_npc, "»ÌÚÂÂÒÛÂÚ?" },
-                    new[] { _actor_player, "”ÊÂ Â‰Û." }
-                };
+    [SerializeField] private Sprite button_pt_quit_idle;
+    [SerializeField] private Sprite button_pt_quit_pointed;
+    [SerializeField] private Sprite button_pt_quit_pressed;
 
-                foreach (var _string in _dialogue_array_ru)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-        }
+    [SerializeField] private Sprite button_pt_switch_en_idle;
+    [SerializeField] private Sprite button_pt_switch_en_pointed;
+    [SerializeField] private Sprite button_pt_switch_en_pressed;
 
-        return _dialogue;
-    }
+    [SerializeField] private Sprite button_pt_switch_ru_idle;
+    [SerializeField] private Sprite button_pt_switch_ru_pointed;
+    [SerializeField] private Sprite button_pt_switch_ru_pressed;
+
+    [SerializeField] private Sprite button_pt_switch_es_idle;
+    [SerializeField] private Sprite button_pt_switch_es_pointed;
+    [SerializeField] private Sprite button_pt_switch_es_pressed;
+
+    [SerializeField] private Sprite button_pt_switch_pt_idle;
+    [SerializeField] private Sprite button_pt_switch_pt_pointed;
+    [SerializeField] private Sprite button_pt_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_pt_switch_de_idle;
+    [SerializeField] private Sprite button_pt_switch_de_pointed;
+    [SerializeField] private Sprite button_pt_switch_de_pressed;
+
+    [SerializeField] private Sprite button_pt_switch_id_idle;
+    [SerializeField] private Sprite button_pt_switch_id_pointed;
+    [SerializeField] private Sprite button_pt_switch_id_pressed;
+
+    [SerializeField] private Sprite button_pt_idle_buy;
+    [SerializeField] private Sprite button_pt_idle_improve;
+    [SerializeField] private Sprite button_pt_pointed_buy;
+    [SerializeField] private Sprite button_pt_pointed_improve;
+    [SerializeField] private Sprite button_pt_received;
+
+    [SerializeField] private Sprite button_pt_ok_idle;
+    [SerializeField] private Sprite button_pt_ok_pointed;
+    [SerializeField] private Sprite button_pt_ok_pressed;
+
+    [SerializeField] private Sprite button_pt_menu_idle;
+    [SerializeField] private Sprite button_pt_menu_pointed;
+    [SerializeField] private Sprite button_pt_menu_pressed;
+
+    [SerializeField] private Sprite button_pt_resume_idle;
+    [SerializeField] private Sprite button_pt_resume_pointed;
+    [SerializeField] private Sprite button_pt_resume_pressed;
+
+    [SerializeField] private Sprite button_pt_revive_idle;
+    [SerializeField] private Sprite button_pt_revive_pointed;
+    [SerializeField] private Sprite button_pt_revive_pressed;
+
+    [SerializeField] private Sprite button_pt_restart_idle;
+    [SerializeField] private Sprite button_pt_restart_pointed;
+    [SerializeField] private Sprite button_pt_restart_pressed;
 
     #endregion
 
-    public enum GameLanguage
-    {
-        english,
-        russian
-    }
+    #region German
 
-    public GameLanguage GameLanguage_Current { get; private set; }
+    [SerializeField] private Sprite button_de_play_idle;
+    [SerializeField] private Sprite button_de_play_pointed;
+    [SerializeField] private Sprite button_de_play_pressed;
 
-    public void SetGameLanguage(GameLanguage _language)
-    {
-        GameLanguage_Current = _language;
+    [SerializeField] private Sprite button_de_upgrades_idle;
+    [SerializeField] private Sprite button_de_upgrades_pointed;
+    [SerializeField] private Sprite button_de_upgrades_pressed;
 
-        GameLanguage_OnUpdate();
+    [SerializeField] private Sprite button_de_settings_idle;
+    [SerializeField] private Sprite button_de_settings_pointed;
+    [SerializeField] private Sprite button_de_settings_pressed;
 
-        ControlPers_DataHandler.SingleOnScene.SettingsData_LanguageValue = GameLanguage_Current;        
-    }
+    [SerializeField] private Sprite button_de_quit_idle;
+    [SerializeField] private Sprite button_de_quit_pointed;
+    [SerializeField] private Sprite button_de_quit_pressed;
 
-    public delegate void GameLanguage_Update();
-    public event GameLanguage_Update GameLanguage_OnUpdate;
+    [SerializeField] private Sprite button_de_switch_en_idle;
+    [SerializeField] private Sprite button_de_switch_en_pointed;
+    [SerializeField] private Sprite button_de_switch_en_pressed;
 
-    public Sprite[] GetSprites(ButtonName _buttonName, int _numberOfSprites)
+    [SerializeField] private Sprite button_de_switch_ru_idle;
+    [SerializeField] private Sprite button_de_switch_ru_pointed;
+    [SerializeField] private Sprite button_de_switch_ru_pressed;
+
+    [SerializeField] private Sprite button_de_switch_es_idle;
+    [SerializeField] private Sprite button_de_switch_es_pointed;
+    [SerializeField] private Sprite button_de_switch_es_pressed;
+
+    [SerializeField] private Sprite button_de_switch_pt_idle;
+    [SerializeField] private Sprite button_de_switch_pt_pointed;
+    [SerializeField] private Sprite button_de_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_de_switch_de_idle;
+    [SerializeField] private Sprite button_de_switch_de_pointed;
+    [SerializeField] private Sprite button_de_switch_de_pressed;
+
+    [SerializeField] private Sprite button_de_switch_id_idle;
+    [SerializeField] private Sprite button_de_switch_id_pointed;
+    [SerializeField] private Sprite button_de_switch_id_pressed;
+
+    [SerializeField] private Sprite button_de_idle_buy;
+    [SerializeField] private Sprite button_de_idle_improve;
+    [SerializeField] private Sprite button_de_pointed_buy;
+    [SerializeField] private Sprite button_de_pointed_improve;
+    [SerializeField] private Sprite button_de_received;
+
+    [SerializeField] private Sprite button_de_ok_idle;
+    [SerializeField] private Sprite button_de_ok_pointed;
+    [SerializeField] private Sprite button_de_ok_pressed;
+
+    [SerializeField] private Sprite button_de_menu_idle;
+    [SerializeField] private Sprite button_de_menu_pointed;
+    [SerializeField] private Sprite button_de_menu_pressed;
+
+    [SerializeField] private Sprite button_de_resume_idle;
+    [SerializeField] private Sprite button_de_resume_pointed;
+    [SerializeField] private Sprite button_de_resume_pressed;
+
+    [SerializeField] private Sprite button_de_revive_idle;
+    [SerializeField] private Sprite button_de_revive_pointed;
+    [SerializeField] private Sprite button_de_revive_pressed;
+
+    [SerializeField] private Sprite button_de_restart_idle;
+    [SerializeField] private Sprite button_de_restart_pointed;
+    [SerializeField] private Sprite button_de_restart_pressed;
+
+    #endregion
+
+    #region Indonesian
+
+    [SerializeField] private Sprite button_id_play_idle;
+    [SerializeField] private Sprite button_id_play_pointed;
+    [SerializeField] private Sprite button_id_play_pressed;
+
+    [SerializeField] private Sprite button_id_upgrades_idle;
+    [SerializeField] private Sprite button_id_upgrades_pointed;
+    [SerializeField] private Sprite button_id_upgrades_pressed;
+
+    [SerializeField] private Sprite button_id_settings_idle;
+    [SerializeField] private Sprite button_id_settings_pointed;
+    [SerializeField] private Sprite button_id_settings_pressed;
+
+    [SerializeField] private Sprite button_id_quit_idle;
+    [SerializeField] private Sprite button_id_quit_pointed;
+    [SerializeField] private Sprite button_id_quit_pressed;
+
+    [SerializeField] private Sprite button_id_switch_en_idle;
+    [SerializeField] private Sprite button_id_switch_en_pointed;
+    [SerializeField] private Sprite button_id_switch_en_pressed;
+
+    [SerializeField] private Sprite button_id_switch_ru_idle;
+    [SerializeField] private Sprite button_id_switch_ru_pointed;
+    [SerializeField] private Sprite button_id_switch_ru_pressed;
+
+    [SerializeField] private Sprite button_id_switch_es_idle;
+    [SerializeField] private Sprite button_id_switch_es_pointed;
+    [SerializeField] private Sprite button_id_switch_es_pressed;
+
+    [SerializeField] private Sprite button_id_switch_pt_idle;
+    [SerializeField] private Sprite button_id_switch_pt_pointed;
+    [SerializeField] private Sprite button_id_switch_pt_pressed;
+
+    [SerializeField] private Sprite button_id_switch_de_idle;
+    [SerializeField] private Sprite button_id_switch_de_pointed;
+    [SerializeField] private Sprite button_id_switch_de_pressed;
+
+    [SerializeField] private Sprite button_id_switch_id_idle;
+    [SerializeField] private Sprite button_id_switch_id_pointed;
+    [SerializeField] private Sprite button_id_switch_id_pressed;
+
+    [SerializeField] private Sprite button_id_idle_buy;
+    [SerializeField] private Sprite button_id_idle_improve;
+    [SerializeField] private Sprite button_id_pointed_buy;
+    [SerializeField] private Sprite button_id_pointed_improve;
+    [SerializeField] private Sprite button_id_received;
+
+    [SerializeField] private Sprite button_id_ok_idle;
+    [SerializeField] private Sprite button_id_ok_pointed;
+    [SerializeField] private Sprite button_id_ok_pressed;
+
+    [SerializeField] private Sprite button_id_menu_idle;
+    [SerializeField] private Sprite button_id_menu_pointed;
+    [SerializeField] private Sprite button_id_menu_pressed;
+
+    [SerializeField] private Sprite button_id_resume_idle;
+    [SerializeField] private Sprite button_id_resume_pointed;
+    [SerializeField] private Sprite button_id_resume_pressed;
+
+    [SerializeField] private Sprite button_id_revive_idle;
+    [SerializeField] private Sprite button_id_revive_pointed;
+    [SerializeField] private Sprite button_id_revive_pressed;
+
+    [SerializeField] private Sprite button_id_restart_idle;
+    [SerializeField] private Sprite button_id_restart_pointed;
+    [SerializeField] private Sprite button_id_restart_pressed;
+
+    #endregion
+
+    public Sprite[] Buttons_GetSprites(ButtonName _buttonName, int _numberOfSprites)
     {
         Sprite[] _spriteArray = new Sprite[_numberOfSprites];
 
@@ -334,6 +505,38 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
                     break;
 
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_en_switch_es_idle;
+                        _spriteArray[1] = button_en_switch_es_pointed;
+                        _spriteArray[2] = button_en_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_en_switch_pt_idle;
+                        _spriteArray[1] = button_en_switch_pt_pointed;
+                        _spriteArray[2] = button_en_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_en_switch_de_idle;
+                        _spriteArray[1] = button_en_switch_de_pointed;
+                        _spriteArray[2] = button_en_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_en_switch_id_idle;
+                        _spriteArray[1] = button_en_switch_id_pointed;
+                        _spriteArray[2] = button_en_switch_id_pressed;
+
+                    break;
+
                     case ButtonName.upgrade:
 
                         _spriteArray[0] = button_en_idle_buy;
@@ -385,7 +588,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                     break;
                 }
 
-                break;
+            break;
 
             case GameLanguage.russian:
 
@@ -436,6 +639,38 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[0] = button_ru_switch_ru_idle;
                         _spriteArray[1] = button_ru_switch_ru_pointed;
                         _spriteArray[2] = button_ru_switch_ru_pressed;
+
+                    break;
+
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_ru_switch_es_idle;
+                        _spriteArray[1] = button_ru_switch_es_pointed;
+                        _spriteArray[2] = button_ru_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_ru_switch_pt_idle;
+                        _spriteArray[1] = button_ru_switch_pt_pointed;
+                        _spriteArray[2] = button_ru_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_ru_switch_de_idle;
+                        _spriteArray[1] = button_ru_switch_de_pointed;
+                        _spriteArray[2] = button_ru_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_ru_switch_id_idle;
+                        _spriteArray[1] = button_ru_switch_id_pointed;
+                        _spriteArray[2] = button_ru_switch_id_pressed;
 
                     break;
 
@@ -490,11 +725,853 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                     break;
                 }
 
-                break;
+            break;
+            case GameLanguage.spanish:
+
+                switch (_buttonName)
+                {
+                    case ButtonName.play:
+
+                        _spriteArray[0] = button_es_play_idle;
+                        _spriteArray[1] = button_es_play_pointed;
+                        _spriteArray[2] = button_es_play_pressed;
+
+                    break;
+
+                    case ButtonName.upgrades:
+
+                        _spriteArray[0] = button_es_upgrades_idle;
+                        _spriteArray[1] = button_es_upgrades_pointed;
+                        _spriteArray[2] = button_es_upgrades_pressed;
+
+                    break;
+
+                    case ButtonName.settings:
+
+                        _spriteArray[0] = button_es_settings_idle;
+                        _spriteArray[1] = button_es_settings_pointed;
+                        _spriteArray[2] = button_es_settings_pressed;
+
+                    break;
+
+                    case ButtonName.quit:
+
+                        _spriteArray[0] = button_es_quit_idle;
+                        _spriteArray[1] = button_es_quit_pointed;
+                        _spriteArray[2] = button_es_quit_pressed;
+
+                    break;
+
+                    case ButtonName.switch_en:
+
+                        _spriteArray[0] = button_es_switch_en_idle;
+                        _spriteArray[1] = button_es_switch_en_pointed;
+                        _spriteArray[2] = button_es_switch_en_pressed;
+
+                    break;
+
+                    case ButtonName.switch_ru:
+
+                        _spriteArray[0] = button_es_switch_ru_idle;
+                        _spriteArray[1] = button_es_switch_ru_pointed;
+                        _spriteArray[2] = button_es_switch_ru_pressed;
+
+                    break;
+
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_es_switch_es_idle;
+                        _spriteArray[1] = button_es_switch_es_pointed;
+                        _spriteArray[2] = button_es_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_es_switch_pt_idle;
+                        _spriteArray[1] = button_es_switch_pt_pointed;
+                        _spriteArray[2] = button_es_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_es_switch_de_idle;
+                        _spriteArray[1] = button_es_switch_de_pointed;
+                        _spriteArray[2] = button_es_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_es_switch_id_idle;
+                        _spriteArray[1] = button_es_switch_id_pointed;
+                        _spriteArray[2] = button_es_switch_id_pressed;
+
+                    break;
+
+                    case ButtonName.upgrade:
+
+                        _spriteArray[0] = button_es_idle_buy;
+                        _spriteArray[1] = button_es_idle_improve;
+                        _spriteArray[2] = button_es_pointed_buy;
+                        _spriteArray[3] = button_es_pointed_improve;
+                        _spriteArray[4] = button_es_received;
+
+                    break;
+
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_es_ok_idle;
+                        _spriteArray[1] = button_es_ok_pointed;
+                        _spriteArray[2] = button_es_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
+
+                        _spriteArray[0] = button_es_menu_idle;
+                        _spriteArray[1] = button_es_menu_pointed;
+                        _spriteArray[2] = button_es_menu_pressed;
+
+                    break;
+
+                    case ButtonName.resume:
+
+                        _spriteArray[0] = button_es_resume_idle;
+                        _spriteArray[1] = button_es_resume_pointed;
+                        _spriteArray[2] = button_es_resume_pressed;
+
+                    break;
+
+                    case ButtonName.revive:
+
+                        _spriteArray[0] = button_es_revive_idle;
+                        _spriteArray[1] = button_es_revive_pointed;
+                        _spriteArray[2] = button_es_revive_pressed;
+
+                    break;
+
+                    case ButtonName.restart:
+
+                        _spriteArray[0] = button_es_restart_idle;
+                        _spriteArray[1] = button_es_restart_pointed;
+                        _spriteArray[2] = button_es_restart_pressed;
+
+                    break;
+                }
+
+            break;
+            case GameLanguage.portuguese:
+
+                switch (_buttonName)
+                {
+                    case ButtonName.play:
+
+                        _spriteArray[0] = button_pt_play_idle;
+                        _spriteArray[1] = button_pt_play_pointed;
+                        _spriteArray[2] = button_pt_play_pressed;
+
+                    break;
+
+                    case ButtonName.upgrades:
+
+                        _spriteArray[0] = button_pt_upgrades_idle;
+                        _spriteArray[1] = button_pt_upgrades_pointed;
+                        _spriteArray[2] = button_pt_upgrades_pressed;
+
+                    break;
+
+                    case ButtonName.settings:
+
+                        _spriteArray[0] = button_pt_settings_idle;
+                        _spriteArray[1] = button_pt_settings_pointed;
+                        _spriteArray[2] = button_pt_settings_pressed;
+
+                    break;
+
+                    case ButtonName.quit:
+
+                        _spriteArray[0] = button_pt_quit_idle;
+                        _spriteArray[1] = button_pt_quit_pointed;
+                        _spriteArray[2] = button_pt_quit_pressed;
+
+                    break;
+
+                    case ButtonName.switch_en:
+
+                        _spriteArray[0] = button_pt_switch_en_idle;
+                        _spriteArray[1] = button_pt_switch_en_pointed;
+                        _spriteArray[2] = button_pt_switch_en_pressed;
+
+                    break;
+
+                    case ButtonName.switch_ru:
+
+                        _spriteArray[0] = button_pt_switch_ru_idle;
+                        _spriteArray[1] = button_pt_switch_ru_pointed;
+                        _spriteArray[2] = button_pt_switch_ru_pressed;
+
+                    break;
+
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_pt_switch_es_idle;
+                        _spriteArray[1] = button_pt_switch_es_pointed;
+                        _spriteArray[2] = button_pt_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_pt_switch_pt_idle;
+                        _spriteArray[1] = button_pt_switch_pt_pointed;
+                        _spriteArray[2] = button_pt_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_pt_switch_de_idle;
+                        _spriteArray[1] = button_pt_switch_de_pointed;
+                        _spriteArray[2] = button_pt_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_pt_switch_id_idle;
+                        _spriteArray[1] = button_pt_switch_id_pointed;
+                        _spriteArray[2] = button_pt_switch_id_pressed;
+
+                    break;
+
+                    case ButtonName.upgrade:
+
+                        _spriteArray[0] = button_pt_idle_buy;
+                        _spriteArray[1] = button_pt_idle_improve;
+                        _spriteArray[2] = button_pt_pointed_buy;
+                        _spriteArray[3] = button_pt_pointed_improve;
+                        _spriteArray[4] = button_pt_received;
+
+                    break;
+
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_pt_ok_idle;
+                        _spriteArray[1] = button_pt_ok_pointed;
+                        _spriteArray[2] = button_pt_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
+
+                        _spriteArray[0] = button_pt_menu_idle;
+                        _spriteArray[1] = button_pt_menu_pointed;
+                        _spriteArray[2] = button_pt_menu_pressed;
+
+                    break;
+
+                    case ButtonName.resume:
+
+                        _spriteArray[0] = button_pt_resume_idle;
+                        _spriteArray[1] = button_pt_resume_pointed;
+                        _spriteArray[2] = button_pt_resume_pressed;
+
+                    break;
+
+                    case ButtonName.revive:
+
+                        _spriteArray[0] = button_pt_revive_idle;
+                        _spriteArray[1] = button_pt_revive_pointed;
+                        _spriteArray[2] = button_pt_revive_pressed;
+
+                    break;
+
+                    case ButtonName.restart:
+
+                        _spriteArray[0] = button_pt_restart_idle;
+                        _spriteArray[1] = button_pt_restart_pointed;
+                        _spriteArray[2] = button_pt_restart_pressed;
+
+                    break;
+                }
+
+            break;
+            case GameLanguage.german:
+
+                switch (_buttonName)
+                {
+                    case ButtonName.play:
+
+                        _spriteArray[0] = button_de_play_idle;
+                        _spriteArray[1] = button_de_play_pointed;
+                        _spriteArray[2] = button_de_play_pressed;
+
+                    break;
+
+                    case ButtonName.upgrades:
+
+                        _spriteArray[0] = button_de_upgrades_idle;
+                        _spriteArray[1] = button_de_upgrades_pointed;
+                        _spriteArray[2] = button_de_upgrades_pressed;
+
+                    break;
+
+                    case ButtonName.settings:
+
+                        _spriteArray[0] = button_de_settings_idle;
+                        _spriteArray[1] = button_de_settings_pointed;
+                        _spriteArray[2] = button_de_settings_pressed;
+
+                    break;
+
+                    case ButtonName.quit:
+
+                        _spriteArray[0] = button_de_quit_idle;
+                        _spriteArray[1] = button_de_quit_pointed;
+                        _spriteArray[2] = button_de_quit_pressed;
+
+                    break;
+
+                    case ButtonName.switch_en:
+
+                        _spriteArray[0] = button_de_switch_en_idle;
+                        _spriteArray[1] = button_de_switch_en_pointed;
+                        _spriteArray[2] = button_de_switch_en_pressed;
+
+                    break;
+
+                    case ButtonName.switch_ru:
+
+                        _spriteArray[0] = button_de_switch_ru_idle;
+                        _spriteArray[1] = button_de_switch_ru_pointed;
+                        _spriteArray[2] = button_de_switch_ru_pressed;
+
+                    break;
+
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_de_switch_es_idle;
+                        _spriteArray[1] = button_de_switch_es_pointed;
+                        _spriteArray[2] = button_de_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_de_switch_pt_idle;
+                        _spriteArray[1] = button_de_switch_pt_pointed;
+                        _spriteArray[2] = button_de_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_de_switch_de_idle;
+                        _spriteArray[1] = button_de_switch_de_pointed;
+                        _spriteArray[2] = button_de_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_en_switch_id_idle;
+                        _spriteArray[1] = button_en_switch_id_pointed;
+                        _spriteArray[2] = button_en_switch_id_pressed;
+
+                    break;
+
+                    case ButtonName.upgrade:
+
+                        _spriteArray[0] = button_de_idle_buy;
+                        _spriteArray[1] = button_de_idle_improve;
+                        _spriteArray[2] = button_de_pointed_buy;
+                        _spriteArray[3] = button_de_pointed_improve;
+                        _spriteArray[4] = button_de_received;
+
+                    break;
+
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_de_ok_idle;
+                        _spriteArray[1] = button_de_ok_pointed;
+                        _spriteArray[2] = button_de_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
+
+                        _spriteArray[0] = button_de_menu_idle;
+                        _spriteArray[1] = button_de_menu_pointed;
+                        _spriteArray[2] = button_de_menu_pressed;
+
+                    break;
+
+                    case ButtonName.resume:
+
+                        _spriteArray[0] = button_de_resume_idle;
+                        _spriteArray[1] = button_de_resume_pointed;
+                        _spriteArray[2] = button_de_resume_pressed;
+
+                    break;
+
+                    case ButtonName.revive:
+
+                        _spriteArray[0] = button_de_revive_idle;
+                        _spriteArray[1] = button_de_revive_pointed;
+                        _spriteArray[2] = button_de_revive_pressed;
+
+                    break;
+
+                    case ButtonName.restart:
+
+                        _spriteArray[0] = button_de_restart_idle;
+                        _spriteArray[1] = button_de_restart_pointed;
+                        _spriteArray[2] = button_de_restart_pressed;
+
+                    break;
+                }
+
+            break;
+            case GameLanguage.indonesian:
+
+                switch (_buttonName)
+                {
+                    case ButtonName.play:
+
+                        _spriteArray[0] = button_id_play_idle;
+                        _spriteArray[1] = button_id_play_pointed;
+                        _spriteArray[2] = button_id_play_pressed;
+
+                    break;
+
+                    case ButtonName.upgrades:
+
+                        _spriteArray[0] = button_id_upgrades_idle;
+                        _spriteArray[1] = button_id_upgrades_pointed;
+                        _spriteArray[2] = button_id_upgrades_pressed;
+
+                    break;
+
+                    case ButtonName.settings:
+
+                        _spriteArray[0] = button_id_settings_idle;
+                        _spriteArray[1] = button_id_settings_pointed;
+                        _spriteArray[2] = button_id_settings_pressed;
+
+                    break;
+
+                    case ButtonName.quit:
+
+                        _spriteArray[0] = button_id_quit_idle;
+                        _spriteArray[1] = button_id_quit_pointed;
+                        _spriteArray[2] = button_id_quit_pressed;
+
+                    break;
+
+                    case ButtonName.switch_en:
+
+                        _spriteArray[0] = button_id_switch_en_idle;
+                        _spriteArray[1] = button_id_switch_en_pointed;
+                        _spriteArray[2] = button_id_switch_en_pressed;
+
+                    break;
+
+                    case ButtonName.switch_ru:
+
+                        _spriteArray[0] = button_id_switch_ru_idle;
+                        _spriteArray[1] = button_id_switch_ru_pointed;
+                        _spriteArray[2] = button_id_switch_ru_pressed;
+
+                    break;
+
+                    case ButtonName.switch_es:
+
+                        _spriteArray[0] = button_id_switch_es_idle;
+                        _spriteArray[1] = button_id_switch_es_pointed;
+                        _spriteArray[2] = button_id_switch_es_pressed;
+
+                    break;
+
+                    case ButtonName.switch_pt:
+
+                        _spriteArray[0] = button_id_switch_pt_idle;
+                        _spriteArray[1] = button_id_switch_pt_pointed;
+                        _spriteArray[2] = button_id_switch_pt_pressed;
+
+                    break;
+
+                    case ButtonName.switch_de:
+
+                        _spriteArray[0] = button_id_switch_de_idle;
+                        _spriteArray[1] = button_id_switch_de_pointed;
+                        _spriteArray[2] = button_id_switch_de_pressed;
+
+                    break;
+
+                    case ButtonName.switch_id:
+
+                        _spriteArray[0] = button_id_switch_id_idle;
+                        _spriteArray[1] = button_id_switch_id_pointed;
+                        _spriteArray[2] = button_id_switch_id_pressed;
+
+                    break;
+
+                    case ButtonName.upgrade:
+
+                        _spriteArray[0] = button_id_idle_buy;
+                        _spriteArray[1] = button_id_idle_improve;
+                        _spriteArray[2] = button_id_pointed_buy;
+                        _spriteArray[3] = button_id_pointed_improve;
+                        _spriteArray[4] = button_id_received;
+
+                    break;
+
+                    case ButtonName.ok:
+
+                        _spriteArray[0] = button_id_ok_idle;
+                        _spriteArray[1] = button_id_ok_pointed;
+                        _spriteArray[2] = button_id_ok_pressed;
+
+                    break;
+
+                    case ButtonName.menu:
+
+                        _spriteArray[0] = button_id_menu_idle;
+                        _spriteArray[1] = button_id_menu_pointed;
+                        _spriteArray[2] = button_id_menu_pressed;
+
+                    break;
+
+                    case ButtonName.resume:
+
+                        _spriteArray[0] = button_id_resume_idle;
+                        _spriteArray[1] = button_id_resume_pointed;
+                        _spriteArray[2] = button_id_resume_pressed;
+
+                    break;
+
+                    case ButtonName.revive:
+
+                        _spriteArray[0] = button_id_revive_idle;
+                        _spriteArray[1] = button_id_revive_pointed;
+                        _spriteArray[2] = button_id_revive_pressed;
+
+                    break;
+
+                    case ButtonName.restart:
+
+                        _spriteArray[0] = button_id_restart_idle;
+                        _spriteArray[1] = button_id_restart_pointed;
+                        _spriteArray[2] = button_id_restart_pressed;
+
+                    break;
+                }
+
+            break;
         }        
 
         return _spriteArray;
     }
+
+    #endregion
+   
+    #region Text
+
+    public enum Text_Key
+    {
+        startText,
+        loadingCloudData,
+        upgrade_moreCoins,
+        upgrade_moreBonuses,
+        upgrade_coinMagnet,
+        upgrade_heDidNotDie,
+        popUpMessage_notEnoughCoins,
+        indicators_complete,
+        midscreen_gameOver,
+        midscreen_pause,
+        midscreen_distanceRemain,
+        popUp_up,
+        popUp_coin,
+        popUp_coinRush
+    }
+
+    private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "PRESS ANY KEY",
+        [Text_Key.loadingCloudData] = "LOADING CLOUD DATA",
+        [Text_Key.upgrade_moreCoins] = "MORE COINS",
+        [Text_Key.upgrade_moreBonuses] = "MORE BONUSES",
+        [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
+        [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
+        [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
+        [Text_Key.indicators_complete] = "KILOMETERS LEFT",
+        [Text_Key.midscreen_gameOver] = "GAME OVER",
+        [Text_Key.midscreen_pause] = "PAUSE",
+        [Text_Key.midscreen_distanceRemain] = "Distance remain",
+        [Text_Key.popUp_up] = "+1 UP",
+        [Text_Key.popUp_coin] = "+1 Coin",
+        [Text_Key.popUp_coinRush] = "Coin Rush!"
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "–ù–ê–ñ–ú–ò–¢–ï –õ–Æ–ë–£–Æ –ö–õ–ê–í–ò–®–£",
+        [Text_Key.loadingCloudData] = "–ó–ê–ì–†–£–ó–ö–ê –î–ê–ù–ù–´–•",
+        [Text_Key.upgrade_moreCoins] = "–ë–û–õ–¨–®–ï –ú–û–ù–ï–¢",
+        [Text_Key.upgrade_moreBonuses] = "–ë–û–õ–¨–®–ï –ë–û–ù–£–°–û–í",
+        [Text_Key.upgrade_coinMagnet] = "–ú–ê–ì–ù–ò–¢ –î–õ–Ø –ú–û–ù–ï–¢",
+        [Text_Key.upgrade_heDidNotDie] = "–î–ê –ù–ï –£–ú–ï–† –û–ù",
+        [Text_Key.popUpMessage_notEnoughCoins] = "–ù–ï–î–û–°–¢–ê–¢–û–ß–ù–û –ú–û–ù–ï–¢",
+        [Text_Key.indicators_complete] = "–ö–ú –î–û –¶–ï–õ–ò",
+        [Text_Key.midscreen_gameOver] = "–ö–û–ù–ï–¶ –ò–ì–†–´",
+        [Text_Key.midscreen_pause] = "–ü–ê–£–ó–ê",
+        [Text_Key.midscreen_distanceRemain] = "–û—Å—Ç–∞–ª–æ—Å—å –¥–æ —Ü–µ–ª–∏",
+        [Text_Key.popUp_up] = "+1 –ñ–∏–∑–Ω—å",
+        [Text_Key.popUp_coin] = "+1 –ú–æ–Ω–µ—Ç–∞",
+        [Text_Key.popUp_coinRush] = "–ú–æ–Ω–µ—Ç–Ω–∞—è –õ–∏—Ö–æ—Ä–∞–¥–∫–∞!"
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "PRESIONE CUALQUIER TECLA",
+        [Text_Key.loadingCloudData] = "CARGANDO DATOS DE LA NUBE",
+        [Text_Key.upgrade_moreCoins] = "M√ÅS MONEDAS",
+        [Text_Key.upgrade_moreBonuses] = "M√ÅS BONOS",
+        [Text_Key.upgrade_coinMagnet] = "IM√ÅN DE MONEDAS",
+        [Text_Key.upgrade_heDidNotDie] = "√âL NO MURI√ì",
+        [Text_Key.popUpMessage_notEnoughCoins] = "NO HAY SUFICIENTES MONEDAS",
+        [Text_Key.indicators_complete] = "KIL√ìMETROS RESTANTES",
+        [Text_Key.midscreen_gameOver] = "JUEGO TERMINADO",
+        [Text_Key.midscreen_pause] = "PAUSA",
+        [Text_Key.midscreen_distanceRemain] = "La distancia permanece",
+        [Text_Key.popUp_up] = "+1 VIDA",
+        [Text_Key.popUp_coin] = "+ 1 Moneda",
+        [Text_Key.popUp_coinRush] = "Fiebre de monedas!"
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "PRESSIONE QUALQUER TECLA",
+        [Text_Key.loadingCloudData] = "CARREGANDO DADOS DA NUVEM",
+        [Text_Key.upgrade_moreCoins] = "MAIS MOEDAS",
+        [Text_Key.upgrade_moreBonuses] = "MAIS B√îNUS",
+        [Text_Key.upgrade_coinMagnet] = "√çM√É DE MOEDAS",
+        [Text_Key.upgrade_heDidNotDie] = "ELE N√ÉO MORREU",
+        [Text_Key.popUpMessage_notEnoughCoins] = "MOEDAS N√ÉO SUFICIENTES",
+        [Text_Key.indicators_complete] = "QUIL√îMETROS RESTANTES",
+        [Text_Key.midscreen_gameOver] = "FIM DO JOGO",
+        [Text_Key.midscreen_pause] = "PAUSA",
+        [Text_Key.midscreen_distanceRemain] = "Dist√¢ncia permanece",
+        [Text_Key.popUp_up] = "+1 Vida",
+        [Text_Key.popUp_coin] = "+1 Moeda",
+        [Text_Key.popUp_coinRush] = "Corrida de moedas!"
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "DR√úCKEN SIE EINE BELIEBIGE TASTE",
+        [Text_Key.loadingCloudData] = "CLOUD-DATEN LADEN",
+        [Text_Key.upgrade_moreCoins] = "MEHR M√úNZEN",
+        [Text_Key.upgrade_moreBonuses] = "MEHR BONI",
+        [Text_Key.upgrade_coinMagnet] = "M√úNZMAGNET",
+        [Text_Key.upgrade_heDidNotDie] = "ER IST NICHT GESTORBEN",
+        [Text_Key.popUpMessage_notEnoughCoins] = "ES FEHLEN M√úNZEN",
+        [Text_Key.indicators_complete] = "KM ZUM ZIEL",
+        [Text_Key.midscreen_gameOver] = "SPIEL VORBEI",
+        [Text_Key.midscreen_pause] = "PAUSE",
+        [Text_Key.midscreen_distanceRemain] = "Verbleibender Abstand",
+        [Text_Key.popUp_up] = "+1 Leben",
+        [Text_Key.popUp_coin] = "+ 1 M√ºnze",
+        [Text_Key.popUp_coinRush] = "M√ºnzrausch!"
+    };
+
+    private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
+    {
+        [Text_Key.startText] = "TEKAN TOMBOL APA SAJA",
+        [Text_Key.loadingCloudData] = "MENGUNDUH DATA DARI CLOUD",
+        [Text_Key.upgrade_moreCoins] = "LEBIH BANYAK KOIN",
+        [Text_Key.upgrade_moreBonuses] = "LEBIH BANYAK BONUS",
+        [Text_Key.upgrade_coinMagnet] = "KOIN MAGNET",
+        [Text_Key.upgrade_heDidNotDie] = "DIA TIDAK MATI",
+        [Text_Key.popUpMessage_notEnoughCoins] = "KOIN TIDAK CUKUP",
+        [Text_Key.indicators_complete] = "KILOMETER TERSISA",
+        [Text_Key.midscreen_gameOver] = "PERMAINAN BERAKHIR",
+        [Text_Key.midscreen_pause] = "BERHENTI SEBENTAR",
+        [Text_Key.midscreen_distanceRemain] = "Jarak yang tersisa",
+        [Text_Key.popUp_up] = "+ 1 Kehidupan",
+        [Text_Key.popUp_coin] = "+1 Koin",
+        [Text_Key.popUp_coinRush] = "Demam Koin!"
+    };
+
+    public string Text_Get(Text_Key _key)
+    {
+        var _text = string.Empty;
+
+        switch (GameLanguage_Current)
+        {
+            case GameLanguage.english:
+                _text = text_dictionary_en[_key];
+            break;
+            case GameLanguage.russian:
+                _text = text_dictionary_ru[_key];
+            break;
+            case GameLanguage.spanish:
+                _text = text_dictionary_es[_key];
+                break;
+            case GameLanguage.portuguese:
+                _text = text_dictionary_pt[_key];
+                break;
+            case GameLanguage.german:
+                _text = text_dictionary_de[_key];
+                break;
+            case GameLanguage.indonesian:
+                _text = text_dictionary_id[_key];
+                break;
+
+        }
+
+        return _text;
+    }
+
+    #endregion
+
+    #region Dialogue    
+
+    public List<string[]> Dialogue_Get(string _actor_player, string _actor_npc)
+    {  
+        var _dialogue = new List<string[]>();
+
+        switch (GameLanguage_Current)
+        {
+            case GameLanguage.english:
+                string[][] _dialogue_array_en = new string[][]
+                {
+                    new[] { _actor_player, "Hello." },
+                    new[] { _actor_npc, "Hey, handsome." },
+                    new[] { _actor_npc, "I got an extra box of toothpicks on sale. You can just..." },
+                    new[] { _actor_npc, "Come and take it..." },
+                    new[] { _actor_npc, "Interested?" },
+                    new[] { _actor_player, "Already driving." }
+                };
+
+                foreach (var _string in _dialogue_array_en)
+                {
+                    _dialogue.Add(_string);
+                }               
+            break;
+            case GameLanguage.russian:
+
+                string[][] _dialogue_array_ru = new string[][]
+                {
+                    new[] { _actor_player, "–ê–ª–æ." },
+                    new[] { _actor_npc, "–ü—Ä–∏–≤–µ—Ç –∫—Ä–∞—Å–∞–≤—á–∏–∫." },
+                    new[] { _actor_npc, "–Ø —Ç—É—Ç –ø–æ–ª—É—á–∏–ª–∞ –ª–∏—à–Ω—é—é –∫–æ—Ä–æ–±–∫—É –∑—É–±–æ—á–∏—Å—Ç–æ–∫ –ø–æ –∞–∫—Ü–∏–∏. –ú–æ–∂–µ—à—å –ø—Ä–æ—Å—Ç–æ..." },
+                    new[] { _actor_npc, "–ü—Ä–∏–π—Ç–∏ –∏ –≤–∑—è—Ç—å –µ—ë..." },
+                    new[] { _actor_npc, "–ò–Ω—Ç–µ—Ä–µ—Å—É–µ—Ç?" },
+                    new[] { _actor_player, "–£–∂–µ –µ–¥—É." }
+                };
+
+                foreach (var _string in _dialogue_array_ru)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+            case GameLanguage.spanish:
+                string[][] _dialogue_array_es = new string[][]
+                {
+                    new[] { _actor_player, "Hola." },
+                    new[] { _actor_npc, "Hola, guapo." },
+                    new[] { _actor_npc, "Tengo una caja extra de retales que compr√© en una venta de garaje. Puedes..." },
+                    new[] { _actor_npc, "Ven y c√≥gela..." },
+                    new[] { _actor_npc, "¬øInteresa?" },
+                    new[] { _actor_player, "Ya voy en camino." }
+                };
+
+                foreach (var _string in _dialogue_array_es)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+            case GameLanguage.portuguese:
+                string[][] _dialogue_array_pt = new string[][]
+                {
+                    new[] { _actor_player, "Hola." },
+                    new[] { _actor_npc, "Oi, lindo." },
+                    new[] { _actor_npc, "Tenho uma caixa extra de retalhos que comprei em um bazar. Voc√™ pode..." },
+                    new[] { _actor_npc, "Vir pegar..." },
+                    new[] { _actor_npc, "Intresute?" },
+                    new[] { _actor_player, "J√° estou indo." }
+                };
+
+                foreach (var _string in _dialogue_array_pt)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+            case GameLanguage.german:
+                string[][] _dialogue_array_de = new string[][]
+                {
+                    new[] { _actor_player, "Hallo." },
+                    new[] { _actor_npc, "Hallo, h√ºbscher." },
+                    new[] { _actor_npc, "Ich habe noch eine Kiste mit Resten, die ich auf einem Flohmarkt gekauft habe. Du kannst ..." },
+                    new[] { _actor_npc, "Komm und hol sie..." },
+                    new[] { _actor_npc, "Interessiert?" },
+                    new[] { _actor_player, "Bin schon unterwegs." }
+                };
+
+                foreach (var _string in _dialogue_array_de)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+            case GameLanguage.indonesian:
+                string[][] _dialogue_array_id = new string[][]
+                {
+                    new[] { _actor_player, "Halo." },
+                    new[] { _actor_npc, "Hai, tampan." },
+                    new[] { _actor_npc, "Saya punya sekotak sisa barang bekas yang saya beli di obral pekarangan. Anda bisa..." },
+                    new[] { _actor_npc, "Datang dan ambil..." },
+                    new[] { _actor_npc, "Tertarik?" },
+                    new[] { _actor_player, "Sudah dalam perjalanan." }
+                };
+
+                foreach (var _string in _dialogue_array_id)
+                {
+                    _dialogue.Add(_string);
+                }
+            break;
+        }
+
+        return _dialogue;
+    }
+
+    #endregion
+
+    public enum GameLanguage
+    {
+        english,
+        russian,
+        spanish,
+        portuguese,
+        german,
+        indonesian
+    }
+
+    public GameLanguage GameLanguage_Current { get; private set; }
+
+    public void SetGameLanguage(GameLanguage _language)
+    {
+        GameLanguage_Current = _language;
+
+        GameLanguage_OnUpdate();
+
+        ControlPers_DataHandler.SingleOnScene.SettingsData_LanguageValue = GameLanguage_Current;        
+    }
+
+    public delegate void GameLanguage_Update();
+    public event GameLanguage_Update GameLanguage_OnUpdate;
         
     private void Awake()
     {

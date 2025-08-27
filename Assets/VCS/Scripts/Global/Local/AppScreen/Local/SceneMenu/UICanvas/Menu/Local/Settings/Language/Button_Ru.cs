@@ -12,6 +12,10 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_But
     public override void OnClick()
     {
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_En.SingleOnScene.Pressed = false;
+        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Es.SingleOnScene.Pressed = false;
+        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Pt.SingleOnScene.Pressed = false;
+        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_De.SingleOnScene.Pressed = false;
+        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Id.SingleOnScene.Pressed = false;
         ControlPers_LanguageHandler.SingleOnScene.SetGameLanguage(ControlPers_LanguageHandler.GameLanguage.russian);
 
         base.OnClick();
