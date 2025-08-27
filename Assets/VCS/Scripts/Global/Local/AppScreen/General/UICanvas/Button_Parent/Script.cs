@@ -39,7 +39,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
     {
         position_last = transform.position;
 
-        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.GetSprites(_buttonName, 3);
+        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.Buttons_GetSprites(_buttonName, 3);
         
         image_currennt_idle = _spriteArray[0];
         image_currennt_pointed = _spriteArray[1];

@@ -1,3 +1,8 @@
-Build path: E:/Dev/Project MDv2.0/Build/Web_YandexGames
-Build number: 68
+<<<<<<< HEAD
+Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
+Build number: 69
+=======
+Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
+Build number: 73
+>>>>>>> nepko
 PluginYG version: 2.0032

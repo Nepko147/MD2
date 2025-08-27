@@ -118,7 +118,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     
     public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
     {
-        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.GetSprites(_buttonName, 5);
+        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.Buttons_GetSprites(_buttonName, 5);
         
         image_current_idle_buy = _spriteArray[0];
         image_current_idle_improve = _spriteArray[1];

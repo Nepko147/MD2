@@ -335,7 +335,8 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(driftSection_array[driftSection_array_current_ind].distanceLeft,1f);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
     }
 
@@ -594,7 +595,8 @@ public class ControlScene_Main : MonoBehaviour
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
                                     World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
-                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(driftSection_array[driftSection_array_current_ind].distanceLeft, 1f);
+                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
+                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
 
                                     stage_drift_toRoad_cutscene = false;
                                     stage_drift_toRoad_braking_swap = true;
