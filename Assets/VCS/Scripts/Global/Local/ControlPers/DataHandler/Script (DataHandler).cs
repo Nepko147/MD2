@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Xml;
+using System.Text;
+using System.Security.Cryptography;
 using YG;
 using YG.Insides;
 
@@ -21,6 +23,58 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             Directory.CreateDirectory(_path); //Создаём папку
         }
+    }
+
+    [SerializeField] private bool   Data_isEncrypted = true; //True - зашифрован, False - нет. Оставил выбор для отладки
+    private const string            DATA_PASSWORD = "SuperSecretKey";
+    private const string            DATA_SALT = "Salt1234"; // "Соль" - это вторая половинка ключа шифрования
+
+    private string Data_Encrypt(string _inputData)
+    {
+        Aes _aesAlgorhythm = Aes.Create(); // Создаём алгоритм блочного шифрования
+        
+        var _salt = Encoding.UTF8.GetBytes(DATA_SALT); 
+        var _deriveBytes = new Rfc2898DeriveBytes(DATA_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
+
+        var _keyBytes = _deriveBytes.GetBytes(32); //Байты ключа
+        var _saltBytes = _deriveBytes.GetBytes(16);  //Байты "Соли"
+        _aesAlgorhythm.Key = _keyBytes;
+        _aesAlgorhythm.IV = _saltBytes;
+
+        ICryptoTransform _encryptor = _aesAlgorhythm.CreateEncryptor(_aesAlgorhythm.Key, _aesAlgorhythm.IV); // Создаём шифровальшик
+
+        MemoryStream _memoryStream = new MemoryStream(); //Создаём отдельный поток в памяти
+        CryptoStream _cryptoStream = new CryptoStream(_memoryStream, _encryptor, CryptoStreamMode.Write); //Создаём в отдельном потоке памяти, поток шифрования в режиме записи
+        StreamWriter _streamWriter = new StreamWriter(_cryptoStream); // Создаём в этом всём "Потокового писальщика"...        
+        _streamWriter.Write(_inputData); // Шифруем
+        _streamWriter.Close(); //Закрываем
+        var _encryptedString = Convert.ToBase64String(_memoryStream.ToArray()); //Производим ковертацию зашифрованных данных в Base64-строку
+        
+        return _encryptedString;               
+    }
+
+    private string Data_Decrypt(string _encryptedText)
+    {
+        Aes _aesAlgorhythm = Aes.Create(); // Создаём алгоритм блочного шифрования
+        
+        var _salt = Encoding.UTF8.GetBytes(DATA_SALT); 
+        var _deriveBytes = new Rfc2898DeriveBytes(DATA_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
+
+        var _keyBytes = _deriveBytes.GetBytes(32); //Байты ключа
+        var _saltBytes = _deriveBytes.GetBytes(16);  //Байты "Соли"
+        _aesAlgorhythm.Key = _keyBytes;
+        _aesAlgorhythm.IV = _saltBytes;
+
+        ICryptoTransform _decryptor = _aesAlgorhythm.CreateDecryptor(_aesAlgorhythm.Key, _aesAlgorhythm.IV); // Создаём дешифровальшик
+
+        byte[] _encryptedTextBytes = Convert.FromBase64String(_encryptedText); //Производим ковертацию зашифрованной строки в байты из Base64-строки
+
+        MemoryStream _memoryStream = new MemoryStream(_encryptedTextBytes); //Создаём отдельный поток в памяти
+        CryptoStream _cryptoStream = new CryptoStream(_memoryStream, _decryptor, CryptoStreamMode.Read); //Создаём в отдельном потоке памяти, поток дешифрования в режиме чтения
+        StreamReader _streamReader = new StreamReader(_cryptoStream); // Создаём в этом всём "Потокового читальщика"...        
+        var _decryptedString = _streamReader.ReadToEnd(); //Расшифровываем
+        
+        return _decryptedString;        
     }
 
     #endregion
@@ -87,6 +141,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private XmlDocument progressData_file;
     private const string PROGRESSDATA_FILE_NAME = "Progress.xml";
+    private const string PROGRESSDATA_FILE_ENCRYPTED_NAME = "Progress.enc";
     private string progressData_file_path;
 
     private void ProgressData_File_Check()
@@ -148,12 +203,20 @@ public class ControlPers_DataHandler : MonoBehaviour
         switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
         {
             case ControlPers_BuildSettings.CurrentPlatformType.windows:
+
                 progressData_file = new XmlDocument();
-                progressData_file_path = directory_path + PROGRESSDATA_FILE_NAME;
-                
+
                 try //Прробуем загрузить файл
                 {
-                    progressData_file.Load(progressData_file_path); //Если файл в порядке, то всё загрузится
+                    if (Data_isEncrypted)
+                    {
+                        var _encryptedData = File.ReadAllText(progressData_file_path);
+                        progressData_file.InnerXml = Data_Decrypt(_encryptedData);
+                    }
+                    else
+                    {
+                        progressData_file.Load(progressData_file_path); //Если файл в порядке, то всё загрузится
+                    }
                 }
                 catch { } //Если нет, то будет нулевой прогресс. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
 
@@ -202,7 +265,15 @@ public class ControlPers_DataHandler : MonoBehaviour
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText = ProgressData.Upgrades.CoinMagnet.value.ToString(); //Перезаписываем значение в разделе Upgrades/CoinMagnet
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText = ProgressData.Upgrades.Revive.value.ToString(); //Перезаписываем значение в разделе Upgrades/Revive
 
-                progressData_file.Save(progressData_file_path); //Создаем или перезаписываем файл XML документа
+                if (Data_isEncrypted)
+                {
+                    var _encryptedProgressData = Data_Encrypt(progressData_file.InnerXml);
+                    File.WriteAllText(progressData_file_path, _encryptedProgressData);
+                }
+                else
+                {
+                    progressData_file.Save(progressData_file_path); //Создаем или перезаписываем файл XML документа
+                }                
             break;
 
             case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
@@ -509,6 +580,10 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             case ControlPers_BuildSettings.CurrentPlatformType.windows:
                 directory_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DIRECTORY_NAME + @"\";
+
+                var _progressData_FileName = Data_isEncrypted ? PROGRESSDATA_FILE_ENCRYPTED_NAME : PROGRESSDATA_FILE_NAME;
+                progressData_file_path = directory_path + _progressData_FileName;
+
                 Directory_CreateIfNotExists(directory_path);
 
                 ProgressData_Load();
