@@ -15,7 +15,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
         base.Awake();
 
         ActiveOnPopUpMessage = true;
-
+        
         SingleOnScene = this;
     }
 
@@ -41,5 +41,4 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     {
         ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
     }
-
 }

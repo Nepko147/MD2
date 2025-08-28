@@ -37,7 +37,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
 
     public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
     {
-        position_last = transform.position;
+        position_last = transform.localPosition;
 
         var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.Buttons_GetSprites(_buttonName, 3);
         
@@ -47,7 +47,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
 
         rectTransform.sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
         Image_PointsRefresh();
-        transform.position = position_last;
+        transform.localPosition = position_last;
     }
 
     [SerializeField] private AudioClip sound_press;

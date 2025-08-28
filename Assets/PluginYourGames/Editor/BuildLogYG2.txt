@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
-Build number: 73
+Build number: 74
 =======
 <<<<<<< HEAD
 Build path: D:/Games/Midnight Drive/Build/Midnight Drive.exe
