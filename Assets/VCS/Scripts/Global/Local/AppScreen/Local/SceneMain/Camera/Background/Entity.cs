@@ -7,12 +7,15 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
     
     public bool Active { get; set; }
 
+    private Camera camera_background; 
+
     private PostProcessVolume   postProcess_volume;
 
     private ChromaticAberration postProcess_profile_chromaticAberration;
     private  bool               postProcess_profile_chromaticAberration_started = false;
     [SerializeField] float      postProcess_profile_chromaticAberration_speed = 0.0001f;
     [SerializeField] float      postProcess_profile_chromaticAberration_max = 0.4f;
+
     public void PostProcess_Profile_ChromaticAberration_Start()
     {
         postProcess_profile_chromaticAberration_started = true;
@@ -31,6 +34,7 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
 
         Active = false;
 
+        camera_background = GetComponent<Camera>();
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
     }
@@ -38,6 +42,8 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
     protected override void Update()
     {
         base.Update();
+
+        camera_background.fieldOfView = AppScreen_General_Camera_World_Entity.SingleOnScene.Cmera_World_FieldOfView; // Гарантируем, одинаковое поле зрение у камер
 
         if (Active
         && postProcess_profile_chromaticAberration_started)

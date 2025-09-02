@@ -5,6 +5,18 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 {
     public static AppScreen_General_Camera_World_Entity SingleOnScene { get; private set; }
 
+    private Camera camera_world;
+    public float Cmera_World_FieldOfView 
+    { get
+        {
+            return camera_world.fieldOfView;
+        } 
+        set
+        {
+            camera_world.fieldOfView = value;
+        }
+    }
+
     private PostProcessVolume   postProcess_volume;
     private DepthOfField        postProcess_profile_depthOfField;
     private const float         POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN = 1;
@@ -32,6 +44,7 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
         SingleOnScene = this;
 
+        camera_world = GetComponent<Camera>();
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_depthOfField);
     }
