@@ -13,7 +13,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Entity : AppScreen_Ge
     {
         show,
         hide,
-        none
+        none,
+        size
     }
 
     OnDisplay state;

@@ -18,7 +18,10 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     {
         idle,
         follow,
-        destination
+        destination,
+        overZoom_In,
+        overZoom_Out,
+        size
     }
     private Move_State move_state = Move_State.idle;
 
@@ -58,6 +61,40 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     private Vector3 slope_rotation_max_right;
     private float slope_delay;
     [SerializeField] private float slope_delay_init = 5f;
+
+    #endregion
+
+    #region ZoomToTarget
+
+    public void ZoomToTarget(Vector3 _targetPosition)
+    {
+        zoomToTarget_position = _targetPosition + Vector3.forward * zoomToTarget_maximumZoom;
+        zoomToTarget_position_init = transform.position;
+        zoomToTarget_state = ZoomToTarget_state.zoomToTarget_In;
+    }
+
+    public void ZoomToTarget_Disable()
+    {
+        zoomToTarget_state = ZoomToTarget_state.zoomToTarget_Out;
+    }
+
+    private enum ZoomToTarget_state
+    {
+        idle,
+        zoomToTarget_In,
+        zoomToTarget_Out,
+        size
+    }
+
+    private ZoomToTarget_state zoomToTarget_state = ZoomToTarget_state.idle;
+
+    private Vector3 zoomToTarget_position;
+    private Vector3 zoomToTarget_position_init;
+
+    private float zoomToTarget_step_in = 30.0f;
+    private float zoomToTarget_step_out = 20.0f;
+
+    private float zoomToTarget_maximumZoom = -2.0f;
 
     #endregion
 
@@ -109,6 +146,29 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
                     }
                 break;
             }
+
+            switch (zoomToTarget_state)
+            {
+                case ZoomToTarget_state.zoomToTarget_In:
+                    var _zoomToTarget_step = zoomToTarget_step_in * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position, _zoomToTarget_step);
+                    
+                    if(transform.position == zoomToTarget_position)
+                    {
+                        zoomToTarget_state = ZoomToTarget_state.idle;
+                    }
+                break;
+                case ZoomToTarget_state.zoomToTarget_Out:
+                    _zoomToTarget_step = zoomToTarget_step_out * Time.deltaTime;
+                    transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_init, _zoomToTarget_step);
+
+                    if (transform.position == zoomToTarget_position_init)
+                    {
+                        zoomToTarget_state = ZoomToTarget_state.idle;
+                    }
+                break;
+            }
+
 
             if (slope_delay >= 0)
             {

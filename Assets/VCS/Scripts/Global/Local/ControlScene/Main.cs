@@ -146,7 +146,46 @@ public class ControlScene_Main : MonoBehaviour
         {
             stage_drift = true;
         }
-        
+
+        #endregion
+
+        #region Revive
+
+        private bool stage_revive = false;
+
+        private float stage_revive_timer;
+        private float stage_revive_timer_init = 3.0f;
+
+        private int stage_revive_cost_current;
+        private int stage_revive_cost_bought = 200;
+        private int stage_revive_cost_imprved = 100;
+
+        private delegate void Stage_Revive_Event();
+        private event Stage_Revive_Event Stage_Revive_Event_On;
+        private event Stage_Revive_Event Stage_Revive_Event_Off;
+
+        private void Stage_Revive_Event_Off_ToRoad()
+        {
+            stage_road = true;
+        }
+
+        private void Stage_Revive_Event_Off_ToDrift()
+        {
+            stage_drift = true;
+        }
+
+        private bool Stage_Revive_Condition()
+        {
+            if (World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count <= 0)
+            {
+                return (true);
+            }
+            else
+            {
+                return (false);
+            }
+        }
+
         #endregion
 
         #region GameOver
@@ -161,13 +200,29 @@ public class ControlScene_Main : MonoBehaviour
         
         private bool Stage_GameOver_Condition()
         {
-            if (World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count <= 0)
+            if (stage_revive_timer > 0)
             {
-                return (true);
+                if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsBought())
+                {
+                    stage_gameOver_menu_timer = 0.0f;
+                    return (false);
+                }
+                else
+                {
+                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsImproved())
+                    {
+                        stage_gameOver_menu_timer = 0.0f;
+                        return (false);
+                    }
+                    else
+                    {
+                        return (true);
+                    }
+                }
             }
             else
             {
-                return (false);
+                return (true);
             }
         }
         
@@ -237,9 +292,10 @@ public class ControlScene_Main : MonoBehaviour
         Stage_Pause_Event_On += () =>
         {
             audio_source.PlayOneShot(audio_sound_pause);
-
+            
             _GeneralActiveState(false);
 
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             ControlPers_AudioMixer.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
 
@@ -250,6 +306,7 @@ public class ControlScene_Main : MonoBehaviour
 
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
             AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = false;
+            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = false;
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = false;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.Pause();
@@ -264,10 +321,12 @@ public class ControlScene_Main : MonoBehaviour
         {
             _GeneralActiveState(true);
 
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             ControlPers_AudioMixer.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
             AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
+            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = true;
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.UnPause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.UnPause();
@@ -279,6 +338,62 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.SetPause(false);
         };
         Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
+
+        Stage_Revive_Event_On += () =>
+        {
+            _GeneralActiveState(false);
+
+            ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
+
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
+
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
+            var _target = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget(_target);
+
+            if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
+            {
+                AppScreen_Local_SceneMain_UICanvas_Revive_Cost.SingleOnScene.Text = stage_revive_cost_current + "x";
+                stage_revive_timer = stage_revive_timer_init;
+            }
+            else
+            {
+                AppScreen_Local_SceneMain_UICanvas_Revive_Cost.SingleOnScene.Text = "<color=#DD0000>" + stage_revive_cost_current + "x</color>";
+                stage_revive_timer = stage_revive_timer_init / 2;
+            }
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = false;
+            }
+            AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Show();
+            AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = true;
+        };
+
+        Stage_Revive_Event_Off += () =>
+        {
+            _GeneralActiveState(true);
+
+            ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
+
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
+
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Disable();
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = true;
+            }
+
+            ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= stage_revive_cost_current;
+            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
+            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
+            AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
+            AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = false;
+            AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
+        };
+        Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToRoad;
 
         Stage_GameOver_Event_On += () =>
         {
@@ -302,6 +417,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
             AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
+            AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
         };
 
         stage_gameOver_menu_timer = stage_gameOver_menu_timer_init;
@@ -332,24 +448,34 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_General_Camera_Entity.SingleOnScene.Slope = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
+        AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = true;
         AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
         AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
+
+        if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsImproved())
+        {
+            stage_revive_cost_current = stage_revive_cost_imprved;
+        }
+        else
+        {
+            stage_revive_cost_current = stage_revive_cost_bought;
+        }
     }
 
     private void Update()
     {
         if (stage_road)
         {
-            if (Stage_GameOver_Condition())
+            if (Stage_Revive_Condition())
             {
-                Stage_GameOver_Event_On();
+                Stage_Revive_Event_On();
 
                 stage_road = false;
-                stage_gameOver = true;    
+                stage_revive = true;    
             }
             else
             {
@@ -480,6 +606,9 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToRoad;
                                     Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToDrift;
 
+                                    Stage_Revive_Event_Off -= Stage_Revive_Event_Off_ToRoad;
+                                    Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToDrift;
+
                                     World_General_Sky.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
@@ -523,12 +652,12 @@ public class ControlScene_Main : MonoBehaviour
 
         if (stage_drift)
         {
-            if (Stage_GameOver_Condition())
+            if (Stage_Revive_Condition())
             {
-                Stage_GameOver_Event_On();
+                Stage_Revive_Event_On();
 
                 stage_drift = false;
-                stage_gameOver = true;
+                stage_revive = true;
             }
             else
             {
@@ -589,6 +718,9 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
                                     Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToDrift;
 
+                                    Stage_Revive_Event_Off -= Stage_Revive_Event_Off_ToDrift;
+                                    Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToRoad;
+
                                     World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
 
@@ -631,6 +763,46 @@ public class ControlScene_Main : MonoBehaviour
                     SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
                 }
             }              
+        }
+
+        if (stage_revive)
+        {
+            if (Stage_GameOver_Condition())
+            {
+                Stage_GameOver_Event_On();
+
+                stage_revive = false;
+                stage_gameOver = true;                
+            }
+            else
+            {
+                if (AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed)
+                {
+                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
+                    {
+                        Stage_Revive_Event_Off();
+
+                        stage_revive = false;
+                    }
+                    else
+                    {
+                        AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
+                    }
+                }
+                else
+                {
+                    stage_revive_timer -= Time.deltaTime;
+
+                    var _string = "";
+
+                    if (stage_revive_timer > 0)
+                    {
+                        _string = stage_revive_timer.ToString().Substring(0, 4);
+                    }
+
+                    AppScreen_Local_SceneMain_UICanvas_Revive_Timer.SingleOnScene.Text = _string;
+                }                
+            }
         }
 
         if (stage_gameOver)

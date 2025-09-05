@@ -5,7 +5,19 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text : AppScreen_
 {
     public static AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text SingleOnScene { get; private set; }
 
-    Text text;
+    private Text text;
+
+    public string Text
+    {
+        get
+        {
+            return text.text;
+        }
+        set
+        {
+            text.text = value;
+        }
+    }
 
     public void UpdateText(string _string)
     {

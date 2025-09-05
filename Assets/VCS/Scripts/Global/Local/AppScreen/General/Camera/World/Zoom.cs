@@ -45,6 +45,7 @@ public class AppScreen_General_Camera_World_Entity_Zoom : MonoBehaviour
                 //При достижении максимального зума (оверЗум), даём команду камере уменьшить зум
                 if (camera.fieldOfView <= CAMERA_ZOOM_MAX)
                 {
+                    camera.fieldOfView = CAMERA_ZOOM_MAX;
                     camera_overZoom = false;
                 }
             }
@@ -60,7 +61,7 @@ public class AppScreen_General_Camera_World_Entity_Zoom : MonoBehaviour
                 //При достижении минимального зума, разрешаем оверзум и обновляем его таймер
                 if (camera.fieldOfView >= CAMERA_ZOOM_MIN)
                 {
-                    camera.fieldOfView = camera_originalFieldOfView;
+                    camera.fieldOfView = CAMERA_ZOOM_MIN;
                     camera_overZoom_timer = CAMERA_ZOOM_DELAY;
                     camera_overZoom = true;
                 }            

@@ -86,7 +86,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Color spriteRenderer_material_color = Color.white;
-    
+    private Color spriteRenderer_material_color_init;
+
     private Animator animator;
     private const string ANIMATOR_PARAM_SPEED = "Speed";
 
@@ -219,13 +220,21 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
     }
 
+    public void Resurrect()
+    {
+        Up_Take();
+        crashed = false;
+        spriteRenderer_material_color = spriteRenderer_material_color_init;
+        spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+    }
+
     #endregion
 
     #region Moving
 
-        #region Road
+    #region Road
 
-        private enum Moving_Road_State
+    private enum Moving_Road_State
         {
             lnie_1,
             lnie_2,
@@ -573,6 +582,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer_material_color = spriteRenderer.material.GetColor(Constants.MATERIAL_2D_BUMP_U_COLOR);
+        spriteRenderer_material_color_init = spriteRenderer_material_color;
         spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_spriteRenderer_material_normalMap);
 
         animator = GetComponent<Animator>();

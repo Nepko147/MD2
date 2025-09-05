@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using System.Collections;
 
 public class ControlPers_AudioMixer_Music : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     public void Play(AudioClip _music)
     {
+        if (audioSource.pitch != 1) 
+        {
+            audioSource.pitch = 1; //√арантируем нормальное воспроизведение
+        }
+
         audioSource.clip = _music;
         audioSource.Play();
     }
@@ -32,11 +38,66 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
         audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, -80f);
     }
 
+    private float pitch_step = 0.02f;
+
+    private IEnumerator Pitch_Coroutine_ToZero()
+    {
+        while (true)
+        {
+            audioSource.pitch -= pitch_step;
+
+            if (audioSource.pitch > 0)
+            {
+                yield return null;
+            }
+            else
+            {
+                audioSource.pitch = 0;
+                break;
+            }
+        }
+    }
+        
+    private IEnumerator Pitch_Coroutine_ToNormal()
+    {
+        while (true)
+        {
+            audioSource.pitch += pitch_step;
+
+            if (audioSource.pitch < 1)
+            {
+                yield return null;
+            }
+            else
+            {
+                audioSource.pitch = 1;
+                break;
+            }
+        }
+    }
+   
+    private IEnumerator pitch_coroutine_current;
+
+    public void Pitch_ToZero()
+    {
+        StopCoroutine(pitch_coroutine_current);
+        pitch_coroutine_current = Pitch_Coroutine_ToZero();
+        StartCoroutine(pitch_coroutine_current);
+    }
+
+    public void Pitch_ToNormal()
+    {
+        StopCoroutine(pitch_coroutine_current);
+        pitch_coroutine_current = Pitch_Coroutine_ToNormal();
+        StartCoroutine(pitch_coroutine_current);
+    }
+
     private void Awake()
     {
         SingleOnScene = this;
 
         audioSource = GetComponent<AudioSource>();
+        pitch_coroutine_current = Pitch_Coroutine_ToNormal();
     }
 
     private void Start()

@@ -5,11 +5,18 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text : AppScree
 {
     public static AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text SingleOnScene { get; private set; }
 
-    Text text;
+    private Text text;
 
-    public void UpdateText(string _string)
-    {
-        text.text = _string;
+    public string Text 
+    { 
+        get
+        {
+            return text.text;
+        }
+        set
+        {
+            text.text = value;
+        }
     }
 
     protected override void Awake()

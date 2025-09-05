@@ -15,7 +15,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         {
             ups_visual = value;
             var _string = TEXT_X + " " + ups_visual.ToString();
-            AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.UpdateText(_string);
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Text.SingleOnScene.Text = _string;
         }
     }
         
@@ -31,7 +31,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
             coins_visual = value;
 
             var _string = coins_visual.ToString() + " " + TEXT_X;
-            AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.UpdateText(_string);
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Text.SingleOnScene.Text = _string;
         }
     }
 
