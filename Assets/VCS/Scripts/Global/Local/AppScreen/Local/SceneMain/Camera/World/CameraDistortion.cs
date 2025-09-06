@@ -26,7 +26,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
 
     [SerializeField] private Texture2D material_overlay_normalMap_coinRush;
     [SerializeField] private float material_overlay_normalMap_coinRush_visualDiameterInPixels = 120f;
-    public bool Material_Overlay_NormalMap_CoinRish_Active { get; set; }
+    public bool Material_Overlay_NormalMap_CoinRush_Active { get; set; }
     public Vector3 Material_Overlay_NormalMap_CoinRush_WorldPos { get; private set; }
     private Vector4 material_overlay_normalMap_coinRush_screenPos_normalized = Vector2.zero;
     private float material_overlay_normalMap_coinRush_time = 0;
@@ -38,7 +38,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
 
     public void Material_Overlay_NormalMap_CoinRush_Start(Vector3 _position)
     {
-        Material_Overlay_NormalMap_CoinRish_Active = true;
+        Material_Overlay_NormalMap_CoinRush_Active = true;
         Material_Overlay_NormalMap_CoinRush_WorldPos = _position;
         material_overlay_normalMap_coinRush_time = 0;
         material_overlay_normalMap_coinRush_scale = 0;
@@ -63,7 +63,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
 
         Material_Overlay_Active = true;
 
-        Material_Overlay_NormalMap_CoinRish_Active = false;
+        Material_Overlay_NormalMap_CoinRush_Active = false;
     }
 
     private void Start()
@@ -81,7 +81,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
     private void Update()
     {
         if (Material_Overlay_Active
-        && Material_Overlay_NormalMap_CoinRish_Active)
+        && Material_Overlay_NormalMap_CoinRush_Active)
         {
             material_overlay_normalMap_coinRush_time += Time.deltaTime;
 
@@ -101,7 +101,7 @@ public class AppScreen_Local_SceneMain_Camera_World_CameraDistortion : MonoBehav
             if (material_overlay_normalMap_coinRush_time >= MATERIAL_OVERLAY_NORMALMAP_COINRUSH_TIME_MAX)
             {
                 material.SetFloat(MATERIAL_U_OVERLAY_ALPHA, 0);
-                Material_Overlay_NormalMap_CoinRish_Active = false;
+                Material_Overlay_NormalMap_CoinRush_Active = false;
             }
         }
     }

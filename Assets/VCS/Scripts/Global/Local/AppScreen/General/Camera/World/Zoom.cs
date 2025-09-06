@@ -6,64 +6,65 @@ public class AppScreen_General_Camera_World_Entity_Zoom : MonoBehaviour
 
     public bool Active { get; set; }
 
-    new private Camera camera;
-    private Vector3 camera_position_origin;
-    private Vector3 camera_position_correction;
-    private const float CAMERA_POSITION_CORRECTION_SIZE = 0.08f;
-    private const float CAMERA_POSITION_CORRECTION_SPEED = 0.0001f;
+    private Camera camera_component;
 
-    private float camera_originalFieldOfView;
-
-    private const float CAMERA_ZOOM_SPEED = 0.25f;
-    private const float CAMERA_ZOOM_MAX = 23f; //Чем меньше значение, тем сильнее зум
-    private const float CAMERA_ZOOM_MIN = 24f; //Чем больше значение, тем слабее зум
-    private const float CAMERA_ZOOM_DELAY = 5f;    
-    
-    private bool    camera_overZoom;
-    private float   camera_overZoom_timer; //Таймер периодического оверзума
+    private bool zoom_swap = false;
+    private float zoom_min;
+    private float zoom_max;
+    private const float ZOOM_OFS = 1f;
+    private const float ZOOM_SPEED = 0.1f;
+    private const float ZOOM_DELAY_INIT = 1f;    
+    private float zoom_delay_current = ZOOM_DELAY_INIT;
 
     private void Awake()
     {
         SingleOnScene = this;
 
         Active = false;
-        camera = GetComponent<Camera>();
-        camera_originalFieldOfView = camera.fieldOfView;
-        camera_position_origin = transform.localPosition;
-        camera_position_correction = new Vector3(camera_position_origin.x, camera_position_origin.y - CAMERA_POSITION_CORRECTION_SIZE, camera_position_origin.z);
+
+        camera_component = GetComponent<Camera>();
+
+        zoom_max = camera_component.fieldOfView;
+        zoom_min = zoom_max - ZOOM_OFS;
     }
+
     private void Update()
     {       
         if (Active)
-        {            
-            //Вход в состояние оверЗума
-            if (camera.fieldOfView > CAMERA_ZOOM_MAX && camera_overZoom && camera_overZoom_timer <= 0)
+        {
+            if (!zoom_swap)
             {
-                camera.fieldOfView -= CAMERA_ZOOM_SPEED * Time.deltaTime; //Увеличение Зума
-                camera.transform.localPosition = Vector3.MoveTowards(transform.localPosition, camera_position_correction, CAMERA_POSITION_CORRECTION_SPEED * Time.deltaTime); //Сдвиг камеры вниз
-            
-                //При достижении максимального зума (оверЗум), даём команду камере уменьшить зум
-                if (camera.fieldOfView <= CAMERA_ZOOM_MAX)
+                if (zoom_delay_current > 0)
                 {
-                    camera_overZoom = false;
+                    zoom_delay_current -= Time.deltaTime;
+                }
+                else
+                {
+                    camera_component.fieldOfView -= ZOOM_SPEED * Time.deltaTime;
+
+                    if (camera_component.fieldOfView <= zoom_min)
+                    {
+                        zoom_delay_current = ZOOM_DELAY_INIT;
+                        zoom_swap = true;
+                    }
                 }
             }
-
-            camera_overZoom_timer -= Time.deltaTime;
-
-            //Выход из состояния оверЗума
-            if (!camera_overZoom)
+            else
             {
-                camera.fieldOfView += CAMERA_ZOOM_SPEED * Time.deltaTime; //Уменьшение зума
-                camera.transform.localPosition = Vector3.MoveTowards(transform.localPosition, camera_position_origin, CAMERA_POSITION_CORRECTION_SPEED * Time.deltaTime); //Сдвиг камеры в изначальное положение
-            
-                //При достижении минимального зума, разрешаем оверзум и обновляем его таймер
-                if (camera.fieldOfView >= CAMERA_ZOOM_MIN)
+                if (zoom_delay_current > 0)
                 {
-                    camera.fieldOfView = camera_originalFieldOfView;
-                    camera_overZoom_timer = CAMERA_ZOOM_DELAY;
-                    camera_overZoom = true;
-                }            
+                    zoom_delay_current -= Time.deltaTime;
+                }
+                else
+                {
+                    camera_component.fieldOfView += ZOOM_SPEED * Time.deltaTime;
+
+                    if (camera_component.fieldOfView >= zoom_max)
+                    {
+                        zoom_delay_current = ZOOM_DELAY_INIT;
+                        zoom_swap = false;
+                    }
+                }
             }
         }
     }

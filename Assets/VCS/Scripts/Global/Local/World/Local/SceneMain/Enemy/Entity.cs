@@ -8,13 +8,13 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] Texture2D normalMap;
 
-    private float speed = 400f;
-
     private bool isDamaged = false;
 
     private PolygonCollider2D collider2d;
 
-    const float DESTROYPOSITION_X = -5.0f; //Позиция уничтожения объекта за пределами экрана
+    private const float SPEED = 450f;
+
+    private const float DESTROYPOSITION_X = -5.0f; //Позиция уничтожения объекта за пределами экрана
 
     private void Awake()
     {
@@ -30,9 +30,8 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     {     
         if (Active)
         {
-            transform.position += Vector3.left * speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
-            //Проверка на контакт с игроком
             if (!isDamaged
             && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul
             && collider2d.bounds.Intersects(World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit.bounds))

@@ -28,6 +28,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
     private Sprite image_currennt_idle;
     private Sprite image_currennt_pointed;
     private Sprite image_currennt_pressed;
+    private Vector2 image_current_sizeDelta = Vector2.zero;
 
     public void Image_PointsRefresh()
     {
@@ -45,7 +46,9 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         image_currennt_pointed = _spriteArray[1];
         image_currennt_pressed = _spriteArray[2];
 
-        rectTransform.sizeDelta = new Vector2(image_currennt_idle.rect.width, image_currennt_idle.rect.height);
+        image_current_sizeDelta.x = image_currennt_idle.rect.width;
+        image_current_sizeDelta.y = image_currennt_idle.rect.height;
+        rectTransform.sizeDelta = image_current_sizeDelta;
         Image_PointsRefresh();
         transform.position = position_last;
     }
@@ -110,7 +113,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         image = GetComponent<Image>();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (Pressable())
         {
