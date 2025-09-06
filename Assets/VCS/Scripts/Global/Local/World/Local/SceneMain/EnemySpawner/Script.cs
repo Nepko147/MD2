@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 
 public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
 {
@@ -7,33 +9,32 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     public bool Active_General { get; set; }
     public bool Active_Local_Road { get; set; }
 
-    public int          InaccessibleLine { get; set; }
-    private const int   INACCESSIBLELINE_INIT = 0;
-
     [SerializeField] private World_Local_SceneMain_Enemy_Entity[] enemyArray;
 
-    public Vector2 EnemySpawn_SpawnPoint_Line_1 { get; set; }
-    public Vector2 EnemySpawn_SpawnPoint_Line_2 { get; set; }
-    public Vector2 EnemySpawn_SpawnPoint_Line_3 { get; set; }
-    public Vector2 EnemySpawn_SpawnPoint_Line_4 { get; set; }
+    private const float ENEMYSPAWN_SPAWNPOINT_LINE_X = 5.7f;
+    private readonly Vector3 EnemySpawn_SpawnPoint_Line_1 = new Vector3(ENEMYSPAWN_SPAWNPOINT_LINE_X, -0.55f, 0);
+    private readonly Vector3 EnemySpawn_SpawnPoint_Line_2 = new Vector3(ENEMYSPAWN_SPAWNPOINT_LINE_X, -0.85f, 0);
+    private readonly Vector3 EnemySpawn_SpawnPoint_Line_3 = new Vector3(ENEMYSPAWN_SPAWNPOINT_LINE_X, -1.15f, 0);
+    private readonly Vector3 EnemySpawn_SpawnPoint_Line_4 = new Vector3(ENEMYSPAWN_SPAWNPOINT_LINE_X, -1.45f, 0);
 
-    private int enemySpawn_currentLineNumber;
+    private float enemySpawn_wave_delay_refresh = 1f;
+    private const float ENEMYSPAWN_WAVE_DELAY_REFRESH_DEC = 0.1f;
+    private const float ENEMYSPAWN_WAVE_DELAY_REFRESH_MIN = 0;
+    private float enemySpawn_wave_delay_current;
 
-    private float                  enemySpawn_wave_enemyDelay;
-    [SerializeField] private float enemySpawn_wave_enemyDelay_init;
-    [SerializeField] private float enemySpawn_wave_enemyDelay_init_decrease;
-    [SerializeField] private float enemySpawn_wave_enemyDelay_init_min;
+    private float enemySpawn_wave_enemyDelay_current = 0;
+    private float enemySpawn_wave_enemyDelay_refresh = 1f;
+    private const float ENEMYSPAWN_WAVE_ENEMYDELAY_REFRESH_DEC = 0.1f;
+    private const float ENEMYSPAWN_WAVE_ENEMYDELAY_REFRESH_MIN = 0.25f;
 
-    private float                  enemySpawn_wave_delay;
-    [SerializeField] private float enemySpawn_wave_delay_init;
-    [SerializeField] private float enemySpawn_wave_delay_init_decreaseCf;
-    [SerializeField] private float enemySpawn_wave_delay_init_min;
+    private const int ENEMYSPAWN_WAVE_SIZE_INIT = 3;
+    private int enemySpawn_wave_size_current = ENEMYSPAWN_WAVE_SIZE_INIT;
+    private float enemySpawn_wave_size_refresh_current = ENEMYSPAWN_WAVE_SIZE_INIT;
+    private float ENEMYSPAWN_WAVE_SIZE_REFRESH_INC = 0.5f;
+    private float ENEMYSPAWN_WAVE_SIZE_REFRESH_MAX = 10f;
 
-    private int                    enemySpawn_wave_size;
-    [SerializeField] private int   enemySpawn_wave_size_init;
-    private float                  enemySpawn_wave_size_counter;
-    [SerializeField] private float enemySpawn_wave_size_counter_increase;
-    [SerializeField] private int   enemySpawn_wave_size_counter_max;
+    public Constants.RoadLine EnemySpawn_Line_Taken { get; set; }
+    private List<Constants.RoadLine> enemySpawn_line_list = new List<Constants.RoadLine>((int)Constants.RoadLine.size);
 
     private void Awake()
     {
@@ -42,10 +43,9 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
         Active_General = true;
         Active_Local_Road = true;
 
-        InaccessibleLine = 0;
+        enemySpawn_wave_delay_current = enemySpawn_wave_delay_refresh;
 
-        enemySpawn_wave_size = enemySpawn_wave_size_init;
-        enemySpawn_wave_size_counter = enemySpawn_wave_size_init;
+        EnemySpawn_Line_Taken = (Constants.RoadLine)Random.Range(0, (int)Constants.RoadLine.size);
     }
     
     private void FixedUpdate()
@@ -54,91 +54,67 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
         && Active_Local_Road
         && !World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush)
         {
-            if (enemySpawn_wave_delay > 0)
+            if (enemySpawn_wave_delay_current > 0)
             {
-                enemySpawn_wave_delay -= Time.deltaTime;
+                enemySpawn_wave_delay_current -= Time.fixedDeltaTime;
             } 
             else
             {
-                if (enemySpawn_wave_enemyDelay > 0)
+                if (enemySpawn_wave_enemyDelay_current > 0)
                 {
-                    enemySpawn_wave_enemyDelay -= Time.deltaTime;                   
+                    enemySpawn_wave_enemyDelay_current -= Time.fixedDeltaTime;                   
                 } 
                 else
                 {
-                    int _newLineNumber = 1;
-                    bool _needToUpdateLineNumber = true;
-
-                    while (_needToUpdateLineNumber)
+                    if (!World_Local_SceneMain_BonusSpawner.SingleOnScene.Prepared)
                     {
-                        _newLineNumber = Random.Range(1, 5);
-                        _needToUpdateLineNumber = false;
+                        enemySpawn_line_list.Clear();
+                        enemySpawn_line_list.Add(Constants.RoadLine.first);
+                        enemySpawn_line_list.Add(Constants.RoadLine.second);
+                        enemySpawn_line_list.Add(Constants.RoadLine.third);
+                        enemySpawn_line_list.Add(Constants.RoadLine.fourth);
+                        enemySpawn_line_list.Remove(EnemySpawn_Line_Taken);
 
-                        switch (enemySpawn_currentLineNumber)
+                        var _randInd = Random.Range(0, enemySpawn_line_list.Count);
+                        EnemySpawn_Line_Taken = enemySpawn_line_list[_randInd];
+                        
+                        var _position = EnemySpawn_SpawnPoint_Line_1;
+                        
+                        switch (EnemySpawn_Line_Taken)
                         {
-                            case 2:
-                            if (_newLineNumber == 1)
-                            {
-                                _needToUpdateLineNumber = true;
-                            }
+                            case Constants.RoadLine.second:
+                                _position = EnemySpawn_SpawnPoint_Line_2;
                             break;
-                            case 3:
-                            if (_newLineNumber == 4)
-                            {
-                                _needToUpdateLineNumber = true;
-                            }
+
+                            case Constants.RoadLine.third:
+                                _position = EnemySpawn_SpawnPoint_Line_3;
+                            break;
+
+                            case Constants.RoadLine.fourth:
+                                _position = EnemySpawn_SpawnPoint_Line_4;
                             break;
                         }
 
-                        if (_newLineNumber == InaccessibleLine)
+                        var _ind = Random.Range(0, enemyArray.Length);
+                        Instantiate(enemyArray[_ind], _position, new Quaternion(), transform.parent);
+
+                        --enemySpawn_wave_size_current;
+                        
+                        if (enemySpawn_wave_size_current > 0)
                         {
-                            _needToUpdateLineNumber = true;
+                            enemySpawn_wave_enemyDelay_current = enemySpawn_wave_enemyDelay_refresh;
                         }
-                    }
+                        else
+                        {
+                            enemySpawn_wave_delay_refresh = Mathf.Clamp(enemySpawn_wave_delay_refresh - ENEMYSPAWN_WAVE_DELAY_REFRESH_DEC, ENEMYSPAWN_WAVE_DELAY_REFRESH_MIN, enemySpawn_wave_delay_refresh);
+                            enemySpawn_wave_delay_current = enemySpawn_wave_delay_refresh;
 
-                    enemySpawn_currentLineNumber = _newLineNumber;
+                            enemySpawn_wave_enemyDelay_refresh = Mathf.Clamp(enemySpawn_wave_enemyDelay_refresh - ENEMYSPAWN_WAVE_ENEMYDELAY_REFRESH_DEC, ENEMYSPAWN_WAVE_ENEMYDELAY_REFRESH_MIN, enemySpawn_wave_enemyDelay_refresh);
+                            enemySpawn_wave_enemyDelay_current = enemySpawn_wave_enemyDelay_refresh;
 
-                    Vector2 _position = new Vector2();
-
-                    switch (enemySpawn_currentLineNumber)
-                    {
-                        case 1:
-                        _position = EnemySpawn_SpawnPoint_Line_1;
-                        break;
-
-                        case 2:
-                        _position = EnemySpawn_SpawnPoint_Line_2;
-                        break;
-
-                        case 3:
-                        _position = EnemySpawn_SpawnPoint_Line_3;
-                        break;
-
-                        case 4:
-                        _position = EnemySpawn_SpawnPoint_Line_4;
-                        break;
-                    }
-
-                    int _enemyArray_index = Random.Range(0, enemyArray.Length);
-                    Instantiate(enemyArray[_enemyArray_index], _position, new Quaternion(), transform.parent);
-                    InaccessibleLine = INACCESSIBLELINE_INIT;
-                    World_Local_SceneMain_BonusSpawner.SingleOnScene.InaccessibleLine = enemySpawn_currentLineNumber;
-
-                    enemySpawn_wave_enemyDelay = enemySpawn_wave_enemyDelay_init;
-
-                    --enemySpawn_wave_size;
-
-                    if (enemySpawn_wave_size <= 0)
-                    {
-                        enemySpawn_wave_delay_init = Mathf.Clamp(enemySpawn_wave_delay_init - enemySpawn_wave_delay_init_decreaseCf, enemySpawn_wave_delay_init_min, enemySpawn_wave_delay_init);
-                        enemySpawn_wave_delay = enemySpawn_wave_delay_init;
-
-                        enemySpawn_wave_enemyDelay_init = Mathf.Clamp(enemySpawn_wave_enemyDelay_init - enemySpawn_wave_enemyDelay_init_decrease, enemySpawn_wave_enemyDelay_init_min, enemySpawn_wave_enemyDelay);
-
-                        enemySpawn_wave_size_counter += enemySpawn_wave_size_counter_increase;
-                        var _enemySpawn_wave_size_counter_clamp = Mathf.Clamp(enemySpawn_wave_size_counter, enemySpawn_wave_size_counter, enemySpawn_wave_size_counter_max);
-                        var _enemySpawn_wave_size_counter_clamp_floor = Mathf.Floor(_enemySpawn_wave_size_counter_clamp);
-                        enemySpawn_wave_size = (int)_enemySpawn_wave_size_counter_clamp_floor;
+                            enemySpawn_wave_size_refresh_current = Mathf.Clamp(enemySpawn_wave_size_refresh_current + ENEMYSPAWN_WAVE_SIZE_REFRESH_INC, enemySpawn_wave_size_refresh_current, ENEMYSPAWN_WAVE_SIZE_REFRESH_MAX);
+                            enemySpawn_wave_size_current = (int)Mathf.Floor(enemySpawn_wave_size_refresh_current);
+                        }
                     }
                 }
             }

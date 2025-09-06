@@ -3,7 +3,7 @@ using UnityEngine;
 public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
 {
     public static World_Local_SceneMain_MovingBackground_Entity SingleOnScene { get; private set; }
-
+    
     [SerializeField] private GameObject city_3;
     [SerializeField] private GameObject city_3_1;
     [SerializeField] private GameObject city_2;
@@ -39,6 +39,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
         position_road = road.transform.position;
         position_road_1 = road_1.transform.position;
     }
+
     public void Position_Load()
     {
         city_3.transform.position = position_city_3;
@@ -56,8 +57,13 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
     public bool SpeedScale_Active { get; set; }
     public float SpeedScale { get; set; }
     public const float SPEEDSCALE_INIT = 0.008f;
-    private const float SPEEDSCALE_INCREMENT = 0.000001f;
-    private const float SPEEDSCALE_MAX = 0.02f;
+    private const float SPEEDSCALE_INCREMENT = 0.0001f;
+    private const float SPEEDSCALE_MAX = 0.018f;
+    
+    public float SpeedScale_Normalized()
+    {
+        return ((SpeedScale - SPEEDSCALE_INIT) / (SPEEDSCALE_MAX - SPEEDSCALE_INIT));
+    }
 
     private void Awake()
     {

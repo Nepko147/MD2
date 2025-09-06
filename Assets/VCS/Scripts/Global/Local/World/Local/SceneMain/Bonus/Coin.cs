@@ -2,20 +2,34 @@ using UnityEngine;
 
 public class World_Local_SceneMain_Bonus_Coin : World_Local_SceneMain_Bonus_Parent
 {
-    private bool visible = true;
-
     private SpriteRenderer spriteRenderer;
 
-    public void MakeInvisible()
+    private bool visible = true;
+    public bool Visible
     {
-        visible = false;
-        spriteRenderer.enabled = false;
+        get
+        {
+            return (visible);
+        }
+        set
+        {
+            visible = value;
+            spriteRenderer.enabled = value;
+        }
     }
 
-    public void MakeVisible()
+    private bool coinMagnet_active = false;
+    private bool coinMagnet_triggered = false;
+    private float coinMagnet_radius_current = 2f;
+    private const float COINMAGNET_RADIUS_UPGRADED = 4f;
+    private float coinMagnet_speed_current = 1f;
+    private const float COINMAGNET_SPEED_INC_INIT = 4f;
+    private const float COINMAGNET_SPEED_INC_TURBO = 10f;
+    private bool coinMagnet_pickUp = false;
+
+    public void CoinMagnet_Speed_Inc_Turbo()
     {
-        visible = true;
-        spriteRenderer.enabled = true; 
+        coinMagnet_speed_current = COINMAGNET_SPEED_INC_TURBO;
     }
 
     protected override void Awake()
@@ -25,14 +39,57 @@ public class World_Local_SceneMain_Bonus_Coin : World_Local_SceneMain_Bonus_Pare
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    private void Start()
+    {
+        if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_CoinMagnet_IsBought())
+        {
+            coinMagnet_active = true;
+        }
+        else
+        {
+            if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_CoinMagnet_IsImproved())
+            {
+                coinMagnet_radius_current = COINMAGNET_RADIUS_UPGRADED;
+            }
+        }
+    }
+
     protected override void Update()
     {
         base.Update();
 
-        if (Active)
+        if (Active
+        && visible)
         {
+            if (coinMagnet_active)
+            {
+                var _pos_target = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+                var _dist_toTarget = (_pos_target - transform.position).magnitude;
+
+                if (!coinMagnet_triggered)
+                {
+                    if (_dist_toTarget <= coinMagnet_radius_current)
+                    {
+                        coinMagnet_triggered = true;
+                    }
+                }
+                else
+                {
+                    coinMagnet_speed_current += COINMAGNET_SPEED_INC_INIT * Time.deltaTime;
+
+                    var _step = coinMagnet_speed_current * Time.deltaTime;
+
+                    transform.position = Vector3.MoveTowards(transform.position, _pos_target, _step);
+
+                    if (_dist_toTarget <= _step)
+                    {
+                        coinMagnet_pickUp = true;
+                    }
+                }
+            }
+
             if (boxCollider.bounds.Intersects(World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Bonus.bounds)
-            && visible)
+            || coinMagnet_pickUp)
             {
                 ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound);
 

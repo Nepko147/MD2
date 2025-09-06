@@ -10,5 +10,14 @@ namespace Utils
 
         public const string MATERIAL_BUMPMAP_U_BUMPMAP = "_BumpMap";
         public const string MATERIAL_2D_BUMP_U_COLOR = "_Color";
+        
+        public enum RoadLine
+        {
+            first,
+            second, 
+            third, 
+            fourth,
+            size
+        }
     }
 }

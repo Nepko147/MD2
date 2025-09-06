@@ -167,23 +167,23 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             if (value
             && !invul)
             {
-               invul_timer = invul_timer_init; 
+               invul_timer = INVUL_TIMER_INIT; 
             }
 
             invul = value;
         } 
     }
     private float invul_timer;
-    [SerializeField] private float invul_timer_init = 1.2f;
+    private float INVUL_TIMER_INIT = 1.2f;
     private bool invul_alpha_state = false;
-    [SerializeField] private float invul_alpha_step = 12; //„ем больше значение, тем быстрее моргает
+    private float INVUL_ALPHA_STEP = 12; //„ем больше значение, тем быстрее моргает
     private void Invul_Behaviour()
     {
         if (Invul)
         {
             if (invul_alpha_state)
             {
-                spriteRenderer_material_color.a += invul_alpha_step * Time.deltaTime;
+                spriteRenderer_material_color.a += INVUL_ALPHA_STEP * Time.deltaTime;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
 
                 if (spriteRenderer_material_color.a >= 1f)
@@ -193,7 +193,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             }
             else
             {
-                spriteRenderer_material_color.a -= invul_alpha_step * Time.deltaTime;
+                spriteRenderer_material_color.a -= INVUL_ALPHA_STEP * Time.deltaTime;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
 
                 if (spriteRenderer_material_color.a <= 0)
@@ -243,7 +243,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         }
         private Moving_Road_State moving_road_state = Moving_Road_State.lnie_2;    
         
-        [SerializeField] private float moving_road_speed = 0.03f;
+        private const float MOVING_ROAD_SPEED = 2f;
 
         private const float MOVING_ROAD_LINE_1_POSITION_Y = -0.55f;
         private const float MOVING_ROAD_LINE_2_POSITION_Y = -0.85f;
@@ -260,11 +260,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         {
             if (moving_road)
             {
-                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, moving_road_speed);
-
-                if (transform.position == moving_road_newPosition)
+                var _step = MOVING_ROAD_SPEED * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition,_step);
+                
+                if ((moving_road_newPosition - transform.position).magnitude <= _step)
                 {
-                    transform.position = moving_road_newPosition; // √аранитруем, что игрок будет в нужной точке. ¬Ќ≈«јѕЌќ: "transform.position == moving_road_newPosition" и "Vector3.MoveTowards(...)" не грантируют!
+                    transform.position = moving_road_newPosition;
                     moving_road = false;
                 }
             }
@@ -357,7 +358,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private const float MOVING_DRIFT_ANGLE_INIT = 270f;
         private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
         private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
-        [SerializeField] private float moving_drift_angle_step = 0.02f;
+        private float MOVING_DRIFT_ANGLE_STEP = 1f;
         private Vector2 moving_drift_moveVector = Vector2.zero;
         private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
         private Vector2 moving_drift_hitVector = Vector2.zero;
@@ -740,7 +741,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                             moving_drift_angle_input = AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Direction;
                         }
 
-                        moving_drift_angle_current = AngleHandler.Angle_SmoothStep(moving_drift_angle_current, moving_drift_angle_input, moving_drift_angle_step);
+                        moving_drift_angle_current = AngleHandler.Angle_SmoothStep(moving_drift_angle_current, moving_drift_angle_input, MOVING_DRIFT_ANGLE_STEP * Time.deltaTime);
 
                         VisualState_FromAngle(moving_drift_angle_current);
                     }

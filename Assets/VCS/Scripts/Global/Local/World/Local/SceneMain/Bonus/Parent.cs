@@ -23,7 +23,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
             }
         }
     }
-
+    
     [SerializeField] protected World_Local_SceneMain_PopUp popUp;
 
     [SerializeField] protected AudioClip sound;
@@ -31,7 +31,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
     protected Animator animator;
 
     protected BoxCollider2D boxCollider;
-    
+
     private const float SPEED = 500f;
 
     protected const float DESTROYPOSITION_X = -5.0f; //Позиция уничтожения объекта за пределами экрана

@@ -23,20 +23,15 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_Gene
     {
         ImageRefresh();
         ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
-
-        var _delay = 0.2f;
-
-        IEnumerator _coroutine(float _delay)
-        {
-            yield return new WaitForSeconds(_delay);
-
-            Image_PointsRefresh();
-        }
-
-        var _routine = _coroutine(_delay);
-        StartCoroutine(_routine);
     }
-    
+
+    protected override void Update()
+    {
+        base.Update();
+
+        Image_PointsRefresh();
+    }
+
     private void OnDestroy()
     {
         ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
