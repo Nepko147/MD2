@@ -35,7 +35,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private string text_number;
     public string Text_Number
     {
-        get { return (text_number); }
+        get 
+        { 
+            return (text_number); 
+        }
         set 
         {
             text_number = "<color=#" + ColorUtility.ToHtmlStringRGB(text_number_color) + ">" + value + "</color> ";
