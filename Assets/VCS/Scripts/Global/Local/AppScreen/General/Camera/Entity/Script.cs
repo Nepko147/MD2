@@ -69,7 +69,10 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     public void ZoomToTarget(Vector3 _targetPosition)
     {
         zoomToTarget_position = _targetPosition + Vector3.forward * zoomToTarget_maximumZoom;
-        zoomToTarget_position_init = transform.position;
+        var _camera_position_x = Vector3.right * transform.position.x;          //Запоминаем положение камеры до отдаления по оси X
+        var _camera_position_y = Vector3.up * transform.position.y;             //Запоминаем положение камеры до отдаления по оси Y
+        var _camera_position_z = Vector3.forward * zoomToTarget_position_init_z;//Возвращаем положение камеры по оси Z на исходное место
+        zoomToTarget_position_init = _camera_position_x + _camera_position_y + _camera_position_z; //Координаты камеры, куда она должна вернуться после "ZoomToTarget_Disable()"
         zoomToTarget_state = ZoomToTarget_state.zoomToTarget_In;
     }
 
@@ -90,6 +93,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
     private Vector3 zoomToTarget_position;
     private Vector3 zoomToTarget_position_init;
+    private float   zoomToTarget_position_init_z;
 
     private float zoomToTarget_step_in = 30.0f;
     private float zoomToTarget_step_out = 20.0f;
@@ -112,6 +116,8 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
         slope_rotation_max_left = new Vector3(0, 0, 360f - slope_rotation_max_ofs);
         slope_rotation_max_right = new Vector3(0, 0, slope_rotation_max_ofs);
+
+        zoomToTarget_position_init_z = transform.position.z;
     }
 
     private void LateUpdate()
