@@ -45,14 +45,14 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
     public void Show(float _delay)
     {
-        IEnumerator _coroutine(float _delay)
+        IEnumerator _Coroutine(float _delay)
         {
-            yield return new WaitForSeconds(_delay);
+            yield return (new WaitForSeconds(_delay));
 
             dialogue_state_currnet = dialogue_state.onDisplay; 
         }
 
-        var _routine = _coroutine(_delay);
+        var _routine = _Coroutine(_delay);
         StartCoroutine(_routine);
         
     }

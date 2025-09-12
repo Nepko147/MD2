@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class ScreenFilter : MonoBehaviour
+public class AppScreen_General_Camera_UI_ScreenFilter : MonoBehaviour
 {
     [SerializeField] private Material material;
 
     private void Awake()
     {
-        material.SetTexture("_MainTex", null); //Проводим магический ритуал
+        material.SetTexture("_MainTex", null); //Проводим шаманский ритуал
     }
 
     private void OnRenderImage(RenderTexture _source, RenderTexture _destination)

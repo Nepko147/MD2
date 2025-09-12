@@ -66,6 +66,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 break;
 
                 case State.drift_toRoad:
+                    spriteRenderer_material_color.a = 1f;
+                    spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
                     animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
                     VisualState_Set(VisualState.up);
 
@@ -86,10 +88,32 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Color spriteRenderer_material_color = Color.white;
-    private Color spriteRenderer_material_color_init;
 
     private Animator animator;
     private const string ANIMATOR_PARAM_SPEED = "Speed";
+
+    private Rigidbody2D rigidBody;
+
+    private bool crashed = false;
+
+    public void TakeCoin()
+    {
+        ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
+    }
+
+    public void Resurrect()
+    {
+        Up_Take();
+
+        crashed = false;
+
+        spriteRenderer_material_color = Color.white;
+        spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, Color.white);
+    }
+
+    #endregion
+
+    #region Audio
 
     private AudioSource audio_source;
     [SerializeField] private AudioClip audio_sound_hit;
@@ -101,6 +125,10 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         var _ind = Random.Range(0,4);
         audio_source.PlayOneShot(audio_sound_brake[_ind]);
     }
+
+    #endregion
+
+    #region Lights
 
     [SerializeField] private GameObject lights_front_1;
     [SerializeField] private GameObject lights_front_2;
@@ -124,21 +152,30 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         public readonly Quaternion rotation;
     }
 
+    #endregion
+
+    #region Up
+
     public int Up_Count { get; set; }
-    
+
     public void Up_Take()
     {
         ++Up_Count;
     }
 
+    public delegate void Up_Lose_Delegate();
+    public event Up_Lose_Delegate Up_Lose_Event;
+
     public void Up_Lose()
     {
+        Up_Lose_Event();
+
         --Up_Count;
         --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
 
         Invul = true;
 
-        AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Shake();
+        AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
 
         if (Up_Count > 0)
         {
@@ -147,6 +184,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         else
         {
             spriteRenderer_material_color = Color.red;
+            spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+
             animator.speed = 0;
 
             audio_source.PlayOneShot(audio_sound_crash);
@@ -155,6 +194,10 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Invul
+
     private bool invul = false;
     public bool Invul 
     { 
@@ -162,7 +205,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         { 
             return (invul); 
         }
-        private set 
+        set 
         { 
             if (value
             && !invul)
@@ -177,6 +220,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     private float INVUL_TIMER_INIT = 1.2f;
     private bool invul_alpha_state = false;
     private float INVUL_ALPHA_STEP = 12; //Чем больше значение, тем быстрее моргает
+
     private void Invul_Behaviour()
     {
         if (Invul)
@@ -213,28 +257,13 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         }
     }
 
-    private bool crashed = false;
-
-    public void TakeCoin()
-    {
-        ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
-    }
-
-    public void Resurrect()
-    {
-        Up_Take();
-        crashed = false;
-        spriteRenderer_material_color = spriteRenderer_material_color_init;
-        spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-    }
-
     #endregion
 
     #region Moving
 
-    #region Road
+        #region Road
 
-    private enum Moving_Road_State
+        private enum Moving_Road_State
         {
             lnie_1,
             lnie_2,
@@ -261,7 +290,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             if (moving_road)
             {
                 var _step = MOVING_ROAD_SPEED * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition,_step);
+                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
                 
                 if ((moving_road_newPosition - transform.position).magnitude <= _step)
                 {
@@ -351,10 +380,10 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         #region Drift
         
-        private float moving_drift_speed_current;
         private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
-        private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
         private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
+        private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
+        private float moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
         private const float MOVING_DRIFT_ANGLE_INIT = 270f;
         private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
         private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
@@ -370,7 +399,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
         private bool moving_drift_braking_swap = true;
         private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
-
+        
+        public float Moving_Drift_Speed_Current_Normalized_Get()
+        {
+            return ((moving_drift_speed_current - MOVING_DRIFT_SPEED_MIN) / (MOVING_DRIFT_SPEED_MAX - MOVING_DRIFT_SPEED_MIN));
+        }
+        
         #endregion
 
         #region Drift_ToRoad
@@ -564,9 +598,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     #endregion
 
-    #region Physics
-
-    private Rigidbody2D rigidBody;
+    #region Collision
 
     public CircleCollider2D Collision_Hit { get; set; }
     public BoxCollider2D Collision_Bonus { get; set; }
@@ -582,8 +614,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         Position_Init = transform.position;
         
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer_material_color = spriteRenderer.material.GetColor(Constants.MATERIAL_2D_BUMP_U_COLOR);
-        spriteRenderer_material_color_init = spriteRenderer_material_color;
         spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_spriteRenderer_material_normalMap);
 
         animator = GetComponent<Animator>();
@@ -702,7 +732,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                                         //TODO: отрисовка следов от шин
 
-                                        moving_drift_speed_current -= MOVING_DRIFT_BRAKING_SPEED * Time.deltaTime;
+                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_BRAKING_SPEED * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
                                         moving_drift_braking_time -= Time.deltaTime;
 
                                         if (moving_drift_braking_time <= 0)
@@ -714,12 +744,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                     }
                                     else
                                     {
-                                        moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP * Time.deltaTime;
+                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
                                     }
                                 break;
 
                                 default:
-                                    moving_drift_speed_current += MOVING_DRIFT_SPEED_STEP * Time.deltaTime;
+                                     moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
 
                                     if (!moving_drift_braking_swap)
                                     {
@@ -732,8 +762,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                     }
                                 break;
                             }
-
-                            moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
                         }
 
                         if (AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Visual_Inner_Magnitude_Active)
@@ -841,13 +869,19 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     {
         if (!collision_on)
         {
-            collision_on = true;
-
-            Up_Lose();
-
             moving_drift_hitVector = (Vector2)transform.position - (Vector2)_collision.gameObject.transform.position;
             moving_drift_hitVector = moving_drift_hitVector.normalized;
             moving_drift_hitVector_size = MOVING_DRIFT_HITVECTOR_SIZE_MAX;
+
+            collision_on = true;
+        }
+    }
+
+    private void OnCollisionStay2D()
+    {
+        if (!Invul)
+        {
+            Up_Lose();
         }
     }
 

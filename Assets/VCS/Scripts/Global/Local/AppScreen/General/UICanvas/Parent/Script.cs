@@ -134,7 +134,7 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
         shift_time_max = _time;
         shift_pos_speed = (_targetPos - rectTransform.localPosition) / _time;
 
-        IEnumerator _coroutine()
+        IEnumerator _Coroutine()
         {
             while (true)
             {
@@ -143,7 +143,7 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
             
                 if (shift_time < shift_time_max)
                 {
-                    yield return null;
+                    yield return (null);
                 }
                 else
                 {
@@ -153,7 +153,7 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
             }
         }
 
-        var _routine = _coroutine();
+        var _routine = _Coroutine();
         StartCoroutine(_routine);
     }
 

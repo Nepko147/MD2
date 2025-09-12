@@ -34,7 +34,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
 
     private const float SPEED = 500f;
 
-    protected const float DESTROYPOSITION_X = -5.0f; //Позиция уничтожения объекта за пределами экрана
+    protected float destroy_position_x = -5.0f; //Позиция уничтожения объекта за пределами экрана
 
     protected virtual void Awake()
     {
@@ -49,7 +49,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
         {
             transform.position += Vector3.left * SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
-            if (transform.position.x <= DESTROYPOSITION_X)
+            if (transform.position.x <= destroy_position_x)
             {
                 Destroy(gameObject);
             }

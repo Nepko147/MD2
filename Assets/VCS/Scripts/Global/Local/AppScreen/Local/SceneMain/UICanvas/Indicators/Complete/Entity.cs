@@ -82,15 +82,15 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     public void Show(float _delay = 0)
     {
-        IEnumerator _coroutine(float _delay)
+        IEnumerator _Coroutine(float _delay)
         {
-            yield return new WaitForSeconds(_delay);
+            yield return (new WaitForSeconds(_delay));
 
             state_time = STATE_TIME_APPEAR;
             state = State.appear;
         }
 
-        var _routine = _coroutine(_delay);
+        var _routine = _Coroutine(_delay);
         StartCoroutine(_routine);
     }
 

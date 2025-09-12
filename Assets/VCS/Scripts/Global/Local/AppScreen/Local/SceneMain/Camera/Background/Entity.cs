@@ -43,7 +43,7 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
     {
         base.Update();
 
-        camera_background.fieldOfView = AppScreen_General_Camera_World_Entity.SingleOnScene.Cmera_World_FieldOfView; // Гарантируем, одинаковое поле зрение у камер
+        camera_background.fieldOfView = AppScreen_General_Camera_World_Entity.SingleOnScene.FieldOfView_Current; // Гарантируем, одинаковое поле зрение у камер
 
         if (Active
         && postProcess_profile_chromaticAberration_started)
