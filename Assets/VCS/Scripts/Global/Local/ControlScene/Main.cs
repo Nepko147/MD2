@@ -30,11 +30,11 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-    private int driftSection_array_current_ind = 0;
+    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены.
 
     private bool DriftSection_New()
     {
-        if (driftSection_array_current_ind <= driftSection_array.Length)
+        if (driftSection_array_current_ind < driftSection_array.Length - 1)
         {
             if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
             {
@@ -223,8 +223,52 @@ public class ControlScene_Main : MonoBehaviour
                 return (true);
             }
         }
-        
-        #endregion
+
+    #endregion
+
+    #region Cutscene
+
+    private bool stage_cutscene = false;
+    private bool stage_cutscene_isCrushed = false;
+
+    private bool Stage_Ending_isCrushed_Condition()
+    {
+        if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.IsCrushed
+            && !stage_cutscene_isCrushed)
+        {
+            stage_cutscene_isCrushed = true;
+            return (true);
+        }
+        else
+        {
+            return (false);
+        }
+    }
+
+    private delegate void Stage_Cutscene_Event();
+    private event Stage_Cutscene_Event Stage_Cutscene_Event_On;
+    private event Stage_Cutscene_Event Stage_Cutscene_Event_Crush;
+    private event Stage_Cutscene_Event Stage_Cutscene_Event_Off;
+
+    #endregion
+
+    #region Ending
+
+    private bool stage_ending = false;
+
+    private bool Stage_Ending_Condition()
+    {
+        if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Done)
+        {
+            return (true);
+        }
+        else
+        {
+            return (false);
+        }        
+    }
+
+    #endregion
 
     #endregion
 
@@ -366,6 +410,7 @@ public class ControlScene_Main : MonoBehaviour
             {
                 _item.Active = false;
             }
+
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Show();
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = true;
         };
@@ -422,6 +467,38 @@ public class ControlScene_Main : MonoBehaviour
         };
 
         stage_gameOver_menu_timer = stage_gameOver_menu_timer_init;
+
+        Stage_Cutscene_Event_On += () =>
+        {
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count = 1;
+            
+            var _cutscenePreparingTime = 1.0f;
+            AppScreen_Local_SceneMain_UICanvas_Bushes.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Show(_cutscenePreparingTime);
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
+            AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = false;
+        };
+
+        Stage_Cutscene_Event_Crush += () =>
+        {
+            ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            {
+                _item.Active = false;
+            }
+
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose();
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
+            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = false;
+            AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
+        };
+
+        Stage_Cutscene_Event_Off += () =>
+        {
+            AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
+            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowEnding();
+        };
     }
 
     private void Start()
@@ -562,14 +639,25 @@ public class ControlScene_Main : MonoBehaviour
                                     if (DriftSection_New())
                                     {
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
-                                        
-                                        stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult;
+
+                                        if (driftSection_array_current_ind != driftSection_array.Length - 1) //Если не последний участок дрифта...
+                                        {
+                                            stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult; // Выставляем обычный таймер
+                                        }
+                                        else //Если последний...
+                                        {
+                                            stage_road_toDrift_timer = 0; //...то ставим 0, чтобы катсцена началась сразу.                                            
+                                        }
+
                                         stage_road_toDrift_clearing = false;
                                         stage_road_toDrift_cutscene = true;
                                     }
                                     else
                                     {
-                                        //TODO: переход к конечной заставке
+                                        Stage_Cutscene_Event_On();
+
+                                        stage_road = false;
+                                        stage_cutscene = true;                                        
                                     }
                                 }
                             }
@@ -873,6 +961,36 @@ public class ControlScene_Main : MonoBehaviour
                     }
                 }
             }                    
+        }
+    
+        if (stage_cutscene)
+        {
+            if (Stage_Ending_isCrushed_Condition())
+            {
+                Stage_Cutscene_Event_Crush();
+            }
+            else
+            {
+                if (Stage_Ending_Condition())
+                {
+                    Stage_Cutscene_Event_Off();
+
+                    stage_cutscene = false;
+                    stage_ending = true;
+                }
+            }
+        }
+
+        if (stage_ending)
+        {
+            if (AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Pressed)
+            {
+                ControlPers_AudioMixer.SingleOnScene.Stop();
+                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
+                ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
+
+                SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+            }
         }
     }
 }

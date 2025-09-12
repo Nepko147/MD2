@@ -1290,6 +1290,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         popUpMessage_notEnoughCoins,
         indicators_complete,
         midscreen_gameOver,
+        midscreen_gameCompleted,
+        midscreen_congratulations,
         midscreen_pause,
         midscreen_distanceRemain,
         popUp_up,
@@ -1308,6 +1310,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
         [Text_Key.indicators_complete] = "KILOMETERS LEFT",
         [Text_Key.midscreen_gameOver] = "GAME OVER",
+        [Text_Key.midscreen_gameCompleted] = "Game completed",
+        [Text_Key.midscreen_congratulations] = "Congratulations!",
         [Text_Key.midscreen_pause] = "PAUSE",
         [Text_Key.midscreen_distanceRemain] = "Distance remain",
         [Text_Key.popUp_up] = "+1 UP",
@@ -1326,6 +1330,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
         [Text_Key.indicators_complete] = "КМ ДО ЦЕЛИ",
         [Text_Key.midscreen_gameOver] = "КОНЕЦ ИГРЫ",
+        [Text_Key.midscreen_gameCompleted] = "Игра пройдена",
+        [Text_Key.midscreen_congratulations] = "Поздравляем!",
         [Text_Key.midscreen_pause] = "ПАУЗА",
         [Text_Key.midscreen_distanceRemain] = "Осталось до цели",
         [Text_Key.popUp_up] = "+1 Жизнь",
@@ -1344,6 +1350,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "NO HAY SUFICIENTES MONEDAS",
         [Text_Key.indicators_complete] = "KILÓMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "JUEGO TERMINADO",
+        [Text_Key.midscreen_gameCompleted] = "Juego completado",
+        [Text_Key.midscreen_congratulations] = "¡Felicidades!",
         [Text_Key.midscreen_pause] = "PAUSA",
         [Text_Key.midscreen_distanceRemain] = "La distancia permanece",
         [Text_Key.popUp_up] = "+1 VIDA",
@@ -1362,6 +1370,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "MOEDAS NÃO SUFICIENTES",
         [Text_Key.indicators_complete] = "QUILÔMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "FIM DO JOGO",
+        [Text_Key.midscreen_gameCompleted] = " Jogo concluído",
+        [Text_Key.midscreen_congratulations] = " Parabéns!",
         [Text_Key.midscreen_pause] = "PAUSA",
         [Text_Key.midscreen_distanceRemain] = "Distância permanece",
         [Text_Key.popUp_up] = "+1 Vida",
@@ -1380,6 +1390,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "ES FEHLEN MÜNZEN",
         [Text_Key.indicators_complete] = "KM ZUM ZIEL",
         [Text_Key.midscreen_gameOver] = "SPIEL VORBEI",
+        [Text_Key.midscreen_gameCompleted] = "Spiel abgeschlossen",
+        [Text_Key.midscreen_congratulations] = " Herzlichen Glückwunsch!",
         [Text_Key.midscreen_pause] = "PAUSE",
         [Text_Key.midscreen_distanceRemain] = "Verbleibender Abstand",
         [Text_Key.popUp_up] = "+1 Leben",
@@ -1398,6 +1410,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.popUpMessage_notEnoughCoins] = "KOIN TIDAK CUKUP",
         [Text_Key.indicators_complete] = "KILOMETER TERSISA",
         [Text_Key.midscreen_gameOver] = "PERMAINAN BERAKHIR",
+        [Text_Key.midscreen_gameCompleted] = "Permainan selesai",
+        [Text_Key.midscreen_congratulations] = "Selamat!",
         [Text_Key.midscreen_pause] = "BERHENTI SEBENTAR",
         [Text_Key.midscreen_distanceRemain] = "Jarak yang tersisa",
         [Text_Key.popUp_up] = "+ 1 Kehidupan",
@@ -1439,7 +1453,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     #region Dialogue    
 
-    public List<string[]> Dialogue_Get(string _actor_player, string _actor_npc)
+    public List<string[]> Dialogue_Opening_Get(string _actor_player, string _actor_npc)
     {  
         var _dialogue = new List<string[]>();
 
@@ -1542,6 +1556,120 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                     _dialogue.Add(_string);
                 }
             break;
+        }
+
+        return _dialogue;
+    }
+
+    public List<string[]> Dialogue_Ending_Get(string _actor_player, string _actor_npc)
+    {
+        var _dialogue = new List<string[]>();
+
+        switch (GameLanguage_Current)
+        {
+            case GameLanguage.english:
+                string[][] _dialogue_array_en = new string[][]
+                {
+                    new[] { _actor_npc, "Where are you?" },
+                    new[] { _actor_npc, "I'm already burning with impatience!" },
+                    new[] { _actor_player, "Almost there." },
+                    new[] { _actor_player, "Oh, crap!" },
+                    new[] { _actor_npc, "Are you okay?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "Can you hear me?" }
+                };
+
+                foreach (var _string in _dialogue_array_en)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
+            case GameLanguage.russian:
+
+                string[][] _dialogue_array_ru = new string[][]
+                {
+                    new[] { _actor_npc, "Ты где?" },
+                    new[] { _actor_npc, "Я уже сгораю от нетерпения!" },
+                    new[] { _actor_player, "Почти на месте." },
+                    new[] { _actor_player, "О, черт!" },
+                    new[] { _actor_npc, "Все в порядке?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "Ты меня слышишь?" }
+                };
+
+                foreach (var _string in _dialogue_array_ru)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
+            case GameLanguage.spanish:
+                string[][] _dialogue_array_es = new string[][]
+                {
+                    new[] { _actor_npc, "¿Dónde estás?" },
+                    new[] { _actor_npc, "¡Ya me estoy muriendo de impaciencia!" },
+                    new[] { _actor_player, "Casi llego." },
+                    new[] { _actor_player, "¡Oh, mierda!" },
+                    new[] { _actor_npc, "¿Estás bien?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "¿Me oyes?" }
+                };
+
+                foreach (var _string in _dialogue_array_es)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
+            case GameLanguage.portuguese:
+                string[][] _dialogue_array_pt = new string[][]
+                {
+                    new[] { _actor_npc, "Onde você está?" },
+                    new[] { _actor_npc, "Já estou morrendo de ansiedade!" },
+                    new[] { _actor_player, "Quase lá." },
+                    new[] { _actor_player, "Ah, droga!" },
+                    new[] { _actor_npc, "Você está bem?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "Você consegue me ouvir?" }
+                };
+
+                foreach (var _string in _dialogue_array_pt)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
+            case GameLanguage.german:
+                string[][] _dialogue_array_de = new string[][]
+                {
+                    new[] { _actor_npc, "Wo bist du?" },
+                    new[] { _actor_npc, "Ich platze vor Ungeduld!" },
+                    new[] { _actor_player, "Fast da." },
+                    new[] { _actor_player, "Oh, Mist!" },
+                    new[] { _actor_npc, "Bist du okay?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "Hörst du mich?" }
+                };
+
+                foreach (var _string in _dialogue_array_de)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
+            case GameLanguage.indonesian:
+                string[][] _dialogue_array_id = new string[][]
+                {
+                    new[] { _actor_npc, "Di mana kamu?" },
+                    new[] { _actor_npc, "Aku sudah terbakar oleh rasa tidak sabar!" },
+                    new[] { _actor_player, "Hampir sampai." },
+                    new[] { _actor_player, "Oh, sial!" },
+                    new[] { _actor_npc, "Apakah kamu baik-baik saja?" },
+                    new[] { _actor_npc, "…" },
+                    new[] { _actor_npc, "Kamu bisa mendengarku?" }
+                };
+
+                foreach (var _string in _dialogue_array_id)
+                {
+                    _dialogue.Add(_string);
+                }
+                break;
         }
 
         return _dialogue;

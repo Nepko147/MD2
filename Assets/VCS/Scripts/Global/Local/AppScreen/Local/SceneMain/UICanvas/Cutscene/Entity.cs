@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
+public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity : MonoBehaviour
 {
-    public static AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity SingleOnScene { get; private set; }
 
     private CanvasGroup canvasGroup;
     private float canvasGroup_deltaApha = 4f;
@@ -21,7 +21,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     
     private List<string[]>  dialogue;
     private int             dialogue_string_number = 0;
-    private string          dialogue_string_current = "";
+    private int             dialogue_string_number_crush = 4; //Номер строки после который ГГ разбивается
+    private string          dialogue_string_current = "";    
 
     private enum dialogue_state
     {
@@ -40,6 +41,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
     public const string PLAYER = "player";
     public const string NPC = "npc";
+
+    public bool IsCrushed { get; private set; }
 
     public bool Done { get; private set; }
 
@@ -60,7 +63,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     public void Text_LanguageRefresh()
     {
         dialogue.Clear();
-        dialogue = ControlPers_LanguageHandler.SingleOnScene.Dialogue_Opening_Get(PLAYER, NPC);
+        dialogue = ControlPers_LanguageHandler.SingleOnScene.Dialogue_Ending_Get(PLAYER, NPC);
         dialogue_string_current = dialogue[0][1];
     }
 
@@ -95,6 +98,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     {
         SingleOnScene = this;
 
+        IsCrushed = false;
         Done = false;
 
         canvasGroup = GetComponent<CanvasGroup>();
@@ -142,6 +146,11 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
                     {
                         if (dialogue.Count != dialogue_string_number) // ... и при этом диалог не завершён...
                         {
+                            if (dialogue_string_number == dialogue_string_number_crush)
+                            {
+                                IsCrushed = true;
+                            }
+
                             UpdateDialogue(); // ... то втыкаем следующию строку из диалога...
                         }
                         else // ...иначе, диалог закончен и даём контроллеру сцены знать, что можно стартовать.
