@@ -241,49 +241,49 @@ public class ControlScene_Main : MonoBehaviour
 
     #endregion
 
-    #region Cutscene
+        #region Cutscene
 
-    private bool stage_cutscene = false;
-    private bool stage_cutscene_isCrushed = false;
+        private bool stage_cutscene = false;
+        private bool stage_cutscene_isCrushed = false;
 
-    private bool Stage_Ending_isCrushed_Condition()
-    {
-        if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.IsCrushed
-            && !stage_cutscene_isCrushed)
+        private bool Stage_Ending_isCrushed_Condition()
         {
-            stage_cutscene_isCrushed = true;
-            return (true);
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.IsCrushed
+                && !stage_cutscene_isCrushed)
+            {
+                stage_cutscene_isCrushed = true;
+                return (true);
+            }
+            else
+            {
+                return (false);
+            }
         }
-        else
+
+        private delegate void Stage_Cutscene_Event();
+        private event Stage_Cutscene_Event Stage_Cutscene_Event_On;
+        private event Stage_Cutscene_Event Stage_Cutscene_Event_Crush;
+        private event Stage_Cutscene_Event Stage_Cutscene_Event_Off;
+
+        #endregion
+
+        #region Ending
+
+        private bool stage_ending = false;
+
+        private bool Stage_Ending_Condition()
         {
-            return (false);
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Done)
+            {
+                return (true);
+            }
+            else
+            {
+                return (false);
+            }        
         }
-    }
 
-    private delegate void Stage_Cutscene_Event();
-    private event Stage_Cutscene_Event Stage_Cutscene_Event_On;
-    private event Stage_Cutscene_Event Stage_Cutscene_Event_Crush;
-    private event Stage_Cutscene_Event Stage_Cutscene_Event_Off;
-
-    #endregion
-
-    #region Ending
-
-    private bool stage_ending = false;
-
-    private bool Stage_Ending_Condition()
-    {
-        if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Done)
-        {
-            return (true);
-        }
-        else
-        {
-            return (false);
-        }        
-    }
-
-    #endregion
+        #endregion
 
     #endregion
 
@@ -469,8 +469,8 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = false;
             }
 
-            AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
@@ -500,8 +500,8 @@ public class ControlScene_Main : MonoBehaviour
 
             World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose();
             AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
-            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = false;
-            AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
         };
 
         Stage_Cutscene_Event_Off += () =>
