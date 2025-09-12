@@ -1,6 +1,5 @@
 using UnityEngine;
 using YG;
-using UnityEngine.UI;
 using Utils;
 
 public class ControlPers_BuildSettings : MonoBehaviour
@@ -15,40 +14,53 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
     [SerializeField] private BuildCompilationType buildCompilationType;
 
-    public enum CurrentPlatformType
+    public enum PlatformType
     {
         windows,
         web_yandexGames_desktop,
         web_yandexGames_mobile_android
     }
 
-    public CurrentPlatformType currentPlatformType { get; private set; }
+    public PlatformType PlatformType_Current { get; private set; }
 
-    [SerializeField] private Text currentPlatformType_Hint;
+    [SerializeField] private bool encryptProgressFile;
+    public bool EncryptProgressFile 
+    { 
+        get 
+        { 
+            return (encryptProgressFile); 
+        } 
+    }
+
+    [SerializeField] private bool debugInfo;
+    public bool DebugInfo 
+    { 
+        get 
+        { 
+            return (debugInfo); 
+        } 
+    }
 
     void Awake()
     {
         SingleOnScene = this;
-
+        
         Application.targetFrameRate = Constants.TARGETFRAMERATE;
         
         switch (buildCompilationType)
         {
             case BuildCompilationType.windows_standalone:
-                currentPlatformType = CurrentPlatformType.windows;
-                currentPlatformType_Hint.text = "Platform: WINDOWS";
+                PlatformType_Current = PlatformType.windows;
             break;
 
             case BuildCompilationType.web_yandexGames:
                 if (YG2.envir.isMobile)
                 {
-                    currentPlatformType = CurrentPlatformType.web_yandexGames_mobile_android;
-                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_MOBILE_ANDROID";
+                    PlatformType_Current = PlatformType.web_yandexGames_mobile_android;
                 }
                 else
                 {
-                    currentPlatformType = CurrentPlatformType.web_yandexGames_desktop;
-                    currentPlatformType_Hint.text = "Platform: WEB_YANDEXGAMES_DESKTOP";
+                    PlatformType_Current = PlatformType.web_yandexGames_desktop;
                 }
             break;
         }

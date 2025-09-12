@@ -27,8 +27,8 @@ public class ControlScene_Opening : MonoBehaviour
     {
         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
 
-        if (ControlPers_BuildSettings.SingleOnScene.currentPlatformType != ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop
-        && ControlPers_BuildSettings.SingleOnScene.currentPlatformType != ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+        && ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
         {
             AppScreen_Local_SceneOpening_UICanvas_StartText.SingleOnScene.Enabled = true;
 

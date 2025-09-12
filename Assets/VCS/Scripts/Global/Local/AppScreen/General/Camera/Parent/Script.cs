@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AppScrren_General_Camera_Parent : MonoBehaviour
 {
-    private Camera camera_component;
+    protected Camera camera_component;
     private const float CAMERA_ASPECT_MIN = 4f / 3f;
     private const float CAMERA_ASPECT_MAX = 22f / 9f;
 

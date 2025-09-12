@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class AppScreen_General_Camera_Entity : MonoBehaviour    
 {
@@ -19,11 +20,10 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
         idle,
         follow,
         destination,
-        overZoom_In,
-        overZoom_Out,
         size
     }
-    private Move_State move_state = Move_State.idle;
+
+    private Move_State move_state_current = Move_State.idle;
 
     private float move_speed = 0;
 
@@ -35,7 +35,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     {
         move_follow_target = _target;
         move_speed = MOVE_FOLLOW_SPEED;
-        move_state = Move_State.follow;
+        move_state_current = Move_State.follow;
     }
 
     private Vector3 move_destination_position;
@@ -45,56 +45,87 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     {
         move_destination_position = _position;
         move_speed = MOVE_DESTINATION_SPEED;
-        move_state = Move_State.destination;
+        move_state_current = Move_State.destination;
     }
 
     #endregion
 
     #region Slope
 
-    public bool Slope { get; set; }
+    public bool Slope_Active { get; set; }
     private bool slope_stage = true;
-    [SerializeField] private float slope_speed = 0.001f;
+    private const float SLOPE_SPEED = 0.1f;
      private Vector3 slope_rotation;
-    [SerializeField] private float slope_rotation_max_ofs = 1f;
+    private const float SLOPE_ROTATION_MAX_OFS = 1f;
     private Vector3 slope_rotation_max_left;
     private Vector3 slope_rotation_max_right;
     private float slope_delay;
-    [SerializeField] private float slope_delay_init = 5f;
+    private const float SLOPE_DELAY_INIT = 5f;
 
     #endregion
 
     #region ZoomToTarget
 
-    public void ZoomToTarget(Vector3 _targetPosition)
-    {
-        zoomToTarget_position = _targetPosition + Vector3.forward * zoomToTarget_maximumZoom;
-        zoomToTarget_position_init = transform.position;
-        zoomToTarget_state = ZoomToTarget_state.zoomToTarget_In;
-    }
-
-    public void ZoomToTarget_Disable()
-    {
-        zoomToTarget_state = ZoomToTarget_state.zoomToTarget_Out;
-    }
+    private bool zoomToTarget_active = false;
 
     private enum ZoomToTarget_state
     {
         idle,
-        zoomToTarget_In,
-        zoomToTarget_Out,
+        on,
+        off,
         size
     }
 
-    private ZoomToTarget_state zoomToTarget_state = ZoomToTarget_state.idle;
+    private ZoomToTarget_state zoomToTarget_state_current = ZoomToTarget_state.idle;
 
-    private Vector3 zoomToTarget_position;
-    private Vector3 zoomToTarget_position_init;
+    private Vector3 zoomToTarget_position_on;
+    private Vector3 zoomToTarget_position_off;
+    private float ZOOMTOTARGET_STEP_ON = 30f;
+    private float ZOOMTOTARGET_STEP_OFF = 20f;
 
-    private float zoomToTarget_step_in = 30.0f;
-    private float zoomToTarget_step_out = 20.0f;
+    private IEnumerator zoomToTarget_autoOff_routine = null;
+    
+    public void ZoomToTarget_On(Vector3 _pos_on, float _pos_on_z_ofs)
+    {
+        zoomToTarget_active = true;
+        zoomToTarget_position_on = _pos_on + Vector3.forward * _pos_on_z_ofs;
+        zoomToTarget_state_current = ZoomToTarget_state.on;
 
-    private float zoomToTarget_maximumZoom = -2.0f;
+        if (zoomToTarget_autoOff_routine != null)
+        {
+            StopCoroutine(zoomToTarget_autoOff_routine);
+        }
+    }
+
+    public void ZoomToTarget_On_AutoOff(Vector3 _pos_on, float _pos_on_z_ofs, Vector3 _pos_off)
+    {
+        ZoomToTarget_On(_pos_on, _pos_on_z_ofs);
+        
+        IEnumerator _Coroutine()
+        {
+            while (zoomToTarget_state_current != ZoomToTarget_state.idle)
+            {
+                yield return (null);
+            }
+
+            ZoomToTarget_Off(_pos_off);
+        }
+        
+        if (zoomToTarget_autoOff_routine != null)
+        {
+            StopCoroutine(zoomToTarget_autoOff_routine);
+        }
+
+        zoomToTarget_autoOff_routine = _Coroutine();
+        StartCoroutine(zoomToTarget_autoOff_routine);
+    }
+
+    public void ZoomToTarget_Off(Vector3 _pos_off)
+    {
+        _pos_off.z = Position_Init.z;
+        zoomToTarget_position_off = _pos_off;
+        zoomToTarget_state_current = ZoomToTarget_state.off;
+    }
 
     #endregion
 
@@ -108,101 +139,123 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
         Move_Follow_YMax = Position_Init.y;
 
-        Slope = false;
-
-        slope_rotation_max_left = new Vector3(0, 0, 360f - slope_rotation_max_ofs);
-        slope_rotation_max_right = new Vector3(0, 0, slope_rotation_max_ofs);
+        Slope_Active = false;
+        slope_rotation_max_left = new Vector3(0, 0, 360f - SLOPE_ROTATION_MAX_OFS);
+        slope_rotation_max_right = new Vector3(0, 0, SLOPE_ROTATION_MAX_OFS);
     }
 
     private void LateUpdate()
     {
         if (Active)
         {
-            switch (move_state)
+            if (!zoomToTarget_active)
             {
-                case Move_State.follow:
-                    var _pos = move_follow_target.transform.position - transform.position;
-                    _pos.z = 0;
-                    _pos = transform.position + _pos * move_speed * Time.deltaTime;
+                #region Move
 
-                    if (_pos.y > Move_Follow_YMax)
-                    {
-                        _pos.y = Move_Follow_YMax;
-                    }
+                switch (move_state_current)
+                {
+                    case Move_State.follow:
+                        var _pos = move_follow_target.transform.position - transform.position;
+                        _pos.z = 0;
+                        _pos = transform.position + _pos * move_speed * Time.deltaTime;
+
+                        if (_pos.y > Move_Follow_YMax)
+                        {
+                            _pos.y = Move_Follow_YMax;
+                        }
                     
-                    transform.position = _pos;
-                break;
+                        transform.position = _pos;
+                    break;
 
-                case Move_State.destination:
-                    var _spd = move_speed * Time.deltaTime;
+                    case Move_State.destination:
+                        var _spd = move_speed * Time.deltaTime;
 
-                    transform.position = Vector3.MoveTowards(transform.position, move_destination_position, _spd);
+                        transform.position = Vector3.MoveTowards(transform.position, move_destination_position, _spd);
 
-                    var _dif = move_destination_position - transform.position;
+                        var _dif = move_destination_position - transform.position;
 
-                    if (_dif.magnitude <= _spd)
-                    {
-                        move_state = Move_State.idle;
-                    }
-                break;
-            }
+                        if (_dif.magnitude <= _spd)
+                        {
+                            move_state_current = Move_State.idle;
+                        }
+                    break;
+                }
 
-            switch (zoomToTarget_state)
-            {
-                case ZoomToTarget_state.zoomToTarget_In:
-                    var _zoomToTarget_step = zoomToTarget_step_in * Time.deltaTime;
-                    transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position, _zoomToTarget_step);
-                    
-                    if(transform.position == zoomToTarget_position)
-                    {
-                        zoomToTarget_state = ZoomToTarget_state.idle;
-                    }
-                break;
-                case ZoomToTarget_state.zoomToTarget_Out:
-                    _zoomToTarget_step = zoomToTarget_step_out * Time.deltaTime;
-                    transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_init, _zoomToTarget_step);
-
-                    if (transform.position == zoomToTarget_position_init)
-                    {
-                        zoomToTarget_state = ZoomToTarget_state.idle;
-                    }
-                break;
-            }
-
-
-            if (slope_delay >= 0)
-            {
-                slope_delay -= Time.deltaTime;
+                    #endregion
             }
             else
             {
-                if (slope_stage)
+                #region ZoomToTarget
+
+                switch (zoomToTarget_state_current)
                 {
-                    slope_rotation.z = transform.eulerAngles.z + slope_speed;
-                    transform.rotation = Quaternion.Euler(slope_rotation);
+                    case ZoomToTarget_state.on:
+                        var _step = ZOOMTOTARGET_STEP_ON * Time.deltaTime;
+                        transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_on, _step);
                     
-                    if (transform.eulerAngles.z >= slope_rotation_max_ofs 
-                    && transform.eulerAngles.z + slope_rotation_max_ofs < 360f)
-                    {
-                        transform.eulerAngles = slope_rotation_max_right;
-                        slope_delay = slope_delay_init;
-                        slope_stage = false;
-                    }                  
+                        if ((zoomToTarget_position_on - transform.position).magnitude <= _step)
+                        {
+                            zoomToTarget_state_current = ZoomToTarget_state.idle;
+                            transform.position = zoomToTarget_position_on;
+                        }
+                    break;
+
+                    case ZoomToTarget_state.off:
+                        _step = ZOOMTOTARGET_STEP_OFF * Time.deltaTime;
+                        transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_off, _step);
+
+                        if ((zoomToTarget_position_off - transform.position).magnitude <= _step)
+                        {
+                            zoomToTarget_active = false;
+                            zoomToTarget_state_current = ZoomToTarget_state.idle;
+                            transform.position = zoomToTarget_position_off;
+                        }
+                    break;
+                }
+
+                #endregion
+            }
+
+            #region Slope
+
+            if (Slope_Active)
+            {
+                if (slope_delay >= 0)
+                {
+                    slope_delay -= Time.deltaTime;
                 }
                 else
                 {
-                    slope_rotation.z = transform.eulerAngles.z - slope_speed;
-                    transform.rotation = Quaternion.Euler(slope_rotation);
-
-                    if (transform.eulerAngles.z <= 360f - slope_rotation_max_ofs 
-                    && transform.eulerAngles.z > slope_rotation_max_ofs)
+                    if (slope_stage)
                     {
-                        transform.eulerAngles = slope_rotation_max_left;
-                        slope_delay = slope_delay_init;
-                        slope_stage = true;
-                    }                 
+                        slope_rotation.z = transform.eulerAngles.z + SLOPE_SPEED * Time.deltaTime;
+                        transform.rotation = Quaternion.Euler(slope_rotation);
+                    
+                        if (transform.eulerAngles.z >= SLOPE_ROTATION_MAX_OFS 
+                        && transform.eulerAngles.z + SLOPE_ROTATION_MAX_OFS < 360f)
+                        {
+                            transform.eulerAngles = slope_rotation_max_right;
+                            slope_delay = SLOPE_DELAY_INIT;
+                            slope_stage = false;
+                        }                  
+                    }
+                    else
+                    {
+                        slope_rotation.z = transform.eulerAngles.z - SLOPE_SPEED * Time.deltaTime;
+                        transform.rotation = Quaternion.Euler(slope_rotation);
+
+                        if (transform.eulerAngles.z <= 360f - SLOPE_ROTATION_MAX_OFS 
+                        && transform.eulerAngles.z > SLOPE_ROTATION_MAX_OFS)
+                        {
+                            transform.eulerAngles = slope_rotation_max_left;
+                            slope_delay = SLOPE_DELAY_INIT;
+                            slope_stage = true;
+                        }                 
+                    }
                 }
             }
-        }                
+
+            #endregion
+        }
     }
 }

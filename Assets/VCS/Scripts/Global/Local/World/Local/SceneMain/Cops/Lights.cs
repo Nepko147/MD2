@@ -4,14 +4,18 @@ public class World_Local_SceneMain_Cops_Lights : MonoBehaviour
 {
     public static World_Local_SceneMain_Cops_Lights SingleOnScene { get; private set; }
 
-    private Animator animation_animator;
-    public void Animation_On()
-    {
-        animation_animator.speed = 1;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+
+    public bool Visible 
+    { 
+        get { return (spriteRenderer.enabled); }
+        set { spriteRenderer.enabled = value; }
     }
-    public void Animation_Off()
-    {
-        animation_animator.speed = 0;
+    public bool Animated
+    { 
+        get { return (animator.enabled); } 
+        set { animator.enabled = value; }
     }
 
     private bool light_active = false;
@@ -74,7 +78,8 @@ public class World_Local_SceneMain_Cops_Lights : MonoBehaviour
     {
         SingleOnScene = this;
 
-        animation_animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         for (var _i = 0; _i < light_blue.Length; ++_i)
         {

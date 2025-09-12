@@ -15,6 +15,10 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public bool IsDataLoaded { get; private set; }
 
+    #endregion
+
+    #region Directory
+
     private const string DIRECTORY_NAME = "Midnight Drive";
     private string directory_path;
     private void Directory_CreateIfNotExists(string _path)
@@ -25,16 +29,19 @@ public class ControlPers_DataHandler : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool   Data_isEncrypted = true; //True - зашифрован, False - нет. Оставил выбор для отладки
-    private const string            DATA_PASSWORD = "SuperSecretKey";
-    private const string            DATA_SALT = "Salt1234"; // "Соль" - это вторая половинка ключа шифрования
+    #endregion
 
-    private string Data_Encrypt(string _inputData)
+    #region Encryption
+
+    private const string ENCRYPTION_PASSWORD = "SuperSecretKey";
+    private const string ENCRYPTION_SALT = "Salt1234"; // "Соль" - это вторая половинка ключа шифрования
+
+    private string Encryption_Encrypt(string _inputData)
     {
         Aes _aesAlgorhythm = Aes.Create(); // Создаём алгоритм блочного шифрования
         
-        var _salt = Encoding.UTF8.GetBytes(DATA_SALT); 
-        var _deriveBytes = new Rfc2898DeriveBytes(DATA_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
+        var _salt = Encoding.UTF8.GetBytes(ENCRYPTION_SALT); 
+        var _deriveBytes = new Rfc2898DeriveBytes(ENCRYPTION_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
 
         var _keyBytes = _deriveBytes.GetBytes(32); //Байты ключа
         var _saltBytes = _deriveBytes.GetBytes(16);  //Байты "Соли"
@@ -53,12 +60,12 @@ public class ControlPers_DataHandler : MonoBehaviour
         return _encryptedString;               
     }
 
-    private string Data_Decrypt(string _encryptedText)
+    private string Encryption_Decrypt(string _encryptedText)
     {
         Aes _aesAlgorhythm = Aes.Create(); // Создаём алгоритм блочного шифрования
         
-        var _salt = Encoding.UTF8.GetBytes(DATA_SALT); 
-        var _deriveBytes = new Rfc2898DeriveBytes(DATA_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
+        var _salt = Encoding.UTF8.GetBytes(ENCRYPTION_SALT); 
+        var _deriveBytes = new Rfc2898DeriveBytes(ENCRYPTION_PASSWORD, _salt); //Полный ключ шифрования складывается из пароля и "Соли"
 
         var _keyBytes = _deriveBytes.GetBytes(32); //Байты ключа
         var _saltBytes = _deriveBytes.GetBytes(16);  //Байты "Соли"
@@ -200,18 +207,18 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public void ProgressData_Load()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
-            case ControlPers_BuildSettings.CurrentPlatformType.windows:
+            case ControlPers_BuildSettings.PlatformType.windows:
 
                 progressData_file = new XmlDocument();
 
                 try //Прробуем загрузить файл
                 {
-                    if (Data_isEncrypted)
+                    if (ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile)
                     {
                         var _encryptedData = File.ReadAllText(progressData_file_path);
-                        progressData_file.InnerXml = Data_Decrypt(_encryptedData);
+                        progressData_file.InnerXml = Encryption_Decrypt(_encryptedData);
                     }
                     else
                     {
@@ -238,8 +245,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 ProgressData.Coins.value = int.Parse(_coins_text); //Грузиим монетки
             break;
 
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 ProgressData.Coins.value = YG2.saves.ProgressData_Coins;
                 ProgressData.Upgrades.MoreCoins.value = YG2.saves.ProgressData_Upgrades_MoreCoins;
                 ProgressData.Upgrades.MoreBonuses.value = YG2.saves.ProgressData_Upgrades_MoreBonuses;
@@ -251,9 +258,9 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public void ProgressData_Save()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
-            case ControlPers_BuildSettings.CurrentPlatformType.windows:
+            case ControlPers_BuildSettings.PlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
 
                 progressData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
@@ -265,9 +272,9 @@ public class ControlPers_DataHandler : MonoBehaviour
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText = ProgressData.Upgrades.CoinMagnet.value.ToString(); //Перезаписываем значение в разделе Upgrades/CoinMagnet
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText = ProgressData.Upgrades.Revive.value.ToString(); //Перезаписываем значение в разделе Upgrades/Revive
 
-                if (Data_isEncrypted)
+                if (ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile)
                 {
-                    var _encryptedProgressData = Data_Encrypt(progressData_file.InnerXml);
+                    var _encryptedProgressData = Encryption_Encrypt(progressData_file.InnerXml);
                     File.WriteAllText(progressData_file_path, _encryptedProgressData);
                 }
                 else
@@ -276,8 +283,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 }                
             break;
 
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 YG2.saves.ProgressData_Coins = ProgressData.Coins.value;
                 YG2.saves.ProgressData_Upgrades_MoreCoins = ProgressData.Upgrades.MoreCoins.value;
                 YG2.saves.ProgressData_Upgrades_MoreBonuses = ProgressData.Upgrades.MoreBonuses.value;
@@ -486,9 +493,9 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public void SettingsData_Load()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
-            case ControlPers_BuildSettings.CurrentPlatformType.windows:
+            case ControlPers_BuildSettings.PlatformType.windows:
                 settingsData_file = new XmlDocument();
                 settingsData_file_path = directory_path + SETTINGSDATA_FILE_NAME;
 
@@ -510,8 +517,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 Enum.TryParse(_languageValue_text, out SettingsData.Language.value); //Грузим язык
             break;
 
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 SettingsData.Audio.Sound.value = YG2.saves.SettingsData_Audio_Sound;
                 SettingsData.Audio.Music.value = YG2.saves.SettingsData_Audio_Music;
                 SettingsData.Language.value = YG2.saves.SettingsData_Language;
@@ -521,9 +528,9 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public void SettingsData_Save()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
-            case ControlPers_BuildSettings.CurrentPlatformType.windows:
+            case ControlPers_BuildSettings.PlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
                                 
                 settingsData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
@@ -536,8 +543,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 settingsData_file.Save(settingsData_file_path); //Создаем или перезаписываем файл XML документа
             break;
 
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 YG2.saves.SettingsData_Audio_Sound = SettingsData.Audio.Sound.value;
                 YG2.saves.SettingsData_Audio_Music = SettingsData.Audio.Music.value;
                 YG2.saves.SettingsData_Language = SettingsData.Language.value;
@@ -576,12 +583,12 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private void Start()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.currentPlatformType)
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
-            case ControlPers_BuildSettings.CurrentPlatformType.windows:
+            case ControlPers_BuildSettings.PlatformType.windows:
                 directory_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DIRECTORY_NAME + @"\";
 
-                var _progressData_FileName = Data_isEncrypted ? PROGRESSDATA_FILE_ENCRYPTED_NAME : PROGRESSDATA_FILE_NAME;
+                var _progressData_FileName = ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile ? PROGRESSDATA_FILE_ENCRYPTED_NAME : PROGRESSDATA_FILE_NAME;
                 progressData_file_path = directory_path + _progressData_FileName;
 
                 Directory_CreateIfNotExists(directory_path);
@@ -592,8 +599,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 IsDataLoaded = true;
             break;
 
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.CurrentPlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 YG2.onGetSDKData += () =>
                 {
                     ProgressData_Load();

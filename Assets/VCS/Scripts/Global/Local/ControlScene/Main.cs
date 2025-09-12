@@ -81,6 +81,11 @@ public class ControlScene_Main : MonoBehaviour
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_PLAYERMOVEDOWN_SCALE = 0.5f;
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX = -4f;
         
+        private void Stage_Road_PlayerHitZoom()
+        {
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On_AutoOff(Vector3.zero, -6.5f, AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
+        }
+
         #endregion
 
         #region Drift
@@ -90,6 +95,12 @@ public class ControlScene_Main : MonoBehaviour
         private bool stage_drift_toRoad_braking_swap = true;
         private bool stage_drift_toRoad_braking_right_swap = true;
         private const float STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE = 0.002f;
+        
+        private void Stage_Drift_PlayerHitZoom()
+        {
+            var _pos = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On_AutoOff(_pos, -6.5f, _pos);
+        }
         
         #endregion
 
@@ -164,11 +175,15 @@ public class ControlScene_Main : MonoBehaviour
 
         private void Stage_Revive_Event_Off_ToRoad()
         {
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off(AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
+
             stage_road = true;
         }
 
         private void Stage_Revive_Event_Off_ToDrift()
         {
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off(World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position);
+
             stage_drift = true;
         }
 
@@ -281,7 +296,6 @@ public class ControlScene_Main : MonoBehaviour
             }
 
             AppScreen_General_Camera_Entity.SingleOnScene.Active = _state;
-            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = _state;
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
             AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Active = _state;
@@ -293,7 +307,7 @@ public class ControlScene_Main : MonoBehaviour
             
             _GeneralActiveState(false);
 
-            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
             ControlPers_AudioMixer.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
@@ -304,9 +318,9 @@ public class ControlScene_Main : MonoBehaviour
             }
 
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
-            AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = false;
-            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = false;
-            AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = false;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.Pause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
@@ -325,9 +339,9 @@ public class ControlScene_Main : MonoBehaviour
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
-            AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
-            AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = true;
-            AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = true;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = true;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.UnPause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.UnPause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
@@ -344,12 +358,9 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
-
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
-
             AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
-            var _target = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
-            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget(_target);
+            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On(World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position, -2f);
 
             if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
             {
@@ -366,6 +377,7 @@ public class ControlScene_Main : MonoBehaviour
             {
                 _item.Active = false;
             }
+
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Show();
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = true;
         };
@@ -375,24 +387,22 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
-
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
-
-            AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Disable();
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = true;
             }
-
+            //AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off();
             ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= stage_revive_cost_current;
-            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
+            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = false;
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
         };
+
         Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToRoad;
 
         Stage_GameOver_Event_On += () =>
@@ -415,8 +425,9 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = false;
             }
 
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
+            AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
-            AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
         };
@@ -430,6 +441,7 @@ public class ControlScene_Main : MonoBehaviour
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
+        World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Load();
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
 
@@ -438,12 +450,10 @@ public class ControlScene_Main : MonoBehaviour
             _item.Active = true;
         }
 
-        AppScreen_General_Camera_Entity.SingleOnScene.Slope = true;
+        AppScreen_General_Camera_Entity.SingleOnScene.Slope_Active = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);
-        AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = true;
-        AppScreen_General_Camera_World_Entity_Shake.SingleOnScene.Active = true;
-        AppScreen_General_Camera_World_Entity_Zoom.SingleOnScene.Active = true;
-        AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_Active = true;
+        AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
+        AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
@@ -484,58 +494,69 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     ControlPers_FogHandler.Move();
 
-                    if (!stage_road_toDrift_cutscene)
+                    if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
+                    && AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_NormalMap_CoinRush_Active)
                     {
-                        if (World_Local_SceneMain_BonusSpawner.SingleOnScene.CoinRush
-                        && AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Active)
+                        stage_road_coinRush_swap = true;
+
+                        var _distortion_pos = AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_NormalMap_CoinRush_WorldPos;
+                        var _distance_ofDistortion = AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Distance_Get();
+                        float _distance_toDistortion;
+
+                        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
                         {
-                            stage_road_coinRush_swap = true;
+                            _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
 
-                            var _distortion_pos = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_WorldPos;
-                            var _distance_ofDistortion = AppScreen_Local_SceneMain_Camera_World_CameraDistortion.SingleOnScene.Material_Overlay_NormalMap_CoinRush_Distance_Get();
-                            float _distance_toDistortion;
-
-                            foreach (var _item in FindObjectsByType<World_Local_SceneMain_Enemy_Entity>(FindObjectsSortMode.None))
+                            if (_distance_ofDistortion >= _distance_toDistortion)
                             {
-                                _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
+                                var _pos = _item.transform.position;
+                                var _rot = new Quaternion();
+                                var _tran = _item.transform.parent;
 
-                                if (_distance_ofDistortion >= _distance_toDistortion)
-                                {
-                                    var _pos = _item.transform.position;
-                                    var _rot = new Quaternion();
-                                    var _tran = _item.transform.parent;
+                                Instantiate(prefab_world_bonus_coin, _pos, _rot, _tran);
+                                Instantiate(prefab_world_bonus_coin, _pos + Vector3.left * World_Local_SceneMain_BonusSpawner.COINS_OFFSET, _rot, _tran);
+                                Instantiate(prefab_world_bonus_coin, _pos + Vector3.right * World_Local_SceneMain_BonusSpawner.COINS_OFFSET, _rot, _tran);
 
-                                    Instantiate(prefab_world_bonus_coin, _pos, _rot, _tran);
-                                    Instantiate(prefab_world_bonus_coin, _pos + Vector3.left * World_Local_SceneMain_BonusSpawner.COINS_OFFSET, _rot, _tran);
-                                    Instantiate(prefab_world_bonus_coin, _pos + Vector3.right * World_Local_SceneMain_BonusSpawner.COINS_OFFSET, _rot, _tran);
-
-                                    Destroy(_item.gameObject);
-                                }
+                                Destroy(_item.gameObject);
                             }
+                        }
 
+                        foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
+                        {
+                            _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
+
+                            if (_distance_ofDistortion >= _distance_toDistortion)
+                            {
+                                _item.Visible = true;
+                            }
+                        }
+
+                        if (World_Local_SceneMain_Cops_Entity.SingleOnScene.Move)
+                        {
+                            _distance_toDistortion = Vector3.Distance(World_Local_SceneMain_Cops_Entity.SingleOnScene.transform.position, _distortion_pos);
+
+                            if (_distance_ofDistortion >= _distance_toDistortion)
+                            {
+                                World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn();
+                                World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (stage_road_coinRush_swap)
+                        {
                             foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
                             {
-                                _distance_toDistortion = Vector3.Distance(_item.transform.position, _distortion_pos);
-
-                                if (_distance_ofDistortion >= _distance_toDistortion)
-                                {
-                                    _item.Visible = true;
-                                }
+                                _item.Visible = true;
                             }
-                        }
-                        else
-                        {
-                            if (stage_road_coinRush_swap)
-                            {
-                                foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
-                                {
-                                    _item.Visible = true;
-                                }
 
-                                stage_road_coinRush_swap = false;
-                            }
+                            stage_road_coinRush_swap = false;
                         }
+                    }
 
+                    if (!stage_road_toDrift_cutscene)
+                    {
                         if (stage_road_toDrift_timer > 0)
                         {
                             stage_road_toDrift_timer -= Time.deltaTime;
@@ -633,10 +654,6 @@ public class ControlScene_Main : MonoBehaviour
 
                                     World_General_Sky.SingleOnScene.Active = false;
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
-                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
-                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
-                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
-                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = true;
 
                                     foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
@@ -644,18 +661,35 @@ public class ControlScene_Main : MonoBehaviour
                                         _item.Position_Reset();
                                     }
 
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = true;
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
+                                    World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn_Refresh();
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Road_PlayerHitZoom;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Drift_PlayerHitZoom;
+                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
+                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = true;
                                     AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
+                                    AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Drift();
+                                    AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_State_ToSpeedUp();
                                     AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Discard();
 
                                     var _pos_x_ofs = World_Local_SceneMain_DriftSection_Point_End_Offset.SingleOnScene.transform.position.x - World_Local_SceneMain_Player_Entity.SingleOnScene.Position_Init.x;
                                     
-                                    var _pos = World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position;
+                                    var _pos = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
+                                    _pos.x -= _pos_x_ofs;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position = _pos;
+
+                                    _pos = World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position;
                                     _pos.x -= _pos_x_ofs;
                                     World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position = _pos;
 
-                                    _pos = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
-                                    _pos.x -= _pos_x_ofs;
-                                    World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position = _pos;
+                                    foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
+                                    {
+                                        _pos = _item.transform.position;
+                                        _pos.x -= _pos_x_ofs;
+                                        _item.transform.position = _pos;
+                                    }
 
                                     _pos = AppScreen_General_Camera_Entity.SingleOnScene.transform.position;
                                     _pos.x -= _pos_x_ofs;
@@ -751,10 +785,13 @@ public class ControlScene_Main : MonoBehaviour
 
                                     World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
-
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
-                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
                                     World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
+                                    World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Drift_PlayerHitZoom;
+                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
+                                    AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_State_ToPulse();
+                                    AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Road();
                                     AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
                                     AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
 
@@ -804,20 +841,7 @@ public class ControlScene_Main : MonoBehaviour
             }
             else
             {
-                if (AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed)
-                {
-                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
-                    {
-                        Stage_Revive_Event_Off();
-
-                        stage_revive = false;
-                    }
-                    else
-                    {
-                        AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
-                    }
-                }
-                else
+                if (!AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed)
                 {
                     stage_revive_timer -= Time.deltaTime;
 
@@ -829,6 +853,21 @@ public class ControlScene_Main : MonoBehaviour
                     }
 
                     AppScreen_Local_SceneMain_UICanvas_Revive_Timer.SingleOnScene.Text = _string;
+                }
+                else
+                {
+                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
+                    {
+                        Stage_Revive_Event_Off();
+
+                        World_Local_SceneMain_Player_Entity.SingleOnScene.Invul = true;
+
+                        stage_revive = false;
+                    }
+                    else
+                    {
+                        AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
+                    }
                 }                
             }
         }
