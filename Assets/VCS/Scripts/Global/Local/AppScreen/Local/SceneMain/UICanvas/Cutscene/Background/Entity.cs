@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMain_UICanvas_Bushes : AppScreen_General_UICanvas_Parent
+public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : AppScreen_General_UICanvas_Parent
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Bushes SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity SingleOnScene { get; private set; }
 
     protected override void Awake()
     {

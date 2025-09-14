@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 
-public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity : MonoBehaviour
+public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoBehaviour
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity SingleOnScene { get; private set; }
 
     private CanvasGroup canvasGroup;
     private float canvasGroup_deltaApha = 4f;

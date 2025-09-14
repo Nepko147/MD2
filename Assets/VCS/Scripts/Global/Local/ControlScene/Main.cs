@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
+using System.Collections;
+
 
 public class ControlScene_Main : MonoBehaviour
 {
@@ -11,6 +13,25 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private AudioClip audio_music_crickets;
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
+
+    [SerializeField] private AudioClip  audio_sound_police;
+    private float                       audio_sound_police_startTimer = 5.0f; // За скалько секунд до перехода вдрифт станет слашно полицию.
+
+    private IEnumerator Audio_Sound_Police_Coroutine()
+    {
+        while (true)
+        {
+            if (stage_road_toDrift_timer > audio_sound_police_startTimer)
+            {
+                yield return null;
+            }
+            else
+            {
+                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(audio_sound_police);
+                break;
+            }
+        }
+    }
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
@@ -248,7 +269,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool Stage_Ending_isCrushed_Condition()
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.IsCrushed
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.IsCrushed
                 && !stage_cutscene_isCrushed)
             {
                 stage_cutscene_isCrushed = true;
@@ -273,7 +294,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool Stage_Ending_Condition()
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Done)
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Done)
             {
                 return (true);
             }
@@ -402,6 +423,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
+            ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToZero();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On(World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position, -2f);
@@ -431,6 +453,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
+            ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
@@ -483,8 +506,8 @@ public class ControlScene_Main : MonoBehaviour
             World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count = 1;
             
             var _cutscenePreparingTime = 1.0f;
-            AppScreen_Local_SceneMain_UICanvas_Bushes.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
-            AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Show(_cutscenePreparingTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Show(_cutscenePreparingTime);
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = false;
         };
@@ -544,6 +567,8 @@ public class ControlScene_Main : MonoBehaviour
         {
             stage_revive_cost_current = stage_revive_cost_bought;
         }
+
+        StartCoroutine(Audio_Sound_Police_Coroutine());
     }
 
     private void Update()
@@ -663,6 +688,7 @@ public class ControlScene_Main : MonoBehaviour
                                         if (driftSection_array_current_ind != driftSection_array.Length - 1) //Если не последний участок дрифта...
                                         {
                                             stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult; // Выставляем обычный таймер
+                                            StartCoroutine(Audio_Sound_Police_Coroutine());
                                         }
                                         else //Если последний...
                                         {
