@@ -99,6 +99,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     public void TakeCoin()
     {
         ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
+        ++ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsTotal;
     }
 
     public void Resurrect()

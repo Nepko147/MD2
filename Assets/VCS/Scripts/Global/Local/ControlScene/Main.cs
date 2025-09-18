@@ -286,6 +286,29 @@ public class ControlScene_Main : MonoBehaviour
         private event Stage_Cutscene_Event Stage_Cutscene_Event_Crush;
         private event Stage_Cutscene_Event Stage_Cutscene_Event_Off;
 
+    #endregion
+
+        #region Statistics
+
+        private bool stage_statistics = false;
+        private float stage_statistics_shiftTime = 1.0f;
+        private float stage_statistics_continueTextTime = 4.0f;
+
+        private delegate void Stage_Statistics_Event();
+        private event Stage_Statistics_Event Stage_Statistics_Event_Off;
+
+        private bool Stage_Statistics_Condition()
+        {
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Done)
+            {
+                return (true);
+            }
+            else
+            {
+                return (false);
+            }
+        }
+
         #endregion
 
         #region Ending
@@ -294,7 +317,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool Stage_Ending_Condition()
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Done)
+            if (AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Done)
             {
                 return (true);
             }
@@ -454,15 +477,21 @@ public class ControlScene_Main : MonoBehaviour
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
+            
+            ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= stage_revive_cost_current;
+            ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsSpentOnRevivals += stage_revive_cost_current;
+            ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber += 1;
+
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Invul = true;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = true;
             }
             //AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off();
-            ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= stage_revive_cost_current;
-            World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
+            
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
@@ -529,6 +558,14 @@ public class ControlScene_Main : MonoBehaviour
 
         Stage_Cutscene_Event_Off += () =>
         {
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Statistics_Refresh();
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Show(0.0f);            
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_continueTextTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shiftTime);
+        };
+
+        Stage_Statistics_Event_Off += () =>
+        {
             AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowEnding();
         };
@@ -537,6 +574,8 @@ public class ControlScene_Main : MonoBehaviour
     private void Start()
     {
         ControlPers_FogHandler.Color_Load();
+        ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber = 0;
+        ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_TotalDrivings += 1;
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
@@ -971,9 +1010,7 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
                     {
-                        Stage_Revive_Event_Off();
-
-                        World_Local_SceneMain_Player_Entity.SingleOnScene.Invul = true;
+                        Stage_Revive_Event_Off();                        
 
                         stage_revive = false;
                     }
@@ -997,6 +1034,7 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     audio_source.PlayOneShot(audio_sound_gameOver);
 
+                    ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_Defeats += 1;
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
@@ -1035,13 +1073,39 @@ public class ControlScene_Main : MonoBehaviour
             }
             else
             {
-                if (Stage_Ending_Condition())
+                if (Stage_Statistics_Condition())
                 {
                     Stage_Cutscene_Event_Off();
 
                     stage_cutscene = false;
-                    stage_ending = true;
+                    stage_statistics = true;
                 }
+            }
+        }
+
+        if (stage_statistics)
+        {
+            if (Stage_Ending_Condition())
+            {
+                Stage_Statistics_Event_Off();
+
+                stage_statistics = false;
+                stage_ending = true;
+            }
+            else
+            {
+                if (stage_statistics_shiftTime > 0)
+                {
+                    stage_statistics_shiftTime -= Time.deltaTime;
+                }
+                else
+                {
+                    if (Input.anyKey)
+                    {
+                        AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Hide();
+                        AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Hide();
+                    }
+                }                
             }
         }
 

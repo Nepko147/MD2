@@ -90,7 +90,61 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private struct ProgressData
     {
-        public const string ORIGINNODE = "Progress";        
+        public const string ORIGINNODE = "Progress";
+
+        public struct Statistics
+        {
+            public const string NODE = "Statistics";
+            public const string PATH = ORIGINNODE + "/" + NODE;
+
+            public struct ReviveNumber
+            {
+                public const string NODE = "ReviveNumber";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 0;
+                public static int value = DEFAULTVALUE;
+            }
+
+            public struct ReviveNumberBest
+            {
+                public const string NODE = "ReviveNumberBest";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 999999;
+                public static int value = DEFAULTVALUE;
+            }
+
+            public struct CoinsTotal
+            {
+                public const string NODE = "CoinsTotal";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 0;
+                public static int value = DEFAULTVALUE;
+            }
+
+            public struct CoinsSpentOnRevivals
+            {
+                public const string NODE = "CoinsSpentOnRevivals";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 0;
+                public static int value = DEFAULTVALUE;
+            }
+
+            public struct Defeats
+            {
+                public const string NODE = "Defeats";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 0;
+                public static int value = DEFAULTVALUE;
+            }
+
+            public struct TotalDrivings
+            {
+                public const string NODE = "TotalDrivings";
+                public const string PATH = ORIGINNODE + "/" + Statistics.NODE + "/" + NODE;
+                public const int DEFAULTVALUE = 0;
+                public static int value = DEFAULTVALUE;
+            }
+        }
 
         public struct Upgrades
         {
@@ -161,6 +215,56 @@ public class ControlPers_DataHandler : MonoBehaviour
             progressData_file.AppendChild(_originNode); //Записываем исходный раздел в XML документ
         }
 
+        var _node_statistics = progressData_file.SelectSingleNode(ProgressData.Statistics.PATH); //Берём раздел "Statistics"
+
+        if (_node_statistics == null) //Проверяем наличие раздела Statistics в документе
+        {
+            _node_statistics = progressData_file.CreateElement(ProgressData.Statistics.NODE); //Создаем раздел Statistics для XML документа
+            _originNode.AppendChild(_node_statistics); //Записываем раздел Statistics в исходный раздел
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumber.PATH) == null) //Проверяем наличие узла ReviveNumber в документе
+        {
+            var _node_reviveNumber = progressData_file.CreateElement(ProgressData.Statistics.ReviveNumber.NODE); //Создаем раздел ReviveNumber для XML документа
+            _node_reviveNumber.InnerText = ProgressData.Statistics.ReviveNumber.DEFAULTVALUE.ToString(); //Записываем значение в раздел ReviveNumber
+            _node_statistics.AppendChild(_node_reviveNumber); //Записываем раздел ReviveNumber в раздел Statistics                    
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumberBest.PATH) == null) //Проверяем наличие узла ReviveNumberBest в документе
+        {
+            var _node_reviveNumberBest = progressData_file.CreateElement(ProgressData.Statistics.ReviveNumberBest.NODE); //Создаем раздел ReviveNumberBest для XML документа
+            _node_reviveNumberBest.InnerText = ProgressData.Statistics.ReviveNumberBest.DEFAULTVALUE.ToString(); //Записываем значение в раздел ReviveNumberBest
+            _node_statistics.AppendChild(_node_reviveNumberBest); //Записываем раздел ReviveNumberBest в раздел Statistics                    
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsTotal.PATH) == null) //Проверяем наличие узла CoinsTotal в документе
+        {
+            var _node_coinsTotal = progressData_file.CreateElement(ProgressData.Statistics.CoinsTotal.NODE); //Создаем раздел CoinsTotal для XML документа
+            _node_coinsTotal.InnerText = ProgressData.Statistics.CoinsTotal.DEFAULTVALUE.ToString(); //Записываем значение в раздел CoinsTotal
+            _node_statistics.AppendChild(_node_coinsTotal); //Записываем раздел CoinsTotal в раздел Statistics
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsSpentOnRevivals.PATH) == null) //Проверяем наличие узла CoinsSpentOnRevivals в документе
+        {
+            var _node_coinsSpentOnRevivals = progressData_file.CreateElement(ProgressData.Statistics.CoinsSpentOnRevivals.NODE); //Создаем раздел CoinsSpentOnRevivals для XML документа
+            _node_coinsSpentOnRevivals.InnerText = ProgressData.Statistics.CoinsSpentOnRevivals.DEFAULTVALUE.ToString(); //Записываем значение в раздел CoinsSpentOnRevivals
+            _node_statistics.AppendChild(_node_coinsSpentOnRevivals); //Записываем раздел CoinsSpentOnRevivals в раздел Statistics
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.Defeats.PATH) == null) //Проверяем наличие узла Defeats в документе
+        {
+            var _node_defeats = progressData_file.CreateElement(ProgressData.Statistics.Defeats.NODE); //Создаем раздел Defeats для XML документа
+            _node_defeats.InnerText = ProgressData.Statistics.Defeats.DEFAULTVALUE.ToString(); //Записываем значение в раздел Defeats
+            _node_statistics.AppendChild(_node_defeats); //Записываем раздел Defeats в раздел Statistics
+        }
+
+        if (progressData_file.SelectSingleNode(ProgressData.Statistics.TotalDrivings.PATH) == null) //Проверяем наличие узла TotalDrivings в документе
+        {
+            var _node_totalDrivings = progressData_file.CreateElement(ProgressData.Statistics.TotalDrivings.NODE); //Создаем раздел TotalDrivings для XML документа
+            _node_totalDrivings.InnerText = ProgressData.Statistics.TotalDrivings.DEFAULTVALUE.ToString(); //Записываем значение в раздел TotalDrivings
+            _node_statistics.AppendChild(_node_totalDrivings); //Записываем раздел TotalDrivings в раздел Statistics
+        }
+
         var _node_upgrades = progressData_file.SelectSingleNode(ProgressData.Upgrades.PATH); //Берём раздел "Upgrades"
 
         if (_node_upgrades == null) //Проверяем наличие раздела Upgrades в документе
@@ -227,17 +331,27 @@ public class ControlPers_DataHandler : MonoBehaviour
                 }
                 catch { } //Если нет, то будет нулевой прогресс. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
 
-                ProgressData_File_Check();                
+                ProgressData_File_Check();
+
+                var _reviveNumber_text = progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumber.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.ReviveNumber.value = int.Parse(_reviveNumber_text); //Грузиим "Количество возрождений"
+                var _reviveNumberBest_text = progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumberBest.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.ReviveNumberBest.value = int.Parse(_reviveNumberBest_text); //Грузиим "Количество возрождений" (Лучший)
+                var _coinsTotal_text = progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsTotal.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.CoinsTotal.value = int.Parse(_coinsTotal_text); //Грузиим "Всего монет"
+                var _coinsSpentOnRevivals_text = progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsSpentOnRevivals.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.CoinsSpentOnRevivals.value = int.Parse(_coinsSpentOnRevivals_text); //Грузиим "Потрачено монет на возрождения"
+                var _defeats_text = progressData_file.SelectSingleNode(ProgressData.Statistics.Defeats.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.Defeats.value = int.Parse(_defeats_text); //Грузиим "Поражения"
+                var _totalDrivings_text = progressData_file.SelectSingleNode(ProgressData.Statistics.TotalDrivings.PATH).InnerText; //Считываем данные из файла
+                ProgressData.Statistics.TotalDrivings.value = int.Parse(_totalDrivings_text); //Грузиим "Всего Поездок"
 
                 var _upgrades_moreCoins_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH).InnerText; //Считываем данные из файла
                 Enum.TryParse(_upgrades_moreCoins_text, out ProgressData.Upgrades.MoreCoins.value); //Грузиим состояние апгрейда "Больше монет"
-
                 var _upgrades_moreBonuses_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreBonuses.PATH).InnerText; //Считываем данные из файла
                 Enum.TryParse(_upgrades_moreBonuses_text, out ProgressData.Upgrades.MoreBonuses.value); //Грузиим состояние апгрейда "Больше бонусов"
-
                 var _upgrades_coinMagnet_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText; //Считываем данные из файла
                 Enum.TryParse(_upgrades_coinMagnet_text, out ProgressData.Upgrades.CoinMagnet.value); //Грузиим состояние апгрейда "Магнит для монет"
-
                 var _upgrades_revive_text = progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText; //Считываем данные из файла
                 Enum.TryParse(_upgrades_revive_text, out ProgressData.Upgrades.Revive.value); //Грузиим состояние апгрейда "Да не умер он"
 
@@ -247,11 +361,20 @@ public class ControlPers_DataHandler : MonoBehaviour
 
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                ProgressData.Coins.value = YG2.saves.ProgressData_Coins;
+
+                ProgressData.Statistics.ReviveNumber.value = YG2.saves.ProgressData_Statistics_ReviveNumber;
+                ProgressData.Statistics.ReviveNumberBest.value = YG2.saves.ProgressData_Statistics_ReviveNumberBest;
+                ProgressData.Statistics.CoinsTotal.value = YG2.saves.ProgressData_Statistics_CoinsTotal;
+                ProgressData.Statistics.CoinsSpentOnRevivals.value = YG2.saves.ProgressData_Statistics_CoinsSpentOnRevivals;
+                ProgressData.Statistics.Defeats.value = YG2.saves.ProgressData_Statistics_Defeats;
+                ProgressData.Statistics.TotalDrivings.value = YG2.saves.ProgressData_Statistics_TotalDrivings;
+
                 ProgressData.Upgrades.MoreCoins.value = YG2.saves.ProgressData_Upgrades_MoreCoins;
                 ProgressData.Upgrades.MoreBonuses.value = YG2.saves.ProgressData_Upgrades_MoreBonuses;
                 ProgressData.Upgrades.CoinMagnet.value = YG2.saves.ProgressData_Upgrades_CoinMagnet;
                 ProgressData.Upgrades.Revive.value = YG2.saves.ProgressData_Upgrades_Revive;
+
+                ProgressData.Coins.value = YG2.saves.ProgressData_Coins;
             break;
         }
     }
@@ -266,11 +389,19 @@ public class ControlPers_DataHandler : MonoBehaviour
                 progressData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
                 ProgressData_File_Check(); //Перезаполняем структуру файла
 
-                progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText = ProgressData.Coins.value.ToString(); //Перезаписываем значение в разделе Coins
+                progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumber.PATH).InnerText = ProgressData.Statistics.ReviveNumber.value.ToString(); //Перезаписываем значение в разделе Statistics/ReviveNumber
+                progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumberBest.PATH).InnerText = ProgressData.Statistics.ReviveNumberBest.value.ToString(); //Перезаписываем значение в разделе Statistics/ReviveNumberBest
+                progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsTotal.PATH).InnerText = ProgressData.Statistics.CoinsTotal.value.ToString(); //Перезаписываем значение в разделе Statistics/CoinsTotal
+                progressData_file.SelectSingleNode(ProgressData.Statistics.CoinsSpentOnRevivals.PATH).InnerText = ProgressData.Statistics.CoinsSpentOnRevivals.value.ToString(); //Перезаписываем значение в разделе Statistics/CoinsSpentOnRevivals
+                progressData_file.SelectSingleNode(ProgressData.Statistics.Defeats.PATH).InnerText = ProgressData.Statistics.Defeats.value.ToString(); //Перезаписываем значение в разделе Statistics/Defeats
+                progressData_file.SelectSingleNode(ProgressData.Statistics.TotalDrivings.PATH).InnerText = ProgressData.Statistics.TotalDrivings.value.ToString(); //Перезаписываем значение в разделе Statistics/TotalDrivings
+
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreCoins.PATH).InnerText = ProgressData.Upgrades.MoreCoins.value.ToString(); //Перезаписываем значение в разделе Upgrades/MoreCoins
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.MoreBonuses.PATH).InnerText = ProgressData.Upgrades.MoreBonuses.value.ToString(); //Перезаписываем значение в разделе Upgrades/MoreBonuses
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.CoinMagnet.PATH).InnerText = ProgressData.Upgrades.CoinMagnet.value.ToString(); //Перезаписываем значение в разделе Upgrades/CoinMagnet
                 progressData_file.SelectSingleNode(ProgressData.Upgrades.Revive.PATH).InnerText = ProgressData.Upgrades.Revive.value.ToString(); //Перезаписываем значение в разделе Upgrades/Revive
+
+                progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText = ProgressData.Coins.value.ToString(); //Перезаписываем значение в разделе Coins
 
                 if (ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile)
                 {
@@ -285,31 +416,96 @@ public class ControlPers_DataHandler : MonoBehaviour
 
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                YG2.saves.ProgressData_Coins = ProgressData.Coins.value;
+
+                YG2.saves.ProgressData_Statistics_ReviveNumber = ProgressData.Statistics.ReviveNumber.value;
+                YG2.saves.ProgressData_Statistics_ReviveNumberBest = ProgressData.Statistics.ReviveNumberBest.value;
+                YG2.saves.ProgressData_Statistics_CoinsTotal = ProgressData.Statistics.CoinsTotal.value;
+                YG2.saves.ProgressData_Statistics_CoinsSpentOnRevivals = ProgressData.Statistics.CoinsSpentOnRevivals.value;
+                YG2.saves.ProgressData_Statistics_Defeats = ProgressData.Statistics.Defeats.value;
+                YG2.saves.ProgressData_Statistics_TotalDrivings = ProgressData.Statistics.TotalDrivings.value;
+
                 YG2.saves.ProgressData_Upgrades_MoreCoins = ProgressData.Upgrades.MoreCoins.value;
                 YG2.saves.ProgressData_Upgrades_MoreBonuses = ProgressData.Upgrades.MoreBonuses.value;
                 YG2.saves.ProgressData_Upgrades_CoinMagnet = ProgressData.Upgrades.CoinMagnet.value;
                 YG2.saves.ProgressData_Upgrades_Revive = ProgressData.Upgrades.Revive.value;
-                
+
+                YG2.saves.ProgressData_Coins = ProgressData.Coins.value;
+
                 YG2.SaveProgress();
             break;
         }
     }
 
-    public int ProgressData_Coins
+    public int ProgressData_Statistics_ReviveNumber
     {
-        get 
-        { 
-            return (ProgressData.Coins.value); 
+        get
+        {
+            return ProgressData.Statistics.ReviveNumber.value;
         }
-        set 
-        { 
-            ProgressData.Coins.value = value;
-            ProgressData_Coins_OnChange?.Invoke(value);
+        set
+        {
+            ProgressData.Statistics.ReviveNumber.value = value;
         }
     }
-    public delegate void ProgressData_Coins_Change(int _changedCoinsValue);
-    public event ProgressData_Coins_Change ProgressData_Coins_OnChange;
+
+    public int ProgressData_Statistics_ReviveNumberBest
+    {
+        get
+        {
+            return ProgressData.Statistics.ReviveNumberBest.value;
+        }
+        set
+        {
+            ProgressData.Statistics.ReviveNumberBest.value = value;
+        }
+    }
+
+    public int ProgressData_Statistics_CoinsTotal
+    {
+        get
+        {
+            return ProgressData.Statistics.CoinsTotal.value;
+        }
+        set
+        {
+            ProgressData.Statistics.CoinsTotal.value = value;
+        }
+    }
+
+    public int ProgressData_Statistics_CoinsSpentOnRevivals
+    {
+        get
+        {
+            return ProgressData.Statistics.CoinsSpentOnRevivals.value;
+        }
+        set
+        {
+            ProgressData.Statistics.CoinsSpentOnRevivals.value = value;
+        }
+    }
+
+    public int ProgressData_Statistics_Defeats
+    {
+        get
+        {
+            return ProgressData.Statistics.Defeats.value;
+        }
+        set
+        {
+            ProgressData.Statistics.Defeats.value = value;
+        }
+    }
+    public int ProgressData_Statistics_TotalDrivings
+    {
+        get
+        {
+            return ProgressData.Statistics.TotalDrivings.value;
+        }
+        set
+        {
+            ProgressData.Statistics.TotalDrivings.value = value;
+        }
+    }
 
     private bool ProgressData_Upgade_isBought(ProgressData_Upgrades_State _upgrade)
     {
@@ -403,6 +599,21 @@ public class ControlPers_DataHandler : MonoBehaviour
     {
         return (ProgressData_Upgade_isImproved(ProgressData.Upgrades.Revive.value));
     }
+
+    public int ProgressData_Coins
+    {
+        get
+        {
+            return (ProgressData.Coins.value);
+        }
+        set
+        {
+            ProgressData.Coins.value = value;
+            ProgressData_Coins_OnChange?.Invoke(value);
+        }
+    }
+    public delegate void ProgressData_Coins_Change(int _changedCoinsValue);
+    public event ProgressData_Coins_Change ProgressData_Coins_OnChange;
 
     #endregion
 

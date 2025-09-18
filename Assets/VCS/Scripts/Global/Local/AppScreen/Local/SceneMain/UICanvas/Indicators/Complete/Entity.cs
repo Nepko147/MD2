@@ -102,11 +102,13 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
         text.font.material.mainTexture.filterMode = FilterMode.Point;
 
-        Text_LanguageRefresh();
-
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
+    }
 
+    private void Start()
+    {
+        Text_LanguageRefresh();
         ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 

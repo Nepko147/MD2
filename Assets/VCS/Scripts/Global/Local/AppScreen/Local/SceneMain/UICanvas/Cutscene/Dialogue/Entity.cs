@@ -8,7 +8,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoB
     public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity SingleOnScene { get; private set; }
 
     private CanvasGroup canvasGroup;
-    private float canvasGroup_deltaApha = 4f;
+    private float canvasGroup_deltaApha = 4.0f;
 
     [SerializeField] private AudioClip sound;
 
@@ -29,7 +29,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoB
         onDisplay,
         inProgress,
         hidden,
-        idle
+        idle,
+        size
     }
 
     dialogue_state dialogue_state_currnet;

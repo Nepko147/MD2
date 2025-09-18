@@ -1296,7 +1296,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         midscreen_distanceRemain,
         popUp_up,
         popUp_coin,
-        popUp_coinRush
+        popUp_coinRush,
+        gameBy,
+        statistics_reviveNumber,
+        statistics_coinsTotal,
+        statistics_coinsSpentOnRevivals,
+        statistics_defeats,
+        statistics_totalDrivings,
+        statistics_best,
+        statistics_newRecord
     }
 
     private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
@@ -1316,7 +1324,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "Distance remain",
         [Text_Key.popUp_up] = "+1 UP",
         [Text_Key.popUp_coin] = "+1 Coin",
-        [Text_Key.popUp_coinRush] = "Coin Rush!"
+        [Text_Key.popUp_coinRush] = "Coin Rush!",
+        [Text_Key.gameBy] = "A GAME BY LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Revive number",
+        [Text_Key.statistics_coinsTotal] = "Coins total",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Сoins spent on revivals",
+        [Text_Key.statistics_defeats] = "Defeats",
+        [Text_Key.statistics_totalDrivings] = "Total Drivings",
+        [Text_Key.statistics_best] = "Best"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
@@ -1336,7 +1351,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "Осталось до цели",
         [Text_Key.popUp_up] = "+1 Жизнь",
         [Text_Key.popUp_coin] = "+1 Монета",
-        [Text_Key.popUp_coinRush] = "Монетная Лихорадка!"
+        [Text_Key.popUp_coinRush] = "Монетная Лихорадка!",
+        [Text_Key.gameBy] = "ИГРА LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Количество возрождений",
+        [Text_Key.statistics_coinsTotal] = "Всего монет",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Потрачено монет на возрождения",
+        [Text_Key.statistics_defeats] = "Поражения",
+        [Text_Key.statistics_totalDrivings] = "Всего Поездок",
+        [Text_Key.statistics_best] = "Лучший",
+        [Text_Key.statistics_newRecord] = "Новый рекорд!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
@@ -1356,7 +1379,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "La distancia permanece",
         [Text_Key.popUp_up] = "+1 VIDA",
         [Text_Key.popUp_coin] = "+ 1 Moneda",
-        [Text_Key.popUp_coinRush] = "Fiebre de monedas!"
+        [Text_Key.popUp_coinRush] = "Fiebre de monedas!",
+        [Text_Key.gameBy] = "Un juego de LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Número de revivires",
+        [Text_Key.statistics_coinsTotal] = "Total de monedas",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Monedas gastadas en revivires",
+        [Text_Key.statistics_defeats] = "Derrotas",
+        [Text_Key.statistics_totalDrivings] = "Viajes totales",
+        [Text_Key.statistics_best] = "Mejor",
+        [Text_Key.statistics_newRecord] = "¡Nuevo récord!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
@@ -1376,7 +1407,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "Distância permanece",
         [Text_Key.popUp_up] = "+1 Vida",
         [Text_Key.popUp_coin] = "+1 Moeda",
-        [Text_Key.popUp_coinRush] = "Corrida de moedas!"
+        [Text_Key.popUp_coinRush] = "Corrida de moedas!",
+        [Text_Key.gameBy] = "Um jogo de LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Número de revives",
+        [Text_Key.statistics_coinsTotal] = "Total de moedas",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Moedas gastas em revives",
+        [Text_Key.statistics_defeats] = "Derrotas",
+        [Text_Key.statistics_totalDrivings] = "Total de Viagens",
+        [Text_Key.statistics_best] = "Melhor",
+        [Text_Key.statistics_newRecord] = "Novo recorde!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
@@ -1396,7 +1435,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "Verbleibender Abstand",
         [Text_Key.popUp_up] = "+1 Leben",
         [Text_Key.popUp_coin] = "+ 1 Münze",
-        [Text_Key.popUp_coinRush] = "Münzrausch!"
+        [Text_Key.popUp_coinRush] = "Münzrausch!",
+        [Text_Key.gameBy] = "Ein Spiel von LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Anzahl der Wiederbelebungen",
+        [Text_Key.statistics_coinsTotal] = "Gesamtmünzen",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Münzen zur Wiederbelebung",
+        [Text_Key.statistics_defeats] = "Niederlagen",
+        [Text_Key.statistics_totalDrivings] = "Gesamtfahrten",
+        [Text_Key.statistics_best] = "Bestes",
+        [Text_Key.statistics_newRecord] = "Neuer Rekord!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
@@ -1416,7 +1463,15 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.midscreen_distanceRemain] = "Jarak yang tersisa",
         [Text_Key.popUp_up] = "+ 1 Kehidupan",
         [Text_Key.popUp_coin] = "+1 Koin",
-        [Text_Key.popUp_coinRush] = "Demam Koin!"
+        [Text_Key.popUp_coinRush] = "Demam Koin!",
+        [Text_Key.gameBy] = "Sebuah permainan oleh LUNAR HOWL",
+        [Text_Key.statistics_reviveNumber] = "Jumlah kelahiran kembali",
+        [Text_Key.statistics_coinsTotal] = "Total koin",
+        [Text_Key.statistics_coinsSpentOnRevivals] = "Koin untuk kebangkitan",
+        [Text_Key.statistics_defeats] = "Kekalahan",
+        [Text_Key.statistics_totalDrivings] = "Total Mengemudi",
+        [Text_Key.statistics_best] = "Terbaik",
+        [Text_Key.statistics_newRecord] = "Rekor baru!"
     };
 
     public string Text_Get(Text_Key _key)
