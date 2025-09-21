@@ -4,6 +4,8 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
 {
     public static World_Local_SceneMain_MovingBackground_Entity SingleOnScene { get; private set; }
     
+    public bool Active { get; set; }
+
     [SerializeField] private GameObject city_3;
     [SerializeField] private GameObject city_3_1;
     [SerializeField] private GameObject city_2;
@@ -76,7 +78,8 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
 
     private void Update()
     {
-        if (SpeedScale_Active)
+        if (Active
+        && SpeedScale_Active)
         {
             SpeedScale += SPEEDSCALE_INCREMENT * Time.deltaTime;
 

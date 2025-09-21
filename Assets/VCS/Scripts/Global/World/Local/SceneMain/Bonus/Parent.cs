@@ -24,7 +24,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
         }
     }
     
-    [SerializeField] protected World_Local_SceneMain_PopUp popUp;
+    [SerializeField] protected World_Local_SceneMain_PopUp_Entity popUp;
 
     [SerializeField] protected AudioClip sound;
 

@@ -52,7 +52,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             switch (value)
             {
                 case State.road_toDrift_alignment:
-                    spriteRenderer_material_color.a = 1f;
+                    spriteRenderer_material_color = Color.white;
                     spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
                 break;
 
@@ -66,7 +66,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 break;
 
                 case State.drift_toRoad:
-                    spriteRenderer_material_color.a = 1f;
+                    spriteRenderer_material_color = Color.white;
                     spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
                     animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
                     VisualState_Set(VisualState.up);
@@ -173,7 +173,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         --Up_Count;
         --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
 
-        Invul = true;
+        Invul_Activate(Color.white);
 
         AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
 
@@ -185,7 +185,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         {
             spriteRenderer_material_color = Color.red;
             spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-
+            
             animator.speed = 0;
 
             audio_source.PlayOneShot(audio_sound_crash);
@@ -198,44 +198,42 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     #region Invul
 
-    private bool invul = false;
-    public bool Invul 
-    { 
-        get 
-        { 
-            return (invul); 
-        }
-        set 
-        { 
-            if (value
-            && !invul)
-            {
-               invul_timer = INVUL_TIMER_INIT; 
-            }
-
-            invul = value;
-        } 
-    }
+    public bool Invul_Active { get; private set; }
     private float invul_timer;
     private float INVUL_TIMER_INIT = 1.2f;
+    private Color invul_color;
+    private const float INVUL_COLOR_DELAY_INIT = 0.5f;
+    private float invul_color_delay_current = INVUL_COLOR_DELAY_INIT;
     private bool invul_alpha_state = false;
     private float INVUL_ALPHA_STEP = 12; //Чем больше значение, тем быстрее моргает
 
+    public void Invul_Activate(Color _color)
+    {
+        spriteRenderer_material_color = _color;
+
+        Invul_Active = true;
+        invul_timer = INVUL_TIMER_INIT;
+        invul_color = _color;
+        invul_alpha_state = false;
+    }
+
     private void Invul_Behaviour()
     {
-        if (Invul)
+        if (Invul_Active)
         {
-            if (invul_alpha_state)
+            if (invul_color_delay_current > 0)
             {
-                spriteRenderer_material_color.a += INVUL_ALPHA_STEP * Time.deltaTime;
-                spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-
-                if (spriteRenderer_material_color.a >= 1f)
-                {
-                    invul_alpha_state = false;
-                }
+                invul_color_delay_current -= Time.deltaTime;
             }
             else
+            {
+                var _col = Color.Lerp(Color.white, invul_color, invul_timer / INVUL_TIMER_INIT);
+                spriteRenderer_material_color.r = _col.r;
+                spriteRenderer_material_color.g = _col.g;
+                spriteRenderer_material_color.b = _col.b;
+            }
+
+            if (!invul_alpha_state)
             {
                 spriteRenderer_material_color.a -= INVUL_ALPHA_STEP * Time.deltaTime;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
@@ -245,14 +243,26 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                     invul_alpha_state = true;
                 }
             }
+            else
+            {
+                spriteRenderer_material_color.a += INVUL_ALPHA_STEP * Time.deltaTime;
+                spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
+
+                if (spriteRenderer_material_color.a >= 1f)
+                {
+                    invul_alpha_state = false;
+                }
+            }
 
             invul_timer -= Time.deltaTime;
 
             if (invul_timer <= 0)
             {
-                spriteRenderer_material_color.a = 1f;
+                spriteRenderer_material_color = Color.white;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-                Invul = false;
+
+                Invul_Active = false;
+                invul_color_delay_current = INVUL_COLOR_DELAY_INIT;
             }
         }
     }
@@ -624,6 +634,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         Up_Count = 1;
 
+        Invul_Active = false;
+
         transform.position = new Vector3(transform.position.x, MOVING_ROAD_LINE_2_POSITION_Y, transform.position.z);
         moving_road_newPosition = transform.position;
         moving_drift_toRoad_position_target.x = Position_Init.x;
@@ -855,9 +867,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                     #if UNITY_EDITOR
 
-                    var _line_scale = 1f;
-                    DebugHandler.DrawLine2D(rigidBody.position.x, rigidBody.position.y, rigidBody.position.x + moving_drift_moveVector.x * _line_scale, rigidBody.position.y + moving_drift_moveVector.y * _line_scale, Color.green);
-                    DebugHandler.DrawLine2D(rigidBody.position.x, rigidBody.position.y, rigidBody.position.x + moving_drift_hitVector.x * _line_scale, rigidBody.position.y + moving_drift_hitVector.y * _line_scale, Color.red);
+                    Debug.DrawLine(rigidBody.position, moving_drift_moveVector, Color.green);
+                    Debug.DrawLine(moving_drift_moveVector, moving_drift_hitVector, Color.red);
 
                     #endif
                 break;
@@ -879,7 +890,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     private void OnCollisionStay2D()
     {
-        if (!Invul)
+        if (!Invul_Active)
         {
             Up_Lose();
         }

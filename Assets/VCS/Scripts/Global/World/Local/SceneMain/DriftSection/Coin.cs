@@ -24,7 +24,7 @@ public class World_Local_SceneMain_DriftSection_Coin : MonoBehaviour
         }
     }
 
-    [SerializeField] private World_Local_SceneMain_PopUp popUp;
+    [SerializeField] private World_Local_SceneMain_PopUp_Entity popUp;
 
     [SerializeField] private AudioClip sound;
 

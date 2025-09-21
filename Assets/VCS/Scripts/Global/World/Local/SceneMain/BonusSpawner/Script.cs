@@ -23,7 +23,7 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
     private GameObject spawn_bonusPrefab_current;
 
     private float spawn_delay_start = 2f;
-    private const float SPAWN_DELAY_INC = 1f;
+    private const float SPAWN_DELAY_INC = 0.25f;
     private const float SPAWN_DELAY_RAND = 2f;
     private float spawn_delay_current;
 

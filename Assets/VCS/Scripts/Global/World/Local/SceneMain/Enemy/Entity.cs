@@ -33,7 +33,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
             transform.position += Vector3.left * SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             if (!isDamaged
-            && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul
+            && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Active
             && collider2d.bounds.Intersects(World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit.bounds))
             {
                 isDamaged = true;

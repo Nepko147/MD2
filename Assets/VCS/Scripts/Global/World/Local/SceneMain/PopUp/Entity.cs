@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class World_Local_SceneMain_PopUp : MonoBehaviour
+public class World_Local_SceneMain_PopUp_Entity : MonoBehaviour
 {
     public bool Active { get; set; }
 

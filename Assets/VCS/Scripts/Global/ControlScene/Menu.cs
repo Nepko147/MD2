@@ -96,6 +96,7 @@ public class ControlScene_Menu : MonoBehaviour
                 foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
                 {
                     _item.Active = true;
+                    _item.Move = true;
                 }
 
                 stage_cutscene = false;

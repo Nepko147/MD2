@@ -4,6 +4,8 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
 {
     public bool Active { get; set; }
 
+    public bool Move { get; set; }
+
     protected float Speed { get; set; }
 
     private const float WIDTH = 12.8f;
@@ -18,12 +20,15 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
     {
         Active = false;
 
+        Move = false;
+
         position_init = transform.position;
     }
 
     private void Update()
     {
-        if (Active)
+        if (Active
+        && Move)
         {
             transform.position += Vector3.left * Speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 

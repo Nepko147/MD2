@@ -42,9 +42,8 @@ public class ControlScene_Main : MonoBehaviour
             }
 
             Instantiate(driftSection_array[driftSection_array_current_ind].prefab, World_Entity.SingleOnScene.transform);
-
             ++driftSection_array_current_ind;
-
+            
             return (true);
         }
         else
@@ -162,9 +161,10 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool stage_revive = false;
 
-        private float stage_revive_timer;
-        private float stage_revive_timer_init = 3.0f;
-
+        private const float STAGE_REVIVE_TIMER_INIT = 5f;
+        private const float STAGE_REVIVE_TIMER_NOCOINS = 2.5f;
+        private float stage_revive_timer_current;
+        
         private int stage_revive_cost_current;
         private int stage_revive_cost_bought = 200;
         private int stage_revive_cost_imprved = 100;
@@ -213,7 +213,7 @@ public class ControlScene_Main : MonoBehaviour
         
         private bool Stage_GameOver_Condition()
         {
-            if (stage_revive_timer > 0)
+            if (stage_revive_timer_current > 0)
             {
                 if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsBought())
                 {
@@ -334,7 +334,7 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = _state;
             }
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_PopUp>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_PopUp_Entity>(FindObjectsSortMode.None))
             {
                 _item.Active = _state;
             }
@@ -354,11 +354,16 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
             ControlPers_AudioMixer.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
+            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = false;
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = false;
+            }
+
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
             }
 
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
@@ -378,10 +383,16 @@ public class ControlScene_Main : MonoBehaviour
         {
             _GeneralActiveState(true);
 
-            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             ControlPers_AudioMixer.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
+            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
+
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            {
+                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+            }
+
+            AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = true;
@@ -409,12 +420,12 @@ public class ControlScene_Main : MonoBehaviour
             if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
             {
                 AppScreen_Local_SceneMain_UICanvas_Revive_Cost.SingleOnScene.Text = stage_revive_cost_current + "x";
-                stage_revive_timer = stage_revive_timer_init;
+                stage_revive_timer_current = STAGE_REVIVE_TIMER_INIT;
             }
             else
             {
                 AppScreen_Local_SceneMain_UICanvas_Revive_Cost.SingleOnScene.Text = "<color=#DD0000>" + stage_revive_cost_current + "x</color>";
-                stage_revive_timer = stage_revive_timer_init / 2;
+                stage_revive_timer_current = STAGE_REVIVE_TIMER_NOCOINS;
             }
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
@@ -456,7 +467,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
+            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
             
             if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
@@ -519,11 +530,12 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
         World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Load();
-        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
+        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
 
         foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
         {
             _item.Active = true;
+            _item.Move = true;
         }
 
         AppScreen_General_Camera_Entity.SingleOnScene.Slope_Active = true;
@@ -744,7 +756,7 @@ public class ControlScene_Main : MonoBehaviour
 
                                     foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
-                                        _item.Active = false;
+                                        _item.Move = false;
                                         _item.Position_Reset();
                                     }
 
@@ -852,7 +864,7 @@ public class ControlScene_Main : MonoBehaviour
 
                                 foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
                                 {
-                                    _item.Active = true;
+                                    _item.Move = true;
                                 }
 
                                 World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = true;
@@ -930,13 +942,13 @@ public class ControlScene_Main : MonoBehaviour
             {
                 if (!AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed)
                 {
-                    stage_revive_timer -= Time.deltaTime;
+                    stage_revive_timer_current -= Time.deltaTime;
 
                     var _string = "";
 
-                    if (stage_revive_timer > 0)
+                    if (stage_revive_timer_current > 0)
                     {
-                        _string = stage_revive_timer.ToString().Substring(0, 4);
+                        _string = stage_revive_timer_current.ToString().Substring(0, 4);
                     }
 
                     AppScreen_Local_SceneMain_UICanvas_Revive_Timer.SingleOnScene.Text = _string;
@@ -947,7 +959,7 @@ public class ControlScene_Main : MonoBehaviour
                     {
                         Stage_Revive_Event_Off();
 
-                        World_Local_SceneMain_Player_Entity.SingleOnScene.Invul = true;
+                        World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(Color.red);
 
                         stage_revive = false;
                     }
