@@ -1331,7 +1331,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_coinsSpentOnRevivals] = "Сoins spent on revivals",
         [Text_Key.statistics_defeats] = "Defeats",
         [Text_Key.statistics_totalDrivings] = "Total Drivings",
-        [Text_Key.statistics_best] = "Best"
+        [Text_Key.statistics_best] = "Best",
+        [Text_Key.statistics_newRecord] = "New Record!"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()

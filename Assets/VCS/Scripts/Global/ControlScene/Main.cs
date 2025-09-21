@@ -15,7 +15,7 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private AudioClip audio_sound_gameOver;
 
     [SerializeField] private AudioClip  audio_sound_police;
-    private float                       audio_sound_police_startTimer = 5.0f; // За скалько секунд до перехода вдрифт станет слашно полицию.
+    private float                       audio_sound_police_startTimer = 2.5f; // За скалько секунд до перехода вдрифт станет слашно полицию.
 
     private IEnumerator Audio_Sound_Police_Coroutine()
     {
@@ -494,14 +494,13 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber += 1;
 
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
-            World_Local_SceneMain_Player_Entity.SingleOnScene.Invul = true;
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(Color.red);
             World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
 
             foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = true;
             }
-            //AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off();
             
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
@@ -1023,8 +1022,6 @@ public class ControlScene_Main : MonoBehaviour
                     if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins >= stage_revive_cost_current)
                     {
                         Stage_Revive_Event_Off();
-
-                        World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(Color.red);
 
                         stage_revive = false;
                     }
