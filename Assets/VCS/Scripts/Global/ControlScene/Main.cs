@@ -516,6 +516,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
+            ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = false;
