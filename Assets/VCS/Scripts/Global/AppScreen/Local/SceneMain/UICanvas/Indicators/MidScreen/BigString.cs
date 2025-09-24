@@ -9,7 +9,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString :
 
     private Vector3 position_init;
     private Vector3 position_ending;
-    private float   position_ending_offset_y = 50.0f;
+    private float   position_ending_offset_y = 10.0f;
 
     public void Position_Ending_Set()
     {

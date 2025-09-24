@@ -546,6 +546,7 @@ public class ControlScene_Main : MonoBehaviour
             World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count = 1;
             
             var _cutscenePreparingTime = 1.0f;
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.IsMoving = true;
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Show(_cutscenePreparingTime);
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
@@ -565,6 +566,10 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Material_Main_NormalMap_GameOver_Apply();
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.IsMoving = false;
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shake();
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Shake();
+            AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Shake();
         };
 
         Stage_Cutscene_Event_Off += () =>
