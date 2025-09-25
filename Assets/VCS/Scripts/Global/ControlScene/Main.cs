@@ -15,7 +15,7 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private AudioClip audio_sound_gameOver;
 
     [SerializeField] private AudioClip  audio_sound_police;
-    private float                       audio_sound_police_startTimer = 2.5f; // За скалько секунд до перехода вдрифт станет слашно полицию.
+    private float                       audio_sound_police_startTimer = 2.5f; // За скалько секунд до перехода в дрифт станет слышно полицию.
 
     private IEnumerator Audio_Sound_Police_Coroutine()
     {
@@ -480,6 +480,7 @@ public class ControlScene_Main : MonoBehaviour
 
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Show();
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = true;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
         };
 
         Stage_Revive_Event_Off += () =>
@@ -507,6 +508,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Visible = false;
             AppScreen_Local_SceneMain_UICanvas_Revive_Button.SingleOnScene.Pressed = false;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
         };
 
         Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToRoad;
