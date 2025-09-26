@@ -60,7 +60,24 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     public void Text_LanguageRefresh()
     {
         dialogue.Clear();
-        dialogue = ControlPers_LanguageHandler.SingleOnScene.Dialogue_Opening_Get(PLAYER, NPC);
+
+        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;        
+       
+        string[][] _dialogue_array = new string[][]
+        {
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_1) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_2) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_3) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_4) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_5) },
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_6) }
+        };
+
+        foreach (var _string in _dialogue_array)
+        {
+            dialogue.Add(_string);
+        }
+
         dialogue_string_current = dialogue[0][1];
     }
 

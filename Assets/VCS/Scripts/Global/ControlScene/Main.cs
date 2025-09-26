@@ -51,7 +51,7 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены.
+    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены. 13 - без дрифта
 
     private bool DriftSection_New()
     {

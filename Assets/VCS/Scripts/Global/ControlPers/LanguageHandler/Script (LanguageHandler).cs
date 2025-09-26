@@ -1304,7 +1304,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         statistics_defeats,
         statistics_totalDrivings,
         statistics_best,
-        statistics_newRecord
+        statistics_newRecord,
+        dialogue_start_string_1,
+        dialogue_start_string_2,
+        dialogue_start_string_3,
+        dialogue_start_string_4,
+        dialogue_start_string_5,
+        dialogue_start_string_6,
+        dialogue_end_string_1,
+        dialogue_end_string_2,
+        dialogue_end_string_3,
+        dialogue_end_string_4,
+        dialogue_end_string_5,
+        dialogue_end_string_6,
+        dialogue_end_string_7
     }
 
     private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
@@ -1332,7 +1345,19 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Defeats",
         [Text_Key.statistics_totalDrivings] = "Total Drivings",
         [Text_Key.statistics_best] = "Best",
-        [Text_Key.statistics_newRecord] = "New Record!"
+        [Text_Key.dialogue_start_string_1] = "Hello.",
+        [Text_Key.dialogue_start_string_2] = "Hey, handsome.",
+        [Text_Key.dialogue_start_string_3] = "I got an extra box of toothpicks on sale. You can just...",
+        [Text_Key.dialogue_start_string_4] = "Come and take it...",
+        [Text_Key.dialogue_start_string_5] = "Interested?",
+        [Text_Key.dialogue_start_string_6] = "Already driving.",
+        [Text_Key.dialogue_end_string_1] = "Where are you?",
+        [Text_Key.dialogue_end_string_2] = "I'm already burning with impatience!",
+        [Text_Key.dialogue_end_string_3] = "Almost there.",
+        [Text_Key.dialogue_end_string_4] = "Oh, crap!",
+        [Text_Key.dialogue_end_string_5] = "Are you okay?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "Can you hear me?"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
@@ -1360,7 +1385,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Поражения",
         [Text_Key.statistics_totalDrivings] = "Всего Поездок",
         [Text_Key.statistics_best] = "Лучший",
-        [Text_Key.statistics_newRecord] = "Новый рекорд!"
+        [Text_Key.statistics_newRecord] = "Новый рекорд!",
+        [Text_Key.dialogue_start_string_1] = "Ало.",
+        [Text_Key.dialogue_start_string_2] = "Привет красавчик.",
+        [Text_Key.dialogue_start_string_3] = "Я тут получила лишнюю коробку зубочисток по акции. Можешь просто...",
+        [Text_Key.dialogue_start_string_4] = "Прийти и взять её...",
+        [Text_Key.dialogue_start_string_5] = "Интересует?",
+        [Text_Key.dialogue_start_string_6] = "Уже еду.",
+        [Text_Key.dialogue_end_string_1] = "Ты где?",
+        [Text_Key.dialogue_end_string_2] = "Я уже сгораю от нетерпения!",
+        [Text_Key.dialogue_end_string_3] = "Почти на месте.",
+        [Text_Key.dialogue_end_string_4] = "О, черт!",
+        [Text_Key.dialogue_end_string_5] = "Все в порядке?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "Ты меня слышишь?"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
@@ -1388,7 +1426,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Derrotas",
         [Text_Key.statistics_totalDrivings] = "Viajes totales",
         [Text_Key.statistics_best] = "Mejor",
-        [Text_Key.statistics_newRecord] = "¡Nuevo récord!"
+        [Text_Key.statistics_newRecord] = "¡Nuevo récord!",
+        [Text_Key.dialogue_start_string_1] = "Hola.",
+        [Text_Key.dialogue_start_string_2] = "Hola, guapo.",
+        [Text_Key.dialogue_start_string_3] = "Tengo una caja extra de retales que compré en una venta de garaje. Puedes...",
+        [Text_Key.dialogue_start_string_4] = "Ven y cógela...",
+        [Text_Key.dialogue_start_string_5] = "¿Interesa?",
+        [Text_Key.dialogue_start_string_6] = "Ya voy en camino.",
+        [Text_Key.dialogue_end_string_1] = "¿Dónde estás?",
+        [Text_Key.dialogue_end_string_2] = "¡Ya me estoy muriendo de impaciencia!",
+        [Text_Key.dialogue_end_string_3] = "Casi llego.",
+        [Text_Key.dialogue_end_string_4] = "¡Oh, mierda!",
+        [Text_Key.dialogue_end_string_5] = "¿Estás bien?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "¿Me oyes?"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
@@ -1416,7 +1467,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Derrotas",
         [Text_Key.statistics_totalDrivings] = "Total de Viagens",
         [Text_Key.statistics_best] = "Melhor",
-        [Text_Key.statistics_newRecord] = "Novo recorde!"
+        [Text_Key.statistics_newRecord] = "Novo recorde!",
+        [Text_Key.dialogue_start_string_1] = "Hola.",
+        [Text_Key.dialogue_start_string_2] = "Oi, lindo.",
+        [Text_Key.dialogue_start_string_3] = "Tenho uma caixa extra de retalhos que comprei em um bazar. Você pode...",
+        [Text_Key.dialogue_start_string_4] = "Vir pegar...",
+        [Text_Key.dialogue_start_string_5] = "Intresute?",
+        [Text_Key.dialogue_start_string_6] = "Já estou indo.",
+        [Text_Key.dialogue_end_string_1] = "Onde você está?",
+        [Text_Key.dialogue_end_string_2] = "Já estou morrendo de ansiedade!",
+        [Text_Key.dialogue_end_string_3] = "Quase lá.",
+        [Text_Key.dialogue_end_string_4] = "Ah, droga!",
+        [Text_Key.dialogue_end_string_5] = "Você está bem?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "Você consegue me ouvir?"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
@@ -1444,7 +1508,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Niederlagen",
         [Text_Key.statistics_totalDrivings] = "Gesamtfahrten",
         [Text_Key.statistics_best] = "Bestes",
-        [Text_Key.statistics_newRecord] = "Neuer Rekord!"
+        [Text_Key.statistics_newRecord] = "Neuer Rekord!",
+        [Text_Key.dialogue_start_string_1] = "Hallo.",
+        [Text_Key.dialogue_start_string_2] = "Hallo, hübscher.",
+        [Text_Key.dialogue_start_string_3] = "Ich habe noch eine Kiste mit Resten, die ich auf einem Flohmarkt gekauft habe. Du kannst ...",
+        [Text_Key.dialogue_start_string_4] = "Komm und hol sie...",
+        [Text_Key.dialogue_start_string_5] = "Interessiert?",
+        [Text_Key.dialogue_start_string_6] = "Bin schon unterwegs.",
+        [Text_Key.dialogue_end_string_1] = "Wo bist du?",
+        [Text_Key.dialogue_end_string_2] = "Ich platze vor Ungeduld!",
+        [Text_Key.dialogue_end_string_3] = "Fast da.",
+        [Text_Key.dialogue_end_string_4] = "Oh, Mist!",
+        [Text_Key.dialogue_end_string_5] = "Bist du okay?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "Hörst du mich?"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
@@ -1472,7 +1549,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.statistics_defeats] = "Kekalahan",
         [Text_Key.statistics_totalDrivings] = "Total Mengemudi",
         [Text_Key.statistics_best] = "Terbaik",
-        [Text_Key.statistics_newRecord] = "Rekor baru!"
+        [Text_Key.statistics_newRecord] = "Rekor baru!",
+        [Text_Key.dialogue_start_string_1] = "Halo.",
+        [Text_Key.dialogue_start_string_2] = "Hai, tampan.",
+        [Text_Key.dialogue_start_string_3] = "Saya punya sekotak sisa barang bekas yang saya beli di obral pekarangan. Anda bisa...",
+        [Text_Key.dialogue_start_string_4] = "Datang dan ambil...",
+        [Text_Key.dialogue_start_string_5] = "Tertarik?",
+        [Text_Key.dialogue_start_string_6] = "Sudah dalam perjalanan.",
+        [Text_Key.dialogue_end_string_1] = "Di mana kamu?",
+        [Text_Key.dialogue_end_string_2] = "Aku sudah terbakar oleh rasa tidak sabar!",
+        [Text_Key.dialogue_end_string_3] = "Hampir sampai.",
+        [Text_Key.dialogue_end_string_4] = "Oh, sial!",
+        [Text_Key.dialogue_end_string_5] = "Apakah kamu baik-baik saja?",
+        [Text_Key.dialogue_end_string_6] = "…",
+        [Text_Key.dialogue_end_string_7] = "Kamu bisa mendengarku?"
     };
 
     public string Text_Get(Text_Key _key)
@@ -1503,232 +1593,6 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         }
 
         return _text;
-    }
-
-    #endregion
-
-    #region Dialogue    
-
-    public List<string[]> Dialogue_Opening_Get(string _actor_player, string _actor_npc)
-    {  
-        var _dialogue = new List<string[]>();
-
-        switch (GameLanguage_Current)
-        {
-            case GameLanguage.english:
-                string[][] _dialogue_array_en = new string[][]
-                {
-                    new[] { _actor_player, "Hello." },
-                    new[] { _actor_npc, "Hey, handsome." },
-                    new[] { _actor_npc, "I got an extra box of toothpicks on sale. You can just..." },
-                    new[] { _actor_npc, "Come and take it..." },
-                    new[] { _actor_npc, "Interested?" },
-                    new[] { _actor_player, "Already driving." }
-                };
-
-                foreach (var _string in _dialogue_array_en)
-                {
-                    _dialogue.Add(_string);
-                }               
-            break;
-            case GameLanguage.russian:
-
-                string[][] _dialogue_array_ru = new string[][]
-                {
-                    new[] { _actor_player, "Ало." },
-                    new[] { _actor_npc, "Привет красавчик." },
-                    new[] { _actor_npc, "Я тут получила лишнюю коробку зубочисток по акции. Можешь просто..." },
-                    new[] { _actor_npc, "Прийти и взять её..." },
-                    new[] { _actor_npc, "Интересует?" },
-                    new[] { _actor_player, "Уже еду." }
-                };
-
-                foreach (var _string in _dialogue_array_ru)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-            case GameLanguage.spanish:
-                string[][] _dialogue_array_es = new string[][]
-                {
-                    new[] { _actor_player, "Hola." },
-                    new[] { _actor_npc, "Hola, guapo." },
-                    new[] { _actor_npc, "Tengo una caja extra de retales que compré en una venta de garaje. Puedes..." },
-                    new[] { _actor_npc, "Ven y cógela..." },
-                    new[] { _actor_npc, "¿Interesa?" },
-                    new[] { _actor_player, "Ya voy en camino." }
-                };
-
-                foreach (var _string in _dialogue_array_es)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-            case GameLanguage.portuguese:
-                string[][] _dialogue_array_pt = new string[][]
-                {
-                    new[] { _actor_player, "Hola." },
-                    new[] { _actor_npc, "Oi, lindo." },
-                    new[] { _actor_npc, "Tenho uma caixa extra de retalhos que comprei em um bazar. Você pode..." },
-                    new[] { _actor_npc, "Vir pegar..." },
-                    new[] { _actor_npc, "Intresute?" },
-                    new[] { _actor_player, "Já estou indo." }
-                };
-
-                foreach (var _string in _dialogue_array_pt)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-            case GameLanguage.german:
-                string[][] _dialogue_array_de = new string[][]
-                {
-                    new[] { _actor_player, "Hallo." },
-                    new[] { _actor_npc, "Hallo, hübscher." },
-                    new[] { _actor_npc, "Ich habe noch eine Kiste mit Resten, die ich auf einem Flohmarkt gekauft habe. Du kannst ..." },
-                    new[] { _actor_npc, "Komm und hol sie..." },
-                    new[] { _actor_npc, "Interessiert?" },
-                    new[] { _actor_player, "Bin schon unterwegs." }
-                };
-
-                foreach (var _string in _dialogue_array_de)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-            case GameLanguage.indonesian:
-                string[][] _dialogue_array_id = new string[][]
-                {
-                    new[] { _actor_player, "Halo." },
-                    new[] { _actor_npc, "Hai, tampan." },
-                    new[] { _actor_npc, "Saya punya sekotak sisa barang bekas yang saya beli di obral pekarangan. Anda bisa..." },
-                    new[] { _actor_npc, "Datang dan ambil..." },
-                    new[] { _actor_npc, "Tertarik?" },
-                    new[] { _actor_player, "Sudah dalam perjalanan." }
-                };
-
-                foreach (var _string in _dialogue_array_id)
-                {
-                    _dialogue.Add(_string);
-                }
-            break;
-        }
-
-        return _dialogue;
-    }
-
-    public List<string[]> Dialogue_Ending_Get(string _actor_player, string _actor_npc)
-    {
-        var _dialogue = new List<string[]>();
-
-        switch (GameLanguage_Current)
-        {
-            case GameLanguage.english:
-                string[][] _dialogue_array_en = new string[][]
-                {
-                    new[] { _actor_npc, "Where are you?" },
-                    new[] { _actor_npc, "I'm already burning with impatience!" },
-                    new[] { _actor_player, "Almost there." },
-                    new[] { _actor_player, "Oh, crap!" },
-                    new[] { _actor_npc, "Are you okay?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "Can you hear me?" }
-                };
-
-                foreach (var _string in _dialogue_array_en)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-            case GameLanguage.russian:
-
-                string[][] _dialogue_array_ru = new string[][]
-                {
-                    new[] { _actor_npc, "Ты где?" },
-                    new[] { _actor_npc, "Я уже сгораю от нетерпения!" },
-                    new[] { _actor_player, "Почти на месте." },
-                    new[] { _actor_player, "О, черт!" },
-                    new[] { _actor_npc, "Все в порядке?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "Ты меня слышишь?" }
-                };
-
-                foreach (var _string in _dialogue_array_ru)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-            case GameLanguage.spanish:
-                string[][] _dialogue_array_es = new string[][]
-                {
-                    new[] { _actor_npc, "¿Dónde estás?" },
-                    new[] { _actor_npc, "¡Ya me estoy muriendo de impaciencia!" },
-                    new[] { _actor_player, "Casi llego." },
-                    new[] { _actor_player, "¡Oh, mierda!" },
-                    new[] { _actor_npc, "¿Estás bien?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "¿Me oyes?" }
-                };
-
-                foreach (var _string in _dialogue_array_es)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-            case GameLanguage.portuguese:
-                string[][] _dialogue_array_pt = new string[][]
-                {
-                    new[] { _actor_npc, "Onde você está?" },
-                    new[] { _actor_npc, "Já estou morrendo de ansiedade!" },
-                    new[] { _actor_player, "Quase lá." },
-                    new[] { _actor_player, "Ah, droga!" },
-                    new[] { _actor_npc, "Você está bem?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "Você consegue me ouvir?" }
-                };
-
-                foreach (var _string in _dialogue_array_pt)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-            case GameLanguage.german:
-                string[][] _dialogue_array_de = new string[][]
-                {
-                    new[] { _actor_npc, "Wo bist du?" },
-                    new[] { _actor_npc, "Ich platze vor Ungeduld!" },
-                    new[] { _actor_player, "Fast da." },
-                    new[] { _actor_player, "Oh, Mist!" },
-                    new[] { _actor_npc, "Bist du okay?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "Hörst du mich?" }
-                };
-
-                foreach (var _string in _dialogue_array_de)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-            case GameLanguage.indonesian:
-                string[][] _dialogue_array_id = new string[][]
-                {
-                    new[] { _actor_npc, "Di mana kamu?" },
-                    new[] { _actor_npc, "Aku sudah terbakar oleh rasa tidak sabar!" },
-                    new[] { _actor_player, "Hampir sampai." },
-                    new[] { _actor_player, "Oh, sial!" },
-                    new[] { _actor_npc, "Apakah kamu baik-baik saja?" },
-                    new[] { _actor_npc, "…" },
-                    new[] { _actor_npc, "Kamu bisa mendengarku?" }
-                };
-
-                foreach (var _string in _dialogue_array_id)
-                {
-                    _dialogue.Add(_string);
-                }
-                break;
-        }
-
-        return _dialogue;
     }
 
     #endregion
