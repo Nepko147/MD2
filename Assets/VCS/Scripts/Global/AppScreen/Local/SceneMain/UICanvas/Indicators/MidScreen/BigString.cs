@@ -7,15 +7,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString :
     
     Text text;
 
-    private Vector3 position_init;
-    private Vector3 position_ending;
-    private float   position_ending_offset_y = 10.0f;
-
-    public void Position_Ending_Set()
-    {
-        rectTransform.anchoredPosition3D = position_ending;
-    }
-
     public void Enable(bool _state)
     {
         text.enabled = _state;
@@ -34,8 +25,5 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_BigString :
 
         text = GetComponent<Text>();
         text.font.material.mainTexture.filterMode = FilterMode.Point;
-
-        position_init = rectTransform.anchoredPosition3D;
-        position_ending = position_init - Vector3.up * position_ending_offset_y;
     }
 }

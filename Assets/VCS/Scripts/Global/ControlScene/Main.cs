@@ -51,7 +51,7 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены. 13 - без дрифта
+    private int driftSection_array_current_ind = 13; //0 - по дефолту. 12 - для отладки финальной катсцены. 13 - без дрифта
 
     private bool DriftSection_New()
     {
@@ -291,11 +291,8 @@ public class ControlScene_Main : MonoBehaviour
         #region Statistics
 
         private bool stage_statistics = false;
-        private float stage_statistics_shiftTime = 1.0f;
-        private float stage_statistics_continueTextTime = 4.0f;
-
-        private delegate void Stage_Statistics_Event();
-        private event Stage_Statistics_Event Stage_Statistics_Event_Off;
+        private float stage_statistics_shiftTime = 20.0f;
+        private float stage_statistics_continueTextTime = 22.0f;
 
         private bool Stage_Statistics_Condition()
         {
@@ -313,7 +310,8 @@ public class ControlScene_Main : MonoBehaviour
 
         #region Ending
 
-        private bool stage_ending = false;
+        private bool    stage_ending = false;
+        private float   stage_ending_timer = 1.0f;
 
         private bool Stage_Ending_Condition()
         {
@@ -551,6 +549,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.IsMoving = true;
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Show(_cutscenePreparingTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Show(0.0f);
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
             AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = false;
         };
@@ -580,12 +579,6 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Show(0.0f);            
             AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_continueTextTime);
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shiftTime);
-        };
-
-        Stage_Statistics_Event_Off += () =>
-        {
-            AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
-            AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowEnding();
         };
     }
 
@@ -1106,8 +1099,6 @@ public class ControlScene_Main : MonoBehaviour
         {
             if (Stage_Ending_Condition())
             {
-                Stage_Statistics_Event_Off();
-
                 stage_statistics = false;
                 stage_ending = true;
             }
@@ -1130,7 +1121,11 @@ public class ControlScene_Main : MonoBehaviour
 
         if (stage_ending)
         {
-            if (AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Pressed)
+            if (stage_ending_timer > 0)
+            {
+                stage_ending_timer -= Time.deltaTime;                
+            }
+            else
             {
                 ControlPers_AudioMixer.SingleOnScene.Stop();
                 ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);

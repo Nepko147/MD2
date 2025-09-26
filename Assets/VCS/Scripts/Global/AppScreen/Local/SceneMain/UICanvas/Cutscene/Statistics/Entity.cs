@@ -36,7 +36,9 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
 
     [SerializeField] private Text totalDrivings_text;
     [SerializeField] private Text totalDrivings_number;
-    
+
+    [SerializeField] private Text gameCompleted_text;
+
     private enum statistics_state
     {
         onDisplay,
@@ -88,13 +90,16 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
 
     public void Text_LanguageRefresh()
     {
-        gameBy.text =                       ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.gameBy);
-        reviveNumber_text.text =            ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_reviveNumber) + ":";
-        reviveNumberBest_text.text =        ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_best) + ":";
-        coinsTotal_text.text =              ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsTotal) + ":";
-        coinsSpentOnRevivals_text.text =    ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsSpentOnRevivals) + ":";
-        defeats_text.text =                 ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_defeats) + ":";
-        totalDrivings_text.text =           ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_totalDrivings) + ":";
+        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
+
+        gameBy.text =                       _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.gameBy);
+        reviveNumber_text.text =            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_reviveNumber) + ":";
+        reviveNumberBest_text.text =        _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_best) + ":";
+        coinsTotal_text.text =              _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsTotal) + ":";
+        coinsSpentOnRevivals_text.text =    _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsSpentOnRevivals) + ":";
+        defeats_text.text =                 _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_defeats) + ":";
+        totalDrivings_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_totalDrivings) + ":";
+        gameCompleted_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_gameCompleted);
     }
 
     private void Awake()

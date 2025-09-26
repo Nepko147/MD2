@@ -1,8 +1,13 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : AppScreen_General_UICanvas_Parent
 {
     public static AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity SingleOnScene { get; private set; }
+
+    private CanvasGroup canvasGroup;
+    private float canvasGroup_deltaApha = 4.0f;
 
     public bool IsMoving 
     {
@@ -38,9 +43,36 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : App
 
     #endregion
 
+    public void Show(float _delay)
+    {
+        IEnumerator _coroutine(float _delay)
+        {
+            yield return new WaitForSeconds(_delay);
+
+            background_state_currnet = background_state.onDisplay;
+        }
+
+        var _routine = _coroutine(_delay);
+        StartCoroutine(_routine);
+
+    }
+
+    private enum background_state
+    {
+        onDisplay,
+        hidden,
+        idle,
+        size
+    }
+
+    background_state background_state_currnet;
+
     protected override void Awake()
     {
         base.Awake();
+
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 0;
 
         SingleOnScene = this;
     }
@@ -56,6 +88,32 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : App
 
     private void Update()
     {
+        switch (background_state_currnet)
+        {
+            case background_state.onDisplay:
+                if (canvasGroup.alpha < 1)
+                {
+                    canvasGroup.alpha += canvasGroup_deltaApha * Time.deltaTime;
+                }
+                else
+                {
+                    background_state_currnet = background_state.idle;
+                    canvasGroup.alpha = 1; // Гарантируем полное появление
+                }
+            break;
+            case background_state.hidden:
+                if (canvasGroup.alpha > 0)
+                {
+                    canvasGroup.alpha -= canvasGroup_deltaApha * Time.deltaTime;
+                }
+                else
+                {
+                    background_state_currnet = background_state.idle;
+                    canvasGroup.alpha = 0; // Гарантируем полное исчезновение
+                }
+            break;
+        }
+
         if (shake_on)
         {
             shake_delay_current -= Time.deltaTime;
