@@ -1,8 +1,7 @@
-﻿Shader "Custom/Passthrough"
+﻿Shader "Custom/SpriteDrawer"
 {
     Properties
     {
-        _MainTex ("Background Texture", 2D) = "white" {}
         _Color ("Color", Color) = (1,1,1,1)
     }
 
@@ -17,8 +16,8 @@
 
         Pass
         {
-             Blend SrcAlpha OneMinusSrcAlpha
-            
+            Blend SrcAlpha OneMinusSrcAlpha
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

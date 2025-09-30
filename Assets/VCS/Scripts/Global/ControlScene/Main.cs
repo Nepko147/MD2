@@ -51,7 +51,7 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-    private int driftSection_array_current_ind = 13; //0 - по дефолту. 12 - для отладки финальной катсцены. 13 - без дрифта
+    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены. 13 - без дрифта
 
     private bool DriftSection_New()
     {
@@ -917,6 +917,11 @@ public class ControlScene_Main : MonoBehaviour
                         {
                             World_General_Sky.SingleOnScene.Active = true;
                             AppScreen_General_Camera_Entity.SingleOnScene.Move_Destination(AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
+
+                            foreach (World_General_DrawableSurface _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
+                            {
+                                _item.Texture_Refresh();
+                            }
 
                             stage_drift_toRoad_braking_swap = false;
                         }

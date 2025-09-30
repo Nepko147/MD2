@@ -1,15 +1,16 @@
 using UnityEngine;
 using Utils;
+using System.Collections;
 
 public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 {
     #region General
-    
+
     public static World_Local_SceneMain_Player_Entity SingleOnScene { get; private set; }
-    
+
     private bool active = true;
-    public bool Active 
-    { 
+    public bool Active
+    {
         get
         {
             return (active);
@@ -54,16 +55,16 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 case State.road_toDrift_alignment:
                     spriteRenderer_material_color = Color.white;
                     spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-                break;
+                    break;
 
                 case State.road_toDrift_moveDown:
                     VisualState_Set(VisualState.down);
-                break;
+                    break;
 
                 case State.drift:
                     moving_drift_speed_current = MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX;
                     animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
-                break;
+                    break;
 
                 case State.drift_toRoad:
                     spriteRenderer_material_color = Color.white;
@@ -79,7 +80,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                     {
                         moving_drift_toRoad_position_target.y = MOVING_ROAD_LINE_3_POSITION_Y;
                     }
-                break;
+                    break;
             }
         }
     }
@@ -87,6 +88,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     public Vector3 Position_Init { get; private set; }
 
     private SpriteRenderer spriteRenderer;
+    public SpriteRenderer SpriteRenderer;
     private Color spriteRenderer_material_color = Color.white;
 
     private Animator animator;
@@ -123,7 +125,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     private void Audio_Sound_Brake_Play()
     {
-        var _ind = Random.Range(0,4);
+        var _ind = Random.Range(0, 4);
         audio_source.PlayOneShot(audio_sound_brake[_ind]);
     }
 
@@ -152,6 +154,59 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         public readonly Vector3 localPosition;
         public readonly Quaternion rotation;
     }
+
+    #endregion
+
+    #region Tyres
+
+    [SerializeField] private Texture2D tyres_texture;
+    public Texture2D Tyres_Texture { get; private set; }
+    [SerializeField] private GameObject tyres_front_1;
+    [SerializeField] private GameObject tyres_front_2;
+    [SerializeField] private GameObject tyres_rear_1;
+    [SerializeField] private GameObject tyres_rear_2;
+    public Vector3[] Tyres_Position { get; private set; } = new Vector3[4];
+    public bool     Tyres_IsDrawing { get; private set; }
+    private float   tyres_isDrawing_timer;
+    private float   tyres_isDrawing_timer_init = 0.5f;
+
+    private IEnumerator Tyres_IsDrawing_Corutine()
+    {
+        tyres_isDrawing_timer = tyres_isDrawing_timer_init;
+        Tyres_IsDrawing = true;
+
+        while (true)
+        {
+            tyres_isDrawing_timer -= Time.deltaTime;
+            Tyres_Position = new Vector3[4] { tyres_front_1.transform.position, tyres_front_2.transform.position, tyres_rear_1.transform.position, tyres_rear_2.transform.position };
+
+            if (tyres_isDrawing_timer > 0)
+            {
+                yield return null;
+            }
+            else
+            {
+                Tyres_IsDrawing = false;
+                break;
+            }
+        }
+    }
+
+    private IEnumerator tyres_isDrawing__coroutine_current;
+
+    private const float TYRES_LOCALPOSITION_Z = 0.0f;
+
+    private struct Tyres
+    {
+        public Tyres(float _x, float _y)
+        {
+            localPosition = new Vector3(_x, _y, TYRES_LOCALPOSITION_Z);
+        }
+
+        public readonly Vector3 localPosition;
+    }
+
+
 
     #endregion
 
@@ -186,7 +241,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         {
             spriteRenderer_material_color = Color.red;
             spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
-            
+
             animator.speed = 0;
 
             audio_source.PlayOneShot(audio_sound_crash);
@@ -272,163 +327,163 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     #region Moving
 
-        #region Road
+    #region Road
 
-        private enum Moving_Road_State
+    private enum Moving_Road_State
+    {
+        lnie_1,
+        lnie_2,
+        lnie_3,
+        lnie_4
+    }
+    private Moving_Road_State moving_road_state = Moving_Road_State.lnie_2;
+
+    private const float MOVING_ROAD_SPEED = 2f;
+
+    private const float MOVING_ROAD_LINE_1_POSITION_Y = -0.55f;
+    private const float MOVING_ROAD_LINE_2_POSITION_Y = -0.85f;
+    private const float MOVING_ROAD_LINE_3_POSITION_Y = -1.15f;
+    private const float MOVING_ROAD_LINE_4_POSITION_Y = -1.45f;
+
+    private bool moving_road = false;
+    private Vector3 moving_road_newPosition;
+    private bool moving_road_ending_active = false;
+    private Moving_Road_State moving_road_ending_destinationState;
+    private bool moving_road_ending_visualStateSwap = false;
+
+    private bool Moving_Road()
+    {
+        if (moving_road)
         {
-            lnie_1,
-            lnie_2,
-            lnie_3,
-            lnie_4
-        }
-        private Moving_Road_State moving_road_state = Moving_Road_State.lnie_2;    
-        
-        private const float MOVING_ROAD_SPEED = 2f;
+            var _step = MOVING_ROAD_SPEED * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
 
-        private const float MOVING_ROAD_LINE_1_POSITION_Y = -0.55f;
-        private const float MOVING_ROAD_LINE_2_POSITION_Y = -0.85f;
-        private const float MOVING_ROAD_LINE_3_POSITION_Y = -1.15f;
-        private const float MOVING_ROAD_LINE_4_POSITION_Y = -1.45f;
-
-        private bool moving_road = false;
-        private Vector3 moving_road_newPosition;
-        private bool moving_road_ending_active = false;
-        private Moving_Road_State moving_road_ending_destinationState;
-        private bool moving_road_ending_visualStateSwap = false;
-
-        private bool Moving_Road()
-        {
-            if (moving_road)
+            if ((moving_road_newPosition - transform.position).magnitude <= _step)
             {
-                var _step = MOVING_ROAD_SPEED * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
-                
-                if ((moving_road_newPosition - transform.position).magnitude <= _step)
-                {
-                    transform.position = moving_road_newPosition;
-                    moving_road = false;
-                }
+                transform.position = moving_road_newPosition;
+                moving_road = false;
+            }
+        }
+        else
+        {
+            if (moving_road_ending_active)
+            {
+                moving_road_state = moving_road_ending_destinationState;
+                moving_road_ending_visualStateSwap = true;
+                moving_road_ending_active = false;
             }
             else
             {
-                if (moving_road_ending_active)
+                if (moving_road_ending_visualStateSwap)
                 {
-                    moving_road_state = moving_road_ending_destinationState;
-                    moving_road_ending_visualStateSwap = true;
-                    moving_road_ending_active = false;
-                }
-                else
-                {
-                    if (moving_road_ending_visualStateSwap)
-                    {
-                        VisualState_Set(VisualState.right);
-                        moving_road_ending_visualStateSwap = false;
-                    }
+                    VisualState_Set(VisualState.right);
+                    moving_road_ending_visualStateSwap = false;
                 }
             }
-
-            return (moving_road_ending_active);
         }
 
-        private void Moving_Road_Start(float _newPosition, Moving_Road_State _destinationState, VisualState _visualState)
+        return (moving_road_ending_active);
+    }
+
+    private void Moving_Road_Start(float _newPosition, Moving_Road_State _destinationState, VisualState _visualState)
+    {
+        moving_road = true;
+        moving_road_ending_active = true;
+
+        moving_road_newPosition.y = _newPosition;
+        moving_road_ending_destinationState = _destinationState;
+
+        VisualState_Set(_visualState);
+    }
+
+    private void Moving_Road_Start_Up()
+    {
+        switch (moving_road_state)
         {
-            moving_road = true;
-            moving_road_ending_active = true;
+            case Moving_Road_State.lnie_2:
+                Moving_Road_Start(MOVING_ROAD_LINE_1_POSITION_Y, Moving_Road_State.lnie_1, VisualState.right_up);
+                break;
 
-            moving_road_newPosition.y = _newPosition;
-            moving_road_ending_destinationState = _destinationState;
+            case Moving_Road_State.lnie_3:
+                Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_up);
+                break;
 
-            VisualState_Set(_visualState);
+            case Moving_Road_State.lnie_4:
+                Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_up);
+                break;
         }
+    }
 
-        private void Moving_Road_Start_Up()
+    private void Moving_Road_Start_Down()
+    {
+        switch (moving_road_state)
         {
-            switch (moving_road_state)
-            {
-                case Moving_Road_State.lnie_2:
-                    Moving_Road_Start(MOVING_ROAD_LINE_1_POSITION_Y, Moving_Road_State.lnie_1, VisualState.right_up);
+            case Moving_Road_State.lnie_1:
+                Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_down);
                 break;
 
-                case Moving_Road_State.lnie_3:
-                    Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_up);
+            case Moving_Road_State.lnie_2:
+                Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_down);
                 break;
 
-                case Moving_Road_State.lnie_4:
-                    Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_up);
+            case Moving_Road_State.lnie_3:
+                Moving_Road_Start(MOVING_ROAD_LINE_4_POSITION_Y, Moving_Road_State.lnie_4, VisualState.right_down);
                 break;
-            }
         }
+    }
 
-        private void Moving_Road_Start_Down()
-        {
-            switch (moving_road_state)
-            {
-                case Moving_Road_State.lnie_1:
-                    Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_down);
-                break;
+    #endregion
 
-                case Moving_Road_State.lnie_2:
-                    Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_down);
-                break;
+    #region Road_ToDrift
 
-                case Moving_Road_State.lnie_3:
-                    Moving_Road_Start(MOVING_ROAD_LINE_4_POSITION_Y, Moving_Road_State.lnie_4, VisualState.right_down);
-                break;
-            }
-        }
-        
-        #endregion
+    private const float MOVING_ROAD_TODRIFT_BRAKING_SPEED = 0.25f;
 
-        #region Road_ToDrift
-        
-        private const float MOVING_ROAD_TODRIFT_BRAKING_SPEED = 0.25f;
+    private float moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
+    private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP = 2f;
+    private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX = 2f;
 
-        private float moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
-        private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP = 2f;
-        private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX = 2f; 
+    #endregion
 
-        #endregion
+    #region Drift
 
-        #region Drift
-        
-        private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
-        private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
-        private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
-        private float moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
-        private const float MOVING_DRIFT_ANGLE_INIT = 270f;
-        private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
-        private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
-        private float MOVING_DRIFT_ANGLE_STEP = 1f;
-        private Vector2 moving_drift_moveVector = Vector2.zero;
-        private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
-        private Vector2 moving_drift_hitVector = Vector2.zero;
-        private float moving_drift_hitVector_size = 0;
-        private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 5f;
-        private const float MOVING_DRIFT_HITVECTOR_TIME = 1.5f;
-        private bool moving_drift_braking = true;
-        private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.5f;
-        private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
-        private bool moving_drift_braking_swap = true;
-        private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
-        
-        public float Moving_Drift_Speed_Current_Normalized_Get()
-        {
-            return ((moving_drift_speed_current - MOVING_DRIFT_SPEED_MIN) / (MOVING_DRIFT_SPEED_MAX - MOVING_DRIFT_SPEED_MIN));
-        }
-        
-        #endregion
+    private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
+    private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
+    private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
+    private float moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
+    private const float MOVING_DRIFT_ANGLE_INIT = 270f;
+    private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
+    private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
+    private float MOVING_DRIFT_ANGLE_STEP = 1f;
+    private Vector2 moving_drift_moveVector = Vector2.zero;
+    private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
+    private Vector2 moving_drift_hitVector = Vector2.zero;
+    private float moving_drift_hitVector_size = 0;
+    private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 5f;
+    private const float MOVING_DRIFT_HITVECTOR_TIME = 1.5f;
+    private bool moving_drift_braking = true;
+    private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.5f;
+    private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
+    private bool moving_drift_braking_swap = true;
+    private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
 
-        #region Drift_ToRoad
-        
-        private Vector3 moving_drift_toRoad_position_target;
-        public bool Moving_Drift_ToRoad_Braking { get; private set; }
-        private const float MOVING_DRIFT_TOROAD_BRAKING_DIST = 3f;
-        private const float MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP = 3f;
-        private const float MOVING_DRIFT_BRAKING_SPEED_MIN = 2f;
-        public bool Moving_Drift_ToRoad_Braking_Right { get; private set; }
-        private const float MOVING_DRIFT_TOROAD_BRAKING_RIGHT_DIST = 1.5f;
-        
-        #endregion
+    public float Moving_Drift_Speed_Current_Normalized_Get()
+    {
+        return ((moving_drift_speed_current - MOVING_DRIFT_SPEED_MIN) / (MOVING_DRIFT_SPEED_MAX - MOVING_DRIFT_SPEED_MIN));
+    }
+
+    #endregion
+
+    #region Drift_ToRoad
+
+    private Vector3 moving_drift_toRoad_position_target;
+    public bool Moving_Drift_ToRoad_Braking { get; private set; }
+    private const float MOVING_DRIFT_TOROAD_BRAKING_DIST = 3f;
+    private const float MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP = 3f;
+    private const float MOVING_DRIFT_BRAKING_SPEED_MIN = 2f;
+    public bool Moving_Drift_ToRoad_Braking_Right { get; private set; }
+    private const float MOVING_DRIFT_TOROAD_BRAKING_RIGHT_DIST = 1.5f;
+
+    #endregion
 
     #endregion
 
@@ -443,65 +498,114 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         right_up,
         right_down,
         up,
-        down
+        down,
+        size
     }
     private VisualState visual_state_current = VisualState.right;
 
     private const string VISUALSTATE_LEFT_ANIMATOR_P = "Left";
     [SerializeField] private Texture2D visualState_left_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_left_lights_front_1 = new Lights(-0.07f, 0, -180f);
     private readonly Lights visualState_left_lights_front_2 = new Lights(-0.07f, -0.1f, -180f);
-    private readonly Lights visualState_left_lights_rear_1 = new Lights(0.225f,-0.02f, 0);
+    private readonly Lights visualState_left_lights_rear_1 = new Lights(0.225f, -0.02f, 0);
     private readonly Lights visualState_left_lights_rear_2 = new Lights(0.225f, -0.05f, 0);
+
+    private readonly Tyres visualState_left_tyres_front_1 = new Tyres(-0.2f, -0.08f);
+    private readonly Tyres visualState_left_tyres_front_2 = new Tyres(-0.2f, -0.0f);
+    private readonly Tyres visualState_left_tyres_rear_1 = new Tyres(0.25f, -0.08f);
+    private readonly Tyres visualState_left_tyres_rear_2 = new Tyres(0.25f, -0.0f);
 
     private const string VISUALSTATE_LEFT_UP_ANIMATOR_P = "Left_Up";
     [SerializeField] private Texture2D visualState_left_up_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_left_up_lights_front_1 = new Lights(0.01f, 0, -140f);
     private readonly Lights visualState_left_up_lights_front_2 = new Lights(-0.1f, -0.07f, -145f);
     private readonly Lights visualState_left_up_lights_rear_1 = new Lights(0.2f, -0.01f, 35f);
     private readonly Lights visualState_left_up_lights_rear_2 = new Lights(0.1f, -0.1f, 35f);
 
+    private readonly Tyres visualState_left_up_tyres_front_1 = new Tyres(-0.25f, 0.01f);
+    private readonly Tyres visualState_left_up_tyres_front_2 = new Tyres(-0.08f, 0.11f);
+    private readonly Tyres visualState_left_up_tyres_rear_1 = new Tyres(0.06f, -0.15f);
+    private readonly Tyres visualState_left_up_tyres_rear_2 = new Tyres(0.23f, -0.02f);
+
     private const string VISUALSTATE_LEFT_DOWN_ANIMATOR_P = "Left_Down";
     [SerializeField] private Texture2D visualState_left_down_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_left_down_lights_front_1 = new Lights(-0.07f, 0.01f, 150f);
     private readonly Lights visualState_left_down_lights_front_2 = new Lights(0, -0.03f, 140f);
     private readonly Lights visualState_left_down_lights_rear_1 = new Lights(0.225f, 0, -40f);
     private readonly Lights visualState_left_down_lights_rear_2 = new Lights(0.1f, 0.1f, -40f);
 
+    private readonly Tyres visualState_left_down_tyres_front_1 = new Tyres(-0.05f, -0.16f);
+    private readonly Tyres visualState_left_down_tyres_front_2 = new Tyres(-0.24f, -0.05f);
+    private readonly Tyres visualState_left_down_tyres_rear_1 = new Tyres(0.27f, 0.0f);
+    private readonly Tyres visualState_left_down_tyres_rear_2 = new Tyres(0.08f, 0.11f);
+
     private const string VISUALSTATE_RIGHT_ANIMATOR_P = "Right";
     [SerializeField] private Texture2D visualState_right_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_right_lights_front_1 = new Lights(0.07f, 0, 0);
     private readonly Lights visualState_right_lights_front_2 = new Lights(0.07f, -0.1f, 0);
     private readonly Lights visualState_right_lights_rear_1 = new Lights(-0.225f, -0.02f, 180);
     private readonly Lights visualState_right_lights_rear_2 = new Lights(-0.225f, -0.05f, 180);
 
+    private readonly Tyres visualState_right_tyres_front_1 = new Tyres(0.2f, -0.02f);
+    private readonly Tyres visualState_right_tyres_front_2 = new Tyres(0.2f, -0.1f);
+    private readonly Tyres visualState_right_tyres_rear_1 = new Tyres(-0.25f, -0.02f);
+    private readonly Tyres visualState_right_tyres_rear_2 = new Tyres(-0.25f, -0.1f);
+
     private const string VISUALSTATE_RIGHT_UP_ANIMATOR_P = "Right_Up";
     [SerializeField] private Texture2D visualState_right_up_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_right_up_lights_front_1 = new Lights(-0.01f, -0.02f, 320f);
     private readonly Lights visualState_right_up_lights_front_2 = new Lights(0.07f, -0.1f, 325f);
     private readonly Lights visualState_right_up_lights_rear_1 = new Lights(-0.225f, 0.01f, 145f);
     private readonly Lights visualState_right_up_lights_rear_2 = new Lights(-0.1f, -0.12f, 145f);
 
+    private readonly Tyres visualState_right_up_tyres_front_1 = new Tyres(0.1f, 0.12f);
+    private readonly Tyres visualState_right_up_tyres_front_2 = new Tyres(0.25f, 0.01f);
+    private readonly Tyres visualState_right_up_tyres_rear_1 = new Tyres(-0.25f, -0.01f);
+    private readonly Tyres visualState_right_up_tyres_rear_2 = new Tyres(-0.07f, -0.15f);
+    
     private const string VISUALSTATE_RIGHT_DOWN_ANIMATOR_P = "Right_Down";
     [SerializeField] private Texture2D visualState_right_down_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_right_down_lights_front_1 = new Lights(0.05f, 0.025f, 30f);
     private readonly Lights visualState_right_down_lights_front_2 = new Lights(0, -0.025f, 40f);
     private readonly Lights visualState_right_down_lights_rear_1 = new Lights(-0.1f, 0.1f, 220f);
     private readonly Lights visualState_right_down_lights_rear_2 = new Lights(-0.225f, -0.01f, 220f);
 
+    private readonly Tyres visualState_right_down_tyres_front_1 = new Tyres(0.24f, -0.04f);
+    private readonly Tyres visualState_right_down_tyres_front_2 = new Tyres(0.05f, -0.15f);
+    private readonly Tyres visualState_right_down_tyres_rear_1 = new Tyres(-0.1f, 0.12f);
+    private readonly Tyres visualState_right_down_tyres_rear_2 = new Tyres(-0.27f, 0.0f);
+
     private const string VISUALSTATE_UP_ANIMATOR_P = "Up";
     [SerializeField] private Texture2D visualState_up_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_up_lights_front_1 = new Lights(-0.07f, -0.125f, 270f);
     private readonly Lights visualState_up_lights_front_2 = new Lights(0.07f, -0.125f, 270f);
     private readonly Lights visualState_up_lights_rear_1 = new Lights(-0.125f, -0.025f, 90f);
     private readonly Lights visualState_up_lights_rear_2 = new Lights(0.125f, -0.025f, 90f);
 
+    private readonly Tyres visualState_up_tyres_front_1 = new Tyres(-0.1f, 0.12f);
+    private readonly Tyres visualState_up_tyres_front_2 = new Tyres(0.1f, 0.12f);
+    private readonly Tyres visualState_up_tyres_rear_1 = new Tyres(-0.14f, -0.09f);
+    private readonly Tyres visualState_up_tyres_rear_2 = new Tyres(0.14f, -0.09f);
+
     private const string VISUALSTATE_DOWN_ANIMATOR_P = "Down";
     [SerializeField] private Texture2D visualState_down_spriteRenderer_material_normalMap;
+
     private readonly Lights visualState_down_lights_front_1 = new Lights(0.1f, 0.05f, 90f);
     private readonly Lights visualState_down_lights_front_2 = new Lights(-0.1f, 0.05f, 90f);
     private readonly Lights visualState_down_lights_rear_1 = new Lights(0.07f, 0.07f, 270f);
     private readonly Lights visualState_down_lights_rear_2 = new Lights(-0.07f, 0.07f, 270f);
+
+    private readonly Tyres visualState_down_tyres_front_1 = new Tyres(0.15f, -0.1f);
+    private readonly Tyres visualState_down_tyres_front_2 = new Tyres(-0.15f, -0.1f);
+    private readonly Tyres visualState_down_tyres_rear_1 = new Tyres(0.14f, 0.11f);
+    private readonly Tyres visualState_down_tyres_rear_2 = new Tyres(-0.14f, 0.11f);
 
     private void VisualState_Set(VisualState _visualState)
     {
@@ -516,12 +620,23 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                 lights_front_2.transform.localPosition = _front_2.localPosition;
                 lights_front_2.transform.rotation = _front_2.rotation;
-            
+
                 lights_rear_1.transform.localPosition = _rear_1.localPosition;
                 lights_rear_1.transform.rotation = _rear_1.rotation;
 
                 lights_rear_2.transform.localPosition = _rear_2.localPosition;
                 lights_rear_2.transform.rotation = _rear_2.rotation;
+            }
+
+            void _Tyres_Set(Tyres _front_1, Tyres _front_2, Tyres _rear_1, Tyres _rear_2)
+            {
+                tyres_front_1.transform.localPosition = _front_1.localPosition;
+
+                tyres_front_2.transform.localPosition = _front_2.localPosition;
+
+                tyres_rear_1.transform.localPosition = _rear_1.localPosition;
+
+                tyres_rear_2.transform.localPosition = _rear_2.localPosition;
             }
 
             switch (_visualState)
@@ -530,58 +645,65 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                     animator.SetTrigger(VISUALSTATE_LEFT_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_lights_front_1, visualState_left_lights_front_2, visualState_left_lights_rear_1, visualState_left_lights_rear_2);
+                    _Tyres_Set(visualState_left_tyres_front_1, visualState_left_tyres_front_2, visualState_left_tyres_rear_1, visualState_left_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(180f, 0.76f, 0.24f);
-                break;
+                    break;
 
                 case VisualState.left_up:
                     animator.SetTrigger(VISUALSTATE_LEFT_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_up_lights_front_1, visualState_left_up_lights_front_2, visualState_left_up_lights_rear_1, visualState_left_up_lights_rear_2);
+                    _Tyres_Set(visualState_left_up_tyres_front_1, visualState_left_up_tyres_front_2, visualState_left_up_tyres_rear_1, visualState_left_up_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(162f, 0.7f, 0.3f);
-                break;
-            
+                    break;
+
                 case VisualState.left_down:
                     animator.SetTrigger(VISUALSTATE_LEFT_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_left_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_left_down_lights_front_1, visualState_left_down_lights_front_2, visualState_left_down_lights_rear_1, visualState_left_down_lights_rear_2);
+                    _Tyres_Set(visualState_left_down_tyres_front_1, visualState_left_down_tyres_front_2, visualState_left_down_tyres_rear_1, visualState_left_down_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(208f, 0.7f, 0.3f);
-                break;
-            
+                    break;
+
                 case VisualState.right:
                     animator.SetTrigger(VISUALSTATE_RIGHT_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_lights_front_1, visualState_right_lights_front_2, visualState_right_lights_rear_1, visualState_right_lights_rear_2);
+                    _Tyres_Set(visualState_right_tyres_front_1, visualState_right_tyres_front_2, visualState_right_tyres_rear_1, visualState_right_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(0, 0.76f, 0.24f);
-                break;
+                    break;
 
                 case VisualState.right_up:
                     animator.SetTrigger(VISUALSTATE_RIGHT_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_up_lights_front_1, visualState_right_up_lights_front_2, visualState_right_up_lights_rear_1, visualState_right_up_lights_rear_2);
+                    _Tyres_Set(visualState_right_up_tyres_front_1, visualState_right_up_tyres_front_2, visualState_right_up_tyres_rear_1, visualState_right_up_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(27f, 0.7f, 0.3f);
-                break;
+                    break;
 
                 case VisualState.right_down:
                     animator.SetTrigger(VISUALSTATE_RIGHT_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_right_down_lights_front_1, visualState_right_down_lights_front_2, visualState_right_down_lights_rear_1, visualState_right_down_lights_rear_2);
+                    _Tyres_Set(visualState_right_down_tyres_front_1, visualState_right_down_tyres_front_2, visualState_right_down_tyres_rear_1, visualState_right_down_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(332f, 0.7f, 0.3f);
-                break;
+                    break;
 
                 case VisualState.up:
                     animator.SetTrigger(VISUALSTATE_UP_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_up_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_up_lights_front_1, visualState_up_lights_front_2, visualState_up_lights_rear_1, visualState_up_lights_rear_2);
+                    _Tyres_Set(visualState_up_tyres_front_1, visualState_up_tyres_front_2, visualState_up_tyres_rear_1, visualState_up_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(90f, 0.5f, 0.36f);
-
-                break;
+                    break;
 
                 case VisualState.down:
                     animator.SetTrigger(VISUALSTATE_DOWN_ANIMATOR_P);
                     spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_down_spriteRenderer_material_normalMap);
                     _Lights_Set(visualState_down_lights_front_1, visualState_down_lights_front_2, visualState_down_lights_rear_1, visualState_down_lights_rear_2);
+                    _Tyres_Set(visualState_down_tyres_front_1, visualState_down_tyres_front_2, visualState_down_tyres_rear_1, visualState_down_tyres_rear_2);
                     World_Local_SceneMain_Player_Collision_Bonus.SingleOnScene.Collision_Param_Set(90f, 0.5f, 0.36f);
-                break;
+                    break;
             }
         }
     }
@@ -621,11 +743,13 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     private void Awake()
     {       
         SingleOnScene = this;
-
-        Position_Init = transform.position;
         
+        Position_Init = transform.position;
+        Tyres_Texture = tyres_texture;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, visualState_right_spriteRenderer_material_normalMap);
+        SpriteRenderer = spriteRenderer;
 
         animator = GetComponent<Animator>();
 
@@ -689,6 +813,9 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                 animator.SetFloat(ANIMATOR_PARAM_SPEED, 0);
                                 Audio_Sound_Brake_Play();
 
+                                tyres_isDrawing__coroutine_current = Tyres_IsDrawing_Corutine();
+                                StartCoroutine(tyres_isDrawing__coroutine_current);
+
                                 state_current = State.road_toDrift_braking;
                             break;
                         }
@@ -719,6 +846,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 break;
 
                 case State.drift:
+
                     if (!crashed)
                     {
                         if (collision_on)
@@ -738,7 +866,11 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                         if (moving_drift_braking_swap)
                                         {
                                             animator.SetFloat(ANIMATOR_PARAM_SPEED, 0);
+                                                                                        
                                             Audio_Sound_Brake_Play();
+
+                                            tyres_isDrawing__coroutine_current = Tyres_IsDrawing_Corutine();
+                                            StartCoroutine(tyres_isDrawing__coroutine_current);
 
                                             moving_drift_braking_swap = false;
                                         }
@@ -807,7 +939,10 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                             animator.SetFloat(ANIMATOR_PARAM_SPEED, 0);
                             Audio_Sound_Brake_Play();
 
-					        Moving_Drift_ToRoad_Braking = true;
+                            tyres_isDrawing__coroutine_current = Tyres_IsDrawing_Corutine();
+                            StartCoroutine(tyres_isDrawing__coroutine_current);
+
+                            Moving_Drift_ToRoad_Braking = true;
 					    }
                     }
                     else

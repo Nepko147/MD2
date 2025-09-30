@@ -8,7 +8,7 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
 
     protected float Speed { get; set; }
 
-    private const float WIDTH = 12.8f;
+    protected const float WIDTH = 12.8f;
 
     private Vector3 position_init;
     public void Position_Reset()
@@ -25,7 +25,7 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
         position_init = transform.position;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (Active
         && Move)
