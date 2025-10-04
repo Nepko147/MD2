@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
+[System.Serializable] public class World_General_MovingBackground_Entity : MonoBehaviour
 {
-    public static World_Local_SceneMain_MovingBackground_Entity SingleOnScene { get; private set; }
+    public static World_General_MovingBackground_Entity SingleOnScene { get; private set; }
     
     public bool Active { get; set; }
 
@@ -53,7 +53,7 @@ public class World_Local_SceneMain_MovingBackground_Entity : MonoBehaviour
         bushes.transform.position = position_bushes;
         bushes_1.transform.position = position_bushes_1;
         road.transform.position = position_road;
-        road_1.transform.position = position_road_1;        
+        road_1.transform.position = position_road_1;  
     }
 
     public bool SpeedScale_Active { get; set; }

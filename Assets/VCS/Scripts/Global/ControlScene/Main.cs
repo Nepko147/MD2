@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
-using System.Collections;
-
 
 public class ControlScene_Main : MonoBehaviour
 {
@@ -13,25 +11,7 @@ public class ControlScene_Main : MonoBehaviour
     [SerializeField] private AudioClip audio_music_crickets;
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
-
-    [SerializeField] private AudioClip  audio_sound_police;
-    private float                       audio_sound_police_startTimer = 2.5f; // За скалько секунд до перехода вдрифт станет слашно полицию.
-
-    private IEnumerator Audio_Sound_Police_Coroutine()
-    {
-        while (true)
-        {
-            if (stage_road_toDrift_timer > audio_sound_police_startTimer)
-            {
-                yield return null;
-            }
-            else
-            {
-                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(audio_sound_police);
-                break;
-            }
-        }
-    }
+    [SerializeField] private AudioClip audio_sound_police;
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
@@ -51,27 +31,7 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-    private int driftSection_array_current_ind = 0; //0 - по дефолту. 12 - для отладки финальной катсцены.
-
-    private bool DriftSection_New()
-    {
-        if (driftSection_array_current_ind < driftSection_array.Length - 1)
-        {
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
-            {
-                Destroy(World_Local_SceneMain_DriftSection_Enity.SingleOnScene.gameObject);
-            }
-
-            Instantiate(driftSection_array[driftSection_array_current_ind].prefab, World_Entity.SingleOnScene.transform);
-            ++driftSection_array_current_ind;
-            
-            return (true);
-        }
-        else
-        {
-            return (false);
-        }
-    }
+    private int driftSection_array_current_ind = 0; //0 - по дефолту. 13 - для отладки финальной катсцены
 
     #endregion
 
@@ -83,6 +43,8 @@ public class ControlScene_Main : MonoBehaviour
         private bool stage_road_coinRush_swap = false;
         private const float STAGE_ROAD_TODRIFT_TIMER_INIT = 15f;
         private float stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT;
+        private const float STAGE_ROAD_TODRIFT_SIRENS_TIME = 5f; // За сколько секунд до перехода в дрифт станет слышно звук сирен
+        private bool stage_road_toDrift_sirens_activate = true;
         private bool stage_road_toDrift_clearing = false;
         private bool stage_road_toDrift_cutscene = false;
         private enum Stage_Road_ToDrift_Cutscene_State
@@ -100,7 +62,8 @@ public class ControlScene_Main : MonoBehaviour
         private bool stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_PLAYERMOVEDOWN_SCALE = 0.5f;
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX = -4f;
-        
+        private bool stage_road_last = false;    
+
         private void Stage_Road_PlayerHitZoom()
         {
             AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On_AutoOff(Vector3.zero, -6.5f, AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
@@ -149,22 +112,23 @@ public class ControlScene_Main : MonoBehaviour
             World_General_Sky.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
             
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
-                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = false;
             }
         }
+        
         private void Stage_Pause_Event_Off_ToRoad()
         {
             World_General_Sky.SingleOnScene.Active = true;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
             
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
-                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = true;
             }
             
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = true;
             }
@@ -226,8 +190,8 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool stage_gameOver = false;
         private bool stage_gameOver_menu_onDisplay = false;
-        private float stage_gameOver_menu_timer;
-        [SerializeField] private float stage_gameOver_menu_timer_init = 1.5f;
+        private float stage_gameOver_menu_timer_current;
+        private const float STAGE_GAMEOVER_MENU_TIMER_INIT = 1.5f;
         
         private delegate void Stage_GameOver_Event();
         private event Stage_GameOver_Event Stage_GameOver_Event_On;
@@ -238,14 +202,14 @@ public class ControlScene_Main : MonoBehaviour
             {
                 if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsBought())
                 {
-                    stage_gameOver_menu_timer = 0.0f;
+                    stage_gameOver_menu_timer_current = 0.0f;
                     return (false);
                 }
                 else
                 {
                     if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsImproved())
                     {
-                        stage_gameOver_menu_timer = 0.0f;
+                        stage_gameOver_menu_timer_current = 0.0f;
                         return (false);
                     }
                     else
@@ -398,16 +362,16 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
             ControlPers_AudioMixer.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = false;
+            World_General_MovingBackground_Entity.SingleOnScene.Active = false;
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = false;
             }
 
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
-                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = false;
             }
 
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
@@ -429,11 +393,11 @@ public class ControlScene_Main : MonoBehaviour
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
+            World_General_MovingBackground_Entity.SingleOnScene.Active = true;
 
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
-                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = true;
+                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = true;
             }
 
             AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
@@ -473,7 +437,7 @@ public class ControlScene_Main : MonoBehaviour
                 stage_revive_timer_current = STAGE_REVIVE_TIMER_NOCOINS;
             }
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = false;
             }
@@ -494,10 +458,10 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber += 1;
 
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
-            World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(Color.red);
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(2.4f, Color.red);
             World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = true;
             }
@@ -518,15 +482,15 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
-            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = false;
+            World_General_MovingBackground_Entity.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
             
-            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity>())
+            if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
-                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Active = false;
+                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = false;
             }
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = false;
             }
@@ -538,7 +502,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
         };
 
-        stage_gameOver_menu_timer = stage_gameOver_menu_timer_init;
+        stage_gameOver_menu_timer_current = STAGE_GAMEOVER_MENU_TIMER_INIT;
 
         Stage_Cutscene_Event_On += () =>
         {
@@ -555,7 +519,7 @@ public class ControlScene_Main : MonoBehaviour
         {
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
 
-            foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+            foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
             {
                 _item.Active = false;
             }
@@ -590,10 +554,10 @@ public class ControlScene_Main : MonoBehaviour
         World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
-        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Load();
-        World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Active = true;
+        World_General_MovingBackground_Entity.SingleOnScene.Active = true;
+        World_General_MovingBackground_Entity.SingleOnScene.Position_Load();
 
-        foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+        foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
         {
             _item.Active = true;
             _item.Move = true;
@@ -617,8 +581,6 @@ public class ControlScene_Main : MonoBehaviour
         {
             stage_revive_cost_current = stage_revive_cost_bought;
         }
-
-        StartCoroutine(Audio_Sound_Police_Coroutine());
     }
 
     private void Update()
@@ -711,6 +673,13 @@ public class ControlScene_Main : MonoBehaviour
                         if (stage_road_toDrift_timer > 0)
                         {
                             stage_road_toDrift_timer -= Time.deltaTime;
+
+                            if (stage_road_toDrift_sirens_activate
+                            && stage_road_toDrift_timer <= STAGE_ROAD_TODRIFT_SIRENS_TIME)
+                            {
+                                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(audio_sound_police);
+                                stage_road_toDrift_sirens_activate = false;
+                            }
                         }
                         else
                         {
@@ -731,19 +700,28 @@ public class ControlScene_Main : MonoBehaviour
                                 if (!InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Enemy_Entity>()
                                 && !InstanceHandler.AnyInstanceExists<World_Local_SceneMain_Bonus_Parent>())
                                 {
-                                    if (DriftSection_New())
+                                    if (!stage_road_last)
                                     {
-                                        World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
+                                        if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
+                                        {
+                                            Destroy(World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.gameObject);
+                                        }
 
-                                        if (driftSection_array_current_ind != driftSection_array.Length - 1) //Если не последний участок дрифта...
+                                        Instantiate(driftSection_array[driftSection_array_current_ind].prefab, World_Entity.SingleOnScene.transform);
+
+                                        if (driftSection_array_current_ind < driftSection_array.Length - 1)
                                         {
-                                            stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult; // Выставляем обычный таймер
-                                            StartCoroutine(Audio_Sound_Police_Coroutine());
+                                            ++driftSection_array_current_ind;
+
+                                            stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult;
+                                            stage_road_toDrift_sirens_activate = true;
                                         }
-                                        else //Если последний...
+                                        else
                                         {
-                                            stage_road_toDrift_timer = 0; //...то ставим 0, чтобы катсцена началась сразу.                                            
+                                            stage_road_last = true;
                                         }
+
+                                        World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
 
                                         stage_road_toDrift_clearing = false;
                                         stage_road_toDrift_cutscene = true;
@@ -753,7 +731,7 @@ public class ControlScene_Main : MonoBehaviour
                                         Stage_Cutscene_Event_On();
 
                                         stage_road = false;
-                                        stage_cutscene = true;                                        
+                                        stage_cutscene = true;  
                                     }
                                 }
                             }
@@ -766,13 +744,13 @@ public class ControlScene_Main : MonoBehaviour
                             case Stage_Road_ToDrift_Cutscene_State.alignment:
                                 if (World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current == World_Local_SceneMain_Player_Entity.State.road_toDrift_braking)
                                 {
-                                    stage_road_toDrift_cutscene_state_braking_time_buffer = (STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MAX - (STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MAX - STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MIN) * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Normalized());
-                                    stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer = World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale;
+                                    stage_road_toDrift_cutscene_state_braking_time_buffer = (STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MAX - (STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MAX - STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_TIME_MIN) * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Normalized());
+                                    stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer = World_General_MovingBackground_Entity.SingleOnScene.SpeedScale;
 
                                     World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(0, stage_road_toDrift_cutscene_state_braking_time_buffer);
-                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
+                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = false;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Start();
-                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = true;
+                                    World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Move = true;
 
                                     stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.braking;
                                 }
@@ -780,7 +758,7 @@ public class ControlScene_Main : MonoBehaviour
 
                             case Stage_Road_ToDrift_Cutscene_State.braking:
                                 stage_road_toDrift_cutscene_state_braking_scale -= Time.deltaTime / stage_road_toDrift_cutscene_state_braking_time_buffer;
-                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer * stage_road_toDrift_cutscene_state_braking_scale;
+                                World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = stage_road_toDrift_cutscene_state_braking_movingBackground_speedScale_buffer * stage_road_toDrift_cutscene_state_braking_scale;
                                 
                                 if (stage_road_toDrift_cutscene_state_braking_scale < STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_PLAYERMOVEDOWN_SCALE)
                                 {
@@ -795,7 +773,7 @@ public class ControlScene_Main : MonoBehaviour
                                     {
                                         if (stage_road_toDrift_cutscene_state_braking_scale <= 0)
                                         {
-                                            World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
+                                            World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
                                             stage_road_toDrift_cutscene_state_braking_scale = 1f;
 
                                             stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
@@ -816,9 +794,9 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToDrift;
 
                                     World_General_Sky.SingleOnScene.Active = false;
-                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
+                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
 
-                                    foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+                                    foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
                                         _item.Move = false;
                                         _item.Position_Reset();
@@ -830,8 +808,8 @@ public class ControlScene_Main : MonoBehaviour
                                     World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn_Refresh();
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Road_PlayerHitZoom;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Drift_PlayerHitZoom;
-                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = false;
-                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = true;
+                                    World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Move = false;
+                                    World_Local_SceneMain_DriftSection_Transition_Barrier.SingleOnScene.Active = true;
                                     AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow_YMax = STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX;
                                     AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Drift();
                                     AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_State_ToSpeedUp();
@@ -843,9 +821,9 @@ public class ControlScene_Main : MonoBehaviour
                                     _pos.x -= _pos_x_ofs;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position = _pos;
 
-                                    _pos = World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position;
+                                    _pos = World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.transform.position;
                                     _pos.x -= _pos_x_ofs;
-                                    World_Local_SceneMain_DriftSection_Enity.SingleOnScene.transform.position = _pos;
+                                    World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.transform.position = _pos;
 
                                     foreach (var _item in FindObjectsByType<World_Local_SceneMain_Bonus_Coin>(FindObjectsSortMode.None))
                                     {
@@ -924,14 +902,14 @@ public class ControlScene_Main : MonoBehaviour
                             if (stage_drift_toRoad_braking_right_swap
                             && World_Local_SceneMain_Player_Entity.SingleOnScene.Moving_Drift_ToRoad_Braking_Right)
                             {
-                                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE;
+                                World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE;
 
-                                foreach (var _item in FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None))
+                                foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
                                 {
                                     _item.Move = true;
                                 }
 
-                                World_Local_SceneMain_DriftSection_Enity.SingleOnScene.Move = true;
+                                World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Move = true;
 
                                 stage_drift_toRoad_braking_right_swap = false;
                             }
@@ -949,10 +927,10 @@ public class ControlScene_Main : MonoBehaviour
                                     World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
-                                    World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale = World_Local_SceneMain_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = World_General_MovingBackground_Entity.SPEEDSCALE_INIT;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Drift_PlayerHitZoom;
-                                    World_Local_SceneMain_DriftSection_Barrier.SingleOnScene.Active = false;
+                                    World_Local_SceneMain_DriftSection_Transition_Barrier.SingleOnScene.Active = false;
                                     AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_State_ToPulse();
                                     AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Road();
                                     AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
@@ -1035,9 +1013,9 @@ public class ControlScene_Main : MonoBehaviour
 
         if (stage_gameOver)
         {
-            if (stage_gameOver_menu_timer > 0)
+            if (stage_gameOver_menu_timer_current > 0)
             {
-                stage_gameOver_menu_timer -= Time.deltaTime;
+                stage_gameOver_menu_timer_current -= Time.deltaTime;
             }
             else
             {

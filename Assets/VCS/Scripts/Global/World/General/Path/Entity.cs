@@ -127,6 +127,7 @@ using Utils;
     private bool editor_draw_enable;
     [SerializeField] private GameObject editor_pointer;
     [SerializeField] [Range(0, 1)] private float editor_distance;
+    [SerializeField] private bool editor_spline_point_show;
     private float EDITOR_SPLINE_POINT_SIZE = 0.025f;
 
     #endif
@@ -184,11 +185,14 @@ using Utils;
 
             Spline_WalkThrou(_CustomFunc);
 
-            Spline_BuildPoints();
-
-            for (var _i = 0; _i < spline_point_list.Count; ++_i)
+            if (editor_spline_point_show)
             {
-                Gizmos.DrawSphere(spline_point_list[_i].position, EDITOR_SPLINE_POINT_SIZE);
+                Spline_BuildPoints();
+
+                for (var _i = 0; _i < spline_point_list.Count; ++_i)
+                {
+                    Gizmos.DrawSphere(spline_point_list[_i].position, EDITOR_SPLINE_POINT_SIZE);
+                }
             }
         }
     }

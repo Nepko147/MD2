@@ -92,8 +92,8 @@ public class ControlScene_Menu : MonoBehaviour
                 AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(STAGE_CUTSCENE_TOSTART_TIME);
                 AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, STAGE_CUTSCENE_TOSTART_TIME);
 
-                var _world_movingBackground_parent_array = FindObjectsByType<World_Local_SceneMain_MovingBackground_Parent>(FindObjectsSortMode.None);
-                foreach (World_Local_SceneMain_MovingBackground_Parent _item in _world_movingBackground_parent_array)
+                var _world_movingBackground_parent_array = FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None);
+                foreach (World_General_MovingBackground_Parent _item in _world_movingBackground_parent_array)
                 {
                     _item.Active = true;
                     _item.Move = true;
@@ -113,7 +113,7 @@ public class ControlScene_Menu : MonoBehaviour
             if (stage_start_time <= 0)
             {
                 ControlPers_FogHandler.Color_Save();
-                World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.Position_Save();
+                World_General_MovingBackground_Entity.SingleOnScene.Position_Save();
                 SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
             }
         }

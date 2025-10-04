@@ -30,7 +30,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     {     
         if (Active)
         {
-            transform.position += Vector3.left * SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * SPEED * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             if (!isDamaged
             && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Active
