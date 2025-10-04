@@ -47,7 +47,7 @@ public class World_Local_SceneMain_Bonus_Parent : MonoBehaviour
     {
         if (active) 
         {
-            transform.position += Vector3.left * SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * SPEED * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             if (transform.position.x <= destroy_position_x)
             {

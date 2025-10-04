@@ -70,7 +70,7 @@ public class World_Local_SceneMain_Cops_Entity : MonoBehaviour
         if (active
         && Move)
         {
-            transform.position += Vector3.left * World_Local_SceneMain_MovingBackground_Road.SPEED * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * World_General_MovingBackground_Road.SPEED * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
         }
     }
 }

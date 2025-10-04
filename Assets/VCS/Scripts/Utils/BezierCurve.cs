@@ -10,7 +10,7 @@ namespace Utils
         public const int DEGREE = 3;
 
         ///<summary>
-        ///Получение точки, по нормализованному значению расстояния, на кривой Безье которая задается четыремя обзазующими точками.
+        ///Получение позиции точки на кривой Безье, по четырем образующим точкам и нормализованному значению расстояния.
         ///</summary>
         public static Vector3 Point_Get(Vector3 _point_1, Vector3 _point_2, Vector3 _point_3, Vector3 _point_4, float _dist)
         {

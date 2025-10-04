@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
+public class World_General_MovingBackground_Parent : MonoBehaviour
 {
     public bool Active { get; set; }
 
@@ -30,7 +30,7 @@ public class World_Local_SceneMain_MovingBackground_Parent : MonoBehaviour
         if (Active
         && Move)
         {
-            transform.position += Vector3.left * Speed * World_Local_SceneMain_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * Speed * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             //Город занимается СамоВоспроизводством
             if (transform.position.x <= -WIDTH)

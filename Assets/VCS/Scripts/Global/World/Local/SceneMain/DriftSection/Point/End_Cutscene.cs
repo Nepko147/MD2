@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class World_Local_SceneMain_DriftSection_Point_End_Cutscene : MonoBehaviour
+public class World_Local_SceneMain_DriftSection_Point_End_Cutscene : World_Local_SceneMain_DriftSection_Point_Parent
 {
     public static World_Local_SceneMain_DriftSection_Point_End_Cutscene SingleOnScene { get ; private set; }
 

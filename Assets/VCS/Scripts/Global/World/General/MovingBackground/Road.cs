@@ -1,8 +1,8 @@
 using UnityEngine;
 using Utils;
 
-public class World_Local_SceneMain_MovingBackground_Road : World_Local_SceneMain_MovingBackground_Parent
-{    
+public class World_Local_SceneMain_MovingBackground_Road : World_General_MovingBackground_Parent
+{
     [SerializeField] private Texture2D normalMap;
     [SerializeField] private World_General_DrawableSurface drawableSurface;
 

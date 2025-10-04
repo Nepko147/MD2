@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class World_Local_SceneMain_DriftSection_Barrier : MonoBehaviour
+public class World_Local_SceneMain_DriftSection_Transition_Barrier : MonoBehaviour
 {
-    public static World_Local_SceneMain_DriftSection_Barrier SingleOnScene { get; private set; }
+    public static World_Local_SceneMain_DriftSection_Transition_Barrier SingleOnScene { get; private set; }
 
     BoxCollider2D boxCollider;
 

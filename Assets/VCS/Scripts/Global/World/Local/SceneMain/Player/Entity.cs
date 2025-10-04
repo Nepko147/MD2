@@ -72,15 +72,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                     animator.SetFloat(ANIMATOR_PARAM_SPEED, 1f);
                     VisualState_Set(VisualState.up);
 
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        moving_drift_toRoad_position_target.y = MOVING_ROAD_LINE_2_POSITION_Y;
-                    }
-                    else
-                    {
-                        moving_drift_toRoad_position_target.y = MOVING_ROAD_LINE_3_POSITION_Y;
-                    }
-                    break;
+                break;
             }
         }
     }
@@ -109,9 +101,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         Up_Take();
 
         crashed = false;
-
-        spriteRenderer_material_color = Color.white;
-        spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, Color.white);
     }
 
     #endregion
@@ -206,8 +195,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         public readonly Vector3 localPosition;
     }
 
-
-
     #endregion
 
     #region Up
@@ -229,7 +216,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         --Up_Count;
         --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual;
 
-        Invul_Activate(Color.white);
+        Invul_Activate(1.2f, Color.white);
 
         AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
 
@@ -255,21 +242,23 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     #region Invul
 
     public bool Invul_Active { get; private set; }
-    private float invul_timer;
-    private float INVUL_TIMER_INIT = 1.2f;
+    private float invul_timer_current;
+    private float invul_timer_max;
     private Color invul_color;
     private const float INVUL_COLOR_DELAY_INIT = 0.5f;
     private float invul_color_delay_current = INVUL_COLOR_DELAY_INIT;
     private bool invul_alpha_state = false;
     private float INVUL_ALPHA_STEP = 12; //Чем больше значение, тем быстрее моргает
 
-    public void Invul_Activate(Color _color)
+    public void Invul_Activate(float _time, Color _color)
     {
         spriteRenderer_material_color = _color;
 
         Invul_Active = true;
-        invul_timer = INVUL_TIMER_INIT;
+        invul_timer_current = _time;
+        invul_timer_max = _time;
         invul_color = _color;
+        invul_color_delay_current = INVUL_COLOR_DELAY_INIT;
         invul_alpha_state = false;
     }
 
@@ -283,7 +272,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             }
             else
             {
-                var _col = Color.Lerp(Color.white, invul_color, invul_timer / INVUL_TIMER_INIT);
+                var _col = Color.Lerp(Color.white, invul_color, invul_timer_current / invul_timer_max);
                 spriteRenderer_material_color.r = _col.r;
                 spriteRenderer_material_color.g = _col.g;
                 spriteRenderer_material_color.b = _col.b;
@@ -310,15 +299,14 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 }
             }
 
-            invul_timer -= Time.deltaTime;
+            invul_timer_current -= Time.deltaTime;
 
-            if (invul_timer <= 0)
+            if (invul_timer_current <= 0)
             {
                 spriteRenderer_material_color = Color.white;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
 
                 Invul_Active = false;
-                invul_color_delay_current = INVUL_COLOR_DELAY_INIT;
             }
         }
     }
@@ -327,163 +315,163 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
     #region Moving
 
-    #region Road
+        #region Road
 
-    private enum Moving_Road_State
-    {
-        lnie_1,
-        lnie_2,
-        lnie_3,
-        lnie_4
-    }
-    private Moving_Road_State moving_road_state = Moving_Road_State.lnie_2;
-
-    private const float MOVING_ROAD_SPEED = 2f;
-
-    private const float MOVING_ROAD_LINE_1_POSITION_Y = -0.55f;
-    private const float MOVING_ROAD_LINE_2_POSITION_Y = -0.85f;
-    private const float MOVING_ROAD_LINE_3_POSITION_Y = -1.15f;
-    private const float MOVING_ROAD_LINE_4_POSITION_Y = -1.45f;
-
-    private bool moving_road = false;
-    private Vector3 moving_road_newPosition;
-    private bool moving_road_ending_active = false;
-    private Moving_Road_State moving_road_ending_destinationState;
-    private bool moving_road_ending_visualStateSwap = false;
-
-    private bool Moving_Road()
-    {
-        if (moving_road)
+        private enum Moving_Road_State
         {
-            var _step = MOVING_ROAD_SPEED * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
-
-            if ((moving_road_newPosition - transform.position).magnitude <= _step)
-            {
-                transform.position = moving_road_newPosition;
-                moving_road = false;
-            }
+            lnie_1,
+            lnie_2,
+            lnie_3,
+            lnie_4
         }
-        else
+        private Moving_Road_State moving_road_state = Moving_Road_State.lnie_2;
+
+        private const float MOVING_ROAD_SPEED = 2f;
+
+        private const float MOVING_ROAD_LINE_1_POSITION_Y = -0.55f;
+        private const float MOVING_ROAD_LINE_2_POSITION_Y = -0.85f;
+        private const float MOVING_ROAD_LINE_3_POSITION_Y = -1.15f;
+        private const float MOVING_ROAD_LINE_4_POSITION_Y = -1.45f;
+
+        private bool moving_road = false;
+        private Vector3 moving_road_newPosition;
+        private bool moving_road_ending_active = false;
+        private Moving_Road_State moving_road_ending_destinationState;
+        private bool moving_road_ending_visualStateSwap = false;
+
+        private bool Moving_Road()
         {
-            if (moving_road_ending_active)
+            if (moving_road)
             {
-                moving_road_state = moving_road_ending_destinationState;
-                moving_road_ending_visualStateSwap = true;
-                moving_road_ending_active = false;
+                var _step = MOVING_ROAD_SPEED * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
+
+                if ((moving_road_newPosition - transform.position).magnitude <= _step)
+                {
+                    transform.position = moving_road_newPosition;
+                    moving_road = false;
+                }
             }
             else
             {
-                if (moving_road_ending_visualStateSwap)
+                if (moving_road_ending_active)
                 {
-                    VisualState_Set(VisualState.right);
-                    moving_road_ending_visualStateSwap = false;
+                    moving_road_state = moving_road_ending_destinationState;
+                    moving_road_ending_visualStateSwap = true;
+                    moving_road_ending_active = false;
                 }
+                else
+                {
+                    if (moving_road_ending_visualStateSwap)
+                    {
+                        VisualState_Set(VisualState.right);
+                        moving_road_ending_visualStateSwap = false;
+                    }
+                }
+            }
+
+            return (moving_road_ending_active);
+        }
+
+        private void Moving_Road_Start(float _newPosition, Moving_Road_State _destinationState, VisualState _visualState)
+        {
+            moving_road = true;
+            moving_road_ending_active = true;
+
+            moving_road_newPosition.y = _newPosition;
+            moving_road_ending_destinationState = _destinationState;
+
+            VisualState_Set(_visualState);
+        }
+
+        private void Moving_Road_Start_Up()
+        {
+            switch (moving_road_state)
+            {
+                case Moving_Road_State.lnie_2:
+                    Moving_Road_Start(MOVING_ROAD_LINE_1_POSITION_Y, Moving_Road_State.lnie_1, VisualState.right_up);
+                    break;
+
+                case Moving_Road_State.lnie_3:
+                    Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_up);
+                    break;
+
+                case Moving_Road_State.lnie_4:
+                    Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_up);
+                    break;
             }
         }
 
-        return (moving_road_ending_active);
-    }
-
-    private void Moving_Road_Start(float _newPosition, Moving_Road_State _destinationState, VisualState _visualState)
-    {
-        moving_road = true;
-        moving_road_ending_active = true;
-
-        moving_road_newPosition.y = _newPosition;
-        moving_road_ending_destinationState = _destinationState;
-
-        VisualState_Set(_visualState);
-    }
-
-    private void Moving_Road_Start_Up()
-    {
-        switch (moving_road_state)
+        private void Moving_Road_Start_Down()
         {
-            case Moving_Road_State.lnie_2:
-                Moving_Road_Start(MOVING_ROAD_LINE_1_POSITION_Y, Moving_Road_State.lnie_1, VisualState.right_up);
-                break;
+            switch (moving_road_state)
+            {
+                case Moving_Road_State.lnie_1:
+                    Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_down);
+                    break;
 
-            case Moving_Road_State.lnie_3:
-                Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_up);
-                break;
+                case Moving_Road_State.lnie_2:
+                    Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_down);
+                    break;
 
-            case Moving_Road_State.lnie_4:
-                Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_up);
-                break;
+                case Moving_Road_State.lnie_3:
+                    Moving_Road_Start(MOVING_ROAD_LINE_4_POSITION_Y, Moving_Road_State.lnie_4, VisualState.right_down);
+                    break;
+            }
         }
-    }
 
-    private void Moving_Road_Start_Down()
-    {
-        switch (moving_road_state)
+        #endregion
+
+        #region Road_ToDrift
+
+        private const float MOVING_ROAD_TODRIFT_BRAKING_SPEED = 0.25f;
+
+        private float moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
+        private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP = 2f;
+        private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX = 2f;
+
+        #endregion
+
+        #region Drift
+        
+        private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
+        private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
+        private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
+        private float moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
+        private const float MOVING_DRIFT_ANGLE_INIT = 270f;
+        private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
+        private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
+        private float MOVING_DRIFT_ANGLE_STEP = 1f;
+        private Vector2 moving_drift_moveVector = Vector2.zero;
+        private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
+        private Vector2 moving_drift_hitVector = Vector2.zero;
+        private float moving_drift_hitVector_size = 0;
+        private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 3f;
+        private const float MOVING_DRIFT_HITVECTOR_TIME = 1f;
+        private bool moving_drift_braking = true;
+        private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.5f;
+        private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
+        private bool moving_drift_braking_swap = true;
+        private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
+        
+        public float Moving_Drift_Speed_Current_Normalized_Get()
         {
-            case Moving_Road_State.lnie_1:
-                Moving_Road_Start(MOVING_ROAD_LINE_2_POSITION_Y, Moving_Road_State.lnie_2, VisualState.right_down);
-                break;
-
-            case Moving_Road_State.lnie_2:
-                Moving_Road_Start(MOVING_ROAD_LINE_3_POSITION_Y, Moving_Road_State.lnie_3, VisualState.right_down);
-                break;
-
-            case Moving_Road_State.lnie_3:
-                Moving_Road_Start(MOVING_ROAD_LINE_4_POSITION_Y, Moving_Road_State.lnie_4, VisualState.right_down);
-                break;
+            return ((moving_drift_speed_current - MOVING_DRIFT_SPEED_MIN) / (MOVING_DRIFT_SPEED_MAX - MOVING_DRIFT_SPEED_MIN));
         }
-    }
+        
+        #endregion
 
-    #endregion
+        #region Drift_ToRoad
 
-    #region Road_ToDrift
+        private Vector3 moving_drift_toRoad_position_target;
+        public bool Moving_Drift_ToRoad_Braking { get; private set; }
+        private const float MOVING_DRIFT_TOROAD_BRAKING_DIST = 3f;
+        private const float MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP = 3f;
+        private const float MOVING_DRIFT_BRAKING_SPEED_MIN = 2f;
+        public bool Moving_Drift_ToRoad_Braking_Right { get; private set; }
+        private const float MOVING_DRIFT_TOROAD_BRAKING_RIGHT_DIST = 1.5f;
 
-    private const float MOVING_ROAD_TODRIFT_BRAKING_SPEED = 0.25f;
-
-    private float moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
-    private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP = 2f;
-    private const float MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_MAX = 2f;
-
-    #endregion
-
-    #region Drift
-
-    private const float MOVING_DRIFT_SPEED_MIN = 2.5f;
-    private const float MOVING_DRIFT_SPEED_MAX = 3.5f;
-    private const float MOVING_DRIFT_SPEED_STEP = 1.5f;
-    private float moving_drift_speed_current = MOVING_DRIFT_SPEED_MIN;
-    private const float MOVING_DRIFT_ANGLE_INIT = 270f;
-    private float moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
-    private float moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
-    private float MOVING_DRIFT_ANGLE_STEP = 1f;
-    private Vector2 moving_drift_moveVector = Vector2.zero;
-    private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
-    private Vector2 moving_drift_hitVector = Vector2.zero;
-    private float moving_drift_hitVector_size = 0;
-    private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 5f;
-    private const float MOVING_DRIFT_HITVECTOR_TIME = 1.5f;
-    private bool moving_drift_braking = true;
-    private const float MOVING_DRIFT_BRAKING_TIME_INIT = 0.5f;
-    private float moving_drift_braking_time = MOVING_DRIFT_BRAKING_TIME_INIT;
-    private bool moving_drift_braking_swap = true;
-    private const float MOVING_DRIFT_BRAKING_SPEED = 1f;
-
-    public float Moving_Drift_Speed_Current_Normalized_Get()
-    {
-        return ((moving_drift_speed_current - MOVING_DRIFT_SPEED_MIN) / (MOVING_DRIFT_SPEED_MAX - MOVING_DRIFT_SPEED_MIN));
-    }
-
-    #endregion
-
-    #region Drift_ToRoad
-
-    private Vector3 moving_drift_toRoad_position_target;
-    public bool Moving_Drift_ToRoad_Braking { get; private set; }
-    private const float MOVING_DRIFT_TOROAD_BRAKING_DIST = 3f;
-    private const float MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP = 3f;
-    private const float MOVING_DRIFT_BRAKING_SPEED_MIN = 2f;
-    public bool Moving_Drift_ToRoad_Braking_Right { get; private set; }
-    private const float MOVING_DRIFT_TOROAD_BRAKING_RIGHT_DIST = 1.5f;
-
-    #endregion
+        #endregion
 
     #endregion
 
@@ -763,7 +751,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, MOVING_ROAD_LINE_2_POSITION_Y, transform.position.z);
         moving_road_newPosition = transform.position;
-        moving_drift_toRoad_position_target.x = Position_Init.x;
+        moving_drift_toRoad_position_target = new Vector3(Position_Init.x, MOVING_ROAD_LINE_3_POSITION_Y, Position_Init.z);
         Moving_Drift_ToRoad_Braking = false;
     }
 
@@ -841,6 +829,11 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
 					if (_dif.magnitude <= _speed)
 					{
+                        moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
+                        moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
+                        moving_drift_hitVector = Vector2.zero;
+                        moving_drift_hitVector_size = 0;
+
 						state_current = State.drift;
 					}
                 break;
@@ -874,8 +867,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                                             moving_drift_braking_swap = false;
                                         }
-
-                                        //TODO: отрисовка следов от шин
 
                                         moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_BRAKING_SPEED * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
                                         moving_drift_braking_time -= Time.deltaTime;
@@ -965,8 +956,6 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 					        {
                                 transform.position = moving_drift_toRoad_position_target;
 
-                                moving_drift_angle_current = MOVING_DRIFT_ANGLE_INIT;
-                                moving_drift_angle_input = MOVING_DRIFT_ANGLE_INIT;
                                 moving_road_toDrift_moveDown_speed = MOVING_ROAD_TODRIFT_BRAKING_SPEED;
                                 Moving_Drift_ToRoad_Braking = false;
                                 Moving_Drift_ToRoad_Braking_Right = false;
