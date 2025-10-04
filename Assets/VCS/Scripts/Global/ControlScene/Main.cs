@@ -878,6 +878,9 @@ public class ControlScene_Main : MonoBehaviour
                         if (_pl_pos.x > _cutscene_pos.x
                         && _pl_pos.y > _cutscene_pos.y) 
                         {
+                            Stage_Pause_Event_On += Stage_Pause_Event_On_FromRoad;
+                            Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
+
                             World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.drift_toRoad;
                             AppScreen_General_Camera_Entity.SingleOnScene.Move_Follow_YMax = AppScreen_General_Camera_Entity.SingleOnScene.Position_Init.y;
 
@@ -924,8 +927,6 @@ public class ControlScene_Main : MonoBehaviour
                             {
                                 if (World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current == World_Local_SceneMain_Player_Entity.State.road)
                                 {
-                                    Stage_Pause_Event_On += Stage_Pause_Event_On_FromRoad;
-                                    Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
                                     Stage_Pause_Event_Off -= Stage_Pause_Event_Off_ToDrift;
 
                                     Stage_Revive_Event_Off -= Stage_Revive_Event_Off_ToDrift;

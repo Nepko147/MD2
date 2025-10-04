@@ -5,7 +5,7 @@ public class World_General_MovingBackground_Parent : MonoBehaviour
     public bool Active { get; set; }
 
     public bool Move { get; set; }
-
+    
     protected float Speed { get; set; }
 
     protected const float WIDTH = 12.8f;
@@ -37,6 +37,6 @@ public class World_General_MovingBackground_Parent : MonoBehaviour
             {
                 transform.position = new Vector2(transform.position.x + (WIDTH * 2), transform.position.y);
             }
-        }        
+        }
     }
 }
