@@ -1,4 +1,4 @@
-Shader "Custom/Sprites/TextureMix + Rotation"
+Shader "Custom/Sprites/TextureMix"
 {
     Properties
     {
