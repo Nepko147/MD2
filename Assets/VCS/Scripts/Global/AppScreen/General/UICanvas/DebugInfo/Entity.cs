@@ -4,10 +4,19 @@ using UnityEngine.SceneManagement;
 
 public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
 {
+    public static AppScreen_UICanvas_DebugInfo SingleOnScene { get; private set; }
+
     private Text text_component;
+
+    public void Text_Add(string _text)
+    {
+        text_component.text += "; " + _text;
+    }
 
     private void Awake()
     {
+        SingleOnScene = this;
+
         text_component = GetComponent<Text>();
     }
 
@@ -34,7 +43,7 @@ public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
                 break;
             }
         }
-
+        
         text_component.text += "; " + SceneManager.GetActiveScene().name;
     }
 }

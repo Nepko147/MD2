@@ -2,57 +2,58 @@
 {
     Properties
     {
-        _MainTex ("Background Texture", 2D) = "white" {}
-        _Color ("Color", Color) = (1,1,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1, 1, 1, 1)
     }
 
     Subshader
     {
         Tags 
         {
-            "RenderType"="Opaque"
+            "RenderType" = "Opaque"
         }
 
         LOD 100
 
         Pass
         {
-             Blend SrcAlpha OneMinusSrcAlpha
+            Blend SrcAlpha OneMinusSrcAlpha
             
             CGPROGRAM
+
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            struct appdata_t 
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-            };
-
-            struct v2f 
-            {
-                float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-            };
-
+            sampler2D _MainTex;
             float4 _MainTex_ST;
 
             fixed4 _Color;
-            sampler2D _MainTex;
 
-            v2f vert(appdata_t v)
+            struct vertex_data 
             {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                float4 pos : POSITION;
+                float2 uv : TEXCOORD0;
+            };
 
-                return o;
+            struct fragment_data 
+            {
+                float4 pos : SV_POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            fragment_data vert(vertex_data _vd)
+            {
+                fragment_data _output;
+                _output.pos = UnityObjectToClipPos(_vd.pos);
+                _output.uv = TRANSFORM_TEX(_vd.uv, _MainTex);
+
+                return (_output);
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            fixed4 frag(fragment_data _fd) : SV_Target
             {
-                return tex2D(_MainTex, i.uv) * _Color;
+                return (tex2D(_MainTex, _fd.uv) * _Color);
             }
 
             ENDCG
