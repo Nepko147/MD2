@@ -8,6 +8,7 @@
         _ShakeSpeed ("Shake speed", float) = 5.0
         _ShakeBlockSize ("Shake speed", float) = 30.5
         _ShakeColorRate ("Shake range", Range(0, 1)) = 0.01 
+        _Intermittency("Intermittency", float) = 100.0
     }
 
     Subshader
@@ -61,15 +62,16 @@
             float _ShakeSpeed;
             float _ShakeBlockSize;
             float _ShakeColorRate;
+            float _Intermittency;
 
             float Rand(float _seed)
             {	            
                 float2 _vec1 = float2(_seed, _seed);
-                float2 _vec2 = float2(3525.46, -54.3415);                
+                float2 _vec2 = float2(1, 1); 
                 float _dot = dot(_vec1, _vec2);
                 float _dot_sin = sin(_dot);
                 
-                return (frac(543.2543 * _dot_sin));
+                return (frac(_Intermittency * _dot_sin));
             }
 
             fixed4 frag(fragment_data _input) : SV_Target
