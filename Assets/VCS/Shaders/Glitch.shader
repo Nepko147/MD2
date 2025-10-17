@@ -4,11 +4,12 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _ShakePower ("Shake power", float) =  0.03
-        _ShakeRate ("Shake range", Range(0, 1)) = 0.2
+        _ShakeRate ("Shake rate", Range(0, 1)) = 0.2
         _ShakeSpeed ("Shake speed", float) = 5.0
         _ShakeBlockSize ("Shake speed", float) = 30.5
-        _ShakeColorRate ("Shake range", Range(0, 1)) = 0.01 
+        _ShakeColorRate ("Shake color rate", Range(0, 1)) = 0.01 
         _Intermittency("Intermittency", float) = 100.0
+        _Alpha("Alpha", Range(0, 1)) = 1.0
     }
 
     Subshader
@@ -63,6 +64,7 @@
             float _ShakeBlockSize;
             float _ShakeColorRate;
             float _Intermittency;
+            float _Alpha;
 
             float Rand(float _seed)
             {	            
@@ -93,7 +95,7 @@
 	            _color.r = lerp(_color.r, _r_offset, _shift);
 	            _color.b = lerp(_color.b, _b_offset, _shift);
 	                         
-                return _color;
+                return _color * _Alpha;
             }
 
             ENDCG

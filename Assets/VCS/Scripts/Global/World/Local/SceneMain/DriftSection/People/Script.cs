@@ -1,11 +1,11 @@
 using UnityEngine;
-using Utils;
+using System.Collections;
 
 public class World_Local_SceneMain_DriftSection_People : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite[] spriteArray;
-
+    
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -14,8 +14,38 @@ public class World_Local_SceneMain_DriftSection_People : MonoBehaviour
         spriteRenderer.sprite = _sprite;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        var _position = transform.position;
+        World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit_Soft(_position);
+
+        IEnumerator Disappearance()
+        {
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            spriteRenderer.material.SetFloat("_ShakePower", 1);
+            spriteRenderer.material.SetFloat("_ShakeRate", 1);
+
+            var _currentAplpha = 1.0f;
+            var _currentAplpha_step = 2.0f;
+
+            while (true)
+            {
+                spriteRenderer.material.SetFloat("_Alpha", _currentAplpha);                
+
+                if (_currentAplpha > 0)
+                {
+                    _currentAplpha -= _currentAplpha_step * Time.deltaTime;
+                    yield return null;
+                }
+                else
+                {                    
+                    Destroy(gameObject);
+                    break;
+                }
+            }
+        }
+
+        var _routine = Disappearance();
+        StartCoroutine(_routine);
     }
 }

@@ -103,6 +103,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         crashed = false;
     }
 
+    [SerializeField] private GameObject droppedCoin;
+
     #endregion
 
     #region Audio
@@ -446,6 +448,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         private const float MOVING_DRIFT_MOVEVECTOR_SIZE_MAX = 3f;
         private Vector2 moving_drift_hitVector = Vector2.zero;
         private float moving_drift_hitVector_size = 0;
+        private const float MOVING_DRIFT_HITVECTOR_SIZE_HIT_SOFT = 1.5f;
         private const float MOVING_DRIFT_HITVECTOR_SIZE_MAX = 3f;
         private const float MOVING_DRIFT_HITVECTOR_TIME = 1f;
         private bool moving_drift_braking = true;
@@ -722,6 +725,61 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     #region Collision
 
     public CircleCollider2D Collision_Hit { get; set; }
+
+    public void Collision_Hit_Soft(Vector2 _position)
+    {
+        moving_drift_hitVector = (Vector2)transform.position - _position;
+        moving_drift_hitVector = moving_drift_hitVector.normalized;
+        moving_drift_hitVector_size = MOVING_DRIFT_HITVECTOR_SIZE_HIT_SOFT;
+
+        if (Up_Count > 1)
+        {
+            Up_Lose();
+        }
+        else
+        {
+            var _hit_soft_coinsLose = 50;
+            
+            if (ControlPers_DataHandler.SingleOnScene.ProgressData_Coins > 0)
+            {
+                var _coinsCurrent = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins - _hit_soft_coinsLose;
+                ControlPers_DataHandler.SingleOnScene.ProgressData_Coins = Mathf.Clamp(_coinsCurrent, 0, _coinsCurrent);
+
+                IEnumerator CoinDecreaser()
+                {
+                    while (true)
+                    {               
+                        if (Active)
+                        {
+                            if (AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual > ControlPers_DataHandler.SingleOnScene.ProgressData_Coins)
+                            {
+                                --AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual;
+                                Instantiate(droppedCoin, transform.position, new Quaternion());
+                                yield return null;
+                            }
+                            else
+                            {
+                                AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            yield return null;
+                        }
+                    }
+                }
+
+                var _routine = CoinDecreaser();
+                StartCoroutine(_routine);
+            }
+            else
+            {
+                Up_Lose();
+            }
+        }
+    }
+
     public BoxCollider2D Collision_Bonus { get; set; }
 
     private bool collision_on = false;
