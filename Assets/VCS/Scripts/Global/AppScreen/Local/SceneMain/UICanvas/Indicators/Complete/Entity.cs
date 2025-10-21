@@ -22,6 +22,12 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     [SerializeField] private Text text;
 
+    private int TEXT_SIZE_KMLEFT = 48;
+    private int TEXT_SIZE_RADIO = 24;
+
+    private int TEXT_HEIGHT_KMLEFT = 48;
+    private int TEXT_HEIGHT_RADIO = 60;
+
     private void Text_Update()
     {
         text.text = text_number + text_kmLeft;
@@ -30,6 +36,26 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     public void Text_LanguageRefresh()
     {
         Text_Km_Left = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.indicators_complete);
+
+        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
+
+        text_radio_array = new string[]
+        {
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_1),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_2),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_3),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_4),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_5),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_6),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_7),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_8),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_9),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_10),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_11),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_12),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_13),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_14)
+        };
     }
 
     private string text_number;
@@ -47,7 +73,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     }
     [SerializeField] private Color text_number_color = Color.white;
 
-    private string text_kmLeft;
+    private string  text_kmLeft;
+    
 
     public string Text_Km_Left 
     {
@@ -62,22 +89,33 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         }
     }
 
-    [SerializeField] private Color text_kmLeft_color = new Color(1.000f, 0.137f, 0.451f, 1.000f);
+    [SerializeField] private Color  text_kmLeft_color = new Color(1.000f, 0.137f, 0.451f, 1.000f);    
+    
+    private string[]    text_radio_array;
+    private int         text_radio_array_current = 0;
+    private const float TEXT_RADIO_MUSIC_VOLUME_MULTIPLIER = 0.75f;
+    private float       text_radio_music_volume_init;
 
     private CanvasGroup canvasGroup;
 
     private enum State
     {
-        hiden,
-        appear,
-        wait,
-        hide
+        hidden,
+        appear_kmLeft,
+        appear_radio,
+        wait_kmLeft,
+        wait_radio,
+        wait_hide,
+        hide_kmLeft,
+        hide_radio,
+        size
     }
-    private State state = State.hiden;
+    private State state = State.hidden;
 
     private float state_time;
     private const float STATE_TIME_APPEAR = 1f;
-    private const float STATE_TIME_WAIT = 2f;
+    private const float STATE_TIME_WAIT_KMLEFT = 2f;
+    private const float STATE_TIME_WAIT_RADIO = 3f;
     private const float STATE_TIME_HIDE = 1f;
 
     public void Show(float _delay = 0)
@@ -87,7 +125,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
             yield return (new WaitForSeconds(_delay));
 
             state_time = STATE_TIME_APPEAR;
-            state = State.appear;
+            state = State.appear_kmLeft;
+
+            text.fontSize = TEXT_SIZE_KMLEFT;
+            text.rectTransform.sizeDelta = new Vector2(text.rectTransform.sizeDelta.x, TEXT_HEIGHT_KMLEFT);
         }
 
         var _routine = _Coroutine(_delay);
@@ -118,36 +159,77 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         {
             switch (state)
             {
-                case State.appear:
+                case State.appear_kmLeft:
                     state_time -= Time.deltaTime;
 
                     canvasGroup.alpha = 1f - state_time / STATE_TIME_APPEAR;
 
                     if (state_time <= 0)
                     {
-                        state_time = STATE_TIME_WAIT;
-                        state = State.wait;
+                        state_time = STATE_TIME_WAIT_KMLEFT;
+                        state = State.wait_kmLeft;
                     }
                 break;
 
-                case State.wait:
+                case State.wait_kmLeft:
                     state_time -= Time.deltaTime;
 
                     if (state_time <= 0)
                     {
                         state_time = STATE_TIME_HIDE;
-                        state = State.hide;
+                        state = State.hide_kmLeft;
                     }
                 break;
 
-                case State.hide:
+                case State.hide_kmLeft:
                     state_time -= Time.deltaTime;
 
                     canvasGroup.alpha = state_time / STATE_TIME_HIDE;
 
                     if (state_time <= 0)
                     {
-                        state = State.hiden;
+                        state_time = STATE_TIME_APPEAR;
+
+                        text.fontSize = TEXT_SIZE_RADIO;
+                        text.rectTransform.sizeDelta = new Vector2(text.rectTransform.sizeDelta.x, TEXT_HEIGHT_RADIO);
+                        text.text = text_radio_array[text_radio_array_current];
+                        ++text_radio_array_current;
+                        text_radio_array_current = Mathf.Clamp(text_radio_array_current, 0, text_radio_array.Length);
+
+                        //TODO: Звук "помех и неразборчивой речи" ВКЛ
+                        text_radio_music_volume_init = ControlPers_AudioMixer_Music.SingleOnScene.Volume_Get();
+                        var _volume = text_radio_music_volume_init * TEXT_RADIO_MUSIC_VOLUME_MULTIPLIER;
+                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(_volume);
+
+                        state = State.appear_radio;
+                    }
+                    break;
+
+                case State.appear_radio:
+                    state_time -= Time.deltaTime;
+
+                    canvasGroup.alpha = 1f - state_time / STATE_TIME_APPEAR;
+
+                    if (state_time <= 0)
+                    {
+                        state_time = STATE_TIME_WAIT_RADIO;
+                        state = State.hide_radio;
+                    }
+                break;
+
+                case State.hide_radio:
+                    state_time -= Time.deltaTime;
+
+                    canvasGroup.alpha = state_time / STATE_TIME_HIDE;
+
+                    if (state_time <= 0)
+                    {
+                        state_time = STATE_TIME_HIDE;
+
+                        //TODO: Звук "помех и неразборчивой речи" ВЫКЛ (Если он сильно длиный)
+                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(text_radio_music_volume_init);
+
+                        state = State.hidden;
                     }
                 break;
             }
