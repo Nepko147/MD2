@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
+using System.Collections;
 
 public class ControlScene_Main : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class ControlScene_Main : MonoBehaviour
     #region Stage
 
         #region Road
-        
+
         private bool stage_road = true;
         private bool stage_road_coinRush_swap = false;
         private const float STAGE_ROAD_TODRIFT_TIMER_INIT = 15f;
@@ -562,6 +563,7 @@ public class ControlScene_Main : MonoBehaviour
         ControlPers_FogHandler.Color_Load();
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber = 0;
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_TotalDrivings += 1;
+
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
@@ -580,9 +582,7 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
-        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
+        AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();        
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
 
         if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsImproved())
@@ -592,6 +592,46 @@ public class ControlScene_Main : MonoBehaviour
         else
         {
             stage_revive_cost_current = stage_revive_cost_bought;
+        }
+
+        if (ControlPers_DataHandler.SingleOnScene.ProgressData_Tutorial)
+        {
+            stage_road = false;
+
+            AppScreen_General_UICanvas_Entity.SingleOnScene.Tutorial_Show();
+
+            World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_General = false;
+            World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_General = false;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
+
+            IEnumerator _tutorial()
+            {
+                while (true)
+                {                    
+                    if (ControlPers_DataHandler.SingleOnScene.ProgressData_Tutorial)
+                    {
+                        yield return null;
+                    }
+                    else
+                    {
+                        stage_road = true;
+                        World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_General = true;
+                        World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_General = true;
+                        AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
+                        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
+                        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
+                        break;
+                    }
+                }                
+            }
+
+            var _routine = _tutorial();
+            StartCoroutine(_routine);
+        }
+        else
+        {
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
+            AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         }
     }
 
