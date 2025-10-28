@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class World_General_DrawableSurface : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class World_General_DrawableSurface : MonoBehaviour
 
     private Texture2D texture;
     private Texture2D texture_temp;
-    private RenderTexture texture_rt;
     [SerializeField] private TextureWrapMode texture_wrapMode;
     [SerializeField] private FilterMode texture_filterMode;
 
@@ -24,6 +24,7 @@ public class World_General_DrawableSurface : MonoBehaviour
     private const string WEB_PAINTING_SORTINGLAYERNAME = "Player";
 
     #endregion
+        
 
     //Если просто хотим обновить(очистить) тектуру
     public void Texture_Refresh()
@@ -39,7 +40,6 @@ public class World_General_DrawableSurface : MonoBehaviour
 
         texture = new Texture2D(texture_size_x, texture_size_y, TextureFormat.RGBA32, false); //Объявляем новую тектуру
         texture_temp = new Texture2D(texture_size_x, texture_size_y, TextureFormat.RGBA32, false); //Объявляем новую тектуру
-        texture_rt = new RenderTexture(texture_size_x, texture_size_y, 32);
 
         Color[] _color_Clear = new Color[texture_size_x * texture_size_y]; //Создаём массив для пустых пикселей
 
@@ -73,9 +73,12 @@ public class World_General_DrawableSurface : MonoBehaviour
                 material_mixer.SetTexture("_OverlayTex", _overlayTexture);
                 material_mixer.SetFloat("_OverlayRotation", angle);
                 var _overlayTexture_scale_x = ((float)_overlayTexture.width / texture.width) * _overlayTexture_scaleMultiplier_x;
-                var _overlayTex_scale_y = ((float)_overlayTexture.height / texture.height) * _overlayTexture_scaleMultiplier_y;
+                var _overlayTexture_scale_y = ((float)_overlayTexture.height / texture.height) * _overlayTexture_scaleMultiplier_y;
                 material_mixer.SetFloat("_OverlayScaleX", _overlayTexture_scale_x);
-                material_mixer.SetFloat("_OverlayScaleY", _overlayTex_scale_y);
+                material_mixer.SetFloat("_OverlayScaleY", _overlayTexture_scale_y);
+
+                RenderTexture _texture_rt_temp = RenderTexture.GetTemporary(texture.width, texture.height); //Получаем временную РендерТекстуру
+                Graphics.CopyTexture(texture, _texture_rt_temp);
 
                 foreach (var _position in _positions)
                 {
@@ -83,36 +86,36 @@ public class World_General_DrawableSurface : MonoBehaviour
                     var _pos_y = (collision.bounds.size.y - (collision.bounds.max.y - _position.y)) / collision.bounds.size.y;
 
                     material_mixer.SetFloat("_PositionX", _pos_x - 0.5f * _overlayTexture_scale_x);
-                    material_mixer.SetFloat("_PositionY", _pos_y - 0.5f * _overlayTex_scale_y);
-                    Graphics.Blit(texture, texture_rt, material_mixer); //В WEB "texture_rt" остаётся пустой, т.к. в нём не работает Graphics.Blit();
+                    material_mixer.SetFloat("_PositionY", _pos_y - 0.5f * _overlayTexture_scale_y);
+                    Graphics.Blit(texture, _texture_rt_temp, material_mixer);   //Рендерим основную Текстуру во временную РендерТекстуру, при помощи шейдера
                 }
 
-                Graphics.CopyTexture(texture_rt, texture); //Быстрая альтернатива для "texture.ReadPixels(); texture.Apply();"
+                Graphics.CopyTexture(_texture_rt_temp, texture); //Быстрая альтернатива для "texture.ReadPixels(); texture.Apply();"
+                RenderTexture.ReleaseTemporary(_texture_rt_temp);           //Освобождаем память от временной РендерТекстуры. Защита от утечек памяти
             break;
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                //Т.К. в WEB не работает Graphics.Blit(), изобретаем костыли
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:                
                 var _rect = new Rect(0, 0, _overlayTexture.width, _overlayTexture.height);
                 var _sprite = Sprite.Create(_overlayTexture, _rect, Vector2.one / 2); //Создаём новый спрайт
                 var _scale = new Vector3(1 / transform.localScale.x * _overlayTexture_scaleMultiplier_x, 1 / transform.localScale.y * _overlayTexture_scaleMultiplier_y, transform.localScale.z) * WEB_PAINTING_LOCALSCALE;
 
                 foreach (var _position in _positions)
                 {
-                    var _painting = new GameObject();                                       //Создаём новый объект
-                    var _painting_sr = _painting.gameObject.AddComponent<SpriteRenderer>(); //Добавляем в него СпрайтРендерер
-                    _painting_sr.sprite = _sprite;                                          //Суём в СпрайтРендерер новый спрайт
-                    _painting_sr.sortingLayerName = WEB_PAINTING_SORTINGLAYERNAME;          //Указываем слой сортировки (имя слоя из редактора)
-                    _painting.transform.parent = transform;                                 //Назначаем ЭТОТ сурфэйс родительским объектом
-                    _painting.transform.position = _position;                               //Размещаем новый объект там, где надо                    
-                    _painting.transform.localScale = _scale;                                //Задаём нужный размер
-                    Destroy(_painting, WEB_PAINTING_TIMETOLIVE);                            //Запускаем самоликвидацию объекта
+                    var _gameObject = new GameObject();                                       //Создаём новый объект
+                    var __gameObject_sr = _gameObject.gameObject.AddComponent<SpriteRenderer>(); //Добавляем в него СпрайтРендерер
+                    __gameObject_sr.sprite = _sprite;                                          //Суём в СпрайтРендерер новый спрайт
+                    __gameObject_sr.sortingLayerName = WEB_PAINTING_SORTINGLAYERNAME;          //Указываем слой сортировки (имя слоя из редактора)
+                    _gameObject.transform.parent = transform;                                 //Назначаем ЭТОТ сурфэйс родительским объектом
+                    _gameObject.transform.position = _position;                               //Размещаем новый объект там, где надо                    
+                    _gameObject.transform.localScale = _scale;                                //Задаём нужный размер
+                    Destroy(_gameObject, WEB_PAINTING_TIMETOLIVE);                            //Запускаем самоликвидацию объекта
                 }
             break;
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         material = GetComponent<MeshRenderer>().material;
-        material.color = Color.white; //Гарантируем то, что сурфейс будет видимым        
+        material.color = Color.white; //Гарантируем то, что сурфейс будет видимым
     }
 }

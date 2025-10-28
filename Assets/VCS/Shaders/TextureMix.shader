@@ -92,7 +92,7 @@ Shader "Custom/Sprites/TextureMix"
                     return col;
                 } else {
                     fixed4 newColor = (col * (1 - overlayCol.a)) + overlayCol * overlayCol.a;                     
-                    newColor.a = col.a + overlayCol.a; 
+                    newColor.a = col.a + (1 - col.a) * overlayCol.a; 
                     return newColor;
                 }
             }

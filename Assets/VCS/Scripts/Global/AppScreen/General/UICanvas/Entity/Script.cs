@@ -31,6 +31,13 @@ public class AppScreen_General_UICanvas_Entity : AppScreen_General_UICanvas_Pare
         }
     }
 
+    [SerializeField] private GameObject tutorial_prefab;
+
+    public void Tutorial_Show()
+    {
+        Instantiate(tutorial_prefab, transform);
+    }
+
     protected override void Awake()
     {
         base.Awake();

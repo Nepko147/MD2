@@ -28,6 +28,12 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
         audioSource.Stop();
     }
 
+    public float Volume_Get()
+    {        
+        audioMixerGroup.audioMixer.GetFloat(AUDIOMIXERGROUP_VOLUME_NAME, out var _volume);
+        return 1 - _volume / AUDIOMIXERGROUP_VOLUME_RANGE;
+    }
+
     public void Volume_Set(float _musicValue)
     {
         audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, AUDIOMIXERGROUP_VOLUME_RANGE * (1f - _musicValue));

@@ -1288,6 +1288,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         upgrade_coinMagnet,
         upgrade_heDidNotDie,
         popUpMessage_notEnoughCoins,
+        tutorial,
         indicators_complete,
         midscreen_gameOver,
         midscreen_pause,
@@ -1316,7 +1317,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         dialogue_end_string_4,
         dialogue_end_string_5,
         dialogue_end_string_6,
-        dialogue_end_string_7
+        dialogue_end_string_7,
+        radio_string_1,
+        radio_string_2,
+        radio_string_3,
+        radio_string_4,
+        radio_string_5,
+        radio_string_6,
+        radio_string_7,
+        radio_string_8,
+        radio_string_9,
+        radio_string_10,
+        radio_string_11,
+        radio_string_12,
+        radio_string_13,
+        radio_string_14
     }
 
     private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
@@ -1328,6 +1343,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
         [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
+        [Text_Key.tutorial] = "Use the virtual stick to select direction.",
         [Text_Key.indicators_complete] = "KILOMETERS LEFT",
         [Text_Key.midscreen_gameOver] = "GAME OVER",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1356,7 +1372,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "Oh, crap!",
         [Text_Key.dialogue_end_string_5] = "Are you okay?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "Can you hear me?"
+        [Text_Key.dialogue_end_string_7] = "Can you hear me?",
+        [Text_Key.radio_string_1] = "[interference] «It's exactly midnight on the clock. You're tuned to the Free Road Radio...»",
+        [Text_Key.radio_string_2] = "[noise] «Don't lose speed»",
+        [Text_Key.radio_string_3] = "[interference] «Another overtaking. Another chick»",
+        [Text_Key.radio_string_4] = "[crackle] «Night — time to accelerate»",
+        [Text_Key.radio_string_5] = "[noise] «The faster — the better»",
+        [Text_Key.radio_string_6] = "[interference] «And the heart beats faster»",
+        [Text_Key.radio_string_7] = "[crackle] «Once you rev up, you can't stop»",
+        [Text_Key.radio_string_8] = "[bzz] «You're still alive!»",
+        [Text_Key.radio_string_9] = "[screech] «You have a habit of playing with death»",
+        [Text_Key.radio_string_10] = "[ear ringing] «She'll quickly find a replacement»",
+        [Text_Key.radio_string_11] = "[bzz] «Live fast, die fast»",
+        [Text_Key.radio_string_12] = "[screech] «What are brakes?»",
+        [Text_Key.radio_string_13] = "[ear ringing] «Adrenaline — the best fuel»",
+        [Text_Key.radio_string_14] = "[sound explosion] «Speed will set you free»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
@@ -1368,6 +1398,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "МАГНИТ ДЛЯ МОНЕТ",
         [Text_Key.upgrade_heDidNotDie] = "ДА НЕ УМЕР ОН",
         [Text_Key.popUpMessage_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
+        [Text_Key.tutorial] = "Используй виртуальный стик для выбора направления.",
         [Text_Key.indicators_complete] = "КМ ДО ЦЕЛИ",
         [Text_Key.midscreen_gameOver] = "КОНЕЦ ИГРЫ",
         [Text_Key.midscreen_pause] = "ПАУЗА",
@@ -1396,7 +1427,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "О, черт!",
         [Text_Key.dialogue_end_string_5] = "Все в порядке?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "Ты меня слышишь?"
+        [Text_Key.dialogue_end_string_7] = "Ты меня слышишь?",
+        [Text_Key.radio_string_1] = "[помехи] «На часах ровно полночь. В эфире Радио Свободной Дороги...»",
+        [Text_Key.radio_string_2] = "[шум] «Не теряй скорость»",
+        [Text_Key.radio_string_3] = "[помехи] «Ещё один обгон. Еще одна подружка»",
+        [Text_Key.radio_string_4] = "[треск] «Ночь — время ускорить темп»",
+        [Text_Key.radio_string_5] = "[шум] «Чем быстрее — тем лучше»",
+        [Text_Key.radio_string_6] = "[помехи] «И сердце бьётся чаще»",
+        [Text_Key.radio_string_7] = "[треск] «Стоит разогнать и уже не остановить»",
+        [Text_Key.radio_string_8] = "[бзз] «Ты всё еще жив!»",
+        [Text_Key.radio_string_9] = "[скрежет] «У тебя привычка играть со смертью»",
+        [Text_Key.radio_string_10] = "[звон в ушах] «Она быстро найдет замену»",
+        [Text_Key.radio_string_11] = "[бзз] «Живи быстро, умри быстро»",
+        [Text_Key.radio_string_12] = "[скрежет] «Что такое тормоза?»",
+        [Text_Key.radio_string_13] = "[звон в ушах] «Адреналин — лучшее топливо»",
+        [Text_Key.radio_string_14] = "[разрыв звука] «Скорость сделает тебя свободным»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
@@ -1408,6 +1453,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "IMÁN DE MONEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ÉL NO MURIÓ",
         [Text_Key.popUpMessage_notEnoughCoins] = "NO HAY SUFICIENTES MONEDAS",
+        [Text_Key.tutorial] = "Usa la palanca virtual para seleccionar la dirección.",
         [Text_Key.indicators_complete] = "KILÓMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "JUEGO TERMINADO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1436,7 +1482,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "¡Oh, mierda!",
         [Text_Key.dialogue_end_string_5] = "¿Estás bien?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "¿Me oyes?"
+        [Text_Key.dialogue_end_string_7] = "¿Me oyes?",
+        [Text_Key.radio_string_1] = "[interferencia] «Son exactamente medianoche en el reloj. Estás en la Radio de la Carretera Libre...»",
+        [Text_Key.radio_string_2] = "[ruido] «No pierdas velocidad»",
+        [Text_Key.radio_string_3] = "[interferencia] «Otra adelantada. Otra chica»",
+        [Text_Key.radio_string_4] = "[crackle] «Noche — tiempo de acelerar»",
+        [Text_Key.radio_string_5] = "[ruido] «Cuanto más rápido — mejor»",
+        [Text_Key.radio_string_6] = "[interferencia] «Y el corazón late más rápido»",
+        [Text_Key.radio_string_7] = "[crackle] «Una vez que aceleras, ya no puedes detenerte»",
+        [Text_Key.radio_string_8] = "[bzz] «¡Todavía estás vivo!»",
+        [Text_Key.radio_string_9] = "[chirrido] «Tienes la costumbre de jugar con la muerte»",
+        [Text_Key.radio_string_10] = "[zumbido en el oído] «Ella encontrará un reemplazo rápidamente»",
+        [Text_Key.radio_string_11] = "[bzz] «Vive rápido, muere joven»",
+        [Text_Key.radio_string_12] = "[chirrido] «¿Qué son los frenos?»",
+        [Text_Key.radio_string_13] = "[zumbido en el oído] «La adrenalina — el mejor combustible»",
+        [Text_Key.radio_string_14] = "[explosión de sonido] «La velocidad te hará libre»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
@@ -1448,6 +1508,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "ÍMÃ DE MOEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ELE NÃO MORREU",
         [Text_Key.popUpMessage_notEnoughCoins] = "MOEDAS NÃO SUFICIENTES",
+        [Text_Key.tutorial] = "Use o joystick virtual para selecionar a direção.",
         [Text_Key.indicators_complete] = "QUILÔMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "FIM DO JOGO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1476,7 +1537,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "Ah, droga!",
         [Text_Key.dialogue_end_string_5] = "Você está bem?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "Você consegue me ouvir?"
+        [Text_Key.dialogue_end_string_7] = "Você consegue me ouvir?",
+        [Text_Key.radio_string_1] = "[interferência] «São exatamente meia-noite no relógio. Você está na Rádio da Estrada Livre...»",
+        [Text_Key.radio_string_2] = "[ruído] «Não perca velocidade»",
+        [Text_Key.radio_string_3] = "[interferência] «Mais uma ultrapassagem. Mais uma garota»",
+        [Text_Key.radio_string_4] = "[crackle] «Noite — hora de acelerar»",
+        [Text_Key.radio_string_5] = "[ruído] «Quanto mais rápido — melhor»",
+        [Text_Key.radio_string_6] = "[interferência] «E o coração bate mais rápido»",
+        [Text_Key.radio_string_7] = "[crackle] «Uma vez acelerando»",
+        [Text_Key.radio_string_8] = "[bzz] «Ainda estás vivo!»",
+        [Text_Key.radio_string_9] = "[moagem] «Tens o hábito de namoriscar com a morte»",
+        [Text_Key.radio_string_10] = "[zumbido nos ouvidos] «Ela encontrará um substituto rapidamente»",
+        [Text_Key.radio_string_11] = "[bzz] «Vive rápido, morre rápido»",
+        [Text_Key.radio_string_12] = "[moagem] «O que são freios?»",
+        [Text_Key.radio_string_13] = "[zumbido nos ouvidos] «A adrenalina é o melhor combustível»",
+        [Text_Key.radio_string_14] = "[explosão sonora] «A velocidade libertá-lo-á»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
@@ -1488,6 +1563,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "MÜNZMAGNET",
         [Text_Key.upgrade_heDidNotDie] = "ER IST NICHT GESTORBEN",
         [Text_Key.popUpMessage_notEnoughCoins] = "ES FEHLEN MÜNZEN",
+        [Text_Key.tutorial] = "Sie den virtuellen Stick, um die Richtung auszuwählen.",
         [Text_Key.indicators_complete] = "KM ZUM ZIEL",
         [Text_Key.midscreen_gameOver] = "SPIEL VORBEI",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1516,7 +1592,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "Oh, Mist!",
         [Text_Key.dialogue_end_string_5] = "Bist du okay?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "Hörst du mich?"
+        [Text_Key.dialogue_end_string_7] = "Hörst du mich?",
+        [Text_Key.radio_string_1] = "[störungs] «Es ist genau Mitternacht. Hier läuft das Radio der Freien Straße...»",
+        [Text_Key.radio_string_2] = "[lärm] «Verliere nicht an Geschwindigkeit»",
+        [Text_Key.radio_string_3] = "[störungs] «Noch ein Überholmanöver. Noch ein Mädchen»",
+        [Text_Key.radio_string_4] = "[knistern] «Nacht — Zeit, das Tempo zu erhöhen»",
+        [Text_Key.radio_string_5] = "[lärm] «Je schneller, desto besser»",
+        [Text_Key.radio_string_6] = "[Störung] «Und das Herz schlägt schneller»",
+        [Text_Key.radio_string_7] = "[knistern] «Einmal Gas geben, und man kann nicht mehr aufhören»",
+        [Text_Key.radio_string_8] = "[bzz] «Du lebst noch!»",
+        [Text_Key.radio_string_9] = "[Kreischen] «Du hast die Angewohnheit, mit dem Tod zu spielen»",
+        [Text_Key.radio_string_10] = "[ohrenklingeln] «Sie wird schnell einen Ersatz finden»",
+        [Text_Key.radio_string_11] = "[bzz] «Lebe schnell, sterbe jung»",
+        [Text_Key.radio_string_12] = "[kreischen] «Was sind Bremsen?»",
+        [Text_Key.radio_string_13] = "[ohrenklingeln] «Adrenalin — der beste Treibstoff»",
+        [Text_Key.radio_string_14] = "[soundexplosion] «Geschwindigkeit macht dich frei»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
@@ -1528,6 +1618,7 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "KOIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "DIA TIDAK MATI",
         [Text_Key.popUpMessage_notEnoughCoins] = "KOIN TIDAK CUKUP",
+        [Text_Key.tutorial] = "Gunakan stik virtual untuk memilih arah.",
         [Text_Key.indicators_complete] = "KILOMETER TERSISA",
         [Text_Key.midscreen_gameOver] = "PERMAINAN BERAKHIR",
         [Text_Key.midscreen_pause] = "BERHENTI SEBENTAR",
@@ -1556,7 +1647,21 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_4] = "Oh, sial!",
         [Text_Key.dialogue_end_string_5] = "Apakah kamu baik-baik saja?",
         [Text_Key.dialogue_end_string_6] = "…",
-        [Text_Key.dialogue_end_string_7] = "Kamu bisa mendengarku?"
+        [Text_Key.dialogue_end_string_7] = "Kamu bisa mendengarku?",
+        [Text_Key.radio_string_1] = "[gangguan] «Ini tepat tengah malam di jam. Kamu sedang mendengarkan Radio Jalan Bebas...»",
+        [Text_Key.radio_string_2] = "[suara] «Jangan kehilangan kecepatan»",
+        [Text_Key.radio_string_3] = "[gangguan] «Lagi satu menyalip. Lagi satu gadis»",
+        [Text_Key.radio_string_4] = "[kretek] «Malam — waktu untuk mempercepat»",
+        [Text_Key.radio_string_5] = "[suara] «Semakin cepat — semakin baik»",
+        [Text_Key.radio_string_6] = "[gangguan] «Dan jantung berdetak lebih cepat»",
+        [Text_Key.radio_string_7] = "[kretek] «Sekali gas, tak bisa berhenti lagi»",
+        [Text_Key.radio_string_8] = "[bzz] «Kamu masih hidup!»",
+        [Text_Key.radio_string_9] = "[geraman] «Kamu punya kebiasaan bermain dengan kematian»",
+        [Text_Key.radio_string_10] = "[berdering di telinga] «Dia akan segera menemukan pengganti»",
+        [Text_Key.radio_string_11] = "[bzz] «Hidup cepat, mati muda»",
+        [Text_Key.radio_string_12] = "[geraman] «Apa itu rem?»",
+        [Text_Key.radio_string_13] = "[berdering di telinga] «Adrenalin — bahan bakar terbaik»",
+        [Text_Key.radio_string_14] = "[ledakan suara] «Kecepatan akan membebaskanmu»"
     };
 
     public string Text_Get(Text_Key _key)

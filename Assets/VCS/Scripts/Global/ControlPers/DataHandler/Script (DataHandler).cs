@@ -191,6 +191,14 @@ public class ControlPers_DataHandler : MonoBehaviour
             public const int DEFAULTVALUE = 0;
             public static int value = DEFAULTVALUE;
         }
+
+        public struct Tutorial
+        {
+            public const string NODE = "Coins";
+            public const string PATH = ORIGINNODE + "/" + NODE;
+            public const bool DEFAULTVALUE = true;
+            public static bool value = DEFAULTVALUE;
+        }
     }
 
     public enum ProgressData_Upgrades_State
@@ -614,6 +622,18 @@ public class ControlPers_DataHandler : MonoBehaviour
     }
     public delegate void ProgressData_Coins_Change(int _changedCoinsValue);
     public event ProgressData_Coins_Change ProgressData_Coins_OnChange;
+
+    public bool ProgressData_Tutorial
+    {
+        get
+        {
+            return (ProgressData.Tutorial.value);
+        }
+        set
+        {
+            ProgressData.Tutorial.value = value;
+        }
+    }
 
     #endregion
 

@@ -54,7 +54,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : App
 
         var _routine = _coroutine(_delay);
         StartCoroutine(_routine);
-
     }
 
     private enum background_state
