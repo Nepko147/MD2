@@ -9,7 +9,7 @@ public class ControlScene_Opening : MonoBehaviour
     private bool stage_delay = true;
 
     private bool stage_pressAnyKey = false;
-    private float stage_pressAnyKey_delay = 1f;
+    private float stage_pressAnyKey_delay = 2.1f;
     public bool Stage_PressAnyKey_Pressed { get; private set; }
 
     private bool stage_titleAnimation = false;
@@ -30,10 +30,7 @@ public class ControlScene_Opening : MonoBehaviour
         if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
         && ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
         {
-            AppScreen_Local_SceneOpening_UICanvas_StartText.SingleOnScene.Enabled = true;
-
-            stage_delay = false;
-            stage_pressAnyKey = true;
+            stage_pressAnyKey_delay = 0;
         }
     }
 

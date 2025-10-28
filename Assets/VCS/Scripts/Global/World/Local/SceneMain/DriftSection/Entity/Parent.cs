@@ -39,7 +39,7 @@ public class World_Local_SceneMain_DriftSection_Enity_Parent : MonoBehaviour
 
         for (var _i = 0; _i < path_array.Length; ++_i)
         {
-            var _length = 0f;
+            var _length = path_coin_ofs_current;
 
             while (_length <= path_array[_i].Spline_Length)
             {
