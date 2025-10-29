@@ -19,9 +19,32 @@ public class World_Local_SceneMain_DriftSection_Enity_13 : World_Local_SceneMain
 
     private bool segment_activated = false;
 
+    [SerializeField] private World_Local_SceneMain_DriftSection_People people_prefab;
+    [SerializeField] private GameObject[] people_positions_1;
+    [SerializeField] private GameObject[] people_positions_2;
+    [SerializeField] private GameObject[] people_positions_3;
+    [SerializeField] private GameObject[] people_positions_4;
+    [SerializeField] private GameObject[] people_positions_5;
+    [SerializeField] private GameObject[] people_positions_6;
+    [SerializeField] private GameObject[] people_positions_7;
+    [SerializeField] private GameObject[] people_positions_8;
+    [SerializeField] private GameObject[] people_positions_9;
+    [SerializeField] private GameObject[] people_positions_10;
+
     protected override void Start()
     {
         base.Start();
+
+        People_Spawn(people_prefab, people_positions_1);
+        People_Spawn(people_prefab, people_positions_2);
+        People_Spawn(people_prefab, people_positions_3);
+        People_Spawn(people_prefab, people_positions_4);
+        People_Spawn(people_prefab, people_positions_5);
+        People_Spawn(people_prefab, people_positions_6);
+        People_Spawn(people_prefab, people_positions_7);
+        People_Spawn(people_prefab, people_positions_8);
+        People_Spawn(people_prefab, people_positions_9);
+        People_Spawn(people_prefab, people_positions_10);
 
         switch ((Segment_State)Random.Range((int)Segment_State.scenario_1, (int)Segment_State.size))
         {

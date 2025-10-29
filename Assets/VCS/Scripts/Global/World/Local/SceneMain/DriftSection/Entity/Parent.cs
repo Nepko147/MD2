@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class World_Local_SceneMain_DriftSection_Enity_Parent : MonoBehaviour
 {
@@ -15,6 +17,37 @@ public class World_Local_SceneMain_DriftSection_Enity_Parent : MonoBehaviour
     private const float PATH_COIN_OFS_UPGRADED = 0.5f;
     private const float PATH_COIN_OFS_IMPROVED = 0.35f;
     protected float path_coin_ofs_current = PATH_COIN_OFS_INIT;
+
+    protected void People_Spawn(World_Local_SceneMain_DriftSection_People _prefab, GameObject[] _positions)
+    {
+        void _Instantiate(int _ind)
+        {
+            Instantiate(_prefab, _positions[_ind].transform.position, Quaternion.identity, _positions[_ind].transform.parent);
+        }
+
+        var _ind = Random.Range(0, _positions.Length);
+        _Instantiate(_ind);
+
+        if (Random.Range(0, 2) == 0)
+        {
+            var _ind_list = new List<int>();
+
+            for (var _i = 0; _i < _positions.Length; ++_i)
+            {
+                _ind_list.Add(_i);
+            }
+
+            _ind_list.Remove(_ind);
+            var _ind_list_rndInd = Random.Range(0, _ind_list.Count);
+            _ind = _ind_list.ElementAt(_ind_list_rndInd);
+            _Instantiate(_ind);
+        }
+
+        for (var _i = 0; _i < _positions.Length; ++_i)
+        {
+            Destroy(_positions[_i].gameObject);
+        }
+    }
 
     private void Awake()
     {

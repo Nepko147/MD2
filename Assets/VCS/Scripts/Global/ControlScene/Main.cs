@@ -331,19 +331,19 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = _state;
             }
 
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_DroppedCoin_Pointer>(FindObjectsSortMode.None))
+            {
+                _item.Active = _state;
+            }
+
+            foreach (var _item in FindObjectsByType<World_Local_SceneMain_DroppedCoin_Entity>(FindObjectsSortMode.None))
+            {
+                _item.Active = _state;
+            }
+
             if (InstanceHandler.AnyInstanceExists<World_Local_SceneMain_DriftSection_Enity_Parent>())
             {
                 World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = _state;
-                
-                foreach (var _item in FindObjectsByType<World_Local_SceneMain_DroppedCoin_Pointer>(FindObjectsSortMode.None))
-                {
-                    _item.Active = _state;
-                }
-
-                foreach (var _item in FindObjectsByType<World_Local_SceneMain_DroppedCoin_Entity>(FindObjectsSortMode.None))
-                {
-                    _item.Active = _state;
-                }
             }
 
             AppScreen_General_Camera_Entity.SingleOnScene.Active = _state;

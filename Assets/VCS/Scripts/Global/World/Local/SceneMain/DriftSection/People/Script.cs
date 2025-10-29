@@ -5,6 +5,8 @@ public class World_Local_SceneMain_DriftSection_People : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite[] spriteArray;
+
+    [SerializeField] private AudioClip[] sound_array;
     
     private void Awake()
     {
@@ -14,10 +16,12 @@ public class World_Local_SceneMain_DriftSection_People : MonoBehaviour
         spriteRenderer.sprite = _sprite;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D _collision)
     {
-        var _position = transform.position;
-        World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit_Soft(_position);
+        World_Local_SceneMain_Player_Entity.SingleOnScene.Collision_Hit_Soft(transform.position);
+
+        var _ind = Random.Range(0, sound_array.Length);
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_array[_ind]);
 
         IEnumerator Disappearance()
         {
