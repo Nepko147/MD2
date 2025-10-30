@@ -169,6 +169,8 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool stage_gameOver = false;
         private bool stage_gameOver_menu_onDisplay = false;
+        private const float STAGE_GAMEOVER_INDISPLAY_MENU_TIMER = 1.0f;
+
         private float stage_gameOver_menu_timer_current;
         private const float STAGE_GAMEOVER_MENU_TIMER_INIT = 1.5f;
         
@@ -202,6 +204,13 @@ public class ControlScene_Main : MonoBehaviour
                 return (true);
             }
         }
+
+    #endregion
+
+    #region Upgrades
+
+    private bool stage_upgrades_menu = false;
+    private bool stage_upgrades_menu_onDisplay = false;
 
     #endregion
 
@@ -1027,9 +1036,25 @@ public class ControlScene_Main : MonoBehaviour
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
-                    AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
+                    AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Visible = true;
 
                     stage_gameOver_menu_onDisplay = true;
+
+                    IEnumerator _coroutine(float _delay)
+                    {
+                        yield return new WaitForSeconds(_delay);
+
+                        var _shift_toDestination_time = 1.0f;
+                        AppScreen_Local_SceneMain_UICanvas_MidScreen_Entity.SingleOnScene.Shift_toDestination(_shift_toDestination_time);
+                        AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Shift_toDestination(_shift_toDestination_time);
+
+                        yield return new WaitForSeconds(_shift_toDestination_time);
+
+                        stage_upgrades_menu = true;
+                    }
+
+                    var _routine = _coroutine(STAGE_GAMEOVER_INDISPLAY_MENU_TIMER);
+                    StartCoroutine(_routine);
                 }
                 else
                 {
@@ -1042,7 +1067,7 @@ public class ControlScene_Main : MonoBehaviour
                     }
                     else
                     {
-                        if (AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Pressed)
+                        if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Pressed)
                         {
                             ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                             ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
@@ -1053,7 +1078,37 @@ public class ControlScene_Main : MonoBehaviour
                 }
             }                    
         }
-    
+
+        if (stage_upgrades_menu)
+        {
+            if (!stage_upgrades_menu_onDisplay)
+            {   
+                AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Show(0.0f);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);
+                stage_upgrades_menu_onDisplay = true;
+            }
+            else
+            {
+                if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Pressed)
+                {
+                    ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_mainTheme);
+
+                    SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
+                }
+                else
+                {
+                    if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Pressed)
+                    {
+                        ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
+
+                        SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+                    }
+                }
+            }
+        }
+
         if (stage_cutscene)
         {
             if (Stage_Ending_isCrushed_Condition())

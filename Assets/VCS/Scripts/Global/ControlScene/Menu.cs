@@ -52,8 +52,9 @@ public class ControlScene_Menu : MonoBehaviour
 
                     AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toDestination(menuShiftTime);
                     AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
-                    AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
-                    AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity.SingleOnScene.Show(menuShiftTime);
+                    AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Shift_toDestination(menuShiftTime);
+                    AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Show(0.0f);
+                    AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(menuShiftTime);
 
                     stage_init = false;
                     stage_upgrades = true;
@@ -128,8 +129,9 @@ public class ControlScene_Menu : MonoBehaviour
 
                 AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_toSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity.SingleOnScene.Hide(menuShiftTime);
+                AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Shift_toSource(menuShiftTime);
+                AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Hide(0.0f);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Hide(menuShiftTime);
 
                 stage_upgrades = false;
                 stage_init = true;

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
 
 public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : AppScreen_General_UICanvas_Parent

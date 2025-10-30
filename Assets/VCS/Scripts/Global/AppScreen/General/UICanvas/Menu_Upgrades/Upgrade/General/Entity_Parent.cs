@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Entity_Parent : AppScreen_General_UICanvas_Parent
+public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Entity_Parent : AppScreen_General_UICanvas_Parent
 {
     private const float ANIMATION_TIME_MAX = 0.25f;
     private const float ANIMATION_TIME_STAGE_MAX = ANIMATION_TIME_MAX / 2f;

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity : AppScreen_General_UICanvas_Parent
+public class AppScreen_UICanvas_Menu_Upgrades_Coins_Entity : AppScreen_General_UICanvas_Parent
 {
-    public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity SingleOnScene { get; private set; }
+    public static AppScreen_UICanvas_Menu_Upgrades_Coins_Entity SingleOnScene { get; private set; }
 
     private float alpha = 0;
     private float alpha_step;
@@ -36,8 +36,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity
 
     private void Start()
     {
-        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
-        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
+        AppScreen_UICanvas_Menu_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
+        AppScreen_UICanvas_Menu_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
     }
 
     private void Update()
@@ -53,8 +53,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity
                     currentState = State.idle;
                 }
 
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
             break;
             
             case State.hide:
@@ -66,8 +66,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Entity
                     currentState = State.idle;
                 }
 
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
-                AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Text.SingleOnScene.Alpha_Set(alpha);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Sprite.SingleOnScene.Alpha_Set(alpha);
             break;
         }
     }

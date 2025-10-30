@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString : AppScreen_General_UICanvas_Parent
+public class AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString : AppScreen_General_UICanvas_Parent
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Indicators_MidScreen_SmallString SingleOnScene { get; private set; }
-
+    public static AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString SingleOnScene { get; private set; }
+    
     Text text;
 
     public void Enable(bool _state)

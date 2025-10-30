@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart : AppScreen_General_UICanvas_Button_Parent
+public class AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok : AppScreen_General_UICanvas_Button_Parent
 {
-    public static AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok SingleOnScene { get; private set; }
 
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.restart);
-    }
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.ok);
+    }       
 
     protected override void Awake()
     {

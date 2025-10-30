@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_Price : AppScreen_General_UICanvas_Parent
+public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Price : AppScreen_General_UICanvas_Parent
 {
     private Text text;
 
