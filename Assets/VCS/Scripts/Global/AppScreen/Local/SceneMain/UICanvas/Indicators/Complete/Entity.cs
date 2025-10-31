@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : AppScreen_General_UICanvas_Parent
 {
@@ -39,22 +40,26 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
         var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
 
-        text_radio_array = new string[]
+        text_radio_list_early = new List<string>
         {
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_1),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_2),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_3),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_4),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_5),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_6),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_7),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_8),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_9),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_10),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_11),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_12),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_13),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_14)
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_1),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_2),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_3),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_4),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_5),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_6),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_7),
+        };
+
+        text_radio_list_late = new List<string>
+        {
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_1),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_2),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_3),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_4),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_5),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_6),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_7),
         };
     }
 
@@ -73,8 +78,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     }
     [SerializeField] private Color text_number_color = Color.white;
 
-    private string  text_kmLeft;
-    
+    private string  text_kmLeft;    
 
     public string Text_Km_Left 
     {
@@ -91,8 +95,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     [SerializeField] private Color  text_kmLeft_color = new Color(1.000f, 0.137f, 0.451f, 1.000f);    
     
-    private string[]    text_radio_array;
-    private int         text_radio_array_current = 0;
+    private List<string>    text_radio_list_early;
+    private bool            text_radio_list_early_isFirst = true;
+    private List<string>    text_radio_list_late;
+
     private const float TEXT_RADIO_MUSIC_VOLUME_MULTIPLIER = 0.75f;
     private float       text_radio_music_volume_init;
 
@@ -192,9 +198,38 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
                         text.fontSize = TEXT_SIZE_RADIO;
                         text.rectTransform.sizeDelta = new Vector2(text.rectTransform.sizeDelta.x, TEXT_HEIGHT_RADIO);
-                        text.text = text_radio_array[text_radio_array_current];
-                        ++text_radio_array_current;
-                        text_radio_array_current = Mathf.Clamp(text_radio_array_current, 0, text_radio_array.Length);
+
+                        if (text_radio_list_early.Count > 0)
+                        {
+                            var _stringID = 0;
+
+                            if (text_radio_list_early_isFirst)
+                            {                                                           
+                                text_radio_list_early_isFirst = false;
+                            }
+                            else
+                            {
+                                _stringID = Random.Range(0, text_radio_list_early.Count - 1);
+                                text.text = text_radio_list_early[_stringID];
+                            }
+
+                            text.text = text_radio_list_early[_stringID];
+                            text_radio_list_early.RemoveAt(_stringID);
+                        }
+                        else
+                        {
+                            if (text_radio_list_late.Count > 0)
+                            {
+                                var _stringID = Random.Range(0, text_radio_list_late.Count - 1);
+                                text.text = text_radio_list_late[_stringID];
+
+                                text_radio_list_late.RemoveAt(_stringID);
+                            }
+                            else
+                            {
+                                text.text = "[...]";
+                            }
+                        }
 
                         //TODO: Звук "помех и неразборчивой речи" ВКЛ
                         text_radio_music_volume_init = ControlPers_AudioMixer_Music.SingleOnScene.Volume_Get();
