@@ -1281,14 +1281,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     public enum Text_Key
     {
-        startText,
+        startText_desktop,
+        startText_mobile,
         loadingCloudData,
         upgrade_moreCoins,
         upgrade_moreBonuses,
         upgrade_coinMagnet,
         upgrade_heDidNotDie,
         popUpMessage_notEnoughCoins,
-        tutorial,
+        tutorial_desktop,
+        tutorial_mobile,
         indicators_complete,
         midscreen_gameOver,
         midscreen_pause,
@@ -1336,14 +1338,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_en = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "PRESS ANY KEY",
+        [Text_Key.startText_desktop] = "PRESS ANY KEY",
+        [Text_Key.startText_mobile] = "TAP ON THE SCREEN",
         [Text_Key.loadingCloudData] = "LOADING CLOUD DATA",
         [Text_Key.upgrade_moreCoins] = "MORE COINS",
         [Text_Key.upgrade_moreBonuses] = "MORE BONUSES",
         [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
         [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
-        [Text_Key.tutorial] = "Use the virtual stick to select direction.",
+        [Text_Key.tutorial_desktop] = "To move, hold down the LMB, then pull the stick in the direction of movement.",
+        [Text_Key.tutorial_mobile] = "Tap on the screen to move, then pull the stick in the direction of movement.",
         [Text_Key.indicators_complete] = "KILOMETERS LEFT",
         [Text_Key.midscreen_gameOver] = "GAME OVER",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1391,14 +1395,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "НАЖМИТЕ ЛЮБУЮ КЛАВИШУ",
+        [Text_Key.startText_desktop] = "НАЖМИТЕ ЛЮБУЮ КЛАВИШУ",
+        [Text_Key.startText_mobile] = "НАЖМИТЕ НА ЭКРАН",
         [Text_Key.loadingCloudData] = "ЗАГРУЗКА ДАННЫХ",
         [Text_Key.upgrade_moreCoins] = "БОЛЬШЕ МОНЕТ",
         [Text_Key.upgrade_moreBonuses] = "БОЛЬШЕ БОНУСОВ",
         [Text_Key.upgrade_coinMagnet] = "МАГНИТ ДЛЯ МОНЕТ",
         [Text_Key.upgrade_heDidNotDie] = "ДА НЕ УМЕР ОН",
         [Text_Key.popUpMessage_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
-        [Text_Key.tutorial] = "Используй виртуальный стик для выбора направления.",
+        [Text_Key.tutorial_desktop] = "Для движения зажмите левую кнопку мыши, затем потяните стик в направлении движения.",
+        [Text_Key.tutorial_mobile] = "Для движения нажмите на экран, затем потяните стик в направлении движения.",
         [Text_Key.indicators_complete] = "КМ ДО ЦЕЛИ",
         [Text_Key.midscreen_gameOver] = "КОНЕЦ ИГРЫ",
         [Text_Key.midscreen_pause] = "ПАУЗА",
@@ -1446,14 +1452,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "PRESIONE CUALQUIER TECLA",
+        [Text_Key.startText_desktop] = "PRESIONE CUALQUIER TECLA",
+        [Text_Key.startText_mobile] = "TOCA LA PANTALLA",
         [Text_Key.loadingCloudData] = "CARGANDO DATOS DE LA NUBE",
         [Text_Key.upgrade_moreCoins] = "MÁS MONEDAS",
         [Text_Key.upgrade_moreBonuses] = "MÁS BONOS",
         [Text_Key.upgrade_coinMagnet] = "IMÁN DE MONEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ÉL NO MURIÓ",
         [Text_Key.popUpMessage_notEnoughCoins] = "NO HAY SUFICIENTES MONEDAS",
-        [Text_Key.tutorial] = "Usa la palanca virtual para seleccionar la dirección.",
+        [Text_Key.tutorial_desktop] = "Utilizando el ratón, arrastre el joystick en la dirección del movimiento.",
+        [Text_Key.tutorial_mobile] = "Para moverte, tira del joystick en la dirección del movimiento.",
         [Text_Key.indicators_complete] = "KILÓMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "JUEGO TERMINADO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1501,14 +1509,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "PRESSIONE QUALQUER TECLA",
+        [Text_Key.startText_desktop] = "PRESSIONE QUALQUER TECLA",
+        [Text_Key.startText_mobile] = "TOQUE NA TELA",
         [Text_Key.loadingCloudData] = "CARREGANDO DADOS DA NUVEM",
         [Text_Key.upgrade_moreCoins] = "MAIS MOEDAS",
         [Text_Key.upgrade_moreBonuses] = "MAIS BÔNUS",
         [Text_Key.upgrade_coinMagnet] = "ÍMÃ DE MOEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ELE NÃO MORREU",
         [Text_Key.popUpMessage_notEnoughCoins] = "MOEDAS NÃO SUFICIENTES",
-        [Text_Key.tutorial] = "Use o joystick virtual para selecionar a direção.",
+        [Text_Key.tutorial_desktop] = "Usando o mouse, arraste o joystick na direção do movimento.",
+        [Text_Key.tutorial_mobile] = "Toque na tela para mover, depois puxe o joystick na direção do movimento.",
         [Text_Key.indicators_complete] = "QUILÔMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "FIM DO JOGO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1556,14 +1566,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "DRÜCKEN SIE EINE BELIEBIGE TASTE",
+        [Text_Key.startText_desktop] = "DRÜCKEN SIE EINE BELIEBIGE TASTE",
+        [Text_Key.startText_mobile] = "AUF DEN BILDSCHIRM TIPPEN",
         [Text_Key.loadingCloudData] = "CLOUD-DATEN LADEN",
         [Text_Key.upgrade_moreCoins] = "MEHR MÜNZEN",
         [Text_Key.upgrade_moreBonuses] = "MEHR BONI",
         [Text_Key.upgrade_coinMagnet] = "MÜNZMAGNET",
         [Text_Key.upgrade_heDidNotDie] = "ER IST NICHT GESTORBEN",
         [Text_Key.popUpMessage_notEnoughCoins] = "ES FEHLEN MÜNZEN",
-        [Text_Key.tutorial] = "Sie den virtuellen Stick, um die Richtung auszuwählen.",
+        [Text_Key.tutorial_desktop] = "Ziehen Sie den Joystick mit der Maus in Bewegungsrichtung.",
+        [Text_Key.tutorial_mobile] = "Ziehen Sie den Joystick in Fahrtrichtung, um sich zu bewegen.",
         [Text_Key.indicators_complete] = "KM ZUM ZIEL",
         [Text_Key.midscreen_gameOver] = "SPIEL VORBEI",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1611,14 +1623,16 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
     {
-        [Text_Key.startText] = "TEKAN TOMBOL APA SAJA",
+        [Text_Key.startText_desktop] = "TEKAN TOMBOL APA SAJA",
+        [Text_Key.startText_mobile] = "KETUK LAYAR",
         [Text_Key.loadingCloudData] = "MENGUNDUH DATA DARI CLOUD",
         [Text_Key.upgrade_moreCoins] = "LEBIH BANYAK KOIN",
         [Text_Key.upgrade_moreBonuses] = "LEBIH BANYAK BONUS",
         [Text_Key.upgrade_coinMagnet] = "KOIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "DIA TIDAK MATI",
         [Text_Key.popUpMessage_notEnoughCoins] = "KOIN TIDAK CUKUP",
-        [Text_Key.tutorial] = "Gunakan stik virtual untuk memilih arah.",
+        [Text_Key.tutorial_desktop] = "Tahan tombol kiri mouse untuk bergerak, lalu tarik stik ke arah gerakan.",
+        [Text_Key.tutorial_mobile] = "Ketuk layar untuk bergerak, lalu tarik stik ke arah gerakan.",
         [Text_Key.indicators_complete] = "KILOMETER TERSISA",
         [Text_Key.midscreen_gameOver] = "PERMAINAN BERAKHIR",
         [Text_Key.midscreen_pause] = "BERHENTI SEBENTAR",

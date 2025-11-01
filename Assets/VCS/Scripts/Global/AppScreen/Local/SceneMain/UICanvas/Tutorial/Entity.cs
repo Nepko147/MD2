@@ -9,7 +9,18 @@ public class AppScreen_Local_SceneMain_UICanvas_Tutorial_Entity : MonoBehaviour
 
     public void Text_LanguageRefresh()
     {
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.tutorial);
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        {
+            case ControlPers_BuildSettings.PlatformType.windows:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.tutorial_desktop);
+            break;
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.tutorial_desktop);
+            break;
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.tutorial_mobile);
+            break;
+        }
     }
 
     private void Start()

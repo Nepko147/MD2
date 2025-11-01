@@ -21,7 +21,18 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText : MonoBeha
 
     public void Text_LanguageRefresh()
     {
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText);
+        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        {
+            case ControlPers_BuildSettings.PlatformType.windows:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                break;
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                break;
+            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_mobile); ;
+                break;
+        }
     }
 
     private IEnumerator text_coroutine(float _delay)
