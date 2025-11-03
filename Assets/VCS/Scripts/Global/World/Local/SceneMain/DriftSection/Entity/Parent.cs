@@ -49,7 +49,7 @@ public class World_Local_SceneMain_DriftSection_Enity_Parent : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         SingleOnScene = this;
 

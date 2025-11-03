@@ -9,8 +9,6 @@ public class World_Local_SceneMain_DriftSection_Enity_5 : World_Local_SceneMain_
     [SerializeField] private GameObject segment_2_point;
     [SerializeField] private GameObject segment_2;
 
-    [SerializeField] private AudioClip[] segment_switch_sound_array;
-
     private bool segment_1_activated = false;
     private bool segment_2_activated = false;
 
