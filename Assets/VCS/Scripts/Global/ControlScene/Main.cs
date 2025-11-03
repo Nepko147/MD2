@@ -7,12 +7,7 @@ public class ControlScene_Main : MonoBehaviour
 {
     #region General
 
-    private AudioSource audio_source;
-    [SerializeField] private AudioClip audio_music_mainTheme;
-    [SerializeField] private AudioClip audio_music_crickets;
-    [SerializeField] private AudioClip audio_sound_pause;
-    [SerializeField] private AudioClip audio_sound_gameOver;
-    [SerializeField] private AudioClip audio_sound_police;
+    public static ControlScene_Main SingleOnScene { get; private set; }
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
@@ -37,11 +32,32 @@ public class ControlScene_Main : MonoBehaviour
 
     #endregion
 
+    #region Audio
+
+    private AudioSource audio_source;
+
+    [SerializeField] private AudioClip audio_music_mainTheme;
+    [SerializeField] private AudioClip audio_music_crickets;
+
+    [SerializeField] private AudioClip audio_sound_pause;
+    [SerializeField] private AudioClip audio_sound_gameOver;
+    [SerializeField] private AudioClip audio_sound_police;
+
+    [SerializeField] private AudioClip[] audio_sound_mental_array;
+
+    public void Audio_Sound_Mental_Play()
+    {
+        var _ind = Random.Range(0, audio_sound_mental_array.Length);
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Play(audio_sound_mental_array[_ind]);
+    }
+
+    #endregion
+
     #region Stage
 
-        #region Road
+    #region Road
 
-        private bool stage_road = true;
+    private bool stage_road = true;
         private bool stage_road_coinRush_swap = false;
         private const float STAGE_ROAD_TODRIFT_TIMER_INIT = 15f;
         private float stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT;
@@ -274,6 +290,8 @@ public class ControlScene_Main : MonoBehaviour
 
     private void Awake()
     {
+        SingleOnScene = this;
+
         audio_source = GetComponent<AudioSource>();
 
         driftSection_array = new DriftSection[14]

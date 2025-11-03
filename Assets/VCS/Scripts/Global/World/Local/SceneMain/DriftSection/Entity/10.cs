@@ -6,8 +6,6 @@ public class World_Local_SceneMain_DriftSection_Enity_10 : World_Local_SceneMain
     [SerializeField] private GameObject segment_scenario_1;
     [SerializeField] private GameObject segment_scenario_2;
 
-    [SerializeField] private AudioClip[] segment_switch_sound_array;
-
     private enum Segment_State
     {
         scenario_1,
@@ -59,6 +57,8 @@ public class World_Local_SceneMain_DriftSection_Enity_10 : World_Local_SceneMain
         if (!segment_activated
         && World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.x > segment_point.transform.position.x)
         {
+            ControlScene_Main.SingleOnScene.Audio_Sound_Mental_Play();
+
             switch (segment_state_current)
             {
                 case Segment_State.scenario_1:
@@ -73,9 +73,6 @@ public class World_Local_SceneMain_DriftSection_Enity_10 : World_Local_SceneMain
                     segment_state_current = Segment_State.scenario_1;
                 break;
             }
-
-            var _ind = Random.Range(0, segment_switch_sound_array.Length);
-            ControlPers_AudioMixer_Sounds.SingleOnScene.Play(segment_switch_sound_array[_ind]);
 
             segment_activated = true;
         }
