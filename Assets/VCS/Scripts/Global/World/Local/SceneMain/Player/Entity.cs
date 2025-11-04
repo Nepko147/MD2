@@ -94,6 +94,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     {
         ++ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
         ++ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsTotal;
+        ++AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count;
     }
 
     public void Resurrect()

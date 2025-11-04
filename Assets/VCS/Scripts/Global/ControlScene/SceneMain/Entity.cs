@@ -1099,7 +1099,8 @@ public class ControlScene_Main : MonoBehaviour
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
-                    AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Visible = true;
+                    //AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Visible = true; // Раскоментить чтобы вернуть кнопку меню при Game Over
+                    AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
 
                     stage_gameOver_menu_onDisplay = true;
 
@@ -1130,7 +1131,7 @@ public class ControlScene_Main : MonoBehaviour
                     }
                     else
                     {
-                        if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Pressed)
+                        if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Pressed)
                         {
                             ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                             ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
@@ -1148,6 +1149,7 @@ public class ControlScene_Main : MonoBehaviour
             {   
                 AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Show(0.0f);
                 AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);
+                AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
                 stage_upgrades_menu_onDisplay = true;
             }
             else
@@ -1161,7 +1163,18 @@ public class ControlScene_Main : MonoBehaviour
                 }
                 else
                 {
-                    if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Ok.SingleOnScene.Pressed)
+                    if (AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed)
+                    {
+                        //TODO: Запуск рекламы.
+                        
+                        AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed = false;
+                        AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
+                        var _coins_received = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count;
+                        ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_received; 
+                        AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count = _coins_received * 2;
+                    }
+                    
+                    if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Pressed)
                     {
                         ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets);
