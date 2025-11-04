@@ -27,7 +27,7 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
     }
     private DriftSection[] driftSection_array; 
-
+    
     private int driftSection_array_current_ind = 0; //0 - по дефолту. 13 - для отладки финальной катсцены
 
     #endregion
@@ -41,7 +41,6 @@ public class ControlScene_Main : MonoBehaviour
 
     [SerializeField] private AudioClip audio_sound_pause;
     [SerializeField] private AudioClip audio_sound_gameOver;
-    [SerializeField] private AudioClip audio_sound_police;
 
     [SerializeField] private AudioClip[] audio_sound_mental_array;
 
@@ -55,9 +54,9 @@ public class ControlScene_Main : MonoBehaviour
 
     #region Stage
 
-    #region Road
+        #region Road
 
-    private bool stage_road = true;
+        private bool stage_road = true;
         private bool stage_road_coinRush_swap = false;
         private const float STAGE_ROAD_TODRIFT_TIMER_INIT = 15f;
         private float stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT;
@@ -221,14 +220,14 @@ public class ControlScene_Main : MonoBehaviour
             }
         }
 
-    #endregion
+        #endregion
 
-    #region Upgrades
+        #region Upgrades
 
-    private bool stage_upgrades_menu = false;
-    private bool stage_upgrades_menu_onDisplay = false;
+        private bool stage_upgrades_menu = false;
+        private bool stage_upgrades_menu_onDisplay = false;
 
-    #endregion
+        #endregion
 
         #region Cutscene
 
@@ -254,7 +253,7 @@ public class ControlScene_Main : MonoBehaviour
         private event Stage_Cutscene_Event Stage_Cutscene_Event_Crush;
         private event Stage_Cutscene_Event Stage_Cutscene_Event_Off;
 
-    #endregion
+        #endregion
 
         #region Statistics
 
@@ -293,7 +292,19 @@ public class ControlScene_Main : MonoBehaviour
             }        
         }
 
-        #endregion
+    #endregion
+
+    #endregion
+
+    #region Debug
+
+    #if UNITY_EDITOR
+
+    [SerializeField] [Range(1,14)] private int debug_startLocation = 1;
+    [SerializeField] private bool debug_fastRoadStage = false;
+    private const float DEBUG_FASTROADSTAGE_TIME = 5f;
+
+    #endif
 
     #endregion
 
@@ -386,6 +397,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer.SingleOnScene.Pause();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
@@ -405,6 +417,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.UnPause();
             World_General_MovingBackground_Entity.SingleOnScene.Active = true;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
@@ -477,6 +490,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer.SingleOnScene.Stop();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
@@ -528,6 +542,17 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_continueTextTime);
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shiftTime);
         };
+
+        #if UNITY_EDITOR
+
+        driftSection_array_current_ind = debug_startLocation - 1;
+
+        if (debug_fastRoadStage)
+        {
+            stage_road_toDrift_timer = DEBUG_FASTROADSTAGE_TIME;
+        }
+
+        #endif
     }
 
     private void Start()
@@ -674,6 +699,7 @@ public class ControlScene_Main : MonoBehaviour
 
                             if (_distance_ofDistortion >= _distance_toDistortion)
                             {
+                                ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Stop();
                                 World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn();
                                 World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = false;
                             }
@@ -701,7 +727,7 @@ public class ControlScene_Main : MonoBehaviour
                             if (stage_road_toDrift_sirens_activate
                             && stage_road_toDrift_timer <= STAGE_ROAD_TODRIFT_SIRENS_TIME)
                             {
-                                ControlPers_AudioMixer_Sounds.SingleOnScene.Play(audio_sound_police);
+                                ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Play();
                                 stage_road_toDrift_sirens_activate = false;
                             }
                         }
@@ -738,11 +764,30 @@ public class ControlScene_Main : MonoBehaviour
                                             ++driftSection_array_current_ind;
 
                                             stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult;
+
                                             stage_road_toDrift_sirens_activate = true;
+
+                                            #if UNITY_EDITOR
+
+                                            AppScreen_UICanvas_DebugInfo.SingleOnScene.Text_Set("Current Drift Location: " + driftSection_array_current_ind);
+
+                                            if (debug_fastRoadStage)
+                                            {
+                                                stage_road_toDrift_timer = DEBUG_FASTROADSTAGE_TIME;
+                                            }
+
+                                            #endif
                                         }
                                         else
                                         {
                                             stage_road_last = true;
+
+                                            #if UNITY_EDITOR
+
+                                            var _num = driftSection_array_current_ind + 1;
+                                            AppScreen_UICanvas_DebugInfo.SingleOnScene.Text_Set("Current Drift Location: " + _num);
+
+                                            #endif
                                         }
 
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;

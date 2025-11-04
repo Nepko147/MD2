@@ -210,7 +210,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
                             else
                             {
                                 _stringID = Random.Range(0, text_radio_list_early.Count - 1);
-                                text.text = text_radio_list_early[_stringID];
                             }
 
                             text.text = text_radio_list_early[_stringID];

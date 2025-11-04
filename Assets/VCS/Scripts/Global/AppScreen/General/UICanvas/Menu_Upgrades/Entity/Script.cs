@@ -29,7 +29,12 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_Local_SceneMenu
 
         var _routine = _coroutine(_delay);
         StartCoroutine(_routine);
+    }
 
+    public void Show_Instantly()
+    {
+        Show(0);
+        canvasGroup.alpha = 1f;
     }
 
     public void Hide(float _delay)

@@ -5,7 +5,7 @@ using System.Collections;
 public class ControlPers_AudioMixer_Sounds : MonoBehaviour
 {
     public static ControlPers_AudioMixer_Sounds SingleOnScene { get; private set; }
-
+    
     public AudioSource audioSource { get; private set; }
 
     [SerializeField] private AudioMixerGroup audioMixerGroup;

@@ -8,6 +8,11 @@ public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
 
     private Text text_component;
 
+    public void Text_Set(string _text)
+    {
+        text_component.text = _text;
+    }
+
     public void Text_Add(string _text)
     {
         text_component.text += "; " + _text;
