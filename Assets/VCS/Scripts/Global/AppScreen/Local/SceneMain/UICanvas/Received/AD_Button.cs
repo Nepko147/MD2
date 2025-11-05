@@ -6,7 +6,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_AD_Button : AppScreen_G
 
     private void ImageRefresh()
     {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.ok); // ОК - это заглушка
+        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.ad);
     }
 
     protected override void Awake()

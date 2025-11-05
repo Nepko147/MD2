@@ -184,7 +184,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool stage_gameOver = false;
         private bool stage_gameOver_menu_onDisplay = false;
-        private const float STAGE_GAMEOVER_INDISPLAY_MENU_TIMER = 1.0f;
+        private const float STAGE_GAMEOVER_ONDISPLAY_MENU_TIMER = 1.0f;
 
         private float stage_gameOver_menu_timer_current;
         private const float STAGE_GAMEOVER_MENU_TIMER_INIT = 1.5f;
@@ -1099,8 +1099,7 @@ public class ControlScene_Main : MonoBehaviour
                     AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 1f);
                     AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.ShowGameOver();
                     AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Visible = true;
-                    //AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Visible = true; // Раскоментить чтобы вернуть кнопку меню при Game Over
-                    AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
+                    //AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Visible = true; // Раскоментить чтобы вернуть кнопку меню при Game Over                   
 
                     stage_gameOver_menu_onDisplay = true;
 
@@ -1117,7 +1116,7 @@ public class ControlScene_Main : MonoBehaviour
                         stage_upgrades_menu = true;
                     }
 
-                    var _routine = _coroutine(STAGE_GAMEOVER_INDISPLAY_MENU_TIMER);
+                    var _routine = _coroutine(STAGE_GAMEOVER_ONDISPLAY_MENU_TIMER);
                     StartCoroutine(_routine);
                 }
                 else
@@ -1148,8 +1147,29 @@ public class ControlScene_Main : MonoBehaviour
             if (!stage_upgrades_menu_onDisplay)
             {   
                 AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Show(0.0f);
-                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);
-                AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);                
+
+                if (AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count > 0)
+                {
+                    AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
+                    
+                    switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+                    {
+                        default:
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
+                            AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
+                        break;
+                        case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
+                            AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
+                        break;
+                        case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
+                            AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
+                        break;
+                    }                    
+                }
+
                 stage_upgrades_menu_onDisplay = true;
             }
             else
@@ -1169,6 +1189,8 @@ public class ControlScene_Main : MonoBehaviour
                         
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed = false;
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
+                        AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
+
                         var _coins_received = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count;
                         ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_received; 
                         AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count = _coins_received * 2;

@@ -24,7 +24,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         menu,
         resume,
         revive,
-        restart
+        restart,
+        ad
     }
 
     #region English
@@ -94,6 +95,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_en_restart_idle;
     [SerializeField] private Sprite button_en_restart_pointed;
     [SerializeField] private Sprite button_en_restart_pressed;
+
+    [SerializeField] private Sprite button_en_ad_idle;
+    [SerializeField] private Sprite button_en_ad_pointed;
+    [SerializeField] private Sprite button_en_ad_pressed;
 
     #endregion
 
@@ -165,6 +170,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_ru_restart_pointed;
     [SerializeField] private Sprite button_ru_restart_pressed;
 
+    [SerializeField] private Sprite button_ru_ad_idle;
+    [SerializeField] private Sprite button_ru_ad_pointed;
+    [SerializeField] private Sprite button_ru_ad_pressed;
+
     #endregion
 
     #region Spanish
@@ -234,6 +243,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_es_restart_idle;
     [SerializeField] private Sprite button_es_restart_pointed;
     [SerializeField] private Sprite button_es_restart_pressed;
+
+    [SerializeField] private Sprite button_es_ad_idle;
+    [SerializeField] private Sprite button_es_ad_pointed;
+    [SerializeField] private Sprite button_es_ad_pressed;
 
     #endregion
 
@@ -305,6 +318,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_pt_restart_pointed;
     [SerializeField] private Sprite button_pt_restart_pressed;
 
+    [SerializeField] private Sprite button_pt_ad_idle;
+    [SerializeField] private Sprite button_pt_ad_pointed;
+    [SerializeField] private Sprite button_pt_ad_pressed;
+
     #endregion
 
     #region German
@@ -375,6 +392,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_de_restart_pointed;
     [SerializeField] private Sprite button_de_restart_pressed;
 
+    [SerializeField] private Sprite button_de_ad_idle;
+    [SerializeField] private Sprite button_de_ad_pointed;
+    [SerializeField] private Sprite button_de_ad_pressed;
+
     #endregion
 
     #region Indonesian
@@ -444,6 +465,10 @@ public class ControlPers_LanguageHandler : MonoBehaviour
     [SerializeField] private Sprite button_id_restart_idle;
     [SerializeField] private Sprite button_id_restart_pointed;
     [SerializeField] private Sprite button_id_restart_pressed;
+
+    [SerializeField] private Sprite button_id_ad_idle;
+    [SerializeField] private Sprite button_id_ad_pointed;
+    [SerializeField] private Sprite button_id_ad_pressed;
 
     #endregion
 
@@ -586,6 +611,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[2] = button_en_restart_pressed;
 
                     break;
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_en_ad_idle;
+                        _spriteArray[1] = button_en_ad_pointed;
+                        _spriteArray[2] = button_en_ad_pressed;
+
+                    break;
                 }
 
             break;
@@ -721,6 +754,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[0] = button_ru_restart_idle;
                         _spriteArray[1] = button_ru_restart_pointed;
                         _spriteArray[2] = button_ru_restart_pressed;
+
+                    break;                        
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_ru_ad_idle;
+                        _spriteArray[1] = button_ru_ad_pointed;
+                        _spriteArray[2] = button_ru_ad_pressed;
 
                     break;
                 }
@@ -859,6 +900,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[2] = button_es_restart_pressed;
 
                     break;
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_es_ad_idle;
+                        _spriteArray[1] = button_es_ad_pointed;
+                        _spriteArray[2] = button_es_ad_pressed;
+
+                    break;
                 }
 
             break;
@@ -993,6 +1042,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[0] = button_pt_restart_idle;
                         _spriteArray[1] = button_pt_restart_pointed;
                         _spriteArray[2] = button_pt_restart_pressed;
+
+                    break;
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_pt_ad_idle;
+                        _spriteArray[1] = button_pt_ad_pointed;
+                        _spriteArray[2] = button_pt_ad_pressed;
 
                     break;
                 }
@@ -1131,6 +1188,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[2] = button_de_restart_pressed;
 
                     break;
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_de_ad_idle;
+                        _spriteArray[1] = button_de_ad_pointed;
+                        _spriteArray[2] = button_de_ad_pressed;
+
+                    break;
                 }
 
             break;
@@ -1265,6 +1330,14 @@ public class ControlPers_LanguageHandler : MonoBehaviour
                         _spriteArray[0] = button_id_restart_idle;
                         _spriteArray[1] = button_id_restart_pointed;
                         _spriteArray[2] = button_id_restart_pressed;
+
+                    break;
+
+                    case ButtonName.ad:
+
+                        _spriteArray[0] = button_id_ad_idle;
+                        _spriteArray[1] = button_id_ad_pointed;
+                        _spriteArray[2] = button_id_ad_pressed;
 
                     break;
                 }

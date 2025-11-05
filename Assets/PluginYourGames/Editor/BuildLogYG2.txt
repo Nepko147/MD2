@@ -1,0 +1,3 @@
+Build path: D:/Рабочая зона/Midnight Drive/Build WEB
+Build number: 2
+PluginYG version: 2.0032

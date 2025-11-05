@@ -27,6 +27,17 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
     }
 
     [SerializeField] private Text received_ad_text;
+    public bool Received_Ad_Text_Visible
+    {
+        get
+        {
+            return received_ad_text.enabled;
+        }
+        set
+        {
+            received_ad_text.enabled = value;
+        }
+    }
 
     public void Text_LanguageRefresh()
     {
@@ -76,12 +87,16 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
 
         Received_Coins_Count = 0;
 
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
-
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0.0f;
 
         received_state_currnet = received_state.idle;
+    }
+
+    private void Start()
+    {
+        Text_LanguageRefresh();
+        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
