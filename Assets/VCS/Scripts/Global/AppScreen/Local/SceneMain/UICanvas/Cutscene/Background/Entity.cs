@@ -18,7 +18,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : App
     }
 
     private Vector3 position_init;
-
+    
     [SerializeField] private AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Bushes bushes_1;
     [SerializeField] private AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Bushes bushes_2;
 
@@ -80,7 +80,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity : App
         bushes_1.Active = false;
         bushes_2.Active = false;
 
-        var _destination = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y + 250, rectTransform.localPosition.z);
+        var _destination = new Vector3(rectTransform.localPosition.x - 1280, rectTransform.localPosition.y, rectTransform.localPosition.z);
         Shift_Positions_Set(rectTransform.localPosition, _destination);
     }
 

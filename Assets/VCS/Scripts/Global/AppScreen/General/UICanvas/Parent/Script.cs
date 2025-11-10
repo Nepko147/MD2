@@ -167,6 +167,14 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
         Shift_toTarget(shift_pos_destination, _time);
     }
 
+    /// <summary>
+    /// <para> Проверяка, находится ли объект в точке назначения. </para>
+    /// </summary>
+    public bool Shift_IsOnDestinationPosition()
+    {
+        return rectTransform.localPosition == shift_pos_destination;
+    }
+
     #endregion
 
     protected virtual void Awake()

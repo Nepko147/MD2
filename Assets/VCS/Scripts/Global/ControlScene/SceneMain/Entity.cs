@@ -233,6 +233,7 @@ public class ControlScene_Main : MonoBehaviour
 
         private bool stage_cutscene = false;
         private bool stage_cutscene_isCrushed = false;
+        private float stage_cutscene_delay = 1.0f;
 
         private bool Stage_Ending_isCrushed_Condition()
         {
@@ -258,7 +259,9 @@ public class ControlScene_Main : MonoBehaviour
         #region Statistics
 
         private bool stage_statistics = false;
-        private float stage_statistics_shiftTime = 20.0f;
+        private float stage_statistics_show_delay = 1.0f;
+        private float stage_statistics_shift_time = 20.0f;
+        private float stage_statistics_shift_delay = 2.5f;
         private float stage_statistics_continueTextTime = 22.0f;
 
         private bool Stage_Statistics_Condition()
@@ -507,9 +510,23 @@ public class ControlScene_Main : MonoBehaviour
         {
             World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count = 1;
             
-            var _cutscenePreparingTime = 1.0f;
-            AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.IsMoving = true;
+            var _cutscenePreparingTime = 2.0f;
+            
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shift_toDestination(_cutscenePreparingTime);
+
+            IEnumerator _coroutine()
+            {
+                while(!AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Shift_IsOnDestinationPosition())
+                {
+                    yield return null;
+                }
+
+                AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.IsMoving = true;
+            }
+
+            var _routine = _coroutine();
+            StartCoroutine(_routine);
+            
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity.SingleOnScene.Show(_cutscenePreparingTime);
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Background_Entity.SingleOnScene.Show(0.0f);
             AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Hide();
@@ -538,9 +555,18 @@ public class ControlScene_Main : MonoBehaviour
         Stage_Cutscene_Event_Off += () =>
         {
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Statistics_Refresh();
-            AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Show(0.0f);            
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Show(stage_statistics_show_delay);            
             AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_continueTextTime);
-            AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shiftTime);
+
+            IEnumerator _coroutine(float _delay)
+            {
+                yield return new WaitForSeconds(_delay);
+
+                AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shift_time);
+            }
+
+            var _routine = _coroutine(stage_statistics_shift_delay);
+            StartCoroutine(_routine);
         };
 
         #if UNITY_EDITOR
@@ -797,10 +823,17 @@ public class ControlScene_Main : MonoBehaviour
                                     }
                                     else
                                     {
-                                        Stage_Cutscene_Event_On();
+                                        IEnumerator _coroutine(float _delay)
+                                        {
+                                            yield return new WaitForSeconds(_delay);
+                                            Stage_Cutscene_Event_On();
+                                            stage_cutscene = true;
+                                        }
 
-                                        stage_road = false;
-                                        stage_cutscene = true;  
+                                        var _routine = _coroutine(stage_cutscene_delay);
+                                        StartCoroutine(_routine);
+
+                                        stage_road = false;                                          
                                     }
                                 }
                             }
@@ -1234,9 +1267,9 @@ public class ControlScene_Main : MonoBehaviour
             }
             else
             {
-                if (stage_statistics_shiftTime > 0)
+                if (stage_statistics_shift_time > 0)
                 {
-                    stage_statistics_shiftTime -= Time.deltaTime;
+                    stage_statistics_shift_time -= Time.deltaTime;
                 }
                 else
                 {

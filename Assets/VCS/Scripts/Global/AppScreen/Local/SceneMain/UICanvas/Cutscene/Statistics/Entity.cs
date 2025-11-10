@@ -9,7 +9,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
     public bool Done { get; private set; }
 
     private CanvasGroup canvasGroup;
-    private float canvasGroup_deltaApha = 4.0f;
+    private float canvasGroup_alpha_step = 0.4f;
 
     [SerializeField] private Text gameBy;
 
@@ -93,12 +93,12 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
         var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
 
         gameBy.text =                       _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.gameBy);
-        reviveNumber_text.text =            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_reviveNumber) + ":";
-        reviveNumberBest_text.text =        _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_best) + ":";
-        coinsTotal_text.text =              _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsTotal) + ":";
-        coinsSpentOnRevivals_text.text =    _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsSpentOnRevivals) + ":";
-        defeats_text.text =                 _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_defeats) + ":";
-        totalDrivings_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_totalDrivings) + ":";
+        reviveNumber_text.text =            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_reviveNumber);
+        reviveNumberBest_text.text =        _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_best);
+        coinsTotal_text.text =              _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsTotal);
+        coinsSpentOnRevivals_text.text =    _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsSpentOnRevivals);
+        defeats_text.text =                 _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_defeats);
+        totalDrivings_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_totalDrivings);
         gameCompleted_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_gameCompleted);
     }
 
@@ -131,7 +131,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
             case statistics_state.onDisplay:
                 if (canvasGroup.alpha < 1)
                 {
-                    canvasGroup.alpha += canvasGroup_deltaApha * Time.deltaTime;
+                    canvasGroup.alpha += canvasGroup_alpha_step * Time.deltaTime;
                 }
                 else
                 {
@@ -143,7 +143,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
             case statistics_state.hidden:
                 if (canvasGroup.alpha > 0)
                 {
-                    canvasGroup.alpha -= canvasGroup_deltaApha * Time.deltaTime;
+                    canvasGroup.alpha -= canvasGroup_alpha_step * Time.deltaTime;
                 }
                 else
                 {
