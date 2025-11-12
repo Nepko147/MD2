@@ -4,6 +4,20 @@ public class AppScreen_General_Camera_GlobalLightning_Entity : MonoBehaviour
 {
     public static AppScreen_General_Camera_GlobalLightning_Entity SingleOnScene { get; private set; }
 
+    public Color Color_Top
+    {
+        get
+        {
+            return light_top.color;
+        }
+        set
+        {
+            light_top.color = value;
+        }
+    }
+
+    [SerializeField] private Light light_top; 
+
     private Vector3 position_init;
     private Vector3 position_buffer;
     private float position_z_zoomOfs;

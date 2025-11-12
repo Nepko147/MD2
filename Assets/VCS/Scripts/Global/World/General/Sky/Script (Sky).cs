@@ -12,11 +12,33 @@ public class World_General_Sky : MonoBehaviour
 
     private bool state = true;
 
+    private MeshRenderer meshRenderer;
+
+    public Color OverlayColor
+    {
+        get
+        {
+            return meshRenderer.material.GetColor("_OverlayColor");
+        }
+        set
+        {
+            meshRenderer.material.SetColor("_OverlayColor", value);
+        }
+    }
+
+    public void OverlayColor_Ratio_Set(float _ratio)
+    {
+        _ratio = Mathf.Clamp(_ratio, 0.0f, 1.0f);
+        meshRenderer.material.SetFloat("_OverlayColorRatio", _ratio);
+    }
+
     private void Awake()
     {
         SingleOnScene = this;
 
         Active = false;
+
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     private void Update()

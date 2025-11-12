@@ -22,12 +22,17 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     }
 
     [SerializeField] private Text text;
+    
+    private Outline text_outline;
 
-    private int TEXT_SIZE_KMLEFT = 48;
-    private int TEXT_SIZE_RADIO = 24;
+    private Color   text_outline_kmLeft_color = new Color(0, 0, 0, 0.75f);
+    private Vector2 text_outline_kmLeft_distance = new Vector2(2.0f, 2.0f);
 
-    private int TEXT_HEIGHT_KMLEFT = 48;
-    private int TEXT_HEIGHT_RADIO = 60;
+    private Color   text_outline_radio_color = new Color(0, 0, 0, 1.0f);
+    private Vector2 text_outline_radio_distance = new Vector2(1.5f, 1.5f);
+
+    private const int TEXT_SIZE_KMLEFT = 48;
+    private const int TEXT_SIZE_RADIO = 24;
 
     private void Text_Update()
     {
@@ -121,7 +126,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private float state_time;
     private const float STATE_TIME_APPEAR = 1f;
     private const float STATE_TIME_WAIT_KMLEFT = 2f;
-    private const float STATE_TIME_WAIT_RADIO = 3f;
+    private const float STATE_TIME_WAIT_RADIO = 5f;
     private const float STATE_TIME_HIDE = 1f;
 
     public void Show(float _delay = 0)
@@ -134,7 +139,9 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
             state = State.appear_kmLeft;
 
             text.fontSize = TEXT_SIZE_KMLEFT;
-            text.rectTransform.sizeDelta = new Vector2(text.rectTransform.sizeDelta.x, TEXT_HEIGHT_KMLEFT);
+            text.fontStyle = FontStyle.Bold;
+            text_outline.effectColor = text_outline_kmLeft_color;
+            text_outline.effectDistance = text_outline_kmLeft_distance;
         }
 
         var _routine = _Coroutine(_delay);
@@ -148,6 +155,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         SingleOnScene = this;
 
         text.font.material.mainTexture.filterMode = FilterMode.Point;
+
+        text_outline = text.GetComponent<Outline>();
 
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
@@ -197,7 +206,9 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
                         state_time = STATE_TIME_APPEAR;
 
                         text.fontSize = TEXT_SIZE_RADIO;
-                        text.rectTransform.sizeDelta = new Vector2(text.rectTransform.sizeDelta.x, TEXT_HEIGHT_RADIO);
+                        text.fontStyle = FontStyle.Normal;
+                        text_outline.effectColor = text_outline_radio_color;
+                        text_outline.effectDistance = text_outline_radio_distance;
 
                         if (text_radio_list_early.Count > 0)
                         {

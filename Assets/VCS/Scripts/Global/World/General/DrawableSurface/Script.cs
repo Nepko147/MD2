@@ -23,8 +23,7 @@ public class World_General_DrawableSurface : MonoBehaviour
     private const float WEB_PAINTING_LOCALSCALE = 1.5f;
     private const string WEB_PAINTING_SORTINGLAYERNAME = "Player";
 
-    #endregion
-        
+    #endregion        
 
     //Если просто хотим обновить(очистить) тектуру
     public void Texture_Refresh()
@@ -102,6 +101,7 @@ public class World_General_DrawableSurface : MonoBehaviour
                 {
                     var _gameObject = new GameObject();                                       //Создаём новый объект
                     var __gameObject_sr = _gameObject.gameObject.AddComponent<SpriteRenderer>(); //Добавляем в него СпрайтРендерер
+                    __gameObject_sr.material = material;                                       //Используем материал, в котором есть OverlayColor
                     __gameObject_sr.sprite = _sprite;                                          //Суём в СпрайтРендерер новый спрайт
                     __gameObject_sr.sortingLayerName = WEB_PAINTING_SORTINGLAYERNAME;          //Указываем слой сортировки (имя слоя из редактора)
                     _gameObject.transform.parent = transform;                                 //Назначаем ЭТОТ сурфэйс родительским объектом
@@ -111,6 +111,24 @@ public class World_General_DrawableSurface : MonoBehaviour
                 }
             break;
         }
+    }
+
+    public Color OverlayColor
+    {
+        get
+        {
+            return material.GetColor("_OverlayColor");
+        }
+        set
+        {
+            material.SetColor("_OverlayColor", value);
+        }
+    }
+
+    public void OverlayColor_Ratio_Set(float _ratio)
+    {   
+        _ratio = Mathf.Clamp(_ratio, 0.0f, 1.0f);
+        material.SetFloat("_OverlayColorRatio", _ratio);
     }
 
     private void Awake()

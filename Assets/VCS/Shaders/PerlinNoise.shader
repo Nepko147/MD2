@@ -5,6 +5,10 @@ Shader "Custom/Perlin Noise"
         u_scope ("Scope", Float) = 0.25
         u_color ("Color", Vector) = (0.5, 0.5, 0.5, 0.5)
         u_offset ("Offset", Vector) = (10, 10, 0, 0)
+
+        _redDecreaser("Red Decreaser", Range(0, 1)) = 0.0
+        _greenDecreaser("Green Decreaser", Range(0, 1)) = 0.0
+        _blueDecreaser("Blue Decreaser", Range(0, 1)) = 0.0        
     }
 
     SubShader
@@ -26,6 +30,10 @@ Shader "Custom/Perlin Noise"
             fixed u_scope;
             fixed4 u_color;
             half2 u_offset;
+
+            float _redDecreaser;
+            float _greenDecreaser;
+            float _blueDecreaser;
 
             float Rand(float2 _vec1, float _seed)
             {
@@ -114,7 +122,13 @@ Shader "Custom/Perlin Noise"
             {
 	            float _pn = PerlinNoise(_input_fd.uv / u_scope + u_offset, 0.0, 1.5, 1.0, 0.35);
 
-                return (fixed4(_pn * u_color.r, _pn * u_color.g, _pn * u_color.b, u_color.a));
+                fixed _red = _pn * u_color.r * (1 - _redDecreaser);
+                fixed _green = _pn * u_color.g * (1 - _greenDecreaser);
+                fixed _blue = _pn * u_color.b * (1 - _blueDecreaser);
+
+                fixed4 _color = fixed4(_red, _green, _blue, u_color.a);   
+                
+                return _color;
             }
 
             ENDCG

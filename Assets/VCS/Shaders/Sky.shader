@@ -7,6 +7,10 @@
         _color3 ("Color 3", Color) = (0,0,1,1)
         _blend_offset ("Blend Offset", Range(-2,2)) = 0.5
         _blend_scale ("Blend Scale", Range(-2,2)) = 0.5
+
+        _OverlayColor ("Overlay Color", Color) = (1, 1, 1, 1)
+        _OverlayColorRatio("Overlay Color Ratio", Range(0, 1)) = 0.0
+        _OverlayColorThreshold("Overlay Color Threshold", Range(0, 1)) = 0.0
     }
     SubShader
     {
@@ -38,6 +42,10 @@
             fixed4 _color3;
             float _blend_offset;
             float _blend_scale;
+            
+            fixed4 _OverlayColor;
+            float _OverlayColorRatio;
+            float _OverlayColorThreshold;
 
             v2f vert(appdata_t v)
             {
@@ -53,11 +61,15 @@
 
                 if (blend < 0.5)
                 {
-                    return lerp(_color3, _color2, blend * 2);
+                    fixed4 _color = lerp(_color3, _color2, blend * 2);
+                    fixed4 _newColor = lerp(_color, _OverlayColor, _OverlayColorRatio - _OverlayColorThreshold);
+                    return _newColor;
                 }
                 else
                 {
-                    return lerp(_color2, _color1, (blend - 0.5) * 2);
+                    fixed4 _color = lerp(_color2, _color1, (blend - 0.5) * 2);
+                    fixed4 _newColor = lerp(_color, _OverlayColor, _OverlayColorRatio - _OverlayColorThreshold);
+                    return _newColor;
                 }
             }
             ENDCG

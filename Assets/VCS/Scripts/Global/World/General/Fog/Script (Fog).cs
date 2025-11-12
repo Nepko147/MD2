@@ -67,6 +67,12 @@ public class World_General_Fog : MonoBehaviour
         material_offset_stepScale_step = (_stepScale_newValue - material_offset_stepScale) / _duration;
     }
 
+    public void Redness_Up(float _powerOfRed)
+    {
+        material.SetFloat("_greenDecreaser", _powerOfRed);
+        material.SetFloat("_blueDecreaser", _powerOfRed);
+    }
+
     private void Awake()
     {
         SingleOnScene = this;

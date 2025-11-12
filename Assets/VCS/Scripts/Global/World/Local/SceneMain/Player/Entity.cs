@@ -147,6 +147,22 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         public readonly Quaternion rotation;
     }
 
+    public Color Lights_Front_Color
+    {
+        get
+        {
+            var _color_lights_1 = lights_front_1.GetComponent<Light>().color;
+            var _color_lights_2 = lights_front_2.GetComponent<Light>().color;
+            var _color = Color.Lerp(_color_lights_1, _color_lights_2, 0.5f);
+            return _color;
+        }
+        set
+        {
+            lights_front_1.GetComponent<Light>().color = value;
+            lights_front_2.GetComponent<Light>().color = value;
+        }
+    }
+
     #endregion
 
     #region Tyres

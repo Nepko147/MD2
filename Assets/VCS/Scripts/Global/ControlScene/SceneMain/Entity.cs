@@ -299,9 +299,37 @@ public class ControlScene_Main : MonoBehaviour
 
     #endregion
 
+    #region Redness
+    
+    private float   redness_current = 0.0f;
+    private float   redness_step;
+    private float   redness_max = 1.0f;
+    private int     redness_start_location_index = 7; // Индекс локации с которой начнётся покраснение
+
+    private Color                   redness_movingBackground_color_init;
+    [SerializeField] private Color  redness_movingBackground_color_overlay = new Color(0.75f, 0.0f, 0.0f, 1);
+
+    [SerializeField] private Color  redness_sky_overlayColor = new Color(0.09f, 0.0f, 0.0f, 1.0f);
+
+    private Color                   redness_player_lights_color_init;
+    [SerializeField] private Color  redness_player_lights_color_overlay = new Color(1.0f, 0.0f, 0.0f, 1);
+
+    private Color                   redness_globalLighting_color_top_init;
+    [SerializeField] private Color  redness_globalLighting_color_top_overlay = new Color(1.0f, 0.25f, 0.25f, 1);
+
+    private Color                   redness_moon_color_init;
+    [SerializeField] private Color  redness_moon_color_overlay = new Color(1.0f, 0.2f, 0.2f, 1);
+
+    [SerializeField] private Color  redness_drawableSurface_overlayColor = new Color(0.5f, 0.0f, 0.0f, 1.0f);
+
+    public delegate void Redness_Event();
+    public event Redness_Event Redness_Event_Update;
+
+    #endregion
+
     #region Debug
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     [SerializeField] [Range(1,14)] private int debug_startLocation = 1;
     [SerializeField] private bool debug_fastRoadStage = false;
@@ -569,6 +597,42 @@ public class ControlScene_Main : MonoBehaviour
             StartCoroutine(_routine);
         };
 
+        Redness_Event_Update += () =>
+        {
+            redness_current = redness_step * (driftSection_array_current_ind - redness_start_location_index + 1);
+            redness_current = Mathf.Clamp(redness_current, 0.0f, redness_max);
+
+            //Город
+            var _newColor = Color.Lerp(redness_movingBackground_color_init, redness_movingBackground_color_overlay, redness_current);
+            World_General_MovingBackground_Entity.SingleOnScene.Color = _newColor;
+
+            //Небо
+            World_General_Sky.SingleOnScene.OverlayColor_Ratio_Set(redness_current);
+
+            //Туман
+            World_General_Fog.SingleOnScene.Redness_Up(redness_current);
+
+            //Фары ГГ
+            _newColor = Color.Lerp(redness_player_lights_color_init, redness_player_lights_color_overlay, redness_current);
+            World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color = _newColor;
+
+            //Глобальное освещение
+            _newColor = Color.Lerp(redness_globalLighting_color_top_init, redness_globalLighting_color_top_overlay, redness_current);
+            AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top = _newColor;
+
+            //Луна
+            _newColor = Color.Lerp(redness_moon_color_init, redness_moon_color_overlay, redness_current);
+            World_General_Moon.SingleOnScene.Color = _newColor;
+
+            //Следы
+            foreach (var _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
+            {
+                var _ratio = Mathf.Pow(redness_current, 2);
+                _item.OverlayColor = redness_drawableSurface_overlayColor;
+                _item.OverlayColor_Ratio_Set(_ratio);
+            }
+        };
+
         #if UNITY_EDITOR
 
         driftSection_array_current_ind = debug_startLocation - 1;
@@ -656,6 +720,26 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         }
+
+        #region Redness
+
+        redness_step = 1.0f / (driftSection_prefab.Length - redness_start_location_index);
+
+        World_General_Sky.SingleOnScene.OverlayColor = redness_sky_overlayColor;
+
+        foreach (var _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
+        {
+            _item.OverlayColor = redness_drawableSurface_overlayColor;
+        }
+
+        redness_movingBackground_color_init = World_General_MovingBackground_Entity.SingleOnScene.Color;
+        redness_player_lights_color_init = World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color;
+        redness_globalLighting_color_top_init = AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top;
+        redness_moon_color_init = World_General_Moon.SingleOnScene.Color;
+
+        Redness_Event_Update();
+
+        #endregion
     }
 
     private void Update()
@@ -817,6 +901,9 @@ public class ControlScene_Main : MonoBehaviour
                                         }
 
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
+
+                                        //Увеличение степени покраснения
+                                        Redness_Event_Update();
 
                                         stage_road_toDrift_clearing = false;
                                         stage_road_toDrift_cutscene = true;
@@ -984,7 +1071,7 @@ public class ControlScene_Main : MonoBehaviour
                             {
                                 _item.CoinMagnet_Speed_Inc_Turbo();
                             }
-
+                            
                             stage_drift_toRoad_cutscene = true;
                         }
                     }

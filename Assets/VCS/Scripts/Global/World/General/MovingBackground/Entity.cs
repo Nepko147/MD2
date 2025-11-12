@@ -3,8 +3,31 @@ using UnityEngine;
 [System.Serializable] public class World_General_MovingBackground_Entity : MonoBehaviour
 {
     public static World_General_MovingBackground_Entity SingleOnScene { get; private set; }
-    
+
     public bool Active { get; set; }
+
+    public Color Color
+    {
+        get
+        {
+            return color;
+        }
+        set
+        {
+            color = value;
+            city_3.GetComponent<SpriteRenderer>().color = value;
+            city_3_1.GetComponent<SpriteRenderer>().color = value;
+            city_2.GetComponent<SpriteRenderer>().color = value;
+            city_2_1.GetComponent<SpriteRenderer>().color = value;
+            city_1.GetComponent<SpriteRenderer>().color = value;
+            city_1_1.GetComponent<SpriteRenderer>().color = value;
+            bushes.GetComponent<SpriteRenderer>().color = value;
+            bushes_1.GetComponent<SpriteRenderer>().color = value;
+        }
+    }
+
+    private Color color;
+    [SerializeField] private Color color_init = Color.white;    
 
     [SerializeField] private GameObject city_3;
     [SerializeField] private GameObject city_3_1;
@@ -73,7 +96,9 @@ using UnityEngine;
 
         SpeedScale_Active = false;
 
-        SpeedScale = SPEEDSCALE_INIT; 
+        SpeedScale = SPEEDSCALE_INIT;
+
+        Color = color_init;
     }
 
     private void Update()
