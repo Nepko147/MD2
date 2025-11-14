@@ -33,8 +33,17 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     private float ENEMYSPAWN_WAVE_SIZE_REFRESH_INC = 0.5f;
     private float ENEMYSPAWN_WAVE_SIZE_REFRESH_MAX = 10f;
 
+    private float enemySpawn_speed_min = 0.95f; //Чем больше разница между этими двумя значениями,
+    private float enemySpawn_speed_max = 1.05f; //тем хаотичней движение на дороге.
+
     public Constants.RoadLine EnemySpawn_Line_Taken { get; set; }
     private List<Constants.RoadLine> enemySpawn_line_list = new List<Constants.RoadLine>((int)Constants.RoadLine.size);
+
+    [SerializeField] private World_Local_SceneMain_Enemy_Entity playerCrush;
+
+    public bool     PlayerCrash_Spawn_IsAvalible { get; set; } = false;
+    private float   playerCrash_spawn_chance = 0.1f;
+    private float   playerCrash_spawn_chance_step = 0.2f;
 
     private void Awake()
     {
@@ -95,8 +104,33 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
                             break;
                         }
 
-                        var _ind = Random.Range(0, enemyArray.Length);
-                        Instantiate(enemyArray[_ind], _position, new Quaternion(), transform.parent);
+                        if (PlayerCrash_Spawn_IsAvalible)
+                        {
+                            var _playerCrush_spawn = Random.Range(0, 1.0f) < playerCrash_spawn_chance;
+
+                            if (_playerCrush_spawn)
+                            {
+                                var _playerCrush = Instantiate(playerCrush, _position, new Quaternion(), transform.parent);
+                                _playerCrush.Speed = 500;
+                                PlayerCrash_Spawn_IsAvalible = false;
+                                playerCrash_spawn_chance = 0;       //Если Player_Crush отспаунился
+                                playerCrash_spawn_chance_step = 0;  //Блокируем повторное появление
+                            }
+                            else
+                            {
+                                var _ind = Random.Range(0, enemyArray.Length);
+                                var _enemy = Instantiate(enemyArray[_ind], _position, new Quaternion(), transform.parent);
+                                _enemy.Speed *= Random.Range(enemySpawn_speed_min, enemySpawn_speed_max);
+                                playerCrash_spawn_chance += playerCrash_spawn_chance_step; //Если не повезло, повышаем шанс
+                                PlayerCrash_Spawn_IsAvalible = false;
+                            }                            
+                        }
+                        else
+                        {
+                            var _ind = Random.Range(0, enemyArray.Length);
+                            var _enemy = Instantiate(enemyArray[_ind], _position, new Quaternion(), transform.parent);
+                            _enemy.Speed *= Random.Range(enemySpawn_speed_min, enemySpawn_speed_max);
+                        }
 
                         --enemySpawn_wave_size_current;
                         

@@ -79,9 +79,16 @@ public class ControlScene_Main : MonoBehaviour
         private bool stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_BRAKING_PLAYERMOVEDOWN_SCALE = 0.5f;
         private const float STAGE_ROAD_TODRIFT_CUTSCENE_STATE_MOVEDOWN_CAMERA_YMAX = -4f;
-        private bool stage_road_last = false;    
+        private bool stage_road_last = false;
+        
+        private bool stage_road_showBillboard = true;
+        private float stage_road_showBillboard_chance_onRoad = 0.35f;
+        private float stage_road_showBillboard_chance_toRoad = 0.50f;
+        private float stage_road_showBillboard_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * STAGE_ROAD_SHOWBILLBOARD_TIMER_RATIO;
+        private const float STAGE_ROAD_SHOWBILLBOARD_TIMER_RATIO = 0.6f; //Нормализованое значение времени (относительно времени участка дороги), когда появится биллборд на участке дороги. 0 - сразу, 1 - в конце.
+        private Vector3 stage_road_showBillboard_driftToRoadPosition;
 
-        private void Stage_Road_PlayerHitZoom()
+    private void Stage_Road_PlayerHitZoom()
         {
             AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On_AutoOff(Vector3.zero, -6.5f, AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
         }
@@ -309,6 +316,9 @@ public class ControlScene_Main : MonoBehaviour
     private Color                   redness_movingBackground_color_init;
     [SerializeField] private Color  redness_movingBackground_color_overlay = new Color(0.75f, 0.0f, 0.0f, 1);
 
+    private Color                   redness_movingBackground_billboard_color_init;
+    [SerializeField] private Color  redness_movingBackground_billboard_color_overlay = new Color(1.0f, 0.5f, 0.5f, 1);
+
     [SerializeField] private Color  redness_sky_overlayColor = new Color(0.09f, 0.0f, 0.0f, 1.0f);
 
     private Color                   redness_player_lights_color_init;
@@ -415,6 +425,7 @@ public class ControlScene_Main : MonoBehaviour
                 World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Active = _state;
             }
 
+            World_General_MovingBackground_Billboard.SingleOnScene.Active = _state;
             AppScreen_General_Camera_Entity.SingleOnScene.Active = _state;
             AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.Active = _state;
             AppScreen_Local_SceneMain_UICanvas_VirtualStick_Entity.SingleOnScene.Active = _state;
@@ -570,6 +581,7 @@ public class ControlScene_Main : MonoBehaviour
                 _item.Active = false;
             }
 
+            World_General_MovingBackground_Billboard.SingleOnScene.Active = false;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose();
             AppScreen_General_Camera_Entity.SingleOnScene.Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
@@ -602,9 +614,15 @@ public class ControlScene_Main : MonoBehaviour
             redness_current = redness_step * (driftSection_array_current_ind - redness_start_location_index + 1);
             redness_current = Mathf.Clamp(redness_current, 0.0f, redness_max);
 
+            World_Local_SceneMain_EnemySpawner.SingleOnScene.PlayerCrash_Spawn_IsAvalible = driftSection_array_current_ind >= redness_start_location_index;
+
             //Город
             var _newColor = Color.Lerp(redness_movingBackground_color_init, redness_movingBackground_color_overlay, redness_current);
             World_General_MovingBackground_Entity.SingleOnScene.Color = _newColor;
+
+            //Билборд
+            _newColor = Color.Lerp(redness_movingBackground_billboard_color_init, redness_movingBackground_billboard_color_overlay, redness_current);
+            World_General_MovingBackground_Billboard.SingleOnScene.Color = _newColor;
 
             //Небо
             World_General_Sky.SingleOnScene.OverlayColor_Ratio_Set(redness_current);
@@ -657,13 +675,15 @@ public class ControlScene_Main : MonoBehaviour
         World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
         World_General_MovingBackground_Entity.SingleOnScene.Active = true;
         World_General_MovingBackground_Entity.SingleOnScene.Position_Load();
+        World_General_MovingBackground_Billboard.SingleOnScene.Active = true;
+        World_General_MovingBackground_Billboard.SingleOnScene.Move = false;
 
         foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
         {
             _item.Active = true;
             _item.Move = true;
         }
-
+        
         AppScreen_General_Camera_Entity.SingleOnScene.Slope_Active = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
@@ -721,6 +741,9 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
         }
 
+        var _bilboard_currentPosition = World_General_MovingBackground_Billboard.SingleOnScene.Position;
+        stage_road_showBillboard_driftToRoadPosition = new Vector3(2.0f, _bilboard_currentPosition.y, _bilboard_currentPosition.z);
+
         #region Redness
 
         redness_step = 1.0f / (driftSection_prefab.Length - redness_start_location_index);
@@ -733,6 +756,7 @@ public class ControlScene_Main : MonoBehaviour
         }
 
         redness_movingBackground_color_init = World_General_MovingBackground_Entity.SingleOnScene.Color;
+        redness_movingBackground_billboard_color_init = World_General_MovingBackground_Billboard.SingleOnScene.Color;
         redness_player_lights_color_init = World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color;
         redness_globalLighting_color_top_init = AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top;
         redness_moon_color_init = World_General_Moon.SingleOnScene.Color;
@@ -834,6 +858,26 @@ public class ControlScene_Main : MonoBehaviour
                         {
                             stage_road_toDrift_timer -= Time.deltaTime;
 
+                            if (stage_road_showBillboard)
+                            {
+                                if (stage_road_showBillboard_timer > 0)
+                                {
+                                    stage_road_showBillboard_timer -= Time.deltaTime;
+                                }
+                                else
+                                {
+                                    var _showBillboard = Random.Range(0.0f, 1.0f) < stage_road_showBillboard_chance_onRoad;
+
+                                    if (_showBillboard)
+                                    {
+                                        World_General_MovingBackground_Billboard.SingleOnScene.ImageRefresh(redness_current);
+                                        World_General_MovingBackground_Billboard.SingleOnScene.Move = true;
+                                    }
+                                    
+                                    stage_road_showBillboard = false;
+                                }
+                            }
+
                             if (stage_road_toDrift_sirens_activate
                             && stage_road_toDrift_timer <= STAGE_ROAD_TODRIFT_SIRENS_TIME)
                             {
@@ -874,6 +918,9 @@ public class ControlScene_Main : MonoBehaviour
                                             ++driftSection_array_current_ind;
 
                                             stage_road_toDrift_timer = STAGE_ROAD_TODRIFT_TIMER_INIT * driftSection_array[driftSection_array_current_ind].timerMult;
+
+                                            stage_road_showBillboard_timer = stage_road_toDrift_timer * STAGE_ROAD_SHOWBILLBOARD_TIMER_RATIO;
+                                            stage_road_showBillboard = true;
 
                                             stage_road_toDrift_sirens_activate = true;
 
@@ -983,6 +1030,15 @@ public class ControlScene_Main : MonoBehaviour
 
                                     World_General_Sky.SingleOnScene.Active = false;
                                     World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
+
+                                    var _i = Random.Range(0.0f, 1.0f);
+                                    var _showBillboard = _i < stage_road_showBillboard_chance_toRoad;
+
+                                    if (_showBillboard)
+                                    {                                        
+                                        World_General_MovingBackground_Billboard.SingleOnScene.Position = stage_road_showBillboard_driftToRoadPosition;
+                                        World_General_MovingBackground_Billboard.SingleOnScene.ImageRefresh(redness_current);
+                                    }
 
                                     foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
@@ -1095,13 +1151,12 @@ public class ControlScene_Main : MonoBehaviour
                             if (stage_drift_toRoad_braking_right_swap
                             && World_Local_SceneMain_Player_Entity.SingleOnScene.Moving_Drift_ToRoad_Braking_Right)
                             {
-                                World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE;
+                                World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = STAGE_DRIFT_TOROAD_BRAKING_MOVINGBACKGROUND_SPEEDSCALE;                                
 
                                 foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
                                 {
                                     _item.Move = true;
                                 }
-
                                 World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Move = true;
 
                                 stage_drift_toRoad_braking_right_swap = false;
@@ -1120,6 +1175,7 @@ public class ControlScene_Main : MonoBehaviour
                                     World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
                                     World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = World_General_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    World_General_MovingBackground_Billboard.SingleOnScene.Move = true;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Drift_PlayerHitZoom;
                                     World_Local_SceneMain_DriftSection_Transition_Barrier.SingleOnScene.Active = false;

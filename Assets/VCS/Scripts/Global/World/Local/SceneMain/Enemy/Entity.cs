@@ -5,20 +5,22 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
 {
     public bool Active { get; set; }
 
+    public float Speed { get; set; }
+
     private SpriteRenderer spriteRenderer;
-    [SerializeField] Texture2D normalMap;
+    [SerializeField] private Texture2D normalMap;
 
     private bool isDamaged = false;
 
     private PolygonCollider2D collider2d;
-
-    private const float SPEED = 450f;
 
     private const float DESTROYPOSITION_X = -5.0f; //Позиция уничтожения объекта за пределами экрана
 
     private void Awake()
     {
         Active = true;
+
+        Speed = 450;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.material.SetTexture(Constants.MATERIAL_BUMPMAP_U_BUMPMAP, normalMap);
@@ -30,7 +32,7 @@ public class World_Local_SceneMain_Enemy_Entity : MonoBehaviour
     {     
         if (Active)
         {
-            transform.position += Vector3.left * SPEED * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
+            transform.position += Vector3.left * Speed * World_General_MovingBackground_Entity.SingleOnScene.SpeedScale * Time.deltaTime;
 
             if (!isDamaged
             && !World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Active

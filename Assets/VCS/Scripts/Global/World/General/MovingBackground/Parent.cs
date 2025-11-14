@@ -11,6 +11,7 @@ public class World_General_MovingBackground_Parent : MonoBehaviour
     protected const float WIDTH = 12.8f;
 
     private Vector3 position_init;
+
     public void Position_Reset()
     {
         transform.position = position_init;
