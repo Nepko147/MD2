@@ -17,7 +17,7 @@ public class ControlScene_Menu : MonoBehaviour
 
     [SerializeField] private float menuShiftTime = 0.2f;
 
-    [SerializeField] private AudioClip audio_mainTheme;
+    [SerializeField] private AudioClip audio_music_intro;
 
     private void Awake()
     {
@@ -88,7 +88,7 @@ public class ControlScene_Menu : MonoBehaviour
             if (AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity.SingleOnScene.Done)
             {
                 ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_mainTheme);
+                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
                 World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, STAGE_CUTSCENE_TOSTART_TIME);
                 AppScreen_Local_SceneMenu_UICanvas_Bushes.SingleOnScene.Shift_toDestination(STAGE_CUTSCENE_TOSTART_TIME);
                 AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, STAGE_CUTSCENE_TOSTART_TIME);

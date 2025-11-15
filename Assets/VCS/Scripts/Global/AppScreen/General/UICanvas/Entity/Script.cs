@@ -14,7 +14,7 @@ public class AppScreen_General_UICanvas_Entity : AppScreen_General_UICanvas_Pare
     {
         if (!PopUpMessage_IsActive)
         {
-            popUpMessage_instance = Instantiate(popUpMessage_prefab, Vector3.zero, transform.rotation, transform);
+            popUpMessage_instance = Instantiate(popUpMessage_prefab, transform.position, transform.rotation, transform);
             popUpMessage_instance.Text = _text;
 
             PopUpMessage_IsActive = true;
