@@ -25,7 +25,7 @@ public class ControlScene_Opening : MonoBehaviour
 
     private void Start()
     {
-        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets);
+        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets, true);
 
         if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
         && ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)

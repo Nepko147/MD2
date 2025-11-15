@@ -4,6 +4,8 @@ using System.Collections;
 
 public class ControlPers_AudioMixer_Music : MonoBehaviour
 {
+    #region General
+
     public static ControlPers_AudioMixer_Music SingleOnScene { get; private set; }
 
     public AudioSource audioSource { get; private set; }
@@ -12,15 +14,22 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     private const string AUDIOMIXERGROUP_VOLUME_NAME = "Music_Volume";
     private const float AUDIOMIXERGROUP_VOLUME_RANGE = -24f;
 
-    public void Play(AudioClip _music)
+    public void Play(AudioClip _music, bool _looped)
     {
-        if (audioSource.pitch != 1) 
-        {
-            audioSource.pitch = 1; //√арантируем нормальное воспроизведение
-        }
-
         audioSource.clip = _music;
+        audioSource.loop = _looped;
+        audioSource.pitch = 1f;
         audioSource.Play();
+    }
+
+    public void Pause()
+    {
+        audioSource.Pause();
+    }
+
+    public void UnPause()
+    {
+        audioSource.UnPause();
     }
 
     public void Stop()
@@ -28,29 +37,114 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
         audioSource.Stop();
     }
 
+    #endregion
+
+    #region Volume
+
+    private float volume;
+
     public float Volume_Get()
     {        
         audioMixerGroup.audioMixer.GetFloat(AUDIOMIXERGROUP_VOLUME_NAME, out var _volume);
-        return 1 - _volume / AUDIOMIXERGROUP_VOLUME_RANGE;
+        return (1 - _volume / AUDIOMIXERGROUP_VOLUME_RANGE);
     }
 
-    public void Volume_Set(float _musicValue)
+    public void Volume_Set(float _volume)
     {
-        audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, AUDIOMIXERGROUP_VOLUME_RANGE * (1f - _musicValue));
+        volume = _volume;
+        volume_mute = false;
+        Volume_Refresh();
     }
+
+    private void Volume_Refresh()
+    {
+        if (!volume_mute)
+        {
+            audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, AUDIOMIXERGROUP_VOLUME_RANGE * (1f - volume * volume_scale));
+        }
+    }
+
+    private float volume_scale = 1f;
+    private const float VOLUME_SCALE_TIME = 1f;
+    private IEnumerator Volume_Scale_Coroutine_Current;
+
+    public void Volume_Scale_Set(float _scale)
+    {
+        volume_scale = _scale;
+        Volume_Refresh();
+    }
+
+    private IEnumerator Volume_Scale_ToZero_Coroutine()
+    {
+        while (true)
+        {
+            Volume_Scale_Set(volume_scale - VOLUME_SCALE_TIME * Time.deltaTime);
+            
+            if (volume_scale > 0)
+            {
+                yield return null;
+            }
+            else
+            {
+                Volume_Scale_Set(0);
+                break;
+            }
+        }
+    }
+
+    private IEnumerator Volume_Scale_ToOne_Coroutine()
+    {
+        while (true)
+        {
+            Volume_Scale_Set(volume_scale + VOLUME_SCALE_TIME * Time.deltaTime);
+            
+            if (volume_scale < 1)
+            {
+                yield return null;
+            }
+            else
+            {
+                Volume_Scale_Set(1);
+                break;
+            }
+        }
+    }
+
+    public void Volume_Scale_ToZero()
+    {
+        StopCoroutine(Volume_Scale_Coroutine_Current);
+        Volume_Scale_Coroutine_Current = Volume_Scale_ToZero_Coroutine();
+        StartCoroutine(Volume_Scale_Coroutine_Current);
+    }
+
+    public void Volume_Scale_ToOne()
+    {
+        StopCoroutine(Volume_Scale_Coroutine_Current);
+        Volume_Scale_Coroutine_Current = Volume_Scale_ToOne_Coroutine();
+        StartCoroutine(Volume_Scale_Coroutine_Current);
+    }
+
+    private bool volume_mute;
 
     public void Volume_Mute()
     {
+        volume = 0;
         audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, -80f);
+        volume_mute = true;
     }
 
-    private float pitch_step = 0.02f;
+    #endregion
+
+    #region Pitch
+
+    private const float PITCH_TIME = 1.5f;
+    private IEnumerator pitch_coroutine_current;
 
     private IEnumerator Pitch_Coroutine_ToZero()
     {
         while (true)
         {
-            audioSource.pitch -= pitch_step;
+            audioSource.pitch -= PITCH_TIME * Time.deltaTime;
 
             if (audioSource.pitch > 0)
             {
@@ -59,6 +153,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
             else
             {
                 audioSource.pitch = 0;
+                audioSource.Pause();
                 break;
             }
         }
@@ -68,7 +163,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     {
         while (true)
         {
-            audioSource.pitch += pitch_step;
+            audioSource.pitch += PITCH_TIME * Time.deltaTime;
 
             if (audioSource.pitch < 1)
             {
@@ -81,8 +176,6 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
             }
         }
     }
-   
-    private IEnumerator pitch_coroutine_current;
 
     public void Pitch_ToZero()
     {
@@ -93,16 +186,23 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     public void Pitch_ToNormal()
     {
+        audioSource.UnPause();
+
         StopCoroutine(pitch_coroutine_current);
         pitch_coroutine_current = Pitch_Coroutine_ToNormal();
         StartCoroutine(pitch_coroutine_current);
     }
+
+    #endregion
 
     private void Awake()
     {
         SingleOnScene = this;
 
         audioSource = GetComponent<AudioSource>();
+
+        Volume_Scale_Coroutine_Current = Pitch_Coroutine_ToNormal();
+
         pitch_coroutine_current = Pitch_Coroutine_ToNormal();
     }
 
