@@ -309,7 +309,9 @@ public class ControlScene_Main : MonoBehaviour
     #region Redness
     
     private float   redness_current = 0.0f;
+    private float   redness_next;
     private float   redness_step;
+    private float   redness_step_number = 100.0f;
     private float   redness_max = 1.0f;
     private int     redness_start_location_index = 7; // Индекс локации с которой начнётся покраснение
 
@@ -610,45 +612,74 @@ public class ControlScene_Main : MonoBehaviour
         };
 
         Redness_Event_Update += () =>
-        {
-            redness_current = redness_step * (driftSection_array_current_ind - redness_start_location_index + 1);
-            redness_current = Mathf.Clamp(redness_current, 0.0f, redness_max);
+        {  
+            redness_next = redness_step * (driftSection_array_current_ind - redness_start_location_index + 1);            
+            redness_next = Mathf.Clamp(redness_next, 0.0f, redness_max);
 
-            World_Local_SceneMain_EnemySpawner.SingleOnScene.PlayerCrash_Spawn_IsAvalible = driftSection_array_current_ind >= redness_start_location_index;
+            redness_step_number = Mathf.Clamp(redness_step_number, 1 , float.MaxValue); //Гарантируем, что не будет деления на 0
 
-            //Город
-            var _newColor = Color.Lerp(redness_movingBackground_color_init, redness_movingBackground_color_overlay, redness_current);
-            World_General_MovingBackground_Entity.SingleOnScene.Color = _newColor;
-
-            //Билборд
-            _newColor = Color.Lerp(redness_movingBackground_billboard_color_init, redness_movingBackground_billboard_color_overlay, redness_current);
-            World_General_MovingBackground_Billboard.SingleOnScene.Color = _newColor;
-
-            //Небо
-            World_General_Sky.SingleOnScene.OverlayColor_Ratio_Set(redness_current);
-
-            //Туман
-            World_General_Fog.SingleOnScene.Redness_Up(redness_current);
-
-            //Фары ГГ
-            _newColor = Color.Lerp(redness_player_lights_color_init, redness_player_lights_color_overlay, redness_current);
-            World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color = _newColor;
-
-            //Глобальное освещение
-            _newColor = Color.Lerp(redness_globalLighting_color_top_init, redness_globalLighting_color_top_overlay, redness_current);
-            AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top = _newColor;
-
-            //Луна
-            _newColor = Color.Lerp(redness_moon_color_init, redness_moon_color_overlay, redness_current);
-            World_General_Moon.SingleOnScene.Color = _newColor;
-
-            //Следы
-            foreach (var _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
+            IEnumerator _coroutine()
             {
-                var _ratio = Mathf.Pow(redness_current, 2);
-                _item.OverlayColor = redness_drawableSurface_overlayColor;
-                _item.OverlayColor_Ratio_Set(_ratio);
+                var _step_part = redness_step / redness_step_number;
+
+                void _UpdateRedness()
+                {
+                    World_Local_SceneMain_EnemySpawner.SingleOnScene.PlayerCrash_Spawn_IsAvalible = driftSection_array_current_ind >= redness_start_location_index;
+
+                    //Город
+                    var _newColor = Color.Lerp(redness_movingBackground_color_init, redness_movingBackground_color_overlay, redness_current);
+                    World_General_MovingBackground_Entity.SingleOnScene.Color = _newColor;
+
+                    //Билборд
+                    _newColor = Color.Lerp(redness_movingBackground_billboard_color_init, redness_movingBackground_billboard_color_overlay, redness_current);
+                    World_General_MovingBackground_Billboard.SingleOnScene.Color = _newColor;
+
+                    //Небо
+                    World_General_Sky.SingleOnScene.OverlayColor_Ratio_Set(redness_current);
+
+                    //Туман
+                    World_General_Fog.SingleOnScene.Redness_Up(redness_current);
+
+                    //Фары ГГ
+                    _newColor = Color.Lerp(redness_player_lights_color_init, redness_player_lights_color_overlay, redness_current);
+                    World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color = _newColor;
+
+                    //Глобальное освещение
+                    _newColor = Color.Lerp(redness_globalLighting_color_top_init, redness_globalLighting_color_top_overlay, redness_current);
+                    AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top = _newColor;
+
+                    //Луна
+                    _newColor = Color.Lerp(redness_moon_color_init, redness_moon_color_overlay, redness_current);
+                    World_General_Moon.SingleOnScene.Color = _newColor;
+
+                    //Следы
+                    foreach (var _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
+                    {
+                        var _ratio = Mathf.Pow(redness_current, 2);
+                        _item.OverlayColor = redness_drawableSurface_overlayColor;
+                        _item.OverlayColor_Ratio_Set(_ratio);
+                    }
+                }
+
+                while (true)
+                {
+                    if (redness_current <= redness_next)
+                    {
+                        redness_current += _step_part;
+                        _UpdateRedness();
+                        yield return null;
+                    }
+                    else
+                    {
+                        redness_current = redness_next;
+                        _UpdateRedness();
+                        break;
+                    }
+                }
             }
+
+            var _routine = _coroutine();
+            StartCoroutine(_routine);
         };
 
         #if UNITY_EDITOR
@@ -761,9 +792,13 @@ public class ControlScene_Main : MonoBehaviour
         redness_globalLighting_color_top_init = AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Color_Top;
         redness_moon_color_init = World_General_Moon.SingleOnScene.Color;
 
+        #endregion
+
+        #if UNITY_EDITOR
+
         Redness_Event_Update();
 
-        #endregion
+        #endif
     }
 
     private void Update()

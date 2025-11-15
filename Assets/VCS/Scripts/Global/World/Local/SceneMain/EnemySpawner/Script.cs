@@ -33,8 +33,8 @@ public class World_Local_SceneMain_EnemySpawner : MonoBehaviour
     private float ENEMYSPAWN_WAVE_SIZE_REFRESH_INC = 0.5f;
     private float ENEMYSPAWN_WAVE_SIZE_REFRESH_MAX = 10f;
 
-    private float enemySpawn_speed_min = 0.95f; //Чем больше разница между этими двумя значениями,
-    private float enemySpawn_speed_max = 1.05f; //тем хаотичней движение на дороге.
+    private float enemySpawn_speed_min = 0.975f; //Чем больше разница между этими двумя значениями,
+    private float enemySpawn_speed_max = 1.025f; //тем хаотичней движение на дороге.
 
     public Constants.RoadLine EnemySpawn_Line_Taken { get; set; }
     private List<Constants.RoadLine> enemySpawn_line_list = new List<Constants.RoadLine>((int)Constants.RoadLine.size);
