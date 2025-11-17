@@ -29,6 +29,7 @@ public class ControlScene_Main : MonoBehaviour
     private DriftSection[] driftSection_array; 
     
     private int driftSection_array_current_ind = 0; //0 - по дефолту. 13 - для отладки финальной катсцены
+    private int driftSection_complete_number = 0;
     private const int DRIFTSECTION_ARRAY_MUSICCHANGE_IND = 7; //Индекс участка дрифта начиная с которого музыка меняется
 
     #endregion
@@ -449,6 +450,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_AudioMixer.SingleOnScene.Pause();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
+            World_General_Moon.SingleOnScene.Skull_Parts_IsActive = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(1f, 0f);
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
@@ -468,8 +470,9 @@ public class ControlScene_Main : MonoBehaviour
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.UnPause();
-            World_General_MovingBackground_Entity.SingleOnScene.Active = true;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
+            World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
+            World_General_MovingBackground_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0f);
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = true;
@@ -492,6 +495,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToZero();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
+            World_General_Moon.SingleOnScene.Skull_Parts_IsActive = false;
             AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
             AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_On(World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position, -2f);
 
@@ -523,6 +527,7 @@ public class ControlScene_Main : MonoBehaviour
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(2.4f, Color.red);
             World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
+            World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Coins_Visual = ControlPers_DataHandler.SingleOnScene.ProgressData_Coins;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.Ups_Visual = World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Count;
             AppScreen_Local_SceneMain_UICanvas_Revive_Entity.SingleOnScene.Hide();
@@ -694,6 +699,7 @@ public class ControlScene_Main : MonoBehaviour
         #if UNITY_EDITOR
 
         driftSection_array_current_ind = debug_startLocation - 1;
+        driftSection_complete_number = driftSection_array_current_ind;
 
         if (debug_fastRoadStage)
         {
@@ -810,6 +816,51 @@ public class ControlScene_Main : MonoBehaviour
 
         Redness_Event_Update();
 
+        //Смена состояний луны
+
+        for(int _i = 0; _i <= driftSection_complete_number; _i++)
+        {
+            switch (_i)
+            {
+                case 7:
+                    //на луне появляются очертания черепа.
+                    World_General_Moon.SingleOnScene.Skull_IsVisible = true;
+                break;
+                case 8:
+                    //череп на луне видно явно.
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                break;
+                case 9:
+                    //луна полностью заменяется черепом.
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                    //World_General_Moon.SingleOnScene.Skull_Color = _newColor;
+                break;
+                case 10:
+                    //череп трескается сверху вниз на 1/3.
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                break;
+                case 11:
+                    //череп трескается на 2/3.
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                break;
+                case 12:
+                    //трещина идет через весь череп.
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                break;
+                case 13:
+                    //две части отделенные в месте трещены очень медленно летят в разные стороны                                            
+                    World_General_Moon.SingleOnScene.Skull_State_Next();
+                    World_General_Moon.SingleOnScene.Visible = false;
+                    World_General_Moon.SingleOnScene.Skull_Parts_IsVisible = true;
+                    World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
+                break;
+                case 14:
+                    //луна отсутствует                                            
+                    World_General_Moon.SingleOnScene.Skull_IsVisible = false;
+                    World_General_Moon.SingleOnScene.Skull_Parts_IsVisible = false;
+                break;
+            }
+        }
         #endif
     }
 
@@ -961,7 +1012,7 @@ public class ControlScene_Main : MonoBehaviour
                                         }
 
                                         Instantiate(driftSection_array[driftSection_array_current_ind].prefab, World_Entity.SingleOnScene.transform);
-                                        
+
                                         if (driftSection_array_current_ind < driftSection_array.Length - 1)
                                         {
                                             ++driftSection_array_current_ind;
@@ -997,8 +1048,6 @@ public class ControlScene_Main : MonoBehaviour
                                         }
 
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
-                                        
-                                        Redness_Event_Update(); //Увеличение степени покраснения
 
                                         stage_road_toDrift_clearing = false;
                                         stage_road_toDrift_cutscene = true;
@@ -1059,6 +1108,8 @@ public class ControlScene_Main : MonoBehaviour
                                         {
                                             World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = 0;
                                             stage_road_toDrift_cutscene_state_braking_scale = 1f;
+
+                                            Redness_Event_Update(); //Увеличение степени покраснения
 
                                             stage_road_toDrift_cutscene_state_braking_playerMoveDown_start = true;
                                             stage_road_toDrift_cutscene_state = Stage_Road_ToDrift_Cutscene_State.moveDown;
@@ -1262,6 +1313,50 @@ public class ControlScene_Main : MonoBehaviour
                                     AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Road();
                                     AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
                                     AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
+
+                                    ++driftSection_complete_number;
+
+                                    //Смена состояний луны
+                                    switch (driftSection_complete_number)
+                                    {
+                                        case 7:
+                                            //на луне появляются очертания черепа.
+                                            World_General_Moon.SingleOnScene.Skull_IsVisible = true;
+                                        break;
+                                        case 8:
+                                            //череп на луне видно явно.
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                        break;
+                                        case 9:
+                                            //луна полностью заменяется черепом.
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                            //World_General_Moon.SingleOnScene.Skull_Color = _newColor;
+                                        break;
+                                        case 10:
+                                            //череп трескается сверху вниз на 1/3.
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                        break;
+                                        case 11:
+                                            //череп трескается на 2/3.
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                        break;
+                                        case 12:
+                                            //трещина идет через весь череп.
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                        break;
+                                        case 13:
+                                            //две части отделенные в месте трещены очень медленно летят в разные стороны                                            
+                                            World_General_Moon.SingleOnScene.Skull_State_Next();
+                                            World_General_Moon.SingleOnScene.Visible = false;
+                                            World_General_Moon.SingleOnScene.Skull_Parts_IsVisible = true;
+                                            World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
+                                        break;
+                                        case 14:
+                                            //луна отсутствует                                            
+                                            World_General_Moon.SingleOnScene.Skull_IsVisible = false;
+                                            World_General_Moon.SingleOnScene.Skull_Parts_IsVisible = false;
+                                        break;
+                                    }
 
                                     stage_drift_toRoad_cutscene = false;
                                     stage_drift_toRoad_braking_swap = true;

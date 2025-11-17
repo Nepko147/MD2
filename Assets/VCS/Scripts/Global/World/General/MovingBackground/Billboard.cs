@@ -75,7 +75,7 @@ public class World_General_MovingBackground_Billboard : MonoBehaviour
                     while (_index == spriteRenderer_sprites_redness_index_prev
                         && spriteRenderer_sprites_redness.Length > 1)
                     {
-                        _index = Random.Range(0, spriteRenderer_sprites_normal.Length);
+                        _index = Random.Range(0, spriteRenderer_sprites_redness.Length);
                     }
 
                     spriteRenderer.sprite = spriteRenderer_sprites_redness[_index];
