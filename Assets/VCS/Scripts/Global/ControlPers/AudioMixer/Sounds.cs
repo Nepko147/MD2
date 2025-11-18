@@ -6,7 +6,7 @@ public class ControlPers_AudioMixer_Sounds : MonoBehaviour
 {
     public static ControlPers_AudioMixer_Sounds SingleOnScene { get; private set; }
     
-    public AudioSource audioSource { get; private set; }
+    private AudioSource audioSource;
 
     [SerializeField] private AudioMixerGroup audioMixerGroup;
     private const string AUDIOMIXERGROUP_VOLUME_NAME = "Sound_Volume";
@@ -20,6 +20,16 @@ public class ControlPers_AudioMixer_Sounds : MonoBehaviour
     public void Stop()
     {
         audioSource.Stop();
+    }
+
+    public void Pause()
+    {
+        audioSource.Pause();
+    }
+
+    public void UnPause()
+    {
+        audioSource.UnPause();
     }
 
     public void Volume_Set(float _soundValue)

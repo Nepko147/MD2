@@ -47,7 +47,7 @@
                 fragment_data _output;
                 _output.pos = UnityObjectToClipPos(_vd.pos);
                 _output.uv = TRANSFORM_TEX(_vd.uv, _MainTex);
-
+                
                 return (_output);
             }
 

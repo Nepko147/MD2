@@ -80,7 +80,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
     public Vector3 Position_Init { get; private set; }
 
     private SpriteRenderer spriteRenderer;
-    public SpriteRenderer SpriteRenderer;
+    public SpriteRenderer SpriteRenderer  { get; private set; }
     private Color spriteRenderer_material_color = Color.white;
 
     private Animator animator;
@@ -185,7 +185,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         while (true)
         {
-            tyres_isDrawing_timer -= Time.deltaTime;
+            tyres_isDrawing_timer -= ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
             Tyres_Position = new Vector3[4] { tyres_front_1.transform.position, tyres_front_2.transform.position, tyres_rear_1.transform.position, tyres_rear_2.transform.position };
 
             if (tyres_isDrawing_timer > 0)
@@ -287,7 +287,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         {
             if (invul_color_delay_current > 0)
             {
-                invul_color_delay_current -= Time.deltaTime;
+                invul_color_delay_current -= ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
             }
             else
             {
@@ -299,7 +299,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
             if (!invul_alpha_state)
             {
-                spriteRenderer_material_color.a -= INVUL_ALPHA_STEP * Time.deltaTime;
+                spriteRenderer_material_color.a -= INVUL_ALPHA_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
 
                 if (spriteRenderer_material_color.a <= 0)
@@ -309,7 +309,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
             }
             else
             {
-                spriteRenderer_material_color.a += INVUL_ALPHA_STEP * Time.deltaTime;
+                spriteRenderer_material_color.a += INVUL_ALPHA_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                 spriteRenderer.material.SetColor(Constants.MATERIAL_2D_BUMP_U_COLOR, spriteRenderer_material_color);
 
                 if (spriteRenderer_material_color.a >= 1f)
@@ -318,7 +318,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 }
             }
 
-            invul_timer_current -= Time.deltaTime;
+            invul_timer_current -= ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
             if (invul_timer_current <= 0)
             {
@@ -362,7 +362,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
         {
             if (moving_road)
             {
-                var _step = MOVING_ROAD_SPEED * Time.deltaTime;
+                var _step = MOVING_ROAD_SPEED * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, moving_road_newPosition, _step);
 
                 if ((moving_road_newPosition - transform.position).magnitude <= _step)
@@ -886,17 +886,17 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 break;
 
                 case State.road_toDrift_braking:
-                    transform.position += Vector3.down * MOVING_ROAD_TODRIFT_BRAKING_SPEED * Time.deltaTime;
+                    transform.position += Vector3.down * MOVING_ROAD_TODRIFT_BRAKING_SPEED * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                 break;
 
                 case State.road_toDrift_moveDown:
                     if (moving_road_toDrift_moveDown_speed < MOVING_DRIFT_SPEED_MAX)
                     {
-                        moving_road_toDrift_moveDown_speed += MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP * Time.deltaTime;
+                        moving_road_toDrift_moveDown_speed += MOVING_ROAD_TODRIFT_MOVEDOWN_SPEED_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                     }
 
 					var _destination = World_Local_SceneMain_DriftSection_Point_Start.SingleOnScene.transform.position;
-					var _speed = moving_road_toDrift_moveDown_speed * Time.deltaTime;
+					var _speed = moving_road_toDrift_moveDown_speed * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
                     transform.position = Vector3.MoveTowards(transform.position, _destination, _speed);
 
@@ -943,8 +943,8 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                             moving_drift_braking_swap = false;
                                         }
 
-                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_BRAKING_SPEED * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
-                                        moving_drift_braking_time -= Time.deltaTime;
+                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_BRAKING_SPEED * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
+                                        moving_drift_braking_time -= ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
                                         if (moving_drift_braking_time <= 0)
                                         {
@@ -955,12 +955,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                                     }
                                     else
                                     {
-                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
+                                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
                                     }
                                 break;
 
                                 default:
-                                     moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
+                                     moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime, MOVING_DRIFT_SPEED_MIN, MOVING_DRIFT_SPEED_MAX);
 
                                     if (!moving_drift_braking_swap)
                                     {
@@ -989,7 +989,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                 break;
 
                 case State.drift_toRoad:
-                    _speed = moving_drift_speed_current * Time.deltaTime;
+                    _speed = moving_drift_speed_current * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
                     transform.position = Vector3.MoveTowards(transform.position, moving_drift_toRoad_position_target, _speed);
 
@@ -997,7 +997,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                     if (!Moving_Drift_ToRoad_Braking)
                     {
-                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * Time.deltaTime, moving_drift_speed_current, MOVING_DRIFT_SPEED_MAX);
+                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current + MOVING_DRIFT_SPEED_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime, moving_drift_speed_current, MOVING_DRIFT_SPEED_MAX);
 
                         if (_dif.magnitude <= MOVING_DRIFT_TOROAD_BRAKING_DIST)
 					    {
@@ -1013,7 +1013,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
                     }
                     else
                     {
-                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP * Time.deltaTime, MOVING_DRIFT_BRAKING_SPEED_MIN, moving_drift_speed_current);
+                        moving_drift_speed_current = Mathf.Clamp(moving_drift_speed_current - MOVING_DRIFT_TOROAD_BRAKING_SPEED_STEP * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime, MOVING_DRIFT_BRAKING_SPEED_MIN, moving_drift_speed_current);
                     
                         if (!Moving_Drift_ToRoad_Braking_Right)
                         {
@@ -1057,12 +1057,12 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
                         if (moving_drift_hitVector_size > 0)
                         {
-                            moving_drift_hitVector_size -= MOVING_DRIFT_HITVECTOR_SIZE_MAX / MOVING_DRIFT_HITVECTOR_TIME * Time.fixedDeltaTime;
+                            moving_drift_hitVector_size -= MOVING_DRIFT_HITVECTOR_SIZE_MAX / MOVING_DRIFT_HITVECTOR_TIME * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
                             moving_drift_moveVector += moving_drift_hitVector * moving_drift_hitVector_size;
                             moving_drift_moveVector = Vector2.ClampMagnitude(moving_drift_moveVector, MOVING_DRIFT_MOVEVECTOR_SIZE_MAX);
                         }
 
-                        rigidBody.MovePosition(rigidBody.position + moving_drift_moveVector * Time.fixedDeltaTime);
+                        rigidBody.MovePosition(rigidBody.position + moving_drift_moveVector * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime);
                     }
 
                     #if UNITY_EDITOR

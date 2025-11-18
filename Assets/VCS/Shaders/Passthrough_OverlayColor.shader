@@ -1,4 +1,4 @@
-﻿Shader "Custom/Passthrough+OverlayColor"
+﻿Shader "Custom/Passthrough_OverlayColor"
 {
     Properties
     {

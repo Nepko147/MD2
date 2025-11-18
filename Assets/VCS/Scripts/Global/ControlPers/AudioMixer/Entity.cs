@@ -6,14 +6,14 @@ public class ControlPers_AudioMixer : MonoBehaviour
 
     public void Pause()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.audioSource.Pause();
-        ControlPers_AudioMixer_Music.SingleOnScene.audioSource.Pause();
+        ControlPers_AudioMixer_Sounds.SingleOnScene.Pause();
+        ControlPers_AudioMixer_Music.SingleOnScene.Pause();
     }
 
     public void UnPause()
     {
-        ControlPers_AudioMixer_Sounds.SingleOnScene.audioSource.UnPause();
-        ControlPers_AudioMixer_Music.SingleOnScene.audioSource.UnPause();
+        ControlPers_AudioMixer_Sounds.SingleOnScene.UnPause();
+        ControlPers_AudioMixer_Music.SingleOnScene.UnPause();
     }
 
     public void Stop()

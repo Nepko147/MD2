@@ -346,9 +346,72 @@ public class ControlScene_Main : MonoBehaviour
 
     #endregion
 
+    #region TimeDilation
+
+    public float TimeDilation_Coef { get; private set; } = 1f;
+    private const float TIMEDILATION_COEF_MIN = 0.5f;
+    private const float TIMEDILATION_COEF_SPEED = 0.75f;
+
+    private IEnumerator TimeDilation_On_Coroutine()
+    {
+        while (true)
+        {
+            TimeDilation_Coef -= TIMEDILATION_COEF_SPEED * Time.deltaTime;
+
+            if (TimeDilation_Coef > TIMEDILATION_COEF_MIN)
+            {
+                yield return null;
+            }
+            else
+            {
+                TimeDilation_Coef = TIMEDILATION_COEF_MIN;
+
+                ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
+
+                var _routine = TimeDilation_Off_Coroutine();
+                StartCoroutine(_routine);
+
+                break;
+            }
+        }                
+    }
+
+    private IEnumerator TimeDilation_Off_Coroutine()
+    {
+        while (true)
+        {
+            TimeDilation_Coef += TIMEDILATION_COEF_SPEED * Time.deltaTime;
+
+            if (TimeDilation_Coef < 1f)
+            {
+                yield return null;
+            }
+            else
+            {
+                TimeDilation_Coef = 1f;
+                break;
+            }
+        }                
+    }
+
+    public void TimeDilation()
+    {
+        ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
+
+        var _routine = TimeDilation_On_Coroutine();
+        StopCoroutine(_routine);
+        _routine = TimeDilation_Off_Coroutine();
+        StopCoroutine(_routine);
+
+        _routine = TimeDilation_On_Coroutine();
+        StartCoroutine(_routine);
+    }
+
+    #endregion
+
     #region Debug
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     [SerializeField] [Range(1,14)] private int debug_startLocation = 1;
     [SerializeField] private bool debug_fastRoadStage = false;
@@ -357,7 +420,7 @@ public class ControlScene_Main : MonoBehaviour
     #endif
 
     #endregion
-
+    
     private void Awake()
     {
         SingleOnScene = this;
@@ -448,7 +511,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer.SingleOnScene.Pause();
-            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Pause();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             World_General_Moon.SingleOnScene.Skull_Parts_IsActive = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
@@ -456,6 +519,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = false;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = false;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Active = false;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.Pause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.Pause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
@@ -469,7 +533,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
-            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.UnPause();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
             World_General_MovingBackground_Entity.SingleOnScene.Active = true;
@@ -477,6 +541,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Shake_Active = true;
             AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = true;
+            AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Active = true;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Ups_Icon.SingleOnScene.UnPause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Coins_Icon.SingleOnScene.UnPause();
             AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
@@ -494,6 +559,7 @@ public class ControlScene_Main : MonoBehaviour
 
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToZero();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToZero();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             World_General_Moon.SingleOnScene.Skull_Parts_IsActive = false;
             AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
@@ -524,6 +590,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Coins -= stage_revive_cost_current;
             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsSpentOnRevivals += stage_revive_cost_current;
             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber += 1;
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(2.4f, Color.red);
             World_Local_SceneMain_Player_Entity.SingleOnScene.Resurrect();
@@ -545,7 +612,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer.SingleOnScene.Stop();
-            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Stop();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
             World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
@@ -734,6 +801,7 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_General_Camera_World_Entity.SingleOnScene.Blur(0, 0);
         AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_Active = true;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_Active = true;
+        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Active = true;
         AppScreen_Local_SceneMain_Camera_Background_Entity.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();        
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
@@ -931,7 +999,7 @@ public class ControlScene_Main : MonoBehaviour
 
                             if (_distance_ofDistortion >= _distance_toDistortion)
                             {
-                                ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Stop();
+                                ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
                                 World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn();
                                 World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = false;
                             }
@@ -979,7 +1047,7 @@ public class ControlScene_Main : MonoBehaviour
                             if (stage_road_toDrift_sirens_activate
                             && stage_road_toDrift_timer <= STAGE_ROAD_TODRIFT_SIRENS_TIME)
                             {
-                                ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Play();
+                                ControlScene_SceneMain_Sound_Police.SingleOnScene.Play();
                                 stage_road_toDrift_sirens_activate = false;
                             }
                         }

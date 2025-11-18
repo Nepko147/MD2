@@ -7,6 +7,8 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     public static AppScreen_General_Camera_World_Entity SingleOnScene { get; private set; }
 
+    [SerializeField] private Material passthrough_material;
+
     public float FieldOfView_Current
     {
         get
@@ -110,6 +112,8 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     #region Distortion
 
+    private bool distortion_started = false;
+
     [SerializeField] private Material distortion_material;
 
     private const string DISTORTION_MATERIAL_U_MAIN_NORMALMAP = "u_main_normalMap";
@@ -123,6 +127,7 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     public void Material_Main_NormalMap_GameOver_Apply()
     {
+        distortion_started = true;
         distortion_material.SetTexture(DISTORTION_MATERIAL_U_MAIN_NORMALMAP, distortion_material_main_normalMap_gameOver);
     }
 
@@ -141,6 +146,7 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     public void Material_Overlay_NormalMap_CoinRush_Start(Vector3 _position)
     {
+        distortion_started = true;
         Distortion_Material_Overlay_NormalMap_CoinRush_Active = true;
         Distortion_Material_Overlay_NormalMap_CoinRush_WorldPos = _position;
         distortion_material_overlay_normalMap_coinRush_time = 0;
@@ -158,6 +164,37 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
         return (_visualDiameterInWorld);
     }
 
+    #endregion
+
+    #region ZoomBlur
+
+    public bool ZoomBlur_Active { get; set; } = true;
+    
+    [SerializeField] private Material zoomBlur_material;
+    private const string ZOOMBLUR_MATERIAL_U_INTENSITY = "u_intensity";
+
+    private float zoomBlur_intensity_current = 0;
+    private const float ZOOMBLUR_INTENSITY_MAX = 0.5f;
+    private const float ZOOMBLUR_INTENSITY_SPEED = 1f;
+    public float ZoomBlur_Intensity_Scale { get; set; } = 1f;
+
+    private enum ZoomBlur_Stage
+    {
+        on,
+        off
+    }
+
+    private ZoomBlur_Stage zoomBlur_stage_current = ZoomBlur_Stage.on;
+
+    private bool zoomBlur_started = false;
+
+    public void ZoomBlur_Start()
+    {
+        zoomBlur_intensity_current = 0;
+        zoomBlur_started = true;
+        zoomBlur_stage_current = ZoomBlur_Stage.on;
+    }
+    
     #endregion
 
     protected override void Awake()
@@ -359,9 +396,43 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
             if (distortion_material_overlay_normalMap_coinRush_time >= MATERIAL_OVERLAY_NORMALMAP_COINRUSH_TIME_MAX)
             {
+                distortion_started = false;
                 distortion_material.SetFloat(DISTORTION_MATERIAL_U_OVERLAY_ALPHA, 0);
                 Distortion_Material_Overlay_NormalMap_CoinRush_Active = false;
             }
+        }
+
+        #endregion
+
+        #region ZoomBlur
+
+        if (ZoomBlur_Active
+        && zoomBlur_started)
+        {
+            switch (zoomBlur_stage_current)
+            {
+                case ZoomBlur_Stage.on:
+                    zoomBlur_intensity_current += ZOOMBLUR_INTENSITY_SPEED * ZoomBlur_Intensity_Scale * Time.deltaTime;
+
+                    if (zoomBlur_intensity_current >= ZOOMBLUR_INTENSITY_MAX * ZoomBlur_Intensity_Scale)
+                    {
+                        zoomBlur_intensity_current = ZOOMBLUR_INTENSITY_MAX * ZoomBlur_Intensity_Scale;
+                        zoomBlur_stage_current = ZoomBlur_Stage.off;
+                    }
+                break;
+
+                case ZoomBlur_Stage.off:
+                    zoomBlur_intensity_current -= ZOOMBLUR_INTENSITY_SPEED * ZoomBlur_Intensity_Scale * Time.deltaTime;
+
+                    if (zoomBlur_intensity_current <= 0)
+                    {
+                        zoomBlur_intensity_current = 0;
+                        zoomBlur_started = false;
+                    }
+                break;
+            }
+
+            zoomBlur_material.SetFloat(ZOOMBLUR_MATERIAL_U_INTENSITY, zoomBlur_intensity_current);
         }
 
         #endregion
@@ -369,10 +440,20 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     private void OnRenderImage(RenderTexture _source, RenderTexture _destination)
     {
-        #region Distortion
-
-        Graphics.Blit(_source, _destination, distortion_material); //ѕримен€ем шейдер искажени€ к исходной рендер-текстуре камеры текущего GameObject'а. «атем помещаем результат в конечную рендер-текстуру камеры текущего GameObject'а
-
-        #endregion
+        if (distortion_started)
+        {
+            Graphics.Blit(_source, _destination, distortion_material); //ѕримен€ем шейдер искажени€ к исходной рендер-текстуре камеры текущего GameObject'а. «атем помещаем результат в конечную рендер-текстуру камеры текущего GameObject'а
+        }
+        else
+        {
+            if (zoomBlur_started)
+            {
+                Graphics.Blit(_source, _destination, zoomBlur_material);
+            }
+            else
+            {
+                Graphics.Blit(_source, _destination, passthrough_material);
+            }
+        }
     }
 }
