@@ -28,6 +28,7 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
         _pos = new Vector3(_x, _y, AppScreen_General_Camera_Entity.SingleOnScene.transform.position.z);
         AppScreen_General_Camera_Entity.SingleOnScene.transform.position = _pos;
         AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
+        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Start();
     }
 
     #endregion
@@ -99,47 +100,58 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
         SingleOnScene = this;
     }
 
+    protected override void Start()
+    {
+        base.Start();
+    }
+
     protected override void Update()
     {
         base.Update();
 
-        switch (segment_state_current)
+        if (Active)
         {
-            case Segment_State.none:
-                if (World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.y < segment_none_point_start.transform.position.y)
-                {
-                    segment_state_current = Segment_State.one;
-                }
-            break;
+            switch (segment_state_current)
+            {
+                case Segment_State.none:
+                    if (World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.y < segment_none_point_start.transform.position.y)
+                    {
+                        segment_state_current = Segment_State.one;
+                    }
+                break;
 
-            case Segment_State.one:
-                segment_timer -= Time.deltaTime;
+                case Segment_State.one:
+                    segment_timer -= Time.deltaTime;
 
-                if (segment_timer <= 0
-                || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.x > segment_1_point_trigger.transform.position.x)
-                {
-                    Segment_1_Teleport();
-                }
-            break; 
+                    if (segment_timer <= 0
+                    || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.x > segment_1_point_trigger.transform.position.x)
+                    {
+                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 10f;
+                        Segment_1_Teleport();
+                    }
+                break; 
 
-            case Segment_State.two:
-                segment_timer -= Time.deltaTime;
+                case Segment_State.two:
+                    segment_timer -= Time.deltaTime;
 
-                if (segment_timer <= 0)
-                {
-                    Segment_2_Teleport();
-                }
-            break; 
+                    if (segment_timer <= 0)
+                    {
+                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 200f;
+                        Segment_2_Teleport();
+                    }
+                break; 
 
-            case Segment_State.three:
-                segment_timer -= Time.deltaTime;
+                case Segment_State.three:
+                    segment_timer -= Time.deltaTime;
 
-                if (segment_timer <= 0
-                || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.y > segment_3_point_trigger.transform.position.y)
-                {
-                    Segment_3_Teleport();
-                }
-            break;
+                    if (segment_timer <= 0
+                    || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.y > segment_3_point_trigger.transform.position.y)
+                    {
+                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 1000f;
+                        Segment_3_Teleport();
+                    }
+                break;
+            }
         }
     }
 }

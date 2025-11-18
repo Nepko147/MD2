@@ -1,4 +1,4 @@
-﻿Shader "Custom/Camera Distortion"
+﻿Shader "Custom/Camera_Distortion"
 {
     Properties
     {
@@ -61,7 +61,7 @@
                 _output_fd.uv_overlay.x = (_input_vd.uv.x + 0.5 * u_overlay_scale.x - u_overlay_screenPos.x) / u_overlay_scale.x;
                 _output_fd.uv_overlay.y = (_input_vd.uv.y + 0.5 * u_overlay_scale.y - u_overlay_screenPos.y) / u_overlay_scale.y;
 
-                return _output_fd;
+                return (_output_fd);
             }
 
             fixed4 frag(fragment_data _input_fd) : SV_Target

@@ -58,6 +58,8 @@ public class World_Local_SceneMain_DriftSection_Enity_10 : World_Local_SceneMain
         && World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.x > segment_point.transform.position.x)
         {
             ControlScene_Main.SingleOnScene.Audio_Sound_Mental_Play();
+            ControlScene_Main.SingleOnScene.TimeDilation();
+            AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Start();
 
             switch (segment_state_current)
             {

@@ -8,7 +8,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     public static ControlPers_AudioMixer_Music SingleOnScene { get; private set; }
 
-    public AudioSource audioSource { get; private set; }
+    private AudioSource audioSource;
 
     [SerializeField] private AudioMixerGroup audioMixerGroup;
     private const string AUDIOMIXERGROUP_VOLUME_NAME = "Music_Volume";

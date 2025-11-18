@@ -2,27 +2,7 @@ using UnityEngine;
 
 public class World_Local_SceneMain_DriftSection_Coin : MonoBehaviour
 {
-    private bool active = true;
-    public bool Active 
-    { 
-        get 
-        { 
-            return (active); 
-        }
-        set 
-        { 
-            active = value;
-
-            if (value)
-            {
-                animator.speed = 1;
-            }
-            else
-            {
-                animator.speed = 0;
-            }
-        }
-    }
+    public bool Active { get; set; } = true;
 
     [SerializeField] private World_Local_SceneMain_PopUp_Entity popUp;
 
@@ -70,8 +50,10 @@ public class World_Local_SceneMain_DriftSection_Coin : MonoBehaviour
 
     private void Update()
     {
-        if (active)
+        if (Active)
         {
+            animator.speed = ControlScene_Main.SingleOnScene.TimeDilation_Coef;
+
             if (coinMagnet_active)
             {
                 var _pos_target = World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position;
@@ -86,9 +68,9 @@ public class World_Local_SceneMain_DriftSection_Coin : MonoBehaviour
                 }
                 else
                 {
-                    coinMagnet_speed_current += COINMAGNET_SPEED_INC_INIT * Time.deltaTime;
+                    coinMagnet_speed_current += COINMAGNET_SPEED_INC_INIT * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
-                    var _step = coinMagnet_speed_current * Time.deltaTime;
+                    var _step = coinMagnet_speed_current * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
                     transform.position = Vector3.MoveTowards(transform.position, _pos_target, _step);
 
@@ -111,6 +93,10 @@ public class World_Local_SceneMain_DriftSection_Coin : MonoBehaviour
 
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            animator.speed = 0;
         }
     }
 }

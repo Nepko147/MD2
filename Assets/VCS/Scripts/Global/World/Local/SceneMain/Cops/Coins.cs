@@ -24,7 +24,7 @@ public class World_Local_SceneMain_Cops_Coins : MonoBehaviour
                 }
             }
 
-            ControlScene_SceneMain_Sound_Police.SingleOnScene.audioSource.Stop();
+            ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
 
             coins_spawned = true;
         }

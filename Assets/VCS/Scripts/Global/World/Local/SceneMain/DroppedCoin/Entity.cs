@@ -169,7 +169,7 @@ public class World_Local_SceneMain_DroppedCoin_Entity : MonoBehaviour
                 }
             }
 
-            editor_distance += DROP_SPEED * (1 - editor_distance) * Time.deltaTime;
+            editor_distance += DROP_SPEED * (1 - editor_distance) * ControlScene_Main.SingleOnScene.TimeDilation_Coef * Time.deltaTime;
 
             if (editor_distance >= 0.9f)
             {
