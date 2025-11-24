@@ -7,14 +7,13 @@ public class World_Local_SceneMain_Cops_Lights : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
-    public bool Visible 
-    { 
-        get { return (spriteRenderer.enabled); }
+    public bool Sprite_Visible
+    {
         set { spriteRenderer.enabled = value; }
     }
+
     public bool Animated
-    { 
-        get { return (animator.enabled); } 
+    {
         set { animator.enabled = value; }
     }
 

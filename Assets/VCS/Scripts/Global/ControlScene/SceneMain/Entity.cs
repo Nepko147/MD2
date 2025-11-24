@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using System.Collections;
+using YG;
 
 public class ControlScene_Main : MonoBehaviour
 {
@@ -778,9 +779,10 @@ public class ControlScene_Main : MonoBehaviour
 
     private void Start()
     {
-        ControlPers_FogHandler.Color_Load();
+        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Scale_Set(1f);
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber = 0;
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_TotalDrivings += 1;
+        ControlPers_FogHandler.Color_Load();
 
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
@@ -1000,8 +1002,7 @@ public class ControlScene_Main : MonoBehaviour
                             if (_distance_ofDistortion >= _distance_toDistortion)
                             {
                                 ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
-                                World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn();
-                                World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = false;
+                                World_Local_SceneMain_Cops_Entity.SingleOnScene.Coins_Spawn();
                             }
                         }
                     }
@@ -1214,9 +1215,8 @@ public class ControlScene_Main : MonoBehaviour
                                     }
 
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = false;
-                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Visible = true;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Move_Reset();
-                                    World_Local_SceneMain_Cops_Coins.SingleOnScene.Coins_Spawn_Refresh();
+                                    World_Local_SceneMain_Cops_Entity.SingleOnScene.Coins_Refresh();
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Road_PlayerHitZoom;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Drift_PlayerHitZoom;
                                     World_Local_SceneMain_DriftSection_Enity_Parent.SingleOnScene.Move = false;
@@ -1570,19 +1570,16 @@ public class ControlScene_Main : MonoBehaviour
                 if (AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count > 0)
                 {
                     AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
-                    
+                    AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
+
                     switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
                     {
-                        default:
-                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
+                        case ControlPers_BuildSettings.PlatformType.windows:
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
                         break;
+
                         case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
-                            AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
-                        break;
                         case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
                         break;
                     }                    
@@ -1603,7 +1600,7 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     if (AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed)
                     {
-                        //TODO: Запуск рекламы.
+                        YG2.InterstitialAdvShow();
                         
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed = false;
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;

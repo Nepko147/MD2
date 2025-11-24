@@ -41,17 +41,11 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     #region Volume
 
-    private float volume;
+    private float volume_settings;
 
-    public float Volume_Get()
-    {        
-        audioMixerGroup.audioMixer.GetFloat(AUDIOMIXERGROUP_VOLUME_NAME, out var _volume);
-        return (1 - _volume / AUDIOMIXERGROUP_VOLUME_RANGE);
-    }
-
-    public void Volume_Set(float _volume)
+    public void Volume_Settings_Set(float _volume)
     {
-        volume = _volume;
+        volume_settings = _volume;
         volume_mute = false;
         Volume_Refresh();
     }
@@ -60,12 +54,12 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     {
         if (!volume_mute)
         {
-            audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, AUDIOMIXERGROUP_VOLUME_RANGE * (1f - volume * volume_scale));
+            audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, AUDIOMIXERGROUP_VOLUME_RANGE * (1f - volume_settings * volume_scale));
         }
     }
 
     private float volume_scale = 1f;
-    private const float VOLUME_SCALE_TIME = 1f;
+    private const float VOLUME_SCALE_SPEED = 1f;
     private IEnumerator Volume_Scale_Coroutine_Current;
 
     public void Volume_Scale_Set(float _scale)
@@ -78,7 +72,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     {
         while (true)
         {
-            Volume_Scale_Set(volume_scale - VOLUME_SCALE_TIME * Time.deltaTime);
+            Volume_Scale_Set(volume_scale - VOLUME_SCALE_SPEED * Time.deltaTime);
             
             if (volume_scale > 0)
             {
@@ -96,7 +90,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     {
         while (true)
         {
-            Volume_Scale_Set(volume_scale + VOLUME_SCALE_TIME * Time.deltaTime);
+            Volume_Scale_Set(volume_scale + VOLUME_SCALE_SPEED * Time.deltaTime);
             
             if (volume_scale < 1)
             {
@@ -128,7 +122,6 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     public void Volume_Mute()
     {
-        volume = 0;
         audioMixerGroup.audioMixer.SetFloat(AUDIOMIXERGROUP_VOLUME_NAME, -80f);
         volume_mute = true;
     }
@@ -214,7 +207,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
         }
         else
         {
-            Volume_Set(ControlPers_DataHandler.SingleOnScene.SettingsData_MusicValue);
+            Volume_Settings_Set(ControlPers_DataHandler.SingleOnScene.SettingsData_MusicValue);
         }
     }
 }

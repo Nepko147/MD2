@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public class ControlPers_LanguageHandler : MonoBehaviour
 {
+    #region General
+
     public static ControlPers_LanguageHandler SingleOnScene { get; private set; }
+
+    #endregion
 
     #region Buttons
 
@@ -1421,8 +1425,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "COIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "HE DIDN'T DIE",
         [Text_Key.popUpMessage_notEnoughCoins] = "NOT ENOUGH COINS",
-        [Text_Key.tutorial_desktop] = "To move, hold down the LMB, then pull the stick in the direction of movement.",
-        [Text_Key.tutorial_mobile] = "Tap on the screen to move, then pull the stick in the direction of movement.",
+        [Text_Key.tutorial_desktop] = "To move, hold down the left mouse button, then pull the virtual stick in the direction of movement.",
+        [Text_Key.tutorial_mobile] = "To move, hold your finger on the screen, then pull the virtual stick in the direction of movement.",
         [Text_Key.indicators_complete] = "KILOMETERS LEFT",
         [Text_Key.midscreen_gameOver] = "GAME OVER",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1454,20 +1458,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "Are you okay?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "Can you hear me?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>interference</color>] «It's exactly midnight on the clock. You're tuned to the Free Road Radio...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>noise</color>] «Don't lose <color=#FF2373>speed</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>interference</color>] «Another overtaking. Another <color=#FF2373>chick</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>crackle</color>] «Night — time to <color=#FF2373>accelerate</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>noise</color>] «The <color=#FF2373>faster</color> — the better»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>interference</color>] «And the heart beats faster»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>crackle</color>] «Once you <color=#FF2373>rev up</color>, you can't <color=#9aeff3>stop</color>»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>bzz</color>] «You're still <color=#9aeff3>alive</color>!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>screech</color>] «You have a habit of playing with <color=#FF2373>death</color>»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>ear ringing</color>] «<color=#FF2373>She</color>'ll quickly find a replacement»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>bzz</color>] «<color=#9aeff3>Live</color> fast, <color=#FF2373>die</color> fast»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>screech</color>] «What are <color=#9aeff3>brakes</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>ear ringing</color>] «<color=#FF2373>Adrenaline</color> — the best fuel»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>sound explosion</color>] «Speed will set you <color=#FF2373>free</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>radio</color>] «It's exactly midnight on the clock. You're tuned to the Free Road Radio...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>radio</color>] «Don't lose <color=#FF2373>speed</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>radio</color>] «Another overtaking. Another <color=#FF2373>chick</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>radio</color>] «Night — time to <color=#FF2373>accelerate</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>radio</color>] «The <color=#FF2373>faster</color> — the better»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>radio</color>] «And the heart beats faster»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>radio</color>] «Once you <color=#FF2373>rev up</color>, you can't <color=#9aeff3>stop</color>»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>radio</color>] «You're still <color=#9aeff3>alive</color>!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>radio</color>] «You have a habit of playing with <color=#FF2373>death</color>»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>radio</color>] «<color=#FF2373>She</color>'ll quickly find a replacement»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>radio</color>] «<color=#9aeff3>Live</color> fast, <color=#FF2373>die</color> fast»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>radio</color>] «What are <color=#9aeff3>brakes</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>radio</color>] «<color=#FF2373>Adrenaline</color> — the best fuel»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>radio</color>] «Speed will set you <color=#FF2373>free</color>»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_ru = new Dictionary<Text_Key, string>()
@@ -1480,8 +1484,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "МАГНИТ ДЛЯ МОНЕТ",
         [Text_Key.upgrade_heDidNotDie] = "ДА НЕ УМЕР ОН",
         [Text_Key.popUpMessage_notEnoughCoins] = "НЕДОСТАТОЧНО МОНЕТ",
-        [Text_Key.tutorial_desktop] = "Для движения зажмите левую кнопку мыши, затем потяните стик в направлении движения.",
-        [Text_Key.tutorial_mobile] = "Для движения нажмите на экран, затем потяните стик в направлении движения.",
+        [Text_Key.tutorial_desktop] = "Для движения зажмите левую кнопку мыши, затем потяните виртуальный стик в направлении движения.",
+        [Text_Key.tutorial_mobile] = "Для перемещения удерживайте палец на экране, затем потяните виртуальный стик в направлении движения.",
         [Text_Key.indicators_complete] = "КМ ДО ЦЕЛИ",
         [Text_Key.midscreen_gameOver] = "КОНЕЦ ИГРЫ",
         [Text_Key.midscreen_pause] = "ПАУЗА",
@@ -1513,20 +1517,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "Все в порядке?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "Ты меня слышишь?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>помехи</color>] «На часах ровно полночь. В эфире Радио Свободной Дороги...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>шум</color>] «Не теряй <color=#FF2373>скорость</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>помехи</color>] «Ещё один обгон. Еще одна <color=#FF2373>подружка</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>треск</color>] «Ночь — время <color=#FF2373>ускорить темп</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>шум</color>] «Чем <color=#FF2373>быстрее</color> — тем лучше»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>помехи</color>] «И сердце бьётся чаще»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>треск</color>] «Стоит <color=#FF2373>разогнать</color> и уже не <color=#9aeff3>остановить</color>»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>бзз</color>] «Ты всё еще <color=#9aeff3>жив</color>!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>скрежет</color>] «У тебя привычка играть со <color=#FF2373>смертью</color>»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>звон в ушах</color>] «<color=#FF2373>Она</color> быстро найдет замену»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>бзз</color>] «<color=#9aeff3>Живи</color> быстро, <color=#FF2373>умри</color> быстро»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>скрежет</color>] «Что такое <color=#9aeff3>тормоза</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>звон в ушах</color>] «<color=#FF2373>Адреналин</color> — лучшее топливо»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>разрыв звука</color>] «Скорость сделает тебя <color=#FF2373>свободным</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>радио</color>] «На часах ровно полночь. В эфире Радио Свободной Дороги...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>радио</color>] «Не теряй <color=#FF2373>скорость</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>радио</color>] «Ещё один обгон. Еще одна <color=#FF2373>подружка</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>радио</color>] «Ночь — время <color=#FF2373>ускорить темп</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>радио</color>] «Чем <color=#FF2373>быстрее</color> — тем лучше»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>радио</color>] «И сердце бьётся чаще»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>радио</color>] «Стоит <color=#FF2373>разогнать</color> и уже не <color=#9aeff3>остановить</color>»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>радио</color>] «Ты всё еще <color=#9aeff3>жив</color>!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>радио</color>] «У тебя привычка играть со <color=#FF2373>смертью</color>»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>радио</color>] «<color=#FF2373>Она</color> быстро найдет замену»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>радио</color>] «<color=#9aeff3>Живи</color> быстро, <color=#FF2373>умри</color> быстро»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>радио</color>] «Что такое <color=#9aeff3>тормоза</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>радио</color>] «<color=#FF2373>Адреналин</color> — лучшее топливо»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>радио</color>] «Скорость сделает тебя <color=#FF2373>свободным</color>»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_es = new Dictionary<Text_Key, string>()
@@ -1539,8 +1543,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "IMÁN DE MONEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ÉL NO MURIÓ",
         [Text_Key.popUpMessage_notEnoughCoins] = "NO HAY SUFICIENTES MONEDAS",
-        [Text_Key.tutorial_desktop] = "Utilizando el ratón, arrastre el joystick en la dirección del movimiento.",
-        [Text_Key.tutorial_mobile] = "Para moverte, tira del joystick en la dirección del movimiento.",
+        [Text_Key.tutorial_desktop] = "Para moverse, mantenga presionado el botón izquierdo del mouse y luego tire del joystick virtual en la dirección del movimiento.",
+        [Text_Key.tutorial_mobile] = "Para moverse, mantenga el dedo sobre la pantalla y luego tire del joystick virtual en la dirección del movimiento.",
         [Text_Key.indicators_complete] = "KILÓMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "JUEGO TERMINADO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1572,20 +1576,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "¿Estás bien?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "¿Me oyes?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>interferencia</color>] «Son exactamente medianoche en el reloj. Estás en la Radio de la Carretera Libre...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>ruido</color>] «No pierdas <color=#FF2373>velocidad</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>interferencia</color>] «Otra adelantada. Otra <color=#FF2373>chica</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>crackle</color>] «Noche — tiempo de <color=#FF2373>acelerar</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>ruido</color>] «Cuanto más <color=#FF2373>rápido</color> — mejor»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>interferencia</color>] «Y el corazón late más rápido»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>crackle</color>] «Una vez que aceleras, ya no puedes detenerte»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>bzz</color>] «¡Todavía estás <color=#9aeff3>vivo</color>!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>chirrido</color>] «Tienes la costumbre de jugar con la <color=#FF2373>muerte</color>»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>zumbido en el oído</color>] «<color=#FF2373>Ella</color> encontrará un reemplazo rápidamente»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>bzz</color>] «<color=#9aeff3>Vive</color> rápido, <color=#FF2373>muere</color> joven»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>chirrido</color>] «¿Qué son los <color=#9aeff3>frenos</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>zumbido en el oído</color>] «La <color=#FF2373>adrenalina</color> — el mejor combustible»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>explosión de sonido</color>] «La velocidad te hará <color=#FF2373>libre</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>radio</color>] «Son exactamente medianoche en el reloj. Estás en la Radio de la Carretera Libre...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>radio</color>] «No pierdas <color=#FF2373>velocidad</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>radio</color>] «Otra adelantada. Otra <color=#FF2373>chica</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>radio</color>] «Noche — tiempo de <color=#FF2373>acelerar</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>radio</color>] «Cuanto más <color=#FF2373>rápido</color> — mejor»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>radio</color>] «Y el corazón late más rápido»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>radio</color>] «Una vez que aceleras, ya no puedes detenerte»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>radio</color>] «¡Todavía estás <color=#9aeff3>vivo</color>!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>radio</color>] «Tienes la costumbre de jugar con la <color=#FF2373>muerte</color>»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>radio</color>] «<color=#FF2373>Ella</color> encontrará un reemplazo rápidamente»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>radio</color>] «<color=#9aeff3>Vive</color> rápido, <color=#FF2373>muere</color> joven»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>radio</color>] «¿Qué son los <color=#9aeff3>frenos</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>radio</color>] «La <color=#FF2373>adrenalina</color> — el mejor combustible»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>radio</color>] «La velocidad te hará <color=#FF2373>libre</color>»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_pt = new Dictionary<Text_Key, string>()
@@ -1598,8 +1602,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "ÍMÃ DE MOEDAS",
         [Text_Key.upgrade_heDidNotDie] = "ELE NÃO MORREU",
         [Text_Key.popUpMessage_notEnoughCoins] = "MOEDAS NÃO SUFICIENTES",
-        [Text_Key.tutorial_desktop] = "Usando o mouse, arraste o joystick na direção do movimento.",
-        [Text_Key.tutorial_mobile] = "Toque na tela para mover, depois puxe o joystick na direção do movimento.",
+        [Text_Key.tutorial_desktop] = "Para mover, mantenha pressionado o botão esquerdo do mouse e, em seguida, arraste o joystick virtual na direção do movimento.",
+        [Text_Key.tutorial_mobile] = "Para se mover, mantenha o dedo pressionado na tela e, em seguida, arraste o joystick virtual na direção do movimento.",
         [Text_Key.indicators_complete] = "QUILÔMETROS RESTANTES",
         [Text_Key.midscreen_gameOver] = "FIM DO JOGO",
         [Text_Key.midscreen_pause] = "PAUSA",
@@ -1631,20 +1635,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "Você está bem?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "Você consegue me ouvir?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>interferência</color>] «São exatamente meia-noite no relógio. Você está na Rádio da Estrada Livre...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>ruído</color>] «Não perca <color=#FF2373>velocidade</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>interferência</color>] «Mais uma ultrapassagem. Mais uma <color=#FF2373>garota</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>crackle</color>] «Noite — hora de <color=#FF2373>acelerar</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>ruído</color>] «Quanto mais <color=#FF2373>rápido</color> — melhor»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>interferência</color>] «E o coração bate mais rápido»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>crackle</color>] «Uma vez <color=#FF2373>acelerando</color>, e não podes <color=#9aeff3>parar</color>»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>bzz</color>] «Ainda estás <color=#9aeff3>vivo</color>!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>moagem</color>] «Tens o hábito de namoriscar com a <color=#FF2373>morte</color>»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>zumbido nos ouvidos</color>] «<color=#FF2373>Ela</color> encontrará um substituto rapidamente»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>bzz</color>] «<color=#9aeff3>Vive</color> rápido, <color=#FF2373>morre rápido</color>»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>moagem</color>] «O que são <color=#9aeff3>freios</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>zumbido nos ouvidos</color>] «A <color=#FF2373>adrenalina</color> é o melhor combustível»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>explosão sonora</color>] «A velocidade <color=#9aeff3>libertá-lo-á</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>rádio</color>] «São exatamente meia-noite no relógio. Você está na Rádio da Estrada Livre...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>rádio</color>] «Não perca <color=#FF2373>velocidade</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>rádio</color>] «Mais uma ultrapassagem. Mais uma <color=#FF2373>garota</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>rádio</color>] «Noite — hora de <color=#FF2373>acelerar</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>rádio</color>] «Quanto mais <color=#FF2373>rápido</color> — melhor»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>rádio</color>] «E o coração bate mais rápido»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>rádio</color>] «Uma vez <color=#FF2373>acelerando</color>, e não podes <color=#9aeff3>parar</color>»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>rádio</color>] «Ainda estás <color=#9aeff3>vivo</color>!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>rádio</color>] «Tens o hábito de namoriscar com a <color=#FF2373>morte</color>»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>rádio</color>] «<color=#FF2373>Ela</color> encontrará um substituto rapidamente»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>rádio</color>] «<color=#9aeff3>Vive</color> rápido, <color=#FF2373>morre rápido</color>»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>rádio</color>] «O que são <color=#9aeff3>freios</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>rádio</color>] «A <color=#FF2373>adrenalina</color> é o melhor combustível»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>rádio</color>] «A velocidade <color=#9aeff3>libertá-lo-á</color>»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_de = new Dictionary<Text_Key, string>()
@@ -1657,8 +1661,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "MÜNZMAGNET",
         [Text_Key.upgrade_heDidNotDie] = "ER IST NICHT GESTORBEN",
         [Text_Key.popUpMessage_notEnoughCoins] = "ES FEHLEN MÜNZEN",
-        [Text_Key.tutorial_desktop] = "Ziehen Sie den Joystick mit der Maus in Bewegungsrichtung.",
-        [Text_Key.tutorial_mobile] = "Ziehen Sie den Joystick in Fahrtrichtung, um sich zu bewegen.",
+        [Text_Key.tutorial_desktop] = "Zum Bewegen die linke Maustaste gedrückt halten und dann den virtuellen Stick in Bewegungsrichtung ziehen.",
+        [Text_Key.tutorial_mobile] = "Zum Bewegen halten Sie Ihren Finger auf dem Bildschirm und ziehen Sie dann den virtuellen Stick in Bewegungsrichtung.",
         [Text_Key.indicators_complete] = "KM ZUM ZIEL",
         [Text_Key.midscreen_gameOver] = "SPIEL VORBEI",
         [Text_Key.midscreen_pause] = "PAUSE",
@@ -1690,20 +1694,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "Bist du okay?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "Hörst du mich?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>störungs</color>] «Es ist genau Mitternacht. Hier läuft das Radio der Freien Straße...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>lärm</color>] «Verliere nicht an <color=#FF2373>Geschwindigkeit</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>störungs</color>] «Noch ein Überholmanöver. Noch ein <color=#FF2373>Mädchen</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>knistern</color>] «Nacht — Zeit, das Tempo zu <color=#FF2373>erhöhen</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>lärm</color>] «Je <color=#FF2373>schneller</color>, desto besser»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>Störung</color>] «Und das Herz schlägt schneller»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>knistern</color>] «Einmal Gas <color=#FF2373>geben</color>, und man kann nicht mehr <color=#9aeff3>aufhören</color>»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>bzz</color>] «Du <color=#9aeff3>lebst</color> noch!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>Kreischen</color>] «Du hast die Angewohnheit, mit dem <color=#9aeff3>Tod</color> zu spielen»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>ohrenklingeln</color>] «<color=#FF2373>Sie</color> wird schnell einen Ersatz finden»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>bzz</color>] «<color=#9aeff3>Lebe</color> schnell, <color=#FF2373>sterbe</color> jung»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>kreischen</color>] «Was sind <color=#9aeff3>Bremsen</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>ohrenklingeln</color>] «<color=#FF2373>Adrenalin</color> — der beste Treibstoff»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>soundexplosion</color>] «Geschwindigkeit macht dich <color=#9aeff3>frei</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>Radio</color>] «Es ist genau Mitternacht. Hier läuft das Radio der Freien Straße...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>Radio</color>] «Verliere nicht an <color=#FF2373>Geschwindigkeit</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>Radio</color>] «Noch ein Überholmanöver. Noch ein <color=#FF2373>Mädchen</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>Radio</color>] «Nacht — Zeit, das Tempo zu <color=#FF2373>erhöhen</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>Radio</color>] «Je <color=#FF2373>schneller</color>, desto besser»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>Radio</color>] «Und das Herz schlägt schneller»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>Radio</color>] «Einmal Gas <color=#FF2373>geben</color>, und man kann nicht mehr <color=#9aeff3>aufhören</color>»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>Radio</color>] «Du <color=#9aeff3>lebst</color> noch!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>Radio</color>] «Du hast die Angewohnheit, mit dem <color=#9aeff3>Tod</color> zu spielen»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>Radio</color>] «<color=#FF2373>Sie</color> wird schnell einen Ersatz finden»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>Radio</color>] «<color=#9aeff3>Lebe</color> schnell, <color=#FF2373>sterbe</color> jung»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>Radio</color>] «Was sind <color=#9aeff3>Bremsen</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>Radio</color>] «<color=#FF2373>Adrenalin</color> — der beste Treibstoff»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>Radio</color>] «Geschwindigkeit macht dich <color=#9aeff3>frei</color>»"
     };
 
     private Dictionary<Text_Key, string> text_dictionary_id = new Dictionary<Text_Key, string>()
@@ -1716,8 +1720,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.upgrade_coinMagnet] = "KOIN MAGNET",
         [Text_Key.upgrade_heDidNotDie] = "DIA TIDAK MATI",
         [Text_Key.popUpMessage_notEnoughCoins] = "KOIN TIDAK CUKUP",
-        [Text_Key.tutorial_desktop] = "Tahan tombol kiri mouse untuk bergerak, lalu tarik stik ke arah gerakan.",
-        [Text_Key.tutorial_mobile] = "Ketuk layar untuk bergerak, lalu tarik stik ke arah gerakan.",
+        [Text_Key.tutorial_desktop] = "Untuk bergerak, tahan tombol kiri mouse, lalu tarik stik virtual searah gerakan.",
+        [Text_Key.tutorial_mobile] = "Untuk bergerak, tahan jari Anda pada layar, lalu tarik stik virtual searah gerakan.",
         [Text_Key.indicators_complete] = "KILOMETER TERSISA",
         [Text_Key.midscreen_gameOver] = "PERMAINAN BERAKHIR",
         [Text_Key.midscreen_pause] = "BERHENTI SEBENTAR",
@@ -1749,20 +1753,20 @@ public class ControlPers_LanguageHandler : MonoBehaviour
         [Text_Key.dialogue_end_string_5] = "Apakah kamu baik-baik saja?",
         [Text_Key.dialogue_end_string_6] = "…",
         [Text_Key.dialogue_end_string_7] = "Kamu bisa mendengarku?",
-        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>gangguan</color>] «Ini tepat tengah malam di jam. Kamu sedang mendengarkan Radio Jalan Bebas...»",
-        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>suara</color>] «Jangan kehilangan <color=#FF2373>kecepatan</color>»",
-        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>gangguan</color>] «Lagi satu menyalip. Lagi satu <color=#FF2373>gadis</color>»",
-        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>kretek</color>] «Malam — waktu untuk <color=#FF2373>mempercepat</color>»",
-        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>suara</color>] «Semakin <color=#FF2373>cepat</color> — semakin baik»",
-        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>gangguan</color>] «Dan jantung berdetak lebih cepat»",
-        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>kretek</color>] «Sekali <color=#FF2373>gas</color>, tak bisa berhenti <color=#9aeff3>lagi</color>»",
-        [Text_Key.radio_string_late_1] = "[<color=#FF2373>bzz</color>] «Kamu masih <color=#9aeff3>hidup</color>!»",
-        [Text_Key.radio_string_late_2] = "[<color=#FF2373>geraman</color>] «Kamu punya kebiasaan bermain dengan <color=#FF2373>kematian</color>»",
-        [Text_Key.radio_string_late_3] = "[<color=#FF2373>berdering di telinga</color>] «<color=#FF2373>Dia</color> akan segera menemukan pengganti»",
-        [Text_Key.radio_string_late_4] = "[<color=#FF2373>bzz</color>] «<color=#9aeff3>Hidup</color> cepat, <color=#FF2373>mati</color> muda»",
-        [Text_Key.radio_string_late_5] = "[<color=#FF2373>geraman</color>] «Apa itu <color=#9aeff3>rem</color>?»",
-        [Text_Key.radio_string_late_6] = "[<color=#FF2373>berdering di telinga</color>] «<color=#FF2373>Adrenalin</color> — bahan bakar terbaik»",
-        [Text_Key.radio_string_late_7] = "[<color=#FF2373>ledakan suara</color>] «Kecepatan akan <color=#9aeff3>membebaskanmu</color>»"
+        [Text_Key.radio_string_early_1] = "[<color=#9aeff3>radio</color>] «Ini tepat tengah malam di jam. Kamu sedang mendengarkan Radio Jalan Bebas...»",
+        [Text_Key.radio_string_early_2] = "[<color=#9aeff3>radio</color>] «Jangan kehilangan <color=#FF2373>kecepatan</color>»",
+        [Text_Key.radio_string_early_3] = "[<color=#9aeff3>radio</color>] «Lagi satu menyalip. Lagi satu <color=#FF2373>gadis</color>»",
+        [Text_Key.radio_string_early_4] = "[<color=#9aeff3>radio</color>] «Malam — waktu untuk <color=#FF2373>mempercepat</color>»",
+        [Text_Key.radio_string_early_5] = "[<color=#9aeff3>radio</color>] «Semakin <color=#FF2373>cepat</color> — semakin baik»",
+        [Text_Key.radio_string_early_6] = "[<color=#9aeff3>radio</color>] «Dan jantung berdetak lebih cepat»",
+        [Text_Key.radio_string_early_7] = "[<color=#9aeff3>radio</color>] «Sekali <color=#FF2373>gas</color>, tak bisa berhenti <color=#9aeff3>lagi</color>»",
+        [Text_Key.radio_string_late_1] = "[<color=#FF2373>radio</color>] «Kamu masih <color=#9aeff3>hidup</color>!»",
+        [Text_Key.radio_string_late_2] = "[<color=#FF2373>radio</color>] «Kamu punya kebiasaan bermain dengan <color=#FF2373>kematian</color>»",
+        [Text_Key.radio_string_late_3] = "[<color=#FF2373>radio/color>] «<color=#FF2373>Dia</color> akan segera menemukan pengganti»",
+        [Text_Key.radio_string_late_4] = "[<color=#FF2373>radio</color>] «<color=#9aeff3>Hidup</color> cepat, <color=#FF2373>mati</color> muda»",
+        [Text_Key.radio_string_late_5] = "[<color=#FF2373>radio</color>] «Apa itu <color=#9aeff3>rem</color>?»",
+        [Text_Key.radio_string_late_6] = "[<color=#FF2373>radio</color>] «<color=#FF2373>Adrenalin</color> — bahan bakar terbaik»",
+        [Text_Key.radio_string_late_7] = "[<color=#FF2373>radio</color>] «Kecepatan akan <color=#9aeff3>membebaskanmu</color>»"
     };
 
     public string Text_Get(Text_Key _key)
@@ -1797,6 +1801,8 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     #endregion
 
+    #region GameLanguage
+
     public enum GameLanguage
     {
         english,
@@ -1820,7 +1826,9 @@ public class ControlPers_LanguageHandler : MonoBehaviour
 
     public delegate void GameLanguage_Update();
     public event GameLanguage_Update GameLanguage_OnUpdate;
-        
+
+    #endregion
+
     private void Awake()
     {
         SingleOnScene = this;

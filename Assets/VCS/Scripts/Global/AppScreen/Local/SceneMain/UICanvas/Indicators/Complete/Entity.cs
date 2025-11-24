@@ -18,6 +18,15 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         { 
             active = value;
             text.enabled = value;
+
+            if (value)
+            {
+                sound_radio.UnPause();
+            }
+            else
+            {
+                sound_radio.Pause();
+            }
         }
     }
 
@@ -104,8 +113,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private bool            text_radio_list_early_isFirst = true;
     private List<string>    text_radio_list_late;
 
-    private const float TEXT_RADIO_MUSIC_VOLUME_MULTIPLIER = 0.75f;
-    private float       text_radio_music_volume_init;
+    private const float TEXT_RADIO_MUSIC_VOLUME_SCALE = 0.75f;
 
     private CanvasGroup canvasGroup;
 
@@ -147,6 +155,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
         var _routine = _Coroutine(_delay);
         StartCoroutine(_routine);
     }
+
+    [SerializeField] AudioSource sound_radio;
 
     protected override void Awake()
     {
@@ -241,10 +251,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
                             }
                         }
 
-                        //TODO: Звук "помех и неразборчивой речи" ВКЛ
-                        text_radio_music_volume_init = ControlPers_AudioMixer_Music.SingleOnScene.Volume_Get();
-                        var _volume = text_radio_music_volume_init * TEXT_RADIO_MUSIC_VOLUME_MULTIPLIER;
-                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(_volume);
+                        sound_radio.Play();
+                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Scale_Set(TEXT_RADIO_MUSIC_VOLUME_SCALE);
 
                         state = State.appear_radio;
                     }
@@ -271,8 +279,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
                     {
                         state_time = STATE_TIME_HIDE;
 
-                        //TODO: Звук "помех и неразборчивой речи" ВЫКЛ (Если он сильно длиный)
-                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(text_radio_music_volume_init);
+                        sound_radio.Stop();
+                        ControlPers_AudioMixer_Music.SingleOnScene.Volume_Scale_Set(1f);
 
                         state = State.hidden;
                     }

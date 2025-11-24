@@ -16,7 +16,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
         if (mute)
         {
             AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Music.SingleOnScene.Value = _musicValue;
-            ControlPers_AudioMixer_Music.SingleOnScene.Volume_Set(_musicValue);
+            ControlPers_AudioMixer_Music.SingleOnScene.Volume_Settings_Set(_musicValue);
             ControlPers_DataHandler.SingleOnScene.SettingsData_MusicValue = _musicValue;
             base.Mute_Off(_musicValue);
         }

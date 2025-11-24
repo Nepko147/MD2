@@ -6,12 +6,9 @@ public class World_Local_SceneMain_Cops_Coins : MonoBehaviour
 
     [SerializeField] private GameObject coin_prefab;
     [SerializeField] private GameObject[] coins_positions;
-    private bool coins_spawned = false;
 
     public void Coins_Spawn()
     {
-        if (!coins_spawned)
-        {
             GameObject _inst;
 
             for (var _i = 0; _i < coins_positions.Length; ++_i)
@@ -23,16 +20,6 @@ public class World_Local_SceneMain_Cops_Coins : MonoBehaviour
                     _inst.GetComponent<World_Local_SceneMain_Bonus_Coin>().CoinMagnet_Trigger();
                 }
             }
-
-            ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
-
-            coins_spawned = true;
-        }
-    }
-
-    public void Coins_Spawn_Refresh()
-    {
-        coins_spawned = false;
     }
 
     private void Awake()

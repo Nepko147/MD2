@@ -4,9 +4,9 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-namespace Editor
+namespace UnityEditorCustom
 {
-    public class OnLoad
+    public class Editor_OnLoad
     {
         //Загрузка первой сцены из списка сцен при запуске любой сцены в редакторе
         [InitializeOnLoadMethod]

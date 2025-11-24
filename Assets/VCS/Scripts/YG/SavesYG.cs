@@ -18,6 +18,5 @@ namespace YG
 
         public float SettingsData_Audio_Sound = ControlPers_DataHandler.SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE;
         public float SettingsData_Audio_Music = ControlPers_DataHandler.SETTINGSDATA_AUDIO_MUSIC_DEFAULTVALUE;
-        public ControlPers_LanguageHandler.GameLanguage SettingsData_Language = ControlPers_DataHandler.SETTINGSDATA_LANGUAGE_DEFAULTVALUE;
     }
 }

@@ -720,6 +720,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public const float SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE = SettingsData.Audio.Sound.DEFAULTVALUE;
     public const float SETTINGSDATA_AUDIO_MUSIC_DEFAULTVALUE = SettingsData.Audio.Music.DEFAULTVALUE;
+
     public const ControlPers_LanguageHandler.GameLanguage SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
 
     public void SettingsData_Load()
@@ -752,7 +753,17 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 SettingsData.Audio.Sound.value = YG2.saves.SettingsData_Audio_Sound;
                 SettingsData.Audio.Music.value = YG2.saves.SettingsData_Audio_Music;
-                SettingsData.Language.value = YG2.saves.SettingsData_Language;
+
+                switch (YG2.lang)
+                {
+                    case "ru":
+                        SettingsData.Language.value = ControlPers_LanguageHandler.GameLanguage.russian;
+                    break;
+
+                    default:
+                        SettingsData.Language.value = SettingsData.Language.DEFAULTVALUE;
+                    break;
+                }
             break;
         }
     }
@@ -778,7 +789,6 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
                 YG2.saves.SettingsData_Audio_Sound = SettingsData.Audio.Sound.value;
                 YG2.saves.SettingsData_Audio_Music = SettingsData.Audio.Music.value;
-                YG2.saves.SettingsData_Language = SettingsData.Language.value;
 
                 YG2.SaveProgress();
             break;
