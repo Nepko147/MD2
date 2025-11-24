@@ -431,7 +431,7 @@ public class ControlScene_Main : MonoBehaviour
         driftSection_array = new DriftSection[14]
         {
             new DriftSection(driftSection_prefab[0], "14", 1f),
-            new DriftSection(driftSection_prefab[1], "13.75", 10f),
+            new DriftSection(driftSection_prefab[1], "13.75", 1f),
             new DriftSection(driftSection_prefab[2], "13.5", 2f),
             new DriftSection(driftSection_prefab[3], "13", 2f),
             new DriftSection(driftSection_prefab[4], "12.5", 3f),
