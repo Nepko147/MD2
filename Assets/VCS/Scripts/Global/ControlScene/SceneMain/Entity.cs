@@ -431,7 +431,7 @@ public class ControlScene_Main : MonoBehaviour
         driftSection_array = new DriftSection[14]
         {
             new DriftSection(driftSection_prefab[0], "14", 1f),
-            new DriftSection(driftSection_prefab[1], "13.75", 1f),
+            new DriftSection(driftSection_prefab[1], "13.75", 10f),
             new DriftSection(driftSection_prefab[2], "13.5", 2f),
             new DriftSection(driftSection_prefab[3], "13", 2f),
             new DriftSection(driftSection_prefab[4], "12.5", 3f),
@@ -1570,16 +1570,17 @@ public class ControlScene_Main : MonoBehaviour
                 if (AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count > 0)
                 {
                     AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
-                    AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
 
                     switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
                     {
                         case ControlPers_BuildSettings.PlatformType.windows:
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
                         break;
 
                         case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
                         case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
                         break;
                     }                    
