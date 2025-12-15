@@ -10,7 +10,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Local_Revive_Entity
 
     public void Text_LanguageRefresh()
     {
-        text_bonusName.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.upgrade_heDidNotDie);
+        text_bonusName.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.upgrade_heDidNotDie);
     }
 
     protected override void Awake()
@@ -23,11 +23,11 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_Local_Revive_Entity
     private void Start()
     {
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

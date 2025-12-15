@@ -42,13 +42,13 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
         switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
             case ControlPers_BuildSettings.PlatformType.windows:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
                 break;
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
                 break;
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_mobile); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_mobile); ;
                 break;
         }
     }
@@ -85,7 +85,7 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
                 {
                     if (!ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
                     {
-                        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.loadingCloudData);
+                        text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.loadingCloudData);
                         stage = Stage.LoadData;
                     }
                     else

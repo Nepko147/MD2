@@ -73,8 +73,9 @@ public class World_Local_SceneMain_DriftSection_Enity_Parent : MonoBehaviour
         for (var _i = 0; _i < path_array.Length; ++_i)
         {
             var _length_current = 0f;
+            var _length_max = path_array[_i].Spline_Length - path_coin_ofs_current;
 
-            while (_length_current <= path_array[_i].Spline_Length)
+            while (_length_current <= _length_max)
             {
                 var _pos = path_array[_i].Spline_Point_Get(_length_current);
                 Instantiate(path_coin_prefab, _pos, new Quaternion(), path_array[_i].transform.parent.transform);

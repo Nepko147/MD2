@@ -50,30 +50,30 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     public void Text_LanguageRefresh()
     {
-        Text_Km_Left = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.indicators_complete);
+        Text_Km_Left = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.indicators_complete);
 
-        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
+        var _languageHandler = ControlPers_LanguageHandler_Entity.SingleOnScene;
 
         text_radio_list_early = new List<string>
         {
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_1),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_2),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_3),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_4),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_5),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_6),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_early_7),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_1),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_2),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_3),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_4),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_5),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_6),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_early_7),
         };
 
         text_radio_list_late = new List<string>
         {
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_1),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_2),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_3),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_4),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_5),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_6),
-            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.radio_string_late_7),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_1),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_2),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_3),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_4),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_5),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_6),
+            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.radio_string_late_7),
         };
     }
 
@@ -175,7 +175,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
     private void Start()
     {
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -291,6 +291,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity : App
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

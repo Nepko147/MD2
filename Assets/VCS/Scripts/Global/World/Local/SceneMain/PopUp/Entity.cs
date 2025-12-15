@@ -25,21 +25,21 @@ public class World_Local_SceneMain_PopUp_Entity : MonoBehaviour
     public void Display_AsUp()
     {
         display = true;
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_up);
+        text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.popUp_up);
         Image_Sprite_Set(image_sprite_up);
         Behaviour = Behaviour_Up;
     }
     public void Display_AsCoin()
     {
         display = true;
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_coin);
+        text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.popUp_coin);
         Image_Sprite_Set(image_sprite_coin);
         Behaviour = Behaviour_Coin;
     }
     public void Display_AsCoinRush()
     {
         display = true;
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUp_coinRush);
+        text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.popUp_coinRush);
         Image_Sprite_Set(image_sprite_coinRush);
         Behaviour = Behaviour_CoinRush;
     }

@@ -90,16 +90,16 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
 
     public void Text_LanguageRefresh()
     {
-        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
+        var _languageHandler = ControlPers_LanguageHandler_Entity.SingleOnScene;
 
-        gameBy.text =                       _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.gameBy);
-        reviveNumber_text.text =            _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_reviveNumber);
-        reviveNumberBest_text.text =        _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_best);
-        coinsTotal_text.text =              _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsTotal);
-        coinsSpentOnRevivals_text.text =    _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_coinsSpentOnRevivals);
-        defeats_text.text =                 _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_defeats);
-        totalDrivings_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_totalDrivings);
-        gameCompleted_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_gameCompleted);
+        gameBy.text =                       _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.gameBy);
+        reviveNumber_text.text =            _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_reviveNumber);
+        reviveNumberBest_text.text =        _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_best);
+        coinsTotal_text.text =              _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_coinsTotal);
+        coinsSpentOnRevivals_text.text =    _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_coinsSpentOnRevivals);
+        defeats_text.text =                 _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_defeats);
+        totalDrivings_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_totalDrivings);
+        gameCompleted_text.text =           _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_gameCompleted);
     }
 
     private void Awake()
@@ -121,7 +121,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
             + Vector3.up * reviveNumberBest_newRecord_position_offsetY;
 
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -157,6 +157,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity : Mon
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

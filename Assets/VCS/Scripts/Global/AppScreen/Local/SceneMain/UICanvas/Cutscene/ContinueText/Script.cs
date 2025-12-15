@@ -24,13 +24,13 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText : MonoBeha
         switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
             case ControlPers_BuildSettings.PlatformType.windows:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
                 break;
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_desktop); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
                 break;
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.startText_mobile); ;
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_mobile); ;
                 break;
         }
     }
@@ -71,7 +71,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText : MonoBeha
     private void Start()
     {
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -103,6 +103,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText : MonoBeha
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

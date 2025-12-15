@@ -25,9 +25,9 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
     private Vector2 image_min;
     private Vector2 image_max;
 
-    private Sprite image_currennt_idle;
-    private Sprite image_currennt_pointed;
-    private Sprite image_currennt_pressed;
+    protected Sprite image_currennt_idle;
+    protected Sprite image_currennt_pointed;
+    protected Sprite image_currennt_pressed;
     private Vector2 image_current_sizeDelta = Vector2.zero;
 
     public void Image_PointsRefresh()
@@ -36,15 +36,13 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         image_max = Image_ScreenPoint_Max(image);
     }
 
-    public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
+    public void Image_LanguageRefresh(Sprite _idle, Sprite _pointed, Sprite _pressed)
     {
         position_last = transform.localPosition;
 
-        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.Buttons_GetSprites(_buttonName, 3);
-        
-        image_currennt_idle = _spriteArray[0];
-        image_currennt_pointed = _spriteArray[1];
-        image_currennt_pressed = _spriteArray[2];
+        image_currennt_idle = _idle;
+        image_currennt_pointed = _pointed;
+        image_currennt_pressed = _pressed;
 
         image_current_sizeDelta.x = image_currennt_idle.rect.width;
         image_current_sizeDelta.y = image_currennt_idle.rect.height;
@@ -123,7 +121,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
 
                 position_last = transform.position;
             }
-
+            
             if (!Pointed(image_min, image_max))
             {
                 if (image.sprite != image_currennt_idle)

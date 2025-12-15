@@ -28,7 +28,7 @@ public class AppScreen_Local_SceneMain_UICanvas_MidScreen_Entity : AppScreen_Gen
     private void Start()
     {
         var _source = transform.localPosition;
-        var _destination = transform.localPosition + Vector3.up * 100.0f;
+        var _destination = transform.localPosition + Vector3.up * 100f;
         Shift_Positions_Set(_source, _destination);
     }
 }

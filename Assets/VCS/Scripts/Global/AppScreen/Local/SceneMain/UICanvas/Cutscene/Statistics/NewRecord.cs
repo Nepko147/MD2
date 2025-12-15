@@ -16,7 +16,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_NewRecord : 
     private Text text;
     public void Text_LanguageRefresh()
     {
-        text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.statistics_newRecord);
+        text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.statistics_newRecord);
     }
 
     private void Awake()
@@ -28,7 +28,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_NewRecord : 
     private void Start()
     {
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -41,6 +41,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_NewRecord : 
     }
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

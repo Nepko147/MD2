@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_Local_SceneMenu_UICanvas_Menu_General_Entity_Parent
+public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanvas_Parent
 {
     public static AppScreen_UICanvas_Menu_Upgrades_Entity SingleOnScene { get; private set; }
 
@@ -60,6 +60,13 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_Local_SceneMenu
         canvasGroup.alpha = 0.0f;
 
         menu_upgrades_state_currnet = menu_upgrades_state.idle;
+    }
+
+    private void Start()
+    {
+        var _source = new Vector3(0, -360, 0);
+        var _destination = new Vector3(0, -10, 0);
+        Shift_Positions_Set(_source, _destination);
     }
 
     private void Update()

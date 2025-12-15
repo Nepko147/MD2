@@ -1,0 +1,24 @@
+{
+    "intExample": 5,
+    "strExample": "Hello!",
+    "boolExample": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "idSave": 28,
+    "ProgressData_Statistics_ReviveNumber": 0,
+    "ProgressData_Statistics_ReviveNumberBest": 0,
+    "ProgressData_Statistics_CoinsTotal": 806,
+    "ProgressData_Statistics_CoinsSpentOnRevivals": 0,
+    "ProgressData_Statistics_Defeats": 8,
+    "ProgressData_Statistics_TotalDrivings": 21,
+    "ProgressData_Upgrades_MoreCoins": 0,
+    "ProgressData_Upgrades_MoreBonuses": 0,
+    "ProgressData_Upgrades_CoinMagnet": 0,
+    "ProgressData_Upgrades_Revive": 0,
+    "ProgressData_Coins": 556,
+    "SettingsData_Audio_Sound": 0.7912164330482483,
+    "SettingsData_Audio_Music": 0.800000011920929
+}

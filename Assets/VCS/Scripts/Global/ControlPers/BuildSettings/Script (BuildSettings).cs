@@ -23,14 +23,8 @@ public class ControlPers_BuildSettings : MonoBehaviour
 
     public PlatformType PlatformType_Current { get; private set; }
 
-    [SerializeField] private bool encryptProgressFile;
-    public bool EncryptProgressFile 
-    { 
-        get 
-        { 
-            return (encryptProgressFile); 
-        } 
-    }
+    public const int PLATFORMTYPE_WEB_YANDEXGAMES_BONUS_PRICE_MULT = 2;
+    public const int PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT = 3;
 
     [SerializeField] private bool debugInfo;
     public bool DebugInfo 
@@ -38,6 +32,24 @@ public class ControlPers_BuildSettings : MonoBehaviour
         get 
         { 
             return (debugInfo); 
+        } 
+    }
+
+    [SerializeField] private bool notEncryptProgressFile;
+    public bool NotEncryptProgressFile 
+    { 
+        get 
+        { 
+            return (notEncryptProgressFile); 
+        } 
+    }
+
+    [SerializeField] private bool resetAsFirstLaunch;
+    public bool ResetAsFirstLaunch 
+    { 
+        get 
+        { 
+            return (resetAsFirstLaunch); 
         } 
     }
 

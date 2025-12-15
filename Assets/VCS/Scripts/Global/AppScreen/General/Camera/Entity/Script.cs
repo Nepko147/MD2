@@ -39,12 +39,11 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     }
 
     private Vector3 move_destination_position;
-    private const float MOVE_DESTINATION_SPEED = 3f;
 
-    public void Move_Destination(Vector3 _position)
+    public void Move_Destination(Vector3 _position, float _speed)
     {
         move_destination_position = _position;
-        move_speed = MOVE_DESTINATION_SPEED;
+        move_speed = _speed;
         move_state_current = Move_State.destination;
     }
 
@@ -125,6 +124,12 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
         _pos_off.z = Position_Init.z;
         zoomToTarget_position_off = _pos_off;
         zoomToTarget_state_current = ZoomToTarget_state.off;
+    }
+
+    public void ZoomToTarget_Off_Instant()
+    {
+        zoomToTarget_active = false;
+        zoomToTarget_state_current = ZoomToTarget_state.idle;
     }
 
     #endregion

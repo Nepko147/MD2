@@ -81,22 +81,32 @@ using UnityEngine;
 
     public bool SpeedScale_Active { get; set; }
     public float SpeedScale { get; set; }
-    public const float SPEEDSCALE_INIT = 0.008f;
-    private const float SPEEDSCALE_INCREMENT = 0.0001f;
+    public const float SPEEDSCALE_MIN = 0.008f;
     private const float SPEEDSCALE_MAX = 0.018f;
-    
+    private const float SPEEDSCALE_STEP_MIN = 0.00015f;
+    private const float SPEEDSCALE_STEP_MAX = 0.0005f;
+    private float speedScale_step = SPEEDSCALE_STEP_MIN;
+
     public float SpeedScale_Normalized()
     {
-        return ((SpeedScale - SPEEDSCALE_INIT) / (SPEEDSCALE_MAX - SPEEDSCALE_INIT));
+        return ((SpeedScale - SPEEDSCALE_MIN) / (SPEEDSCALE_MAX - SPEEDSCALE_MIN));
+    }
+
+    /// <summary>
+    /// _boost - нормализованный коэфициэнт увеличения ускорения
+    /// </summary>
+    public void SpeedScale_Step_Boost(float _boost)
+    {
+        speedScale_step = SPEEDSCALE_STEP_MIN + (SPEEDSCALE_STEP_MAX - SPEEDSCALE_STEP_MIN) * _boost;
     }
 
     private void Awake()
     {
         SingleOnScene = this;
 
-        SpeedScale_Active = false;
+        SpeedScale_Active = true;
 
-        SpeedScale = SPEEDSCALE_INIT;
+        SpeedScale = SPEEDSCALE_MIN;
 
         Color = color_init;
     }
@@ -106,7 +116,7 @@ using UnityEngine;
         if (Active
         && SpeedScale_Active)
         {
-            SpeedScale += SPEEDSCALE_INCREMENT * Time.deltaTime;
+            SpeedScale += speedScale_step * Time.deltaTime;
 
             if (SpeedScale >= SPEEDSCALE_MAX)
             {

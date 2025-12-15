@@ -131,7 +131,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
     #region Pitch
 
     private const float PITCH_TIME = 1.5f;
-    private IEnumerator pitch_coroutine_current;
+    private IEnumerator Pitch_Coroutine_Current;
 
     private IEnumerator Pitch_Coroutine_ToZero()
     {
@@ -172,18 +172,18 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
     public void Pitch_ToZero()
     {
-        StopCoroutine(pitch_coroutine_current);
-        pitch_coroutine_current = Pitch_Coroutine_ToZero();
-        StartCoroutine(pitch_coroutine_current);
+        StopCoroutine(Pitch_Coroutine_Current);
+        Pitch_Coroutine_Current = Pitch_Coroutine_ToZero();
+        StartCoroutine(Pitch_Coroutine_Current);
     }
 
     public void Pitch_ToNormal()
     {
         audioSource.UnPause();
 
-        StopCoroutine(pitch_coroutine_current);
-        pitch_coroutine_current = Pitch_Coroutine_ToNormal();
-        StartCoroutine(pitch_coroutine_current);
+        StopCoroutine(Pitch_Coroutine_Current);
+        Pitch_Coroutine_Current = Pitch_Coroutine_ToNormal();
+        StartCoroutine(Pitch_Coroutine_Current);
     }
 
     #endregion
@@ -196,7 +196,7 @@ public class ControlPers_AudioMixer_Music : MonoBehaviour
 
         Volume_Scale_Coroutine_Current = Pitch_Coroutine_ToNormal();
 
-        pitch_coroutine_current = Pitch_Coroutine_ToNormal();
+        Pitch_Coroutine_Current = Pitch_Coroutine_ToNormal();
     }
 
     private void Start()

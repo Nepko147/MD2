@@ -43,10 +43,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
         AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString.SingleOnScene.Enable(true);
         AppScreen_Local_SceneMain_UICanvas_MidScreen_SmallString.SingleOnScene.Enable(true);
 
-        var _text_gameOver = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_gameOver);
+        var _text_gameOver = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.midscreen_gameOver);
         AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString.SingleOnScene.UpdateText(_text_gameOver);
         
-        var _text_distanceRemain = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_distanceRemain) 
+        var _text_distanceRemain = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.midscreen_distanceRemain) 
             + ": "
             + AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number 
             + TEXT_GAMEOVER_DISTANCEREMAIN_SUFF;
@@ -56,7 +56,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Entity : MonoBehaviour
     public void SetPause(bool _pause)
     {
         AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString.SingleOnScene.Enable(_pause);
-        var _text_pause = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.midscreen_pause);
+        var _text_pause = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.midscreen_pause);
         AppScreen_Local_SceneMain_UICanvas_MidScreen_BigString.SingleOnScene.UpdateText(_text_pause);
     }
 

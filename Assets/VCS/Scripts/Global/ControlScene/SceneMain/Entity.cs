@@ -16,22 +16,26 @@ public class ControlScene_Main : MonoBehaviour
 
     private struct DriftSection 
     {
-        public DriftSection(GameObject _prefab, string _distanceLeft, float _timerMult)
+        public DriftSection(GameObject _prefab, string _distanceLeft, float _timerMult, float _speedScale_step_boost)
         {
             prefab = _prefab;
             distanceLeft = _distanceLeft;
             timerMult = _timerMult;
+            speedScale_step_boost = _speedScale_step_boost;
         }
 
         public GameObject prefab;
         public string distanceLeft;
         public float timerMult;
+        public float speedScale_step_boost;
     }
     private DriftSection[] driftSection_array; 
     
     private int driftSection_array_current_ind = 0; //0 - по дефолту. 13 - для отладки финальной катсцены
     private int driftSection_complete_number = 0;
     private const int DRIFTSECTION_ARRAY_MUSICCHANGE_IND = 7; //Индекс участка дрифта начиная с которого музыка меняется
+
+    private bool ad_interstitial_isActive = false;
 
     #endregion
 
@@ -158,6 +162,7 @@ public class ControlScene_Main : MonoBehaviour
         private const float STAGE_REVIVE_TIMER_INIT = 5f;
         private const float STAGE_REVIVE_TIMER_NOCOINS = 2.5f;
         private float stage_revive_timer_current;
+        private const int STAGE_REVIVE_TIMER_LENGTH_MAX = 4;
         
         private int stage_revive_cost_current;
         private int stage_revive_cost_bought = 200;
@@ -277,7 +282,6 @@ public class ControlScene_Main : MonoBehaviour
         private float stage_statistics_show_delay = 1.0f;
         private float stage_statistics_shift_time = 30.0f;
         private float stage_statistics_shift_delay = 4.5f;
-        private float stage_statistics_continueTextTime = 22.0f;
 
         private bool Stage_Statistics_Condition()
         {
@@ -412,7 +416,7 @@ public class ControlScene_Main : MonoBehaviour
 
     #region Debug
 
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
 
     [SerializeField] [Range(1,14)] private int debug_startLocation = 1;
     [SerializeField] private bool debug_fastRoadStage = false;
@@ -430,20 +434,20 @@ public class ControlScene_Main : MonoBehaviour
 
         driftSection_array = new DriftSection[14]
         {
-            new DriftSection(driftSection_prefab[0], "14", 1f),
-            new DriftSection(driftSection_prefab[1], "13.75", 1f),
-            new DriftSection(driftSection_prefab[2], "13.5", 2f),
-            new DriftSection(driftSection_prefab[3], "13", 2f),
-            new DriftSection(driftSection_prefab[4], "12.5", 3f),
-            new DriftSection(driftSection_prefab[5], "11.75", 3f),
-            new DriftSection(driftSection_prefab[6], "11", 4f),
-            new DriftSection(driftSection_prefab[7], "10", 4f),
-            new DriftSection(driftSection_prefab[8], "9", 5f),
-            new DriftSection(driftSection_prefab[9], "7.75", 5f),
-            new DriftSection(driftSection_prefab[10], "6.5", 6f),
-            new DriftSection(driftSection_prefab[11], "5", 6f),
-            new DriftSection(driftSection_prefab[12], "3.5", 7f),
-            new DriftSection(driftSection_prefab[13], "1.75", 7f)
+            new DriftSection(driftSection_prefab[0], "14", 1f, 0f),
+            new DriftSection(driftSection_prefab[1], "13.75", 1.25f, 0f),
+            new DriftSection(driftSection_prefab[2], "13.5", 2.49f, 0f),
+            new DriftSection(driftSection_prefab[3], "13", 2.49f, 0.1f),
+            new DriftSection(driftSection_prefab[4], "12.5", 2.49f, 0.2f),
+            new DriftSection(driftSection_prefab[5], "11.75", 2.49f, 0.3f),
+            new DriftSection(driftSection_prefab[6], "11", 2.49f, 0.4f),
+            new DriftSection(driftSection_prefab[7], "10", 2.49f, 0.5f),
+            new DriftSection(driftSection_prefab[8], "9", 2.49f, 0.6f),
+            new DriftSection(driftSection_prefab[9], "7.75", 2.49f, 0.7f),
+            new DriftSection(driftSection_prefab[10], "6.5", 2.49f, 0.8f),
+            new DriftSection(driftSection_prefab[11], "5", 2.49f, 0.9f),
+            new DriftSection(driftSection_prefab[12], "3.5", 2.49f, 1f),
+            new DriftSection(driftSection_prefab[13], "1.75", 4.98f, 0)
         };
         
         void _GeneralActiveState(bool _state)
@@ -680,12 +684,16 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_AudioMixer_Music.SingleOnScene.Pitch_ToNormal();
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Statistics_Refresh();
             AppScreen_Local_SceneMain_UICanvas_Cutscene_Statistics_Entity.SingleOnScene.Show(stage_statistics_show_delay);            
-            AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_continueTextTime);
+            AppScreen_Local_SceneMain_UICanvas_Cutscene_ContinueText.SingleOnScene.Show(stage_statistics_shift_time);
 
             IEnumerator _coroutine(float _delay)
             {
                 yield return new WaitForSeconds(_delay);
 
+                AppScreen_General_Camera_Entity.SingleOnScene.Active = true;
+                AppScreen_General_Camera_Entity.SingleOnScene.Slope_Active = false;
+                AppScreen_General_Camera_Entity.SingleOnScene.ZoomToTarget_Off_Instant();
+                AppScreen_General_Camera_Entity.SingleOnScene.Move_Destination(AppScreen_General_Camera_Entity.SingleOnScene.transform.position + Vector3.down, 0.1f);
                 AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity.SingleOnScene.Shift_toDestination(stage_statistics_shift_time);
             }
 
@@ -828,7 +836,7 @@ public class ControlScene_Main : MonoBehaviour
             World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_General = false;
             AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = false;
 
-            IEnumerator _tutorial()
+            IEnumerator _Tutorial()
             {
                 while (true)
                 {                    
@@ -851,7 +859,7 @@ public class ControlScene_Main : MonoBehaviour
                 }                
             }
 
-            var _routine = _tutorial();
+            var _routine = _Tutorial();
             StartCoroutine(_routine);
         }
         else
@@ -931,6 +939,7 @@ public class ControlScene_Main : MonoBehaviour
                 break;
             }
         }
+
         #endif
     }
 
@@ -1093,9 +1102,9 @@ public class ControlScene_Main : MonoBehaviour
 
                                             stage_road_toDrift_sirens_activate = true;
 
-                                            #if UNITY_EDITOR
+                                            World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Step_Boost( driftSection_array[driftSection_array_current_ind].speedScale_step_boost);
 
-                                            AppScreen_UICanvas_DebugInfo.SingleOnScene.Text_Set("Current Drift Location: " + driftSection_array_current_ind);
+                                            #if UNITY_EDITOR
 
                                             if (debug_fastRoadStage)
                                             {
@@ -1107,13 +1116,6 @@ public class ControlScene_Main : MonoBehaviour
                                         else
                                         {
                                             stage_road_last = true;
-
-                                            #if UNITY_EDITOR
-
-                                            var _num = driftSection_array_current_ind + 1;
-                                            AppScreen_UICanvas_DebugInfo.SingleOnScene.Text_Set("Current Drift Location: " + _num);
-
-                                            #endif
                                         }
 
                                         World_Local_SceneMain_Player_Entity.SingleOnScene.State_Current = World_Local_SceneMain_Player_Entity.State.road_toDrift_alignment;
@@ -1206,7 +1208,6 @@ public class ControlScene_Main : MonoBehaviour
                                     }
 
                                     World_General_Sky.SingleOnScene.Active = false;
-                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
 
                                     foreach (var _item in FindObjectsByType<World_General_MovingBackground_Parent>(FindObjectsSortMode.None))
                                     {
@@ -1320,7 +1321,7 @@ public class ControlScene_Main : MonoBehaviour
                         && World_Local_SceneMain_Player_Entity.SingleOnScene.Moving_Drift_ToRoad_Braking)
                         {
                             World_General_Sky.SingleOnScene.Active = true;
-                            AppScreen_General_Camera_Entity.SingleOnScene.Move_Destination(AppScreen_General_Camera_Entity.SingleOnScene.Position_Init);
+                            AppScreen_General_Camera_Entity.SingleOnScene.Move_Destination(AppScreen_General_Camera_Entity.SingleOnScene.Position_Init, 3f);
 
                             foreach (World_General_DrawableSurface _item in FindObjectsByType<World_General_DrawableSurface>(FindObjectsSortMode.None))
                             {
@@ -1369,20 +1370,21 @@ public class ControlScene_Main : MonoBehaviour
                                     Stage_Revive_Event_Off -= Stage_Revive_Event_Off_ToDrift;
                                     Stage_Revive_Event_Off += Stage_Revive_Event_Off_ToRoad;
 
+                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale_Active = true;
                                     World_Local_SceneMain_EnemySpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_BonusSpawner.SingleOnScene.Active_Local_Road = true;
                                     World_Local_SceneMain_Cops_Entity.SingleOnScene.Active = true;
-                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = World_General_MovingBackground_Entity.SPEEDSCALE_INIT;
+                                    World_General_MovingBackground_Entity.SingleOnScene.SpeedScale = World_General_MovingBackground_Entity.SPEEDSCALE_MIN;
                                     World_General_MovingBackground_Billboard.SingleOnScene.Move = true;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event += Stage_Road_PlayerHitZoom;
                                     World_Local_SceneMain_Player_Entity.SingleOnScene.Up_Lose_Event -= Stage_Drift_PlayerHitZoom;
                                     World_Local_SceneMain_DriftSection_Transition_Barrier.SingleOnScene.Active = false;
                                     AppScreen_General_Camera_World_Entity.SingleOnScene.Zoom_State_ToPulse();
                                     AppScreen_General_Camera_GlobalLightning_Entity.SingleOnScene.Position_Z_ZoomOfs_Road();
-                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
-                                    AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
 
                                     ++driftSection_complete_number;
+
+                                    var _indicators_complete_show = true;
 
                                     //Смена состояний луны
                                     switch (driftSection_complete_number)
@@ -1423,7 +1425,14 @@ public class ControlScene_Main : MonoBehaviour
                                             //луна отсутствует                                            
                                             World_General_Moon.SingleOnScene.Skull_IsVisible = false;
                                             World_General_Moon.SingleOnScene.Skull_Parts_IsVisible = false;
+                                            _indicators_complete_show = false;
                                         break;
+                                    }
+
+                                    if (_indicators_complete_show)
+                                    {
+                                        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Text_Number = driftSection_array[driftSection_array_current_ind].distanceLeft;
+                                        AppScreen_Local_SceneMain_UICanvas_Indicators_Complete_Entity.SingleOnScene.Show(1f);
                                     }
 
                                     stage_drift_toRoad_cutscene = false;
@@ -1480,7 +1489,15 @@ public class ControlScene_Main : MonoBehaviour
 
                     if (stage_revive_timer_current > 0)
                     {
-                        _string = stage_revive_timer_current.ToString().Substring(0, 4);
+                        _string = stage_revive_timer_current.ToString();
+                        var _length = _string.Length;
+
+                        if (_length > STAGE_REVIVE_TIMER_LENGTH_MAX)
+                        {
+                            _length = STAGE_REVIVE_TIMER_LENGTH_MAX;
+                        }
+
+                        _string = _string.Substring(0, _length);
                     }
 
                     AppScreen_Local_SceneMain_UICanvas_Revive_Timer.SingleOnScene.Text = _string;
@@ -1541,19 +1558,67 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Pressed)
                     {
-                        ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
+                        void _ToMain()
+                        {
+                            ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                            ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
 
-                        SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
+                            SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
+                        }
+
+                        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+                        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                        {
+                            if (!ad_interstitial_isActive)
+                            {
+                                YG2.InterstitialAdvShow();
+                                ad_interstitial_isActive = true;
+                            }
+                            else
+                            {
+                                if (!YG2.nowInterAdv)
+                                {
+                                    _ToMain();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _ToMain();
+                        }
                     }
                     else
                     {
                         if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Pressed)
                         {
-                            ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                            ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets, true);
+                            void _ToMenu()
+                            {
+                                ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                                ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets, true);
 
-                            SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+                                SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+                            }
+
+                            if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+                            || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                            {
+                                if (!ad_interstitial_isActive)
+                                {
+                                    YG2.InterstitialAdvShow();
+                                    ad_interstitial_isActive = true;
+                                }
+                                else
+                                {
+                                    if (!YG2.nowInterAdv)
+                                    {
+                                        _ToMenu();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _ToMenu();
+                            }
                         }
                     }
                 }
@@ -1565,7 +1630,7 @@ public class ControlScene_Main : MonoBehaviour
             if (!stage_upgrades_menu_onDisplay)
             {   
                 AppScreen_UICanvas_Menu_Upgrades_Entity.SingleOnScene.Show(0.0f);
-                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);                
+                AppScreen_UICanvas_Menu_Upgrades_Coins_Entity.SingleOnScene.Show(0.0f);
 
                 if (AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count > 0)
                 {
@@ -1592,32 +1657,84 @@ public class ControlScene_Main : MonoBehaviour
             {
                 if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Restart.SingleOnScene.Pressed)
                 {
-                    ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                    ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
+                    void _ToMain()
+                    {
+                        ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
 
-                    SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
+                        SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
+                    }
+
+                    if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+                    || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                    {
+                        if (!ad_interstitial_isActive)
+                        {
+                            YG2.InterstitialAdvShow();
+                            ad_interstitial_isActive = true;
+                        }
+                        else
+                        {
+                            if (!YG2.nowInterAdv)
+                            {
+                                _ToMain();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _ToMain();
+                    }
                 }
                 else
                 {
                     if (AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed)
                     {
-                        YG2.InterstitialAdvShow();
-                        
+                        void _Reward_Callback()
+                        {
+                            var _coins_add = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count * (ControlPers_BuildSettings.PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT - 1);
+                            ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_add;
+                            ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsTotal += _coins_add;
+                            AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count += _coins_add;
+                        }
+
+                        YG2.RewardedAdvShow("", _Reward_Callback);
+
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Pressed = false;
                         AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
                         AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
-
-                        var _coins_received = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count;
-                        ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_received; 
-                        AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count = _coins_received * 2;
                     }
                     
                     if (AppScreen_Local_SceneMain_UICanvas_GameOver_Button_Menu.SingleOnScene.Pressed)
                     {
-                        ControlPers_AudioMixer_Music.SingleOnScene.Stop();
-                        ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets, true);
+                        void _ToMenu()
+                        {
+                            ControlPers_AudioMixer_Music.SingleOnScene.Stop();
+                            ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_crickets, true);
 
-                        SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+                            SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
+                        }
+
+                        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+                        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                        {
+                            if (!ad_interstitial_isActive)
+                            {
+                                YG2.InterstitialAdvShow();
+                                ad_interstitial_isActive = true;
+                            }
+                            else
+                            {
+                                if (!YG2.nowInterAdv)
+                                {
+                                    _ToMenu();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _ToMenu();
+                        }
                     }
                 }
             }

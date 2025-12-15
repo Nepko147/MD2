@@ -55,7 +55,7 @@ public class World_Local_SceneMain_DroppedCoin_Entity : MonoBehaviour
     private List<Spline_Point> spline_point_list = new List<Spline_Point>();
     private delegate void Spline_WalkThrou_CustomFunc(int _segment_ind, Vector3 _point_prev, Vector3 _point_current);
 
-    private void Spline_WalkThrou(Spline_WalkThrou_CustomFunc _CustomFunc)
+    private void Spline_WalkThrough(Spline_WalkThrou_CustomFunc _CustomFunc)
     {
         var _segment_num = initPoint_array.Length / BezierCurve.DEGREE;
         var _i_max = _segment_num * SEGMENT_POINT_NUMBER;
@@ -96,7 +96,7 @@ public class World_Local_SceneMain_DroppedCoin_Entity : MonoBehaviour
             Spline_Length = _spline_point_length;
         };
 
-        Spline_WalkThrou(_CustomFunc);
+        Spline_WalkThrough(_CustomFunc);
     }
 
     ///<summary>
@@ -187,7 +187,7 @@ public class World_Local_SceneMain_DroppedCoin_Entity : MonoBehaviour
                 Gizmos.DrawLine(_point_prev, _point_current);
             };
 
-            Spline_WalkThrou(_CustomFunc);
+            Spline_WalkThrough(_CustomFunc);
         }
     }
 }

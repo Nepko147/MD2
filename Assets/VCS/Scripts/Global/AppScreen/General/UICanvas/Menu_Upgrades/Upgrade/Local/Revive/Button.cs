@@ -3,10 +3,6 @@ using UnityEngine;
 public class AppScrren_UICanvas_Menu_Upgrades_Upgrade_Local_Revive_Button 
 : AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent
 {
-    private void ImageRefresh()
-    {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.upgrade);
-    }
     protected override void Start()
     {
         price_coins_buy = 300;
@@ -21,12 +17,12 @@ public class AppScrren_UICanvas_Menu_Upgrades_Upgrade_Local_Revive_Button
 
         base.Start();
 
-        ImageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+        Image_LanguageRefresh();
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Image_LanguageRefresh;
     }
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Image_LanguageRefresh;
     }
 }

@@ -21,6 +21,8 @@ public class AppScreen_UICanvas_Menu_Upgrades_Coins_Text : AppScreen_General_UIC
 
     protected override void Awake()
     {
+        base.Awake();
+
         SingleOnScene = this;
 
         text = GetComponent<Text>();

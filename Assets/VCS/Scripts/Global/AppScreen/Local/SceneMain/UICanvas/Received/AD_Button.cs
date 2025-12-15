@@ -4,13 +4,16 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_AD_Button : AppScreen_G
 {
     public static AppScreen_Local_SceneMain_UICanvas_Received_AD_Button SingleOnScene { get; private set; }
 
-    private void ImageRefresh()
-    {
-        Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName.ad);
-    }
+    [SerializeField] private Sprite image_currennt_idle_sf;
+    [SerializeField] private Sprite image_currennt_pointed_sf;
+    [SerializeField] private Sprite image_currennt_pressed_sf;
 
     protected override void Awake()
     {
+        image_currennt_idle = image_currennt_idle_sf;
+        image_currennt_pointed = image_currennt_pointed_sf;
+        image_currennt_pressed = image_currennt_pressed_sf;
+
         base.Awake();
 
         SingleOnScene = this;
@@ -20,11 +23,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_AD_Button : AppScreen_G
 
     private void Start()
     {
-        ImageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
-    }
-    private void OnDestroy()
-    {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= ImageRefresh;
+        Image_PointsRefresh();
     }
 }

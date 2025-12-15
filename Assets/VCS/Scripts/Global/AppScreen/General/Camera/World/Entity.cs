@@ -43,11 +43,11 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
     /// </summary>
     public void Blur(float _value, float _duration)
     {
-        blur_postProcess_profile_depthOfField_aperture_change = true;
         _value = Mathf.Clamp(_value, 0, 1);
-        blur_postProcess_profile_depthOfField_aperture_duration = _duration;
         var _aperture_value = BLUR_POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN + (BLUR_POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX - BLUR_POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN) * (1 - _value);
         blur_postProcess_profile_depthOfField_aperture_step = (_aperture_value - blur_postProcess_profile_depthOfField.aperture.value) / _duration;
+        blur_postProcess_profile_depthOfField_aperture_duration = _duration;
+        blur_postProcess_profile_depthOfField_aperture_change = true;
     }
 
     #endregion
@@ -261,12 +261,13 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
         #region Blur
 
-        if (blur_postProcess_profile_depthOfField_aperture_change)
+        if (blur_postProcess_profile_depthOfField_aperture_change
+        && Time.deltaTime != 0)
         {
-            blur_postProcess_profile_depthOfField_aperture_duration -= Time.deltaTime;            
             blur_postProcess_profile_depthOfField.aperture.value += blur_postProcess_profile_depthOfField_aperture_step * Time.deltaTime;
             blur_postProcess_profile_depthOfField.aperture.value = Mathf.Clamp(blur_postProcess_profile_depthOfField.aperture.value, BLUR_POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MIN, BLUR_POSTPROCESS_PROFILE_DEPTHOFFIELD_APERTURE_MAX);
-            
+            blur_postProcess_profile_depthOfField_aperture_duration -= Time.deltaTime;
+
             if (blur_postProcess_profile_depthOfField_aperture_duration <= 0)
             {
                 blur_postProcess_profile_depthOfField_aperture_change = false;

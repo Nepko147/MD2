@@ -19,7 +19,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     #region Directory
 
-    private const string DIRECTORY_NAME = "Midnight Drive";
+    private const string DIRECTORY_NAME = "Lunar Howl" + @"\" + "Midnight Drive";
     private string directory_path;
     private void Directory_CreateIfNotExists(string _path)
     {
@@ -325,21 +325,29 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 progressData_file = new XmlDocument();
 
-                try //Прробуем загрузить файл
+                
+                try //Пробуем обратиться к файлу
                 {
-                    if (ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile)
+                    if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
                     {
-                        var _encryptedData = File.ReadAllText(progressData_file_path);
-                        progressData_file.InnerXml = Encryption_Decrypt(_encryptedData);
+                        if (!ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile)
+                        {
+                            var _encryptedData = File.ReadAllText(progressData_file_path);
+                            progressData_file.InnerXml = Encryption_Decrypt(_encryptedData);
+                        }
+                        else
+                        {
+                            progressData_file.Load(progressData_file_path);
+                        }
                     }
                     else
                     {
-                        progressData_file.Load(progressData_file_path); //Если файл в порядке, то всё загрузится
+                        progressData_file.RemoveAll(); //Очищаем содержимое файла
                     }
                 }
-                catch { } //Если нет, то будет нулевой прогресс. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
+                catch { } //Если файла нет, то будет нулевой прогресс. После сохранения файл будет создан.
 
-                ProgressData_File_Check();
+                ProgressData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
 
                 var _reviveNumber_text = progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumber.PATH).InnerText; //Считываем данные из файла
                 ProgressData.Statistics.ReviveNumber.value = int.Parse(_reviveNumber_text); //Грузиим "Количество возрождений"
@@ -369,7 +377,6 @@ public class ControlPers_DataHandler : MonoBehaviour
 
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-
                 ProgressData.Statistics.ReviveNumber.value = YG2.saves.ProgressData_Statistics_ReviveNumber;
                 ProgressData.Statistics.ReviveNumberBest.value = YG2.saves.ProgressData_Statistics_ReviveNumberBest;
                 ProgressData.Statistics.CoinsTotal.value = YG2.saves.ProgressData_Statistics_CoinsTotal;
@@ -394,8 +401,8 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.PlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
 
-                progressData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
-                ProgressData_File_Check(); //Перезаполняем структуру файла
+                progressData_file.RemoveAll(); //Очищаем содержимое файла
+                ProgressData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
 
                 progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumber.PATH).InnerText = ProgressData.Statistics.ReviveNumber.value.ToString(); //Перезаписываем значение в разделе Statistics/ReviveNumber
                 progressData_file.SelectSingleNode(ProgressData.Statistics.ReviveNumberBest.PATH).InnerText = ProgressData.Statistics.ReviveNumberBest.value.ToString(); //Перезаписываем значение в разделе Statistics/ReviveNumberBest
@@ -411,7 +418,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 progressData_file.SelectSingleNode(ProgressData.Coins.PATH).InnerText = ProgressData.Coins.value.ToString(); //Перезаписываем значение в разделе Coins
 
-                if (ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile)
+                if (!ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile)
                 {
                     var _encryptedProgressData = Encryption_Encrypt(progressData_file.InnerXml);
                     File.WriteAllText(progressData_file_path, _encryptedProgressData);
@@ -660,7 +667,7 @@ public class ControlPers_DataHandler : MonoBehaviour
             {
                 public const string NODE = "Music";
                 public const string PATH = ORIGINNODE + "/" + Audio.NODE + "/" + NODE;
-                public const float DEFAULTVALUE = 0.5f;
+                public const float DEFAULTVALUE = 0.8f;
                 public static float value = DEFAULTVALUE;
             }
         }
@@ -669,8 +676,8 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             public const string NODE = "Language";
             public const string PATH = ORIGINNODE + "/" + NODE;
-            public const ControlPers_LanguageHandler.GameLanguage DEFAULTVALUE = ControlPers_LanguageHandler.GameLanguage.english;
-            public static ControlPers_LanguageHandler.GameLanguage value = DEFAULTVALUE;
+            public const ControlPers_LanguageHandler_Entity.GameLanguage_State DEFAULTVALUE = ControlPers_LanguageHandler_Entity.GameLanguage_State.english;
+            public static ControlPers_LanguageHandler_Entity.GameLanguage_State value = DEFAULTVALUE;
         }
     }
 
@@ -721,7 +728,7 @@ public class ControlPers_DataHandler : MonoBehaviour
     public const float SETTINGSDATA_AUDIO_SOUND_DEFAULTVALUE = SettingsData.Audio.Sound.DEFAULTVALUE;
     public const float SETTINGSDATA_AUDIO_MUSIC_DEFAULTVALUE = SettingsData.Audio.Music.DEFAULTVALUE;
 
-    public const ControlPers_LanguageHandler.GameLanguage SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
+    public const ControlPers_LanguageHandler_Entity.GameLanguage_State SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
 
     public void SettingsData_Load()
     {
@@ -731,13 +738,20 @@ public class ControlPers_DataHandler : MonoBehaviour
                 settingsData_file = new XmlDocument();
                 settingsData_file_path = directory_path + SETTINGSDATA_FILE_NAME;
 
-                try //Прробуем загрузить файл
+                try //Прробуем обратиться к файлу
                 {
-                    settingsData_file.Load(settingsData_file_path); //Если файл в порядке, то всё загрузится
+                    if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
+                    {
+                        settingsData_file.Load(settingsData_file_path);
+                    }
+                    else
+                    {
+                        progressData_file.RemoveAll(); //Очищаем содержимое файла
+                    }
                 }
-                catch { } //Если нет, то будут настройки по умолчанию. Код ниже отработает. После сохранения, файл починится (даже если он убит в хлам)
-
-                SettingsData_File_Check(); //Проверяем структуру файла                
+                catch { } //Если файла нет, то будут настройки по умолчанию. После сохранения файл будет создан.
+                
+                SettingsData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости            
 
                 var _audio_soundValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText; //Считываем данные из файла
                 SettingsData.Audio.Sound.value = float.Parse(_audio_soundValue_text); //Грузим громкость звуков
@@ -757,7 +771,47 @@ public class ControlPers_DataHandler : MonoBehaviour
                 switch (YG2.lang)
                 {
                     case "ru":
-                        SettingsData.Language.value = ControlPers_LanguageHandler.GameLanguage.russian;
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.russian;
+                    break;
+
+                    case "es":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.spanish;
+                    break;
+
+                    case "pt":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.portuguese;
+                    break;
+
+                    case "fr":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.french;
+                    break;
+
+                    case "it":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.italian;
+                    break;
+
+                    case "pl":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.polish;
+                    break;
+
+                    case "tr":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.turkish;
+                    break;
+
+                    case "kk":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.kazakh;
+                    break;
+
+                    case "be":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.belarusian;
+                    break;
+
+                    case "uk":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.ukrainian;
+                    break;
+
+                    case "uz":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.uzbek;
                     break;
 
                     default:
@@ -774,9 +828,9 @@ public class ControlPers_DataHandler : MonoBehaviour
         {
             case ControlPers_BuildSettings.PlatformType.windows:
                 Directory_CreateIfNotExists(directory_path);
-                                
-                settingsData_file.RemoveAll(); // Очищаем файл с сохранением. Нужно, чтобы в него не попало ничего лишнего (Хвосты из прошлых версий. Например что-то переименовали/переместили/удалили)
-                SettingsData_File_Check(); //Перезаполняем структуру файла
+                
+                settingsData_file.RemoveAll(); // Очищаем содержимое файла
+                SettingsData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
 
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText = SettingsData.Audio.Sound.value.ToString(); //Перезаписываем значение в разделе Audio/Sound
                 settingsData_file.SelectSingleNode(SettingsData.Audio.Music.PATH).InnerText = SettingsData.Audio.Music.value.ToString(); //Перезаписываем значение в разделе Audio/Music
@@ -807,7 +861,7 @@ public class ControlPers_DataHandler : MonoBehaviour
         set { SettingsData.Audio.Music.value = Mathf.Clamp(value, 0, 1f); }
     }
 
-    public ControlPers_LanguageHandler.GameLanguage SettingsData_LanguageValue
+    public ControlPers_LanguageHandler_Entity.GameLanguage_State SettingsData_LanguageValue
     {
         get { return (SettingsData.Language.value); }
         set { SettingsData.Language.value = value; }
@@ -829,7 +883,7 @@ public class ControlPers_DataHandler : MonoBehaviour
             case ControlPers_BuildSettings.PlatformType.windows:
                 directory_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DIRECTORY_NAME + @"\";
 
-                var _progressData_FileName = ControlPers_BuildSettings.SingleOnScene.EncryptProgressFile ? PROGRESSDATA_FILE_ENCRYPTED_NAME : PROGRESSDATA_FILE_NAME;
+                var _progressData_FileName = ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile ? PROGRESSDATA_FILE_NAME : PROGRESSDATA_FILE_ENCRYPTED_NAME;
                 progressData_file_path = directory_path + _progressData_FileName;
 
                 Directory_CreateIfNotExists(directory_path);
@@ -842,6 +896,12 @@ public class ControlPers_DataHandler : MonoBehaviour
 
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
             case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                if (ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
+                {
+                    YG2.SetDefaultSaves();
+                    YG2.SaveProgress();
+                }
+                
                 YG2.onGetSDKData += () =>
                 {
                     ProgressData_Load();

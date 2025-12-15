@@ -67,17 +67,17 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoB
     {
         dialogue.Clear();
 
-        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;
+        var _languageHandler = ControlPers_LanguageHandler_Entity.SingleOnScene;
 
         string[][] _dialogue_array = new string[][]
         {
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_1) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_2) },
-            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_3) },
-            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_4) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_5) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_6) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_end_string_7) }
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_1) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_2) },
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_3) },
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_4) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_5) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_6) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_end_string_7) }
         };
 
         foreach (var _string in _dialogue_array)
@@ -158,7 +158,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoB
     {
         Text_LanguageRefresh();
         UpdateDialogue();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -273,6 +273,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Dialogue_Entity : MonoB
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

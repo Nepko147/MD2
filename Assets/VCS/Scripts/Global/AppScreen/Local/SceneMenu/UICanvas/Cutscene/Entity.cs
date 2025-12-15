@@ -61,16 +61,16 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     {
         dialogue.Clear();
 
-        var _languageHandler = ControlPers_LanguageHandler.SingleOnScene;        
+        var _languageHandler = ControlPers_LanguageHandler_Entity.SingleOnScene;        
        
         string[][] _dialogue_array = new string[][]
         {
-            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_1) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_2) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_3) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_4) },
-            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_5) },
-            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler.Text_Key.dialogue_start_string_6) }
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_1) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_2) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_3) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_4) },
+            new[] { NPC, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_5) },
+            new[] { PLAYER, _languageHandler.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.dialogue_start_string_6) }
         };
 
         foreach (var _string in _dialogue_array)
@@ -130,7 +130,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
     {
         Text_LanguageRefresh();
         UpdateDialogue();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -216,6 +216,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Cutscene_Entity : MonoBehaviour
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }

@@ -10,6 +10,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
     protected int price_coins_buy;
     protected int price_coins_improve;
     private Vector3 price_offset;
+    private const int PRICE_MULT_WEB_YANDEXGAMES = 2;
 
     private void Price_Spawn()
     {
@@ -21,10 +22,10 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
     protected Sprite image_idle;
     protected Sprite image_pointed;
 
-    protected Sprite image_current_idle_buy;
-    protected Sprite image_current_idle_improve;
-    protected Sprite image_current_pointed_buy;
-    protected Sprite image_current_pointed_improve;
+    protected Sprite image_current_buy_idle;
+    protected Sprite image_current_improve_idle;
+    protected Sprite image_current_buy_pointed;
+    protected Sprite image_current_improve_pointed;
     protected Sprite image_current_received;
 
     [SerializeField] private AudioClip sound_button;
@@ -45,7 +46,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
 
         price_offset = new Vector3(-rectTransform.sizeDelta.x, 0, 0);
 
-        popupMessege_text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.popUpMessage_notEnoughCoins);
+        popupMessege_text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.popUpMessage_notEnoughCoins);
     }
 
     protected delegate bool IsState();
@@ -80,7 +81,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_button);
                     ControlPers_AudioMixer_Sounds.SingleOnScene.Play(sound_upgrade);
 
-                    Image_Set(image_current_idle_improve, image_current_pointed_improve);
+                    Image_Set(image_current_improve_idle, image_current_improve_pointed);
 
                     price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
                     price_instance.Coins_Set(price_coins_improve);
@@ -116,16 +117,14 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
         }
     }
     
-    public void Image_LanguageRefresh(ControlPers_LanguageHandler.ButtonName _buttonName)
+    public void Image_LanguageRefresh()
     {
-        var _spriteArray = ControlPers_LanguageHandler.SingleOnScene.Buttons_GetSprites(_buttonName, 5);
+        image_current_buy_idle = ControlPers_LanguageHandler_Entity.SingleOnScene.Sprite_Get(ControlPers_LanguageHandler_Entity.Sprite_Key.button_upgrade_buy_idle);
+        image_current_buy_pointed = ControlPers_LanguageHandler_Entity.SingleOnScene.Sprite_Get(ControlPers_LanguageHandler_Entity.Sprite_Key.button_upgrade_buy_pointed);
+        image_current_improve_idle = ControlPers_LanguageHandler_Entity.SingleOnScene.Sprite_Get(ControlPers_LanguageHandler_Entity.Sprite_Key.button_upgrade_improve_idle);
+        image_current_improve_pointed = ControlPers_LanguageHandler_Entity.SingleOnScene.Sprite_Get(ControlPers_LanguageHandler_Entity.Sprite_Key.button_upgrade_improve_pointed);
+        image_current_received = ControlPers_LanguageHandler_Entity.SingleOnScene.Sprite_Get(ControlPers_LanguageHandler_Entity.Sprite_Key.button_upgrade_received);
         
-        image_current_idle_buy = _spriteArray[0];
-        image_current_idle_improve = _spriteArray[1];
-        image_current_pointed_buy = _spriteArray[2];
-        image_current_pointed_improve = _spriteArray[3];
-        image_current_received = _spriteArray[4];
-                
         if (IsImproved())
         {
             Image_Set(image_current_received, image_current_received);
@@ -134,12 +133,12 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
         {
             if (IsBought())
             {
-                Image_Set(image_current_idle_improve, image_current_pointed_improve);
+                Image_Set(image_current_improve_idle, image_current_improve_pointed);
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             }
             else
             {
-                Image_Set(image_current_idle_buy, image_current_pointed_buy);
+                Image_Set(image_current_buy_idle, image_current_buy_pointed);
                 price_instance.LocalPosition_Set(rectTransform.localPosition + price_offset);
             }
         }
@@ -155,7 +154,14 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
     }
 
     protected virtual void Start()
-    {     
+    {
+        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+        {
+            price_coins_buy *= PRICE_MULT_WEB_YANDEXGAMES;
+            price_coins_improve *= PRICE_MULT_WEB_YANDEXGAMES;
+        }
+
         if (!IsBought())
         {
             Price_Spawn();

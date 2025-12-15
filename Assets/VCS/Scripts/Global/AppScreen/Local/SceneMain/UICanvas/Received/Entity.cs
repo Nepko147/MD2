@@ -4,7 +4,11 @@ using System.Collections;
 
 public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Received_Entity SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMain_UICanvas_Received_Entity SingleOnScene 
+    { 
+        get; 
+        private set; 
+    }
 
     private CanvasGroup canvasGroup;
     private float canvasGroup_deltaApha = 1.0f;
@@ -17,12 +21,13 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
     {
         get 
         {
-            return received_coins_count;
+            return (received_coins_count);
         }
+
         set 
         {
             received_coins_count = value;
-            received_coins_text.text = "" + received_coins_count;
+            received_coins_text.text = received_coins_count.ToString();
         } 
     }
 
@@ -33,6 +38,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
         {
             return received_ad_text.enabled;
         }
+
         set
         {
             received_ad_text.enabled = value;
@@ -41,8 +47,8 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
 
     public void Text_LanguageRefresh()
     {
-        received_text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.received_text);
-        received_ad_text.text = ControlPers_LanguageHandler.SingleOnScene.Text_Get(ControlPers_LanguageHandler.Text_Key.received_ad_text);
+        received_text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.received_text);
+        received_ad_text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.received_ad_text);
     }
 
     private enum received_state
@@ -96,7 +102,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
     private void Start()
     {
         Text_LanguageRefresh();
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += Text_LanguageRefresh;
     }
 
     private void Update()
@@ -135,6 +141,6 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
 
     private void OnDestroy()
     {
-        ControlPers_LanguageHandler.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate -= Text_LanguageRefresh;
     }
 }
