@@ -21,8 +21,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_AD_Button : AppScreen_G
         Visible = false;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         Image_PointsRefresh();
     }
 }

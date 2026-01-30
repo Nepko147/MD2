@@ -66,7 +66,7 @@ public class World_Local_SceneMain_DriftSection_Enity_11 : World_Local_SceneMain
         {
             ControlScene_Main.SingleOnScene.Audio_Sound_Mental_Play();
             ControlScene_Main.SingleOnScene.TimeDilation();
-            AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Start();
+            AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.ZoomBlur_Start();
 
             switch (segment_state_current)
             {

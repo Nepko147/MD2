@@ -22,8 +22,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Button_Menu : AppScreen_General_
         Visible = false;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         ImageRefresh();
         ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
     }

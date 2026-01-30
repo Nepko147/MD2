@@ -35,7 +35,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         image_min = Image_ScreenPoint_Min(image);
         image_max = Image_ScreenPoint_Max(image);
     }
-
+    
     public void Image_LanguageRefresh(Sprite _idle, Sprite _pointed, Sprite _pressed)
     {
         position_last = transform.localPosition;
@@ -109,6 +109,11 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         base.Awake();
 
         image = GetComponent<Image>();
+    }
+
+    protected virtual void Start()
+    {
+        AppScreen_MainCameraCarrier_MainCamera_Entity.SingleOnScene.Screen_Resolution_OnUpdate += Image_PointsRefresh;
     }
 
     protected virtual void Update()

@@ -13,7 +13,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Cutscene_Entity : AppScreen_Gene
 
     private void Start()
     {
-        var _destination = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y + 1560.0f, rectTransform.localPosition.z);
-        Shift_Positions_Set(rectTransform.localPosition, _destination);
+        var _dest_ofs = new Vector2(0, 1560f);
+        Shift_Pos_Define(Vector2.zero, _dest_ofs);
     }
 }

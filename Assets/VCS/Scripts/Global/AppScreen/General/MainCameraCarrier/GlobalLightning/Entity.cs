@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_General_Camera_GlobalLightning_Entity : MonoBehaviour
+public class AppScreen_General_MainCameraCarrier_GlobalLightning_Entity : MonoBehaviour
 {
-    public static AppScreen_General_Camera_GlobalLightning_Entity SingleOnScene { get; private set; }
+    public static AppScreen_General_MainCameraCarrier_GlobalLightning_Entity SingleOnScene { get; private set; }
 
     public Color Color_Top
     {
@@ -43,7 +43,7 @@ public class AppScreen_General_Camera_GlobalLightning_Entity : MonoBehaviour
     private void Update()
     {
         position_buffer = transform.position;
-        var _scale = AppScreen_General_Camera_Entity.SingleOnScene.transform.position.z / AppScreen_General_Camera_Entity.SingleOnScene.Position_Init.z;
+        var _scale = AppScreen_General_MainCameraCarrier_Entity.SingleOnScene.transform.position.z / AppScreen_General_MainCameraCarrier_Entity.SingleOnScene.Position_Init.z;
         position_buffer.z = position_init.z * _scale + position_z_zoomOfs * (1f - _scale);
         transform.position = position_buffer;
     }

@@ -64,9 +64,9 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
 
     private void Start()
     {
-        var _source = new Vector3(0, -360, 0);
-        var _destination = new Vector3(0, -10, 0);
-        Shift_Positions_Set(_source, _destination);
+        var _source_ofs = new Vector2(0, -360f);
+        var _dest_ofs = new Vector2(0, -10f);
+        Shift_Pos_Define(_source_ofs, _dest_ofs);
     }
 
     private void Update()

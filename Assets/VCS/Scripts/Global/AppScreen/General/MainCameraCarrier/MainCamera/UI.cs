@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class AppScreen_General_Camera_UI_ScreenFilter : MonoBehaviour
+public class AppScreen_General_MainCameraCarrier_MainCamera_UI : AppScreen_General_MainCameraCarrier_MainCamera_Parent
 {
     [SerializeField] private Material material;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         material.SetTexture("_MainTex", null); //Проводим шаманский ритуал
     }
 

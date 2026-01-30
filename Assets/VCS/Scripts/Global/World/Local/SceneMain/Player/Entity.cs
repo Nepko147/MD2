@@ -237,7 +237,7 @@ public class World_Local_SceneMain_Player_Entity : MonoBehaviour
 
         Invul_Activate(1.2f, Color.white);
 
-        AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
+        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.Shake();
 
         if (Up_Count > 0)
         {

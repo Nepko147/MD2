@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Parent
+public class AppScreen_General_MainCameraCarrier_MainCamera_World : AppScreen_General_MainCameraCarrier_MainCamera_Parent
 {
     #region General
 
-    public static AppScreen_General_Camera_World_Entity SingleOnScene { get; private set; }
+    public static AppScreen_General_MainCameraCarrier_MainCamera_World SingleOnScene { get; private set; }
 
     [SerializeField] private Material passthrough_material;
 
@@ -239,8 +239,10 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
         #endregion
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         #region Distortion
 
         distortion_material_main_normalMap_clear = new Texture2D(1, 1, TextureFormat.RGBA32, false);
@@ -255,10 +257,8 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
         #endregion
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
-
         #region Blur
 
         if (blur_postProcess_profile_depthOfField_aperture_change
@@ -383,13 +383,14 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
             distortion_material_overlay_normalMap_coinRush_time += Time.deltaTime;
 
             Vector2 _screen_pos = camera_component.WorldToScreenPoint(Distortion_Material_Overlay_NormalMap_CoinRush_WorldPos);
-            distortion_material_overlay_normalMap_coinRush_screenPos_normalized.x = _screen_pos.x / Screen.width;
-            distortion_material_overlay_normalMap_coinRush_screenPos_normalized.y = _screen_pos.y / Screen.height;
+            var _mainCam_rect = AppScreen_Entity.SingleOnScene.MainCamera_Rect_Get();
+            distortion_material_overlay_normalMap_coinRush_screenPos_normalized.x = (_screen_pos.x - Screen.width * _mainCam_rect.x) / (Screen.width * _mainCam_rect.width);
+            distortion_material_overlay_normalMap_coinRush_screenPos_normalized.y = (_screen_pos.y - Screen.height * _mainCam_rect.y) / (Screen.height * _mainCam_rect.height);
             distortion_material.SetVector(DISTORTION_MATERIAL_U_OVERLAY_SCREENPOS, distortion_material_overlay_normalMap_coinRush_screenPos_normalized);
 
             distortion_material_overlay_normalMap_coinRush_scale += DISTORTION_MATERIAL_OVERLAY_NORMALMAP_COINRUSH_SCALE_STEP * Time.deltaTime;
-            distortion_material_overlay_normalMap_coinRush_scale_withAspect.x = distortion_material_overlay_normalMap_coinRush_scale * distortion_material_overlay_normalMap_coinRush.width / Screen.width;
-            distortion_material_overlay_normalMap_coinRush_scale_withAspect.y = distortion_material_overlay_normalMap_coinRush_scale * distortion_material_overlay_normalMap_coinRush.height / Screen.height;
+            distortion_material_overlay_normalMap_coinRush_scale_withAspect.x = distortion_material_overlay_normalMap_coinRush_scale * distortion_material_overlay_normalMap_coinRush.width / (Screen.width * _mainCam_rect.width);
+            distortion_material_overlay_normalMap_coinRush_scale_withAspect.y = distortion_material_overlay_normalMap_coinRush_scale * distortion_material_overlay_normalMap_coinRush.height / (Screen.height * _mainCam_rect.height);
             distortion_material.SetVector(DISTORTION_MATERIAL_U_OVERLAY_SCALE, distortion_material_overlay_normalMap_coinRush_scale_withAspect);
 
             var _alpha = Mathf.Clamp(1f - distortion_material_overlay_normalMap_coinRush_scale / DISTORTION_MATERIAL_OVERLAY_NORMALMAP_COINRUSH_SCALE_MAX, 0, 1f);
@@ -441,9 +442,11 @@ public class AppScreen_General_Camera_World_Entity : AppScrren_General_Camera_Pa
 
     private void OnRenderImage(RenderTexture _source, RenderTexture _destination)
     {
+        //ѕримен€ем шейдер к исходной рендер-текстуре камеры текущего GameObject'а. «атем помещаем результат в конечную рендер-текстуру камеры текущего GameObject'а
+
         if (distortion_started)
         {
-            Graphics.Blit(_source, _destination, distortion_material); //ѕримен€ем шейдер искажени€ к исходной рендер-текстуре камеры текущего GameObject'а. «атем помещаем результат в конечную рендер-текстуру камеры текущего GameObject'а
+            Graphics.Blit(_source, _destination, distortion_material);
         }
         else
         {

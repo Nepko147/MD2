@@ -82,9 +82,9 @@ using UnityEngine;
     public bool SpeedScale_Active { get; set; }
     public float SpeedScale { get; set; }
     public const float SPEEDSCALE_MIN = 0.008f;
-    private const float SPEEDSCALE_MAX = 0.018f;
+    private const float SPEEDSCALE_MAX = 0.016f;
     private const float SPEEDSCALE_STEP_MIN = 0.00015f;
-    private const float SPEEDSCALE_STEP_MAX = 0.0005f;
+    private const float SPEEDSCALE_STEP_MAX = 0.00045f;
     private float speedScale_step = SPEEDSCALE_STEP_MIN;
 
     public float SpeedScale_Normalized()

@@ -139,7 +139,7 @@ public class World_Local_SceneMain_BonusSpawner : MonoBehaviour
             return (Instantiate(bonusPrefab_coin, spawn_spawnPoint_current + Vector3.right * COINS_OFFSET * _num, new Quaternion(), transform.parent));
         }
 
-        if (!AppScreen_General_Camera_World_Entity.SingleOnScene.Distortion_Material_Overlay_NormalMap_CoinRush_Active)
+        if (!AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.Distortion_Material_Overlay_NormalMap_CoinRush_Active)
         {
             for (var _i = 0; _i < coins_amount; ++_i)
             {

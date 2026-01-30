@@ -22,8 +22,10 @@ public class AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume : AppScreen_
         Visible = false;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         ImageRefresh();
         ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
     }

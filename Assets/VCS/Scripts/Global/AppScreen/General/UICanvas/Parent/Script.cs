@@ -81,11 +81,11 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
 
     private static Color image_highlight_color_idle = new Color(0.85f, 0.85f, 0.85f);
     private static Color image_highlight_color_pointed = new Color(1f, 1f, 1f);
+
     /// <summary>
     /// <para> Выполнение общего поведения подсветки компонента Image при наведении </para>
     /// <para> Вызывать после Awake() </para>
     /// </summary>
-    
     protected void Image_Highlight_Behaviour(Image _image)
     {
         var _image_min = Image_ScreenPoint_Min(_image);
@@ -113,32 +113,36 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
 
     #region Shift
 
-    private float   shift_time = 0;
-    private float   shift_time_max;
-    private Vector3 shift_pos_target;
-    private Vector3 shift_pos_source;
-    private Vector3 shift_pos_destination;
-    private Vector3 shift_pos_speed;
+    private float shift_time = 0;
+    private float shift_time_max;
+    protected Vector2 shift_pos_source;
+    protected Vector2 shift_pos_destination;
+    private Vector2 shift_speed;
+    private IEnumerator Shift_Routine;
 
-    protected void Shift_Positions_Set(Vector3 _source, Vector3 _destination)
+    protected void Shift_Pos_Define(Vector2 _source_ofs, Vector2 _dest_ofs)
     {
-        shift_pos_source = _source;
-        shift_pos_destination = _destination;
-        rectTransform.localPosition = shift_pos_source;
+        shift_pos_source = rectTransform.anchoredPosition + _source_ofs;
+        shift_pos_destination = rectTransform.anchoredPosition + _dest_ofs;
+        rectTransform.anchoredPosition = shift_pos_source;
     }
 
-    private void Shift_toTarget(Vector3 _targetPos, float _time)
+    private void Shift_Pos_Begin(Vector2 _pos, float _time)
     {
-        shift_pos_target = _targetPos;
+        if (Shift_Routine != null) 
+        {
+            StopCoroutine(Shift_Routine);
+        }
+
         shift_time = 0;
         shift_time_max = _time;
-        shift_pos_speed = (_targetPos - rectTransform.localPosition) / _time;
+        shift_speed = (_pos - rectTransform.anchoredPosition) / _time;
 
         IEnumerator _Coroutine()
         {
             while (true)
             {
-                rectTransform.localPosition += shift_pos_speed * Time.deltaTime;
+                rectTransform.anchoredPosition += shift_speed * Time.deltaTime;
                 shift_time += Time.deltaTime;
             
                 if (shift_time < shift_time_max)
@@ -147,32 +151,32 @@ public abstract class AppScreen_General_UICanvas_Parent : MonoBehaviour
                 }
                 else
                 {
-                    rectTransform.localPosition = shift_pos_target;
+                    rectTransform.anchoredPosition = _pos;
                     break;
                 }
             }
         }
 
-        var _routine = _Coroutine();
-        StartCoroutine(_routine);
+        Shift_Routine = _Coroutine();
+        StartCoroutine(Shift_Routine);
     }
 
-    public void Shift_toSource(float _time)
+    public void Shift_Pos_ToSource(float _time)
     {
-        Shift_toTarget(shift_pos_source, _time);
+        Shift_Pos_Begin(shift_pos_source, _time);
     }
 
-    public void Shift_toDestination(float _time)
+    public void Shift_Pos_ToDestination(float _time)
     {
-        Shift_toTarget(shift_pos_destination, _time);
+        Shift_Pos_Begin(shift_pos_destination, _time);
     }
 
     /// <summary>
     /// <para> Проверяка, находится ли объект в точке назначения. </para>
     /// </summary>
-    public bool Shift_IsOnDestinationPosition()
+    public bool Shift_Pos_IsOnDestination()
     {
-        return rectTransform.localPosition == shift_pos_destination;
+        return (rectTransform.anchoredPosition == shift_pos_destination);
     }
 
     #endregion

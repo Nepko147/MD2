@@ -13,8 +13,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity : AppScre
 
     private void Start()
     {
-        var _source = new Vector3(0, 0, 0);
-        var _destination = new Vector3(640f, 0, 0);
-        Shift_Positions_Set(_source, _destination);
+        var _dest_ofs = new Vector2(640f, 0);
+        Shift_Pos_Define(Vector2.zero, _dest_ofs);
     }
 }

@@ -20,10 +20,20 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit : Ap
         SingleOnScene = this;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        ImageRefresh();
-        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+        base.Start();
+
+        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            ImageRefresh();
+            ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+        }
     }
 
     private void OnDestroy()

@@ -1,15 +1,21 @@
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_General_Camera_Parent
+public class AppScreen_Local_SceneMain_MainCameraCarrier_MainCamera_Background : AppScreen_General_MainCameraCarrier_MainCamera_Parent
 {
-    public static AppScreen_Local_SceneMain_Camera_Background_Entity SingleOnScene { get; private set; }
+    #region General
+
+    public static AppScreen_Local_SceneMain_MainCameraCarrier_MainCamera_Background SingleOnScene { get; private set; }
     
     public bool Active { get; set; }
 
     private Vector3 position_init;
 
-    private Camera camera_background; 
+    #endregion
+
+    #region Post-Process
+
+    private PostProcessLayer postProcess_layer;
 
     private PostProcessVolume   postProcess_volume;
 
@@ -28,8 +34,10 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
         postProcess_profile_chromaticAberration.intensity.value = 0;
     }
 
+    #endregion
+
     #region Shake
-    
+
     private bool shake_on = false;
     private const float SHAKE_DELAY_INIT = 0.016f;
     private float shake_delay_current = SHAKE_DELAY_INIT;
@@ -55,23 +63,45 @@ public class AppScreen_Local_SceneMain_Camera_Background_Entity : AppScrren_Gene
 
         Active = false;
 
-        camera_background = GetComponent<Camera>();
+        postProcess_layer = GetComponent<PostProcessLayer>();
         postProcess_volume = GetComponent<PostProcessVolume>();
         postProcess_volume.profile.TryGetSettings(out postProcess_profile_chromaticAberration);
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
+        #region General
 
-        camera_background.fieldOfView = AppScreen_General_Camera_World_Entity.SingleOnScene.FieldOfView_Current; // Гарантируем, одинаковое поле зрение у камер
+        camera_component.fieldOfView = AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.FieldOfView_Current;
 
-        if (Active
-        && postProcess_profile_chromaticAberration_started)
+        #endregion
+
+        #region Post-Process
+
+        if (camera_component.rect.x == 0 //Костыль для фикса бага компонента Post-process Layer, который вызывает неправильное отображение камеры
+        && camera_component.rect.y == 0)
         {
-            postProcess_profile_chromaticAberration.intensity.value += postProcess_profile_chromaticAberration_speed;
-            postProcess_profile_chromaticAberration.intensity.value = Mathf.Clamp(postProcess_profile_chromaticAberration.intensity.value, 0, postProcess_profile_chromaticAberration_max);
+            if (Active
+            && postProcess_profile_chromaticAberration_started)
+            {
+                if (!postProcess_layer.enabled)
+                {
+                    postProcess_layer.enabled = true;
+                }
+
+                postProcess_profile_chromaticAberration.intensity.value += postProcess_profile_chromaticAberration_speed;
+                postProcess_profile_chromaticAberration.intensity.value = Mathf.Clamp(postProcess_profile_chromaticAberration.intensity.value, 0, postProcess_profile_chromaticAberration_max);
+            }
         }
+        else
+        {
+            if (postProcess_layer.enabled)
+            {
+               postProcess_layer.enabled = false;
+            }
+        }
+
+        #endregion
 
         #region Shake
 

@@ -13,7 +13,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Bushes : AppScreen_General_UICan
 
     private void Start()
     {
-        var _destination = new Vector3(rectTransform.localPosition.x - 1280f, rectTransform.localPosition.y, rectTransform.localPosition.z);
-        Shift_Positions_Set(rectTransform.localPosition, _destination);
+        var _dest_ofs = new Vector2(-1280f, 0);
+        Shift_Pos_Define(Vector2.zero, _dest_ofs);
     }
 }

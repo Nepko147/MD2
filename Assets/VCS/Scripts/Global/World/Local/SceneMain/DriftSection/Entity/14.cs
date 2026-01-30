@@ -25,10 +25,10 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
         var _pos = new Vector3(_x, _y, World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.z);
         World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position = _pos;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Invul_Activate(2.4f, Color.white);
-        _pos = new Vector3(_x, _y, AppScreen_General_Camera_Entity.SingleOnScene.transform.position.z);
-        AppScreen_General_Camera_Entity.SingleOnScene.transform.position = _pos;
-        AppScreen_General_Camera_World_Entity.SingleOnScene.Shake();
-        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Start();
+        _pos = new Vector3(_x, _y, AppScreen_General_MainCameraCarrier_Entity.SingleOnScene.transform.position.z);
+        AppScreen_General_MainCameraCarrier_Entity.SingleOnScene.transform.position = _pos;
+        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.Shake();
+        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.ZoomBlur_Start();
     }
 
     #endregion
@@ -126,7 +126,7 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
                     if (segment_timer <= 0
                     || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.x > segment_1_point_trigger.transform.position.x)
                     {
-                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 10f;
+                        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.ZoomBlur_Intensity_Scale = 10f;
                         Segment_1_Teleport();
                     }
                 break; 
@@ -136,7 +136,7 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
 
                     if (segment_timer <= 0)
                     {
-                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 200f;
+                        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.ZoomBlur_Intensity_Scale = 200f;
                         Segment_2_Teleport();
                     }
                 break; 
@@ -147,7 +147,7 @@ public class World_Local_SceneMain_DriftSection_Enity_14 : World_Local_SceneMain
                     if (segment_timer <= 0
                     || World_Local_SceneMain_Player_Entity.SingleOnScene.transform.position.y > segment_3_point_trigger.transform.position.y)
                     {
-                        AppScreen_General_Camera_World_Entity.SingleOnScene.ZoomBlur_Intensity_Scale = 1000f;
+                        AppScreen_General_MainCameraCarrier_MainCamera_World.SingleOnScene.ZoomBlur_Intensity_Scale = 1000f;
                         Segment_3_Teleport();
                     }
                 break;

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class AppScreen_General_Camera_Entity : MonoBehaviour    
+public class AppScreen_General_MainCameraCarrier_Entity : MonoBehaviour    
 {
     #region General
 
-    public static AppScreen_General_Camera_Entity SingleOnScene { get; private set; }
+    public static AppScreen_General_MainCameraCarrier_Entity SingleOnScene { get; private set; }
 
     public bool Active { get; set; }
 
@@ -67,7 +67,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
     private bool zoomToTarget_active = false;
 
-    private enum ZoomToTarget_state
+    private enum ZoomToTarget_State
     {
         idle,
         on,
@@ -75,7 +75,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
         size
     }
 
-    private ZoomToTarget_state zoomToTarget_state_current = ZoomToTarget_state.idle;
+    private ZoomToTarget_State zoomToTarget_state_current = ZoomToTarget_State.idle;
 
     private Vector3 zoomToTarget_position_on;
     private Vector3 zoomToTarget_position_off;
@@ -88,7 +88,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     {
         zoomToTarget_active = true;
         zoomToTarget_position_on = _pos_on + Vector3.forward * _pos_on_z_ofs;
-        zoomToTarget_state_current = ZoomToTarget_state.on;
+        zoomToTarget_state_current = ZoomToTarget_State.on;
 
         if (zoomToTarget_autoOff_routine != null)
         {
@@ -102,7 +102,7 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
         
         IEnumerator _Coroutine()
         {
-            while (zoomToTarget_state_current != ZoomToTarget_state.idle)
+            while (zoomToTarget_state_current != ZoomToTarget_State.idle)
             {
                 yield return (null);
             }
@@ -123,13 +123,13 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
     {
         _pos_off.z = Position_Init.z;
         zoomToTarget_position_off = _pos_off;
-        zoomToTarget_state_current = ZoomToTarget_state.off;
+        zoomToTarget_state_current = ZoomToTarget_State.off;
     }
 
     public void ZoomToTarget_Off_Instant()
     {
         zoomToTarget_active = false;
-        zoomToTarget_state_current = ZoomToTarget_state.idle;
+        zoomToTarget_state_current = ZoomToTarget_State.idle;
     }
 
     #endregion
@@ -194,25 +194,25 @@ public class AppScreen_General_Camera_Entity : MonoBehaviour
 
                 switch (zoomToTarget_state_current)
                 {
-                    case ZoomToTarget_state.on:
+                    case ZoomToTarget_State.on:
                         var _step = ZOOMTOTARGET_STEP_ON * Time.deltaTime;
                         transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_on, _step);
                     
                         if ((zoomToTarget_position_on - transform.position).magnitude <= _step)
                         {
-                            zoomToTarget_state_current = ZoomToTarget_state.idle;
+                            zoomToTarget_state_current = ZoomToTarget_State.idle;
                             transform.position = zoomToTarget_position_on;
                         }
                     break;
 
-                    case ZoomToTarget_state.off:
+                    case ZoomToTarget_State.off:
                         _step = ZOOMTOTARGET_STEP_OFF * Time.deltaTime;
                         transform.position = Vector3.MoveTowards(transform.position, zoomToTarget_position_off, _step);
 
                         if ((zoomToTarget_position_off - transform.position).magnitude <= _step)
                         {
                             zoomToTarget_active = false;
-                            zoomToTarget_state_current = ZoomToTarget_state.idle;
+                            zoomToTarget_state_current = ZoomToTarget_State.idle;
                             transform.position = zoomToTarget_position_off;
                         }
                     break;

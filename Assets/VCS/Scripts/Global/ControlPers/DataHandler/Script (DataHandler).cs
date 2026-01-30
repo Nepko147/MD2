@@ -770,6 +770,10 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 switch (YG2.lang)
                 {
+                    case "en":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.english;
+                    break;
+
                     case "ru":
                         SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.russian;
                     break;
@@ -780,6 +784,10 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                     case "pt":
                         SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.portuguese;
+                    break;
+
+                    case "de":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.german;
                     break;
 
                     case "fr":
@@ -812,6 +820,10 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                     case "uz":
                         SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.uzbek;
+                    break;
+
+                    case "id":
+                        SettingsData.Language.value = ControlPers_LanguageHandler_Entity.GameLanguage_State.indonesian;
                     break;
 
                     default:
@@ -899,8 +911,9 @@ public class ControlPers_DataHandler : MonoBehaviour
                 if (ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
                 {
                     YG2.SetDefaultSaves();
-                    YG2.SaveProgress();
                 }
+
+                YG2.SaveProgress(); //Костыль для фикса бага плагина с автоопределением языка
                 
                 YG2.onGetSDKData += () =>
                 {

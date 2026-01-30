@@ -23,7 +23,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Title : AppScreen_General_UICanv
 
     private void Start()
     {
-        var _destination = new Vector3(rectTransform.localPosition.x - 640f, rectTransform.localPosition.y, rectTransform.localPosition.z);
-        Shift_Positions_Set(rectTransform.localPosition, _destination);
+        var _dest_ofs = new Vector2(-640f, 0);
+        Shift_Pos_Define(Vector2.zero, _dest_ofs);
     }
 }

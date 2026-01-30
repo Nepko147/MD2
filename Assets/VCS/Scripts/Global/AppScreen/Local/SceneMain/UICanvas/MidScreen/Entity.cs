@@ -11,7 +11,7 @@ public class AppScreen_Local_SceneMain_UICanvas_MidScreen_Entity : AppScreen_Gen
         {
             yield return new WaitForSeconds(_delay);
 
-            Shift_toDestination(_time);
+            Shift_Pos_ToDestination(_time);
         }
 
         var _routine = _coroutine(_delay);
@@ -27,8 +27,7 @@ public class AppScreen_Local_SceneMain_UICanvas_MidScreen_Entity : AppScreen_Gen
 
     private void Start()
     {
-        var _source = transform.localPosition;
-        var _destination = transform.localPosition + Vector3.up * 100f;
-        Shift_Positions_Set(_source, _destination);
+        var _dest_ofs = new Vector2(0, 100f);
+        Shift_Pos_Define(Vector2.zero, _dest_ofs);
     }
 }

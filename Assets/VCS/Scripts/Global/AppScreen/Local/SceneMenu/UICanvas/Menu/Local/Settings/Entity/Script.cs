@@ -17,9 +17,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Entity : App
 
     private void Start()
     {
-        var _source = new Vector3(0, -360, 0);
-        var _destination = new Vector3(0, -10, 0);
-        Shift_Positions_Set(_source, _destination);
+        var _source_ofs = new Vector2(0, -360f);
+        Shift_Pos_Define(_source_ofs, Vector2.zero);
 
         LanguageToButton[GameLanguage_State.english] = AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_English.SingleOnScene;
         LanguageToButton[GameLanguage_State.russian] = AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Russian.SingleOnScene;

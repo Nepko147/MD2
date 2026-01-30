@@ -20,8 +20,10 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Play : Ap
         SingleOnScene = this;
     }
 
-    private void Start()
-    {        
+    protected override void Start()
+    {
+        base.Start();
+        
         ImageRefresh();
         ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
     }
