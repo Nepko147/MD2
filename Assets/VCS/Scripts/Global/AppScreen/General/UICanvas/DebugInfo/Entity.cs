@@ -6,6 +6,8 @@ public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
 {
     public static AppScreen_UICanvas_DebugInfo SingleOnScene { get; private set; }
 
+    private RectTransform rectTransform;
+
     private Text text_component;
 
     public void Text_Set(string _text)
@@ -21,6 +23,8 @@ public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
     private void Awake()
     {
         SingleOnScene = this;
+
+        rectTransform = GetComponent<RectTransform>();
 
         text_component = GetComponent<Text>();
     }

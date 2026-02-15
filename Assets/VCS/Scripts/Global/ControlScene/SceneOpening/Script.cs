@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
+using YG;
 
 public class ControlScene_Opening : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class ControlScene_Opening : MonoBehaviour
             if (stage_pressAnyKey_delay <= 0)
             {
                 AppScreen_Local_SceneOpening_UICanvas_StartText.SingleOnScene.Enabled = true;
+
+                YG2.GameReadyAPI();
 
                 stage_delay = false;
                 stage_pressAnyKey = true;

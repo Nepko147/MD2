@@ -45,6 +45,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
         }
 
         audioSource.Play();
+
+        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
     }
 
     protected override void Awake()

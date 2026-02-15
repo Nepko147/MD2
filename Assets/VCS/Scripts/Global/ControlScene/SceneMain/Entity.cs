@@ -29,13 +29,15 @@ public class ControlScene_Main : MonoBehaviour
         public float timerMult;
         public float speedScale_step_boost;
     }
+
     private DriftSection[] driftSection_array; 
-    
     private int driftSection_array_current_ind = 0; //0 - по дефолту. 13 - для отладки финальной катсцены
     private int driftSection_complete_number = 0;
     private const int DRIFTSECTION_ARRAY_MUSICCHANGE_IND = 7; //Индекс участка дрифта начиная с которого музыка меняется
 
+    private bool ad_interstitial_isActivated = false;
     private bool ad_interstitial_isActive = false;
+    private float ad_interstitial_waitingTime = ControlPers_YandexGamesHandler.AD_WAITINGTIME;
 
     #endregion
 
@@ -429,7 +431,7 @@ public class ControlScene_Main : MonoBehaviour
     private void Awake()
     {
         SingleOnScene = this;
-
+        
         audio_source = GetComponent<AudioSource>();
 
         driftSection_array = new DriftSection[14]
@@ -516,6 +518,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(false);
 
             ControlPers_AudioMixer.SingleOnScene.Pause();
+            ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Stop();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.Pause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = false;
             World_General_Moon.SingleOnScene.Skull_Parts_IsActive = false;
@@ -538,6 +541,7 @@ public class ControlScene_Main : MonoBehaviour
             _GeneralActiveState(true);
 
             ControlPers_AudioMixer.SingleOnScene.UnPause();
+            ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Start();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.UnPause();
             World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
             World_General_Moon.SingleOnScene.Skull_Parts_IsActive = true;
@@ -617,6 +621,7 @@ public class ControlScene_Main : MonoBehaviour
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer.SingleOnScene.Stop();
+            ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Stop();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.Stop();
             World_General_Sky.SingleOnScene.Active = false;
             World_General_MovingBackground_Entity.SingleOnScene.Active = false;
@@ -787,11 +792,13 @@ public class ControlScene_Main : MonoBehaviour
 
     private void Start()
     {
+        #region General
+
         ControlPers_AudioMixer_Music.SingleOnScene.Volume_Scale_Set(1f);
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber = 0;
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_TotalDrivings += 1;
         ControlPers_FogHandler.Color_Load();
-
+        ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Start();
         World_General_Fog.SingleOnScene.Material_Offset_StepScale_Change(1f, 0);
         World_General_Sky.SingleOnScene.Active = true;
         World_Local_SceneMain_Player_Entity.SingleOnScene.Active = true;
@@ -871,6 +878,8 @@ public class ControlScene_Main : MonoBehaviour
         var _bilboard_currentPosition = World_General_MovingBackground_Billboard.SingleOnScene.Position;
         stage_road_showBillboard_driftToRoadPosition = new Vector3(2.0f, _bilboard_currentPosition.y, _bilboard_currentPosition.z);
 
+        #endregion
+
         #region Redness
 
         redness_step = 1.0f / (driftSection_prefab.Length - redness_start_location_index);
@@ -887,8 +896,6 @@ public class ControlScene_Main : MonoBehaviour
         redness_player_lights_color_init = World_Local_SceneMain_Player_Entity.SingleOnScene.Lights_Front_Color;
         redness_globalLighting_color_top_init = AppScreen_General_MainCameraCarrier_GlobalLightning_Entity.SingleOnScene.Color_Top;
         redness_moon_color_init = World_General_Moon.SingleOnScene.Color;
-
-        #endregion
 
         #if UNITY_EDITOR
 
@@ -941,6 +948,8 @@ public class ControlScene_Main : MonoBehaviour
         }
 
         #endif
+
+        #endregion
     }
 
     private void Update()
@@ -1562,6 +1571,7 @@ public class ControlScene_Main : MonoBehaviour
                         {
                             ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                             ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
+                            ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Start();
 
                             SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
                         }
@@ -1569,16 +1579,35 @@ public class ControlScene_Main : MonoBehaviour
                         if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
                         || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
                         {
-                            if (!ad_interstitial_isActive)
+                            if (!ad_interstitial_isActivated)
                             {
                                 YG2.InterstitialAdvShow();
-                                ad_interstitial_isActive = true;
+                                ad_interstitial_isActivated = true;
                             }
                             else
                             {
-                                if (!YG2.nowInterAdv)
+                                if (!ad_interstitial_isActive)
                                 {
-                                    _ToMain();
+                                    if (YG2.nowInterAdv)
+                                    {
+                                        ad_interstitial_isActive = true;
+                                    }
+                                    else
+                                    {
+                                        ad_interstitial_waitingTime -= Time.deltaTime;
+
+                                        if (ad_interstitial_waitingTime <= 0)
+                                        {
+                                            _ToMain();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (!YG2.nowInterAdv)
+                                    {
+                                        _ToMain();
+                                    }
                                 }
                             }
                         }
@@ -1602,16 +1631,35 @@ public class ControlScene_Main : MonoBehaviour
                             if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
                             || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
                             {
-                                if (!ad_interstitial_isActive)
+                                if (!ad_interstitial_isActivated)
                                 {
                                     YG2.InterstitialAdvShow();
-                                    ad_interstitial_isActive = true;
+                                    ad_interstitial_isActivated = true;
                                 }
                                 else
                                 {
-                                    if (!YG2.nowInterAdv)
+                                    if (!ad_interstitial_isActive)
                                     {
-                                        _ToMenu();
+                                        if (YG2.nowInterAdv)
+                                        {
+                                            ad_interstitial_isActive = true;
+                                        }
+                                        else
+                                        {
+                                            ad_interstitial_waitingTime -= Time.deltaTime;
+
+                                            if (ad_interstitial_waitingTime <= 0)
+                                            {
+                                                _ToMenu();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!YG2.nowInterAdv)
+                                        {
+                                            _ToMenu();
+                                        }
                                     }
                                 }
                             }
@@ -1661,6 +1709,7 @@ public class ControlScene_Main : MonoBehaviour
                     {
                         ControlPers_AudioMixer_Music.SingleOnScene.Stop();
                         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_music_intro, false);
+                        ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Start();
 
                         SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
                     }
@@ -1668,16 +1717,35 @@ public class ControlScene_Main : MonoBehaviour
                     if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
                     || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
                     {
-                        if (!ad_interstitial_isActive)
+                        if (!ad_interstitial_isActivated)
                         {
                             YG2.InterstitialAdvShow();
-                            ad_interstitial_isActive = true;
+                            ad_interstitial_isActivated = true;
                         }
                         else
                         {
-                            if (!YG2.nowInterAdv)
+                            if (!ad_interstitial_isActive)
                             {
-                                _ToMain();
+                                if (YG2.nowInterAdv)
+                                {
+                                    ad_interstitial_isActive = true;
+                                }
+                                else
+                                {
+                                    ad_interstitial_waitingTime -= Time.deltaTime;
+
+                                    if (ad_interstitial_waitingTime <= 0)
+                                    {
+                                        _ToMain();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!YG2.nowInterAdv)
+                                {
+                                    _ToMain();
+                                }
                             }
                         }
                     }
@@ -1695,6 +1763,7 @@ public class ControlScene_Main : MonoBehaviour
                             var _coins_add = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count * (ControlPers_BuildSettings.PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT - 1);
                             ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_add;
                             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsTotal += _coins_add;
+                            ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
                             AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count += _coins_add;
                         }
 
@@ -1718,16 +1787,35 @@ public class ControlScene_Main : MonoBehaviour
                         if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
                         || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
                         {
-                            if (!ad_interstitial_isActive)
+                            if (!ad_interstitial_isActivated)
                             {
                                 YG2.InterstitialAdvShow();
-                                ad_interstitial_isActive = true;
+                                ad_interstitial_isActivated = true;
                             }
                             else
                             {
-                                if (!YG2.nowInterAdv)
+                                if (!ad_interstitial_isActive)
                                 {
-                                    _ToMenu();
+                                    if (YG2.nowInterAdv)
+                                    {
+                                        ad_interstitial_isActive = true;
+                                    }
+                                    else
+                                    {
+                                        ad_interstitial_waitingTime -= Time.deltaTime;
+
+                                        if (ad_interstitial_waitingTime <= 0)
+                                        {
+                                            _ToMenu();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (!YG2.nowInterAdv)
+                                    {
+                                        _ToMenu();
+                                    }
                                 }
                             }
                         }

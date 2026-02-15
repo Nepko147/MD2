@@ -3,7 +3,7 @@ using UnityEngine;
 public class AppScreen_General_UICanvas_Entity : AppScreen_General_UICanvas_Parent
 {
     public static AppScreen_General_UICanvas_Entity SingleOnScene { get; private set; }
-    
+
     public Camera Camera { get; private set; }
 
     [SerializeField] private AppScrren_Local_SceneMenu_UICanvas_Menu_Local_Upgrades_Upgrade_General_PopUpMessage_Entity popUpMessage_prefab;

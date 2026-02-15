@@ -32,6 +32,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider
         Value = 1f - (image_max.x - ControlPers_InputHandler.SingleOnScene.Screen_Position.x) / image_width;
         
         audioSource.Play();
+
+        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
     }
 
     protected override void Awake()

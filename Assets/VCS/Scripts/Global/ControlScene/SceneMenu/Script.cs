@@ -15,7 +15,7 @@ public class ControlScene_Menu : MonoBehaviour
     private bool stage_upgrades = false;
     private bool stage_settings = false;
 
-    [SerializeField] private float menuShiftTime = 0.2f;
+    private float menuShiftTime = 0.2f;
 
     [SerializeField] private AudioClip audio_music_intro;
 
@@ -145,8 +145,6 @@ public class ControlScene_Menu : MonoBehaviour
             if (AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Button_Menu.SingleOnScene.Pressed)
             {
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Settings.SingleOnScene.Pressed = false;
-
-                ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
 
                 AppScreen_Local_SceneMenu_UICanvas_Title.SingleOnScene.Shift_Pos_ToSource(menuShiftTime);
                 AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Entity.SingleOnScene.Shift_Pos_ToSource(menuShiftTime);

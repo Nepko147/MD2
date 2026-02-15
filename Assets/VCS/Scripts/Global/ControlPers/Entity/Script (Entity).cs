@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ControlPers_Entity : MonoBehaviour
 {
-    void Awake()
+    private void Awake()
     {
         DontDestroyOnLoad(gameObject);
     }

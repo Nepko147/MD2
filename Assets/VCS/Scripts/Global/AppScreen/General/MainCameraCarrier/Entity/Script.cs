@@ -181,6 +181,7 @@ public class AppScreen_General_MainCameraCarrier_Entity : MonoBehaviour
 
                         if (_dif.magnitude <= _spd)
                         {
+                            transform.position = move_destination_position;
                             move_state_current = Move_State.idle;
                         }
                     break;

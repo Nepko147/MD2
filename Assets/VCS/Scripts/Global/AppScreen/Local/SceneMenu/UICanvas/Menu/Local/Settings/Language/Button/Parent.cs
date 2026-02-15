@@ -5,11 +5,19 @@ public abstract class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Lan
     [SerializeField] private Sprite image_currennt_idle_sf;
     [SerializeField] private Sprite image_currennt_pointed_sf;
     [SerializeField] private Sprite image_currennt_pressed_sf;
+    
+    public override void OnClick()
+    {
+        base.OnClick();
+
+        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
+    }
 
     protected void Pressed_OffAll()
     {
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_English.SingleOnScene.Pressed = false;
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Russian.SingleOnScene.Pressed = false;
+        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Spanish.SingleOnScene.Pressed = false;
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_Portuguese.SingleOnScene.Pressed = false;
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_German.SingleOnScene.Pressed = false;
         AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Language_Button_French.SingleOnScene.Pressed = false;

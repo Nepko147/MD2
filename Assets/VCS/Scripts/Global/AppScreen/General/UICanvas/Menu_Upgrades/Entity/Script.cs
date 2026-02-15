@@ -8,7 +8,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
     private CanvasGroup canvasGroup;
     private float canvasGroup_deltaApha = 1.0f;
 
-    private enum menu_upgrades_state
+    private enum Menu_Upgrades_State
     {
         onDisplay,
         hidden,
@@ -16,18 +16,18 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
         size
     }
 
-    menu_upgrades_state menu_upgrades_state_currnet;
+    Menu_Upgrades_State menu_upgrades_state_currnet;
 
     public void Show(float _delay)
     {
-        IEnumerator _coroutine(float _delay)
+        IEnumerator _Coroutine(float _delay)
         {
             yield return new WaitForSeconds(_delay);
 
-            menu_upgrades_state_currnet = menu_upgrades_state.onDisplay;
+            menu_upgrades_state_currnet = Menu_Upgrades_State.onDisplay;
         }
 
-        var _routine = _coroutine(_delay);
+        var _routine = _Coroutine(_delay);
         StartCoroutine(_routine);
     }
 
@@ -39,14 +39,14 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
 
     public void Hide(float _delay)
     {
-        IEnumerator _coroutine(float _delay)
+        IEnumerator _Coroutine(float _delay)
         {
             yield return new WaitForSeconds(_delay);
 
-            menu_upgrades_state_currnet = menu_upgrades_state.hidden;
+            menu_upgrades_state_currnet = Menu_Upgrades_State.hidden;
         }
 
-        var _routine = _coroutine(_delay);
+        var _routine = _Coroutine(_delay);
         StartCoroutine(_routine);
     }
 
@@ -59,7 +59,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0.0f;
 
-        menu_upgrades_state_currnet = menu_upgrades_state.idle;
+        menu_upgrades_state_currnet = Menu_Upgrades_State.idle;
     }
 
     private void Start()
@@ -73,7 +73,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
     {
         switch (menu_upgrades_state_currnet)
         {
-            case menu_upgrades_state.onDisplay:
+            case Menu_Upgrades_State.onDisplay:
 
                 if (canvasGroup.alpha < 1)
                 {
@@ -81,13 +81,13 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
                 }
                 else
                 {
-                    menu_upgrades_state_currnet = menu_upgrades_state.idle;
+                    menu_upgrades_state_currnet = Menu_Upgrades_State.idle;
                     canvasGroup.alpha = 1; // Гарантируем полное появление
                 }
 
                 break;
 
-            case menu_upgrades_state.hidden:
+            case Menu_Upgrades_State.hidden:
 
                 if (canvasGroup.alpha > 0)
                 {
@@ -95,7 +95,7 @@ public class AppScreen_UICanvas_Menu_Upgrades_Entity : AppScreen_General_UICanva
                 }
                 else
                 {
-                    menu_upgrades_state_currnet = menu_upgrades_state.idle;
+                    menu_upgrades_state_currnet = Menu_Upgrades_State.idle;
                     canvasGroup.alpha = 0; // Гарантируем полное исчезновение
                 }
 
