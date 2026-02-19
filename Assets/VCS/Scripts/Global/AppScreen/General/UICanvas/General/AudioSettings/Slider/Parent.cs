@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Parent : AppScreen_General_UICanvas_Parent
+public class AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Slider_Parent : AppScreen_General_UICanvas_Parent
 {
     private Image image;
     private Vector2 image_max;
@@ -32,8 +32,6 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider
         Value = 1f - (image_max.x - ControlPers_InputHandler.SingleOnScene.Screen_Position.x) / image_width;
         
         audioSource.Play();
-
-        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
     }
 
     protected override void Awake()

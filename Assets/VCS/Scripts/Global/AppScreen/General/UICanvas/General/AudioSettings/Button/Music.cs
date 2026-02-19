@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button_Music : AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button_Parent
+public class AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Button_Music : AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Button_Parent
 {
-    public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button_Music SingleOnScene { get; private set; }
+    public static AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Button_Music SingleOnScene { get; private set; }
 
     public override void Mute_On(float _musicValue)
     {
         base.Mute_On(_musicValue);
-        AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Music.SingleOnScene.Value = 0;
+        AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Slider_Music.SingleOnScene.Value = 0;
         ControlPers_AudioMixer_Music.SingleOnScene.Volume_Mute();
         ControlPers_DataHandler.SingleOnScene.SettingsData_MusicValue = 0;
     }
@@ -15,7 +15,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
     {
         if (mute)
         {
-            AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Music.SingleOnScene.Value = _musicValue;
+            AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Slider_Music.SingleOnScene.Value = _musicValue;
             ControlPers_AudioMixer_Music.SingleOnScene.Volume_Settings_Set(_musicValue);
             ControlPers_DataHandler.SingleOnScene.SettingsData_MusicValue = _musicValue;
             base.Mute_Off(_musicValue);
@@ -24,7 +24,7 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
 
     public void OnClick()
     {
-        base.OnClick(AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Slider_Music.SingleOnScene.Value);
+        base.OnClick(AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Slider_Music.SingleOnScene.Value);
     }
 
     protected override void Awake()

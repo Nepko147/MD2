@@ -2,11 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
+public class AppScreen_General_UICanvas_DebugInfo : MonoBehaviour
 {
-    public static AppScreen_UICanvas_DebugInfo SingleOnScene { get; private set; }
-
-    private RectTransform rectTransform;
+    public static AppScreen_General_UICanvas_DebugInfo SingleOnScene { get; private set; }
 
     private Text text_component;
 
@@ -23,8 +21,6 @@ public class AppScreen_UICanvas_DebugInfo : MonoBehaviour
     private void Awake()
     {
         SingleOnScene = this;
-
-        rectTransform = GetComponent<RectTransform>();
 
         text_component = GetComponent<Text>();
     }

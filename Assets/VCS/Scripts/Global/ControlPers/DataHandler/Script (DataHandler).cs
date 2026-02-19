@@ -730,7 +730,7 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public const ControlPers_LanguageHandler_Entity.GameLanguage_State SETTINGSDATA_LANGUAGE_DEFAULTVALUE = SettingsData.Language.DEFAULTVALUE;
 
-    public void SettingsData_Load()
+    private void SettingsData_Load()
     {
         switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
@@ -834,7 +834,7 @@ public class ControlPers_DataHandler : MonoBehaviour
         }
     }
 
-    public void SettingsData_Save()
+    private void SettingsData_Save()
     {
         switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
         {
@@ -863,20 +863,41 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public float SettingsData_SoundValue
     {
-        get { return (SettingsData.Audio.Sound.value); }
-        set { SettingsData.Audio.Sound.value = Mathf.Clamp(value, 0, 1f); }
+        get 
+        { 
+            return (SettingsData.Audio.Sound.value);
+        }
+        set 
+        { 
+            SettingsData.Audio.Sound.value = Mathf.Clamp(value, 0, 1f);
+            SettingsData_Save();
+        }
     }
 
     public float SettingsData_MusicValue
     {
-        get { return (SettingsData.Audio.Music.value); }
-        set { SettingsData.Audio.Music.value = Mathf.Clamp(value, 0, 1f); }
+        get 
+        { 
+            return (SettingsData.Audio.Music.value); 
+        }
+        set 
+        { 
+            SettingsData.Audio.Music.value = Mathf.Clamp(value, 0, 1f);
+            SettingsData_Save();
+        }
     }
 
     public ControlPers_LanguageHandler_Entity.GameLanguage_State SettingsData_LanguageValue
     {
-        get { return (SettingsData.Language.value); }
-        set { SettingsData.Language.value = value; }
+        get 
+        { 
+            return (SettingsData.Language.value);
+        }
+        set 
+        { 
+            SettingsData.Language.value = value;
+            SettingsData_Save();
+        }
     }
 
     #endregion

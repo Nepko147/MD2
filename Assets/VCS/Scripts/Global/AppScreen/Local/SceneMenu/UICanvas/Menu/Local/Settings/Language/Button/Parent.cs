@@ -5,13 +5,6 @@ public abstract class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Lan
     [SerializeField] private Sprite image_currennt_idle_sf;
     [SerializeField] private Sprite image_currennt_pointed_sf;
     [SerializeField] private Sprite image_currennt_pressed_sf;
-    
-    public override void OnClick()
-    {
-        base.OnClick();
-
-        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
-    }
 
     protected void Pressed_OffAll()
     {

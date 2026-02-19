@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button_Parent : AppScreen_General_UICanvas_Parent
+public class AppScreen_Local_SceneMenu_UICanvas_General_AudioSettings_Button_Parent : AppScreen_General_UICanvas_Parent
 {
     protected bool mute = false;
     private float mute_on_sliderValue;
@@ -43,10 +43,8 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Settings_Audio_Button
         {
             Mute_On(_sliderValue);
         }
-
+        
         audioSource.Play();
-
-        ControlPers_DataHandler.SingleOnScene.SettingsData_Save();
     }
 
     protected override void Awake()

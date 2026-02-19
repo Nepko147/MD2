@@ -534,6 +534,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Visible = true;
             AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = true;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.SetPause(true);
+            AppScreen_General_UICanvas_General_AudioSettings_Entity.SingleOnScene.Active_Set(true);
         };
 
         Stage_Pause_Event_Off += () =>
@@ -559,6 +560,7 @@ public class ControlScene_Main : MonoBehaviour
             AppScreen_Local_SceneMain_UICanvas_Pause_Button_Resume.SingleOnScene.Pressed = false;
             AppScreen_Local_SceneMain_UICanvas_Button_Menu.SingleOnScene.Visible = false;
             AppScreen_Local_SceneMain_UICanvas_Entity.SingleOnScene.SetPause(false);
+            AppScreen_General_UICanvas_General_AudioSettings_Entity.SingleOnScene.Active_Set(false);
         };
         Stage_Pause_Event_Off += Stage_Pause_Event_Off_ToRoad;
 
@@ -822,6 +824,7 @@ public class ControlScene_Main : MonoBehaviour
         AppScreen_Local_SceneMain_MainCameraCarrier_MainCamera_Background.SingleOnScene.PostProcess_Profile_ChromaticAberration_Start();
         AppScreen_Local_SceneMain_UICanvas_Indicators_Entity.SingleOnScene.Show();        
         AppScreen_Local_SceneMain_UICanvas_Indicators_Button_Pause.SingleOnScene.Visible = true;
+        AppScreen_General_UICanvas_General_AudioSettings_Entity.SingleOnScene.Active_Set(false);
 
         if (ControlPers_DataHandler.SingleOnScene.ProgressData_Upgrade_Revive_IsImproved())
         {
