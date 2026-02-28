@@ -27,9 +27,9 @@ public class ControlScene_Opening : MonoBehaviour
     private void Start()
     {
         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets, true);
+        AppScreen_General_UICanvas_Menu_Main_Button_Discord.SingleOnScene.Hide(0);
 
-        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-        && ControlPers_BuildSettings.SingleOnScene.PlatformType_Current != ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.windows_standalone)
         {
             stage_pressAnyKey_delay = 0;
         }
@@ -67,6 +67,7 @@ public class ControlScene_Opening : MonoBehaviour
             if (Stage_PressAnyKey_Pressed
             && ControlPers_DataHandler.SingleOnScene.IsDataLoaded)
             {
+                AppScreen_General_UICanvas_Menu_Main_Button_Discord.SingleOnScene.Show(1f);
                 AppScreen_Local_SceneOpening_UICanvas_Car.SingleOnScene.Move();
                 AppScreen_Local_SceneOpening_UICanvas_Title.SingleOnScene.PlayAnimation();
 

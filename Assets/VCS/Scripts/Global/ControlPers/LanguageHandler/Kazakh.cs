@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Kazakh : ControlPers_LanguageHandler_Pa
         text_keyToString[Text_Key.midscreen_pause] = "КІДІРТУ"; //Pause
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Қашықтық қалады";
         text_keyToString[Text_Key.received_text] = "Алынған монеталар";
-        text_keyToString[Text_Key.received_ad_text] = "Жарнамалар көру үшін x" + ControlPers_BuildSettings.PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT + " алыңыз"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Жарнамалар көру үшін x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " алыңыз"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Өмір"; //+1 Life
         text_keyToString[Text_Key.popUp_coin] = "+1 Монета";
         text_keyToString[Text_Key.popUp_coinRush] = "Монета безгегі!";

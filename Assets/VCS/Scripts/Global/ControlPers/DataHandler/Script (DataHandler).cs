@@ -21,11 +21,16 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private const string DIRECTORY_NAME = "Lunar Howl" + @"\" + "Midnight Drive";
     private string directory_path;
-    private void Directory_CreateIfNotExists(string _path)
+    private bool Directory_ExistsOrCreate()
     {
-        if (!Directory.Exists(_path)) //Проверяем наличие папки
+        if (Directory.Exists(directory_path)) //Проверяем наличие папки
         {
-            Directory.CreateDirectory(_path); //Создаём папку
+            return (true);
+        }
+        else
+        {
+            Directory.CreateDirectory(directory_path); //Создаём папку
+            return (false);
         }
     }
 
@@ -191,14 +196,6 @@ public class ControlPers_DataHandler : MonoBehaviour
             public const int DEFAULTVALUE = 0;
             public static int value = DEFAULTVALUE;
         }
-
-        public struct Tutorial
-        {
-            public const string NODE = "Coins";
-            public const string PATH = ORIGINNODE + "/" + NODE;
-            public const bool DEFAULTVALUE = true;
-            public static bool value = DEFAULTVALUE;
-        }
     }
 
     public enum ProgressData_Upgrades_State
@@ -319,33 +316,34 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     public void ProgressData_Load()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
-
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
                 progressData_file = new XmlDocument();
-
                 
-                try //Пробуем обратиться к файлу
+                if (Directory_ExistsOrCreate())
                 {
-                    if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
+                    try //Пробуем обратиться к файлу. Если файла нет, то будет нулевой прогресс. После сохранения файл будет создан.
                     {
-                        if (!ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile)
+                        if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
                         {
-                            var _encryptedData = File.ReadAllText(progressData_file_path);
-                            progressData_file.InnerXml = Encryption_Decrypt(_encryptedData);
+                            if (!ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile)
+                            {
+                                var _encryptedData = File.ReadAllText(progressData_file_path);
+                                progressData_file.InnerXml = Encryption_Decrypt(_encryptedData);
+                            }
+                            else
+                            {
+                                progressData_file.Load(progressData_file_path);
+                            }
                         }
                         else
                         {
-                            progressData_file.Load(progressData_file_path);
+                            progressData_file.RemoveAll(); //Очищаем содержимое файла
                         }
                     }
-                    else
-                    {
-                        progressData_file.RemoveAll(); //Очищаем содержимое файла
-                    }
+                    catch { }
                 }
-                catch { } //Если файла нет, то будет нулевой прогресс. После сохранения файл будет создан.
 
                 ProgressData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
 
@@ -375,8 +373,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 ProgressData.Coins.value = int.Parse(_coins_text); //Грузиим монетки
             break;
 
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                 ProgressData.Statistics.ReviveNumber.value = YG2.saves.ProgressData_Statistics_ReviveNumber;
                 ProgressData.Statistics.ReviveNumberBest.value = YG2.saves.ProgressData_Statistics_ReviveNumberBest;
                 ProgressData.Statistics.CoinsTotal.value = YG2.saves.ProgressData_Statistics_CoinsTotal;
@@ -391,15 +389,66 @@ public class ControlPers_DataHandler : MonoBehaviour
 
                 ProgressData.Coins.value = YG2.saves.ProgressData_Coins;
             break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                //Загрузка из локального хранилища браузера через PlayerPrefs
+
+                //Statistics
+                var _defaultValue = ProgressData.Statistics.ReviveNumber.DEFAULTVALUE.ToString();
+                var _value_string = PlayerPrefs.GetString(ProgressData.Statistics.ReviveNumber.NODE, _defaultValue);
+                ProgressData.Statistics.ReviveNumber.value = int.Parse(_value_string);
+
+                _defaultValue = ProgressData.Statistics.ReviveNumberBest.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Statistics.ReviveNumberBest.NODE, _defaultValue);
+                ProgressData.Statistics.ReviveNumberBest.value = int.Parse(_value_string);
+
+                _defaultValue = ProgressData.Statistics.CoinsTotal.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Statistics.CoinsTotal.NODE, _defaultValue);
+                ProgressData.Statistics.CoinsTotal.value = int.Parse(_value_string);
+
+                _defaultValue = ProgressData.Statistics.CoinsSpentOnRevivals.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Statistics.CoinsSpentOnRevivals.NODE, _defaultValue);
+                ProgressData.Statistics.CoinsSpentOnRevivals.value = int.Parse(_value_string);
+
+                _defaultValue = ProgressData.Statistics.Defeats.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Statistics.Defeats.NODE, _defaultValue);
+                ProgressData.Statistics.Defeats.value = int.Parse(_value_string);
+
+                _defaultValue = ProgressData.Statistics.TotalDrivings.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Statistics.TotalDrivings.NODE, _defaultValue);
+                ProgressData.Statistics.TotalDrivings.value = int.Parse(_value_string);
+
+                //Upgrades
+                _defaultValue = ProgressData.Upgrades.MoreCoins.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Upgrades.MoreCoins.NODE, _defaultValue);
+                Enum.TryParse(_value_string, out ProgressData.Upgrades.MoreCoins.value);
+
+                _defaultValue = ProgressData.Upgrades.MoreBonuses.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Upgrades.MoreBonuses.NODE, _defaultValue);
+                Enum.TryParse(_value_string, out ProgressData.Upgrades.MoreBonuses.value);
+
+                _defaultValue = ProgressData.Upgrades.CoinMagnet.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Upgrades.CoinMagnet.NODE, _defaultValue);
+                Enum.TryParse(_value_string, out ProgressData.Upgrades.CoinMagnet.value);
+
+                _defaultValue = ProgressData.Upgrades.Revive.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Upgrades.Revive.NODE, _defaultValue);
+                Enum.TryParse(_value_string, out ProgressData.Upgrades.Revive.value);
+
+                //Coins
+                _defaultValue = ProgressData.Coins.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(ProgressData.Coins.NODE, _defaultValue);
+                ProgressData.Coins.value = int.Parse(_value_string);
+            break;
         }
     }
 
     public void ProgressData_Save()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
-                Directory_CreateIfNotExists(directory_path);
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
+                Directory_ExistsOrCreate();
 
                 progressData_file.RemoveAll(); //Очищаем содержимое файла
                 ProgressData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
@@ -429,8 +478,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 }                
             break;
 
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
 
                 YG2.saves.ProgressData_Statistics_ReviveNumber = ProgressData.Statistics.ReviveNumber.value;
                 YG2.saves.ProgressData_Statistics_ReviveNumberBest = ProgressData.Statistics.ReviveNumberBest.value;
@@ -447,6 +496,46 @@ public class ControlPers_DataHandler : MonoBehaviour
                 YG2.saves.ProgressData_Coins = ProgressData.Coins.value;
 
                 YG2.SaveProgress();
+            break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                //Сохранение в локальном хранилище браузера через PlayerPrefs
+
+                //Statistics
+                var _value_string = ProgressData.Statistics.ReviveNumber.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.ReviveNumber.NODE, _value_string);
+
+                _value_string = ProgressData.Statistics.ReviveNumberBest.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.ReviveNumberBest.NODE, _value_string);
+
+                _value_string = ProgressData.Statistics.CoinsTotal.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.CoinsTotal.NODE, _value_string);
+
+                _value_string = ProgressData.Statistics.CoinsSpentOnRevivals.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.CoinsSpentOnRevivals.NODE, _value_string);
+
+                _value_string = ProgressData.Statistics.Defeats.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.Defeats.NODE, _value_string);
+
+                _value_string = ProgressData.Statistics.TotalDrivings.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Statistics.TotalDrivings.NODE, _value_string);
+
+                //Upgrades
+                _value_string = ProgressData.Upgrades.MoreCoins.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Upgrades.MoreCoins.NODE, _value_string);
+
+                _value_string = ProgressData.Upgrades.MoreBonuses.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Upgrades.MoreBonuses.NODE, _value_string);
+
+                _value_string = ProgressData.Upgrades.CoinMagnet.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Upgrades.CoinMagnet.NODE, _value_string);
+
+                _value_string = ProgressData.Upgrades.Revive.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Upgrades.Revive.NODE, _value_string);
+
+                //Coins
+                _value_string = ProgressData.Coins.value.ToString();
+                PlayerPrefs.SetString(ProgressData.Coins.NODE, _value_string);
             break;
         }
     }
@@ -630,15 +719,16 @@ public class ControlPers_DataHandler : MonoBehaviour
     public delegate void ProgressData_Coins_Change(int _changedCoinsValue);
     public event ProgressData_Coins_Change ProgressData_Coins_OnChange;
 
+    private bool progressData_tutorial = true;
     public bool ProgressData_Tutorial
     {
         get
         {
-            return (ProgressData.Tutorial.value);
+            return (progressData_tutorial);
         }
         set
         {
-            ProgressData.Tutorial.value = value;
+            progressData_tutorial = value;
         }
     }
 
@@ -732,25 +822,27 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private void SettingsData_Load()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
                 settingsData_file = new XmlDocument();
-                settingsData_file_path = directory_path + SETTINGSDATA_FILE_NAME;
 
-                try //Прробуем обратиться к файлу
+                if (Directory_ExistsOrCreate())
                 {
-                    if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
+                    try //Прробуем обратиться к файлу. Если файла нет, то будут настройки по умолчанию. После сохранения файл будет создан.
                     {
-                        settingsData_file.Load(settingsData_file_path);
+                        if (!ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
+                        {
+                            settingsData_file.Load(directory_path + SETTINGSDATA_FILE_NAME);
+                        }
+                        else
+                        {
+                            progressData_file.RemoveAll(); //Очищаем содержимое файла
+                        }
                     }
-                    else
-                    {
-                        progressData_file.RemoveAll(); //Очищаем содержимое файла
-                    }
+                    catch { }
                 }
-                catch { } //Если файла нет, то будут настройки по умолчанию. После сохранения файл будет создан.
-                
+
                 SettingsData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости            
 
                 var _audio_soundValue_text = settingsData_file.SelectSingleNode(SettingsData.Audio.Sound.PATH).InnerText; //Считываем данные из файла
@@ -763,8 +855,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 Enum.TryParse(_languageValue_text, out SettingsData.Language.value); //Грузим язык
             break;
 
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                 SettingsData.Audio.Sound.value = YG2.saves.SettingsData_Audio_Sound;
                 SettingsData.Audio.Music.value = YG2.saves.SettingsData_Audio_Music;
 
@@ -831,15 +923,31 @@ public class ControlPers_DataHandler : MonoBehaviour
                     break;
                 }
             break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                //Загрузка из локального хранилища браузера через PlayerPrefs
+
+                var _defaultValue = SettingsData.Audio.Sound.DEFAULTVALUE.ToString();
+                var _value_string = PlayerPrefs.GetString(SettingsData.Audio.Sound.NODE, _defaultValue);
+                SettingsData.Audio.Sound.value = float.Parse(_value_string);
+
+                _defaultValue = SettingsData.Audio.Music.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(SettingsData.Audio.Music.NODE, _defaultValue);
+                SettingsData.Audio.Music.value = float.Parse(_value_string);
+
+                _defaultValue = SettingsData.Language.DEFAULTVALUE.ToString();
+                _value_string = PlayerPrefs.GetString(SettingsData.Language.NODE, _defaultValue);
+                Enum.TryParse(_value_string, out SettingsData.Language.value);
+            break;
         }
     }
 
     private void SettingsData_Save()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
-                Directory_CreateIfNotExists(directory_path);
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
+                Directory_ExistsOrCreate();
                 
                 settingsData_file.RemoveAll(); // Очищаем содержимое файла
                 SettingsData_File_Check(); //Записываем в файл его дефолтную структуру при необходимости
@@ -851,12 +959,23 @@ public class ControlPers_DataHandler : MonoBehaviour
                 settingsData_file.Save(settingsData_file_path); //Создаем или перезаписываем файл XML документа
             break;
 
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                 YG2.saves.SettingsData_Audio_Sound = SettingsData.Audio.Sound.value;
                 YG2.saves.SettingsData_Audio_Music = SettingsData.Audio.Music.value;
 
                 YG2.SaveProgress();
+            break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                var _value_string = SettingsData.Audio.Sound.value.ToString();
+                PlayerPrefs.SetString(SettingsData.Audio.Sound.NODE, _value_string);
+
+                _value_string = SettingsData.Audio.Music.value.ToString();
+                PlayerPrefs.SetString(SettingsData.Audio.Music.NODE, _value_string);
+
+                _value_string = SettingsData.Language.value.ToString();
+                PlayerPrefs.SetString(SettingsData.Language.NODE, _value_string);
             break;
         }
     }
@@ -911,15 +1030,14 @@ public class ControlPers_DataHandler : MonoBehaviour
 
     private void Start()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
                 directory_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DIRECTORY_NAME + @"\";
 
                 var _progressData_FileName = ControlPers_BuildSettings.SingleOnScene.NotEncryptProgressFile ? PROGRESSDATA_FILE_NAME : PROGRESSDATA_FILE_ENCRYPTED_NAME;
                 progressData_file_path = directory_path + _progressData_FileName;
-
-                Directory_CreateIfNotExists(directory_path);
+                settingsData_file_path = directory_path + SETTINGSDATA_FILE_NAME;
 
                 ProgressData_Load();
                 SettingsData_Load();
@@ -927,8 +1045,8 @@ public class ControlPers_DataHandler : MonoBehaviour
                 IsDataLoaded = true;
             break;
 
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                 if (ControlPers_BuildSettings.SingleOnScene.ResetAsFirstLaunch)
                 {
                     YG2.SetDefaultSaves();
@@ -945,6 +1063,13 @@ public class ControlPers_DataHandler : MonoBehaviour
                 };
 
                 YGInsides.LoadProgress();
+            break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                ProgressData_Load();
+                SettingsData_Load();
+
+                IsDataLoaded = true;
             break;
         }
     }

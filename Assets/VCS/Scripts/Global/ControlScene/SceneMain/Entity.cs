@@ -1579,8 +1579,8 @@ public class ControlScene_Main : MonoBehaviour
                             SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
                         }
 
-                        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-                        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+                        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
                         {
                             if (!ad_interstitial_isActivated)
                             {
@@ -1631,8 +1631,8 @@ public class ControlScene_Main : MonoBehaviour
                                 SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
                             }
 
-                            if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-                            || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                            if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+                            || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
                             {
                                 if (!ad_interstitial_isActivated)
                                 {
@@ -1687,15 +1687,16 @@ public class ControlScene_Main : MonoBehaviour
                 {
                     AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Show(0.0f);
 
-                    switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+                    switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
                     {
-                        case ControlPers_BuildSettings.PlatformType.windows:
+                        case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
+                            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
                             AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = false;
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = false;
                         break;
 
-                        case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                        case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                        case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+                        case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                             AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Ad_Text_Visible = true;
                             AppScreen_Local_SceneMain_UICanvas_Received_AD_Button.SingleOnScene.Visible = true;
                         break;
@@ -1717,8 +1718,8 @@ public class ControlScene_Main : MonoBehaviour
                         SceneManager.LoadScene(Constants.SCENEINDEX_MAIN);
                     }
 
-                    if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-                    || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                    if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+                    || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
                     {
                         if (!ad_interstitial_isActivated)
                         {
@@ -1763,7 +1764,7 @@ public class ControlScene_Main : MonoBehaviour
                     {
                         void _Reward_Callback()
                         {
-                            var _coins_add = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count * (ControlPers_BuildSettings.PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT - 1);
+                            var _coins_add = AppScreen_Local_SceneMain_UICanvas_Received_Entity.SingleOnScene.Received_Coins_Count * (ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT - 1);
                             ControlPers_DataHandler.SingleOnScene.ProgressData_Coins += _coins_add;
                             ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_CoinsTotal += _coins_add;
                             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
@@ -1787,8 +1788,8 @@ public class ControlScene_Main : MonoBehaviour
                             SceneManager.LoadScene(Constants.SCENEINDEX_MENU);
                         }
 
-                        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-                        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+                        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+                        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
                         {
                             if (!ad_interstitial_isActivated)
                             {

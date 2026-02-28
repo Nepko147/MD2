@@ -13,16 +13,24 @@ public class ControlPers_YandexGamesHandler : MonoBehaviour
 
     public void GameReadyAPI_Start()
     {
-        GameReadyAPI_IsOnGameplay = true;
+        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        {
+            GameReadyAPI_IsOnGameplay = true;
 
-        YG2.GameplayStart();
+            YG2.GameplayStart();
+        }
     }
 
     public void GameReadyAPI_Stop()
     {
-        GameReadyAPI_IsOnGameplay = false;
+        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        {
+            GameReadyAPI_IsOnGameplay = false;
 
-        YG2.GameplayStop();
+            YG2.GameplayStop();
+        }
     }
 
     private IEnumerator Update_Coroutine()
@@ -65,8 +73,8 @@ public class ControlPers_YandexGamesHandler : MonoBehaviour
 
     private void Start()
     {
-        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current ==  ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current ==  ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
         {
             var _routine = Update_Coroutine();
             StartCoroutine(_routine);

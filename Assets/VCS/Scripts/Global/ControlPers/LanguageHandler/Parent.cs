@@ -73,6 +73,10 @@ public class ControlPers_LanguageHandler_Parent : MonoBehaviour
     [SerializeField] private Sprite sprite_button_restart_pointed;
     [SerializeField] private Sprite sprite_button_restart_pressed;
 
+    [SerializeField] private Sprite sprite_button_discord_idle;
+    [SerializeField] private Sprite sprite_button_discord_pointed;
+    [SerializeField] private Sprite sprite_button_discord_pressed;
+
     #endregion
 
     protected virtual void Awake()
@@ -118,5 +122,9 @@ public class ControlPers_LanguageHandler_Parent : MonoBehaviour
         sprite_keyToSprite[Sprite_Key.button_restart_idle] = sprite_button_restart_idle;
         sprite_keyToSprite[Sprite_Key.button_restart_pointed] = sprite_button_restart_pointed;
         sprite_keyToSprite[Sprite_Key.button_restart_pressed] = sprite_button_restart_pressed;
+
+        sprite_keyToSprite[Sprite_Key.button_discord_idle] = sprite_button_discord_idle;
+        sprite_keyToSprite[Sprite_Key.button_discord_pointed] = sprite_button_discord_pointed;
+        sprite_keyToSprite[Sprite_Key.button_discord_pressed] = sprite_button_discord_pressed;
     }
 }

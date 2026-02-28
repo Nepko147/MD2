@@ -57,7 +57,7 @@ public class ControlPers_LanguageHandler_Entity : MonoBehaviour
 
         ControlPers_DataHandler.SingleOnScene.SettingsData_LanguageValue = GameLanguage_State_Current;
 
-        GameLanguage_OnUpdate();      
+        GameLanguage_OnUpdate();
     }
 
     public delegate void GameLanguage_Update();
@@ -173,7 +173,10 @@ public class ControlPers_LanguageHandler_Entity : MonoBehaviour
         button_restart_pressed,
         button_revive_idle,
         button_revive_pointed,
-        button_revive_pressed
+        button_revive_pressed,
+        button_discord_idle,
+        button_discord_pointed,
+        button_discord_pressed
     }
 
     #endregion

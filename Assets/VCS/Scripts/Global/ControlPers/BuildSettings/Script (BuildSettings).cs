@@ -9,22 +9,24 @@ public class ControlPers_BuildSettings : MonoBehaviour
     private enum BuildCompilationType
     {
         windows_standalone,
-        web_yandexGames
+        web_yandexGames,
+        web_itchIo
     }
 
     [SerializeField] private BuildCompilationType buildCompilationType;
 
-    public enum PlatformType
+    public enum BuildRuntimeType
     {
-        windows,
+        windows_standalone,
         web_yandexGames_desktop,
-        web_yandexGames_mobile_android
+        web_yandexGames_mobile_android,
+        web_itchIo
     }
 
-    public PlatformType PlatformType_Current { get; private set; }
+    public BuildRuntimeType BuildRuntimeType_Current { get; private set; }
 
-    public const int PLATFORMTYPE_WEB_YANDEXGAMES_BONUS_PRICE_MULT = 2;
-    public const int PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT = 3;
+    public const int BUILDRUNTIMETYPE_WEB_YANDEXGAMES_BONUS_PRICE_MULT = 2;
+    public const int BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT = 3;
 
     [SerializeField] private bool debugInfo;
     public bool DebugInfo 
@@ -62,18 +64,22 @@ public class ControlPers_BuildSettings : MonoBehaviour
         switch (buildCompilationType)
         {
             case BuildCompilationType.windows_standalone:
-                PlatformType_Current = PlatformType.windows;
+                BuildRuntimeType_Current = BuildRuntimeType.windows_standalone;
             break;
 
             case BuildCompilationType.web_yandexGames:
                 if (YG2.envir.isMobile)
                 {
-                    PlatformType_Current = PlatformType.web_yandexGames_mobile_android;
+                    BuildRuntimeType_Current = BuildRuntimeType.web_yandexGames_mobile_android;
                 }
                 else
                 {
-                    PlatformType_Current = PlatformType.web_yandexGames_desktop;
+                    BuildRuntimeType_Current = BuildRuntimeType.web_yandexGames_desktop;
                 }
+            break;
+
+            case BuildCompilationType.web_itchIo:
+                BuildRuntimeType_Current = BuildRuntimeType.web_itchIo;
             break;
         }
     }

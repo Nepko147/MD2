@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Turkish : ControlPers_LanguageHandler_P
         text_keyToString[Text_Key.midscreen_pause] = "DURAKLAT"; //Pause
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Mesafe kalır";
         text_keyToString[Text_Key.received_text] = "Alınan paralar";
-        text_keyToString[Text_Key.received_ad_text] = "Reklamları izlemek için x" + ControlPers_BuildSettings.PLATFORMTYPE_WEB_YANDEXGAMES_AD_MULT + " kazanın"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Reklamları izlemek için x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " kazanın"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Hayat"; //+1 Life
         text_keyToString[Text_Key.popUp_coin] = "+1 Madeni Para";
         text_keyToString[Text_Key.popUp_coinRush] = "Paraya Hücum!";

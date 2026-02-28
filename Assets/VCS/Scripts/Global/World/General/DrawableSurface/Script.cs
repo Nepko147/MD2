@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class World_General_DrawableSurface : MonoBehaviour
 {
+    #region General
+
     private Material material;
     [SerializeField] Material material_mixer;
     [SerializeField] Texture2D additionalTexture;
@@ -16,6 +18,8 @@ public class World_General_DrawableSurface : MonoBehaviour
 
     private int texture_size_x;
     private int texture_size_y;
+
+    #endregion
 
     #region Web
 
@@ -66,9 +70,9 @@ public class World_General_DrawableSurface : MonoBehaviour
     //Если хотим нарисовать что-то в нескльких местах.
     public void Draw(Vector3[] _positions, Texture2D _overlayTexture, float _overlayTexture_scaleMultiplier_x = 1, float _overlayTexture_scaleMultiplier_y = 1)
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
                 material_mixer.SetTexture("_OverlayTex", _overlayTexture);
                 material_mixer.SetFloat("_OverlayRotation", angle);
                 var _overlayTexture_scale_x = ((float)_overlayTexture.width / texture.width) * _overlayTexture_scaleMultiplier_x;
@@ -92,7 +96,9 @@ public class World_General_DrawableSurface : MonoBehaviour
                 Graphics.CopyTexture(_texture_rt_temp, texture); //Быстрая альтернатива для "texture.ReadPixels(); texture.Apply();"
                 RenderTexture.ReleaseTemporary(_texture_rt_temp);           //Освобождаем память от временной РендерТекстуры. Защита от утечек памяти
             break;
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:                
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:  
                 var _rect = new Rect(0, 0, _overlayTexture.width, _overlayTexture.height);
                 var _sprite = Sprite.Create(_overlayTexture, _rect, Vector2.one / 2); //Создаём новый спрайт
                 var _scale = new Vector3(1 / transform.localScale.x * _overlayTexture_scaleMultiplier_x, 1 / transform.localScale.y * _overlayTexture_scaleMultiplier_y, transform.localScale.z) * WEB_PAINTING_LOCALSCALE;

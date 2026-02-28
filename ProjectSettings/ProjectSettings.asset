@@ -40,7 +40,7 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 76cffce7d4f543744bed9fdeae99f111, type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 640
   defaultScreenHeight: 360
@@ -164,13 +164,14 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
+    Android: com.LUNARHOWL.MidnightDrive
     Standalone: com.DefaultCompany.2D-URP
   buildNumber:
     Standalone: 0
     VisionOS: 0
     iPhone: 0
     tvOS: 0
-  overrideDefaultApplicationIdentifier: 1
+  overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
@@ -264,7 +265,7 @@ PlayerSettings:
   useCustomProguardFile: 0
   AndroidTargetArchitectures: 2
   AndroidSplashScreenScale: 0
-  androidSplashScreen: {fileID: 0}
+  androidSplashScreen: {fileID: 2800000, guid: 76cffce7d4f543744bed9fdeae99f111, type: 3}
   AndroidKeystoreName: 
   AndroidKeyaliasName: 
   AndroidEnableArmv9SecurityFeatures: 0
@@ -295,7 +296,103 @@ PlayerSettings:
       m_Width: 128
       m_Height: 128
       m_Kind: 0
-  m_BuildTargetPlatformIcons: []
+  m_BuildTargetPlatformIcons:
+  - m_BuildTarget: Android
+    m_Icons:
+    - m_Textures:
+      - {fileID: 2800000, guid: 3bf94feee33835f45b8955338b24436c, type: 3}
+      - {fileID: 2800000, guid: 3bf94feee33835f45b8955338b24436c, type: 3}
+      m_Width: 432
+      m_Height: 432
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 324
+      m_Height: 324
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 216
+      m_Height: 216
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 162
+      m_Height: 162
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 108
+      m_Height: 108
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 81
+      m_Height: 81
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures:
+      - {fileID: 2800000, guid: 3bf94feee33835f45b8955338b24436c, type: 3}
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures:
+      - {fileID: 2800000, guid: 3bf94feee33835f45b8955338b24436c, type: 3}
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 0
+      m_SubKind: 
   m_BuildTargetBatching: []
   m_BuildTargetShaderSettings: []
   m_BuildTargetGraphicsJobs: []
@@ -321,6 +418,9 @@ PlayerSettings:
   - serializedVersion: 3
     m_BuildTarget: WebGL
     m_Formats: 05000000
+  - serializedVersion: 3
+    m_BuildTarget: Android
+    m_Formats: 01000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
@@ -587,22 +687,22 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
+    Android: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
     GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
-    LinuxHeadlessSimulation: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
-    Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
-    PS4: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
-    PS5: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
+    LinuxHeadlessSimulation: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
+    Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
+    PS4: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
+    PS5: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
     QNX: UNITY_POST_PROCESSING_STACK_V2
     ReservedCFE: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;TMP_YG2;RU_YG2;YandexGamesPlatform_yg;EnvirData_yg;Authorization_yg;Storage_yg;InterstitialAdv_yg;Localization_yg;RewardedAdv_yg
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;TMP_YG2;RU_YG2;YandexGamesPlatform_yg;EnvirData_yg;Authorization_yg;Storage_yg;InterstitialAdv_yg;RewardedAdv_yg;Localization_yg
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
-    WebGL: PLUGIN_YG_2;EnvirData_yg;TMP_YG2;UNITY_POST_PROCESSING_STACK_V2;YandexGamesPlatform_yg;Storage_yg;Authorization_yg;InterstitialAdv_yg;Localization_yg;RewardedAdv_yg
-    Windows Store Apps: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;Storage_yg;TMP_YG2;InterstitialAdv_yg;Localization_yg;RewardedAdv_yg
-    XboxOne: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
-    iPhone: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
-    tvOS: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;Localization_yg;RewardedAdv_yg
+    WebGL: PLUGIN_YG_2;EnvirData_yg;TMP_YG2;UNITY_POST_PROCESSING_STACK_V2;YandexGamesPlatform_yg;Storage_yg;Authorization_yg;InterstitialAdv_yg;RewardedAdv_yg;Localization_yg
+    Windows Store Apps: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;Storage_yg;TMP_YG2;InterstitialAdv_yg;RewardedAdv_yg;Localization_yg
+    XboxOne: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
+    iPhone: PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
+    tvOS: UNITY_POST_PROCESSING_STACK_V2;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Storage_yg;TMP_YG2;RewardedAdv_yg;Localization_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -611,7 +711,7 @@ PlayerSettings:
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
   managedStrippingLevel:
-    Android: 1
+    Android: 4
     EmbeddedLinux: 1
     GameCoreScarlett: 1
     GameCoreXboxOne: 1
@@ -714,7 +814,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: dfceceff-fdab-45d8-b28d-6257d6064c57
   framebufferDepthMemorylessMode: 0

@@ -21,7 +21,7 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
         }
     }
     
-    private Image image;
+    protected Image image;
     private Vector2 image_min;
     private Vector2 image_max;
 

@@ -33,18 +33,22 @@ public class AppScreen_General_UICanvas_DebugInfo : MonoBehaviour
         }
         else
         {
-            switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+            switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
             {
-                case ControlPers_BuildSettings.PlatformType.windows:
+                case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
                     text_component.text = "Platform: WINDOWS";
                 break;
 
-                case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
+                case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
                     text_component.text = "Platform: WEB_YANDEXGAMES_DESKTOP";
                 break;
 
-                case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
+                case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
                     text_component.text = "Platform: WEB_YANDEXGAMES_MOBILE_ANDROID";
+                break;
+
+                case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                    text_component.text = "Platform: WEB_ITCHIO";
                 break;
             }
         }

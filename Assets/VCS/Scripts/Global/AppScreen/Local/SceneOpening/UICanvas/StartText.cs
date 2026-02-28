@@ -39,17 +39,17 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 
     private void Start()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
         {
-            case ControlPers_BuildSettings.PlatformType.windows:
-                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
-                break;
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop:
-                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop); ;
-                break;
-            case ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android:
-                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_mobile); ;
-                break;
+            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop);
+            break;
+
+            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
+                text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_mobile);
+            break;
         }
     }
 

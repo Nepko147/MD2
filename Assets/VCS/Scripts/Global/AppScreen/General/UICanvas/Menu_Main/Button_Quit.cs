@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit : AppScreen_General_UICanvas_Button_Parent
+public class AppScreen_General_UICanvas_Menu_Main_Button_Quit : AppScreen_General_UICanvas_Button_Parent
 {
-    public static AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit SingleOnScene { get; private set; }
+    public static AppScreen_General_UICanvas_Menu_Main_Button_Quit SingleOnScene { get; private set; }
 
     private void ImageRefresh()
     {
@@ -24,15 +24,14 @@ public class AppScreen_Local_SceneMenu_UICanvas_Menu_Local_Main_Button_Quit : Ap
     {
         base.Start();
 
-        if (ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.PlatformType_Current == ControlPers_BuildSettings.PlatformType.web_yandexGames_mobile_android)
+        ImageRefresh();
+        ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
+
+        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android
+        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_itchIo)
         {
             gameObject.SetActive(false);
-        }
-        else
-        {
-            ImageRefresh();
-            ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
         }
     }
 
