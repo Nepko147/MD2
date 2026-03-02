@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_German : ControlPers_LanguageHandler_Pa
         text_keyToString[Text_Key.midscreen_pause] = "PAUSE";
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Verbleibender Abstand";
         text_keyToString[Text_Key.received_text] = "Münzen erhalten";
-        text_keyToString[Text_Key.received_ad_text] = "Hol dir x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " für das Ansehen von Werbung"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Hol dir x" + ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT + " für das Ansehen von Werbung"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Leben";
         text_keyToString[Text_Key.popUp_coin] = "+ 1 Münze";
         text_keyToString[Text_Key.popUp_coinRush] = "Münzrausch!";

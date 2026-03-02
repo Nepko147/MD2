@@ -6,28 +6,30 @@ public class ControlPers_BuildSettings : MonoBehaviour
 {
     public static ControlPers_BuildSettings SingleOnScene { get; private set; }
 
-    private enum BuildCompilationType
+    private enum BuildType_Compilation
     {
         windows_standalone,
         web_yandexGames,
-        web_itchIo
+        web_itchIo,
+        android_standalone
     }
 
-    [SerializeField] private BuildCompilationType buildCompilationType;
+    [SerializeField] private BuildType_Compilation buildType_compilation;
 
-    public enum BuildRuntimeType
+    public enum BuildType_Runtime
     {
         windows_standalone,
         web_yandexGames_desktop,
         web_yandexGames_mobile_android,
-        web_itchIo
+        web_itchIo,
+        android_standalone
     }
+    
+    public BuildType_Runtime BuildType_Runtime_Current { get; private set; }
 
-    public BuildRuntimeType BuildRuntimeType_Current { get; private set; }
-
-    public const int BUILDRUNTIMETYPE_WEB_YANDEXGAMES_BONUS_PRICE_MULT = 2;
-    public const int BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT = 3;
-
+    public const int BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_BONUS_PRICE_MULT = 2;
+    public const int BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT = 3;
+    
     [SerializeField] private bool debugInfo;
     public bool DebugInfo 
     { 
@@ -61,25 +63,29 @@ public class ControlPers_BuildSettings : MonoBehaviour
         
         Application.targetFrameRate = Constants.TARGETFRAMERATE;
         
-        switch (buildCompilationType)
+        switch (buildType_compilation)
         {
-            case BuildCompilationType.windows_standalone:
-                BuildRuntimeType_Current = BuildRuntimeType.windows_standalone;
+            case BuildType_Compilation.windows_standalone:
+                BuildType_Runtime_Current = BuildType_Runtime.windows_standalone;
             break;
 
-            case BuildCompilationType.web_yandexGames:
-                if (YG2.envir.isMobile)
+            case BuildType_Compilation.web_yandexGames:
+                if (!YG2.envir.isMobile)
                 {
-                    BuildRuntimeType_Current = BuildRuntimeType.web_yandexGames_mobile_android;
+                    BuildType_Runtime_Current = BuildType_Runtime.web_yandexGames_desktop;
                 }
                 else
                 {
-                    BuildRuntimeType_Current = BuildRuntimeType.web_yandexGames_desktop;
+                    BuildType_Runtime_Current = BuildType_Runtime.web_yandexGames_mobile_android;
                 }
             break;
 
-            case BuildCompilationType.web_itchIo:
-                BuildRuntimeType_Current = BuildRuntimeType.web_itchIo;
+            case BuildType_Compilation.web_itchIo:
+                BuildType_Runtime_Current = BuildType_Runtime.web_itchIo;
+            break;
+            
+            case BuildType_Compilation.android_standalone:
+                BuildType_Runtime_Current = BuildType_Runtime.android_standalone;
             break;
         }
     }

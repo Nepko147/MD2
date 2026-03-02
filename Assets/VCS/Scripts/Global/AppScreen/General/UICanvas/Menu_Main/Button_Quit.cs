@@ -27,9 +27,9 @@ public class AppScreen_General_UICanvas_Menu_Main_Button_Quit : AppScreen_Genera
         ImageRefresh();
         ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
 
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_itchIo)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_itchIo)
         {
             gameObject.SetActive(false);
         }

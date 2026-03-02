@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Russian : ControlPers_LanguageHandler_P
         text_keyToString[Text_Key.midscreen_pause] = "ПАУЗА";
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Осталось до цели";
         text_keyToString[Text_Key.received_text] = "Полученные монеты";
-        text_keyToString[Text_Key.received_ad_text] = "Получить х" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " за просмотр рекламы"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Получить х" + ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT + " за просмотр рекламы"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Жизнь";
         text_keyToString[Text_Key.popUp_coin] = "+1 Монета";
         text_keyToString[Text_Key.popUp_coinRush] = "Монетная Лихорадка!";

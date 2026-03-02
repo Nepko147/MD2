@@ -13,8 +13,8 @@ public class ControlPers_YandexGamesHandler : MonoBehaviour
 
     public void GameReadyAPI_Start()
     {
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android)
         {
             GameReadyAPI_IsOnGameplay = true;
 
@@ -24,8 +24,8 @@ public class ControlPers_YandexGamesHandler : MonoBehaviour
 
     public void GameReadyAPI_Stop()
     {
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android)
         {
             GameReadyAPI_IsOnGameplay = false;
 
@@ -73,8 +73,8 @@ public class ControlPers_YandexGamesHandler : MonoBehaviour
 
     private void Start()
     {
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current ==  ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current ==  ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android)
         {
             var _routine = Update_Coroutine();
             StartCoroutine(_routine);

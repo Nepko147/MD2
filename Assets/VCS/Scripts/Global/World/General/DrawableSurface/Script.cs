@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class World_General_DrawableSurface : MonoBehaviour
 {
@@ -18,16 +17,6 @@ public class World_General_DrawableSurface : MonoBehaviour
 
     private int texture_size_x;
     private int texture_size_y;
-
-    #endregion
-
-    #region Web
-
-    private const float WEB_PAINTING_TIMETOLIVE = 5.0f;
-    private const float WEB_PAINTING_LOCALSCALE = 1.5f;
-    private const string WEB_PAINTING_SORTINGLAYERNAME = "Player";
-
-    #endregion        
 
     //Если просто хотим обновить(очистить) тектуру
     public void Texture_Refresh()
@@ -70,9 +59,10 @@ public class World_General_DrawableSurface : MonoBehaviour
     //Если хотим нарисовать что-то в нескльких местах.
     public void Draw(Vector3[] _positions, Texture2D _overlayTexture, float _overlayTexture_scaleMultiplier_x = 1, float _overlayTexture_scaleMultiplier_y = 1)
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current)
         {
-            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
+            case ControlPers_BuildSettings.BuildType_Runtime.windows_standalone:
+            case ControlPers_BuildSettings.BuildType_Runtime.android_standalone:
                 material_mixer.SetTexture("_OverlayTex", _overlayTexture);
                 material_mixer.SetFloat("_OverlayRotation", angle);
                 var _overlayTexture_scale_x = ((float)_overlayTexture.width / texture.width) * _overlayTexture_scaleMultiplier_x;
@@ -97,8 +87,8 @@ public class World_General_DrawableSurface : MonoBehaviour
                 RenderTexture.ReleaseTemporary(_texture_rt_temp);           //Освобождаем память от временной РендерТекстуры. Защита от утечек памяти
             break;
 
-            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:  
+            case ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildType_Runtime.web_itchIo:  
                 var _rect = new Rect(0, 0, _overlayTexture.width, _overlayTexture.height);
                 var _sprite = Sprite.Create(_overlayTexture, _rect, Vector2.one / 2); //Создаём новый спрайт
                 var _scale = new Vector3(1 / transform.localScale.x * _overlayTexture_scaleMultiplier_x, 1 / transform.localScale.y * _overlayTexture_scaleMultiplier_y, transform.localScale.z) * WEB_PAINTING_LOCALSCALE;
@@ -136,6 +126,16 @@ public class World_General_DrawableSurface : MonoBehaviour
         _ratio = Mathf.Clamp(_ratio, 0.0f, 1.0f);
         material.SetFloat("_OverlayColorRatio", _ratio);
     }
+
+    #endregion
+
+    #region Web
+
+    private const float WEB_PAINTING_TIMETOLIVE = 5.0f;
+    private const float WEB_PAINTING_LOCALSCALE = 1.5f;
+    private const string WEB_PAINTING_SORTINGLAYERNAME = "Player";
+
+    #endregion 
 
     private void Awake()
     {

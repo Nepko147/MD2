@@ -10,7 +10,6 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
     protected int price_coins_buy;
     protected int price_coins_improve;
     private Vector3 price_offset;
-    private const int PRICE_MULT_WEB_YANDEXGAMES = 2;
 
     private void Price_Spawn()
     {
@@ -155,11 +154,11 @@ public class AppScreen_UICanvas_Menu_Upgrades_Upgrade_General_Button_Parent : Ap
 
     protected virtual void Start()
     {
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android)
         {
-            price_coins_buy *= PRICE_MULT_WEB_YANDEXGAMES;
-            price_coins_improve *= PRICE_MULT_WEB_YANDEXGAMES;
+            price_coins_buy *= ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_BONUS_PRICE_MULT;
+            price_coins_improve *= ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_BONUS_PRICE_MULT;
         }
 
         if (!IsBought())

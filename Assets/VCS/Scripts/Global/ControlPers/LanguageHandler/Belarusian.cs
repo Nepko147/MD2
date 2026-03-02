@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Belarusian : ControlPers_LanguageHandle
         text_keyToString[Text_Key.midscreen_pause] = "ПАЎЗА"; //Pause
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Засталося да мэты"; //Distance remain
         text_keyToString[Text_Key.received_text] = "Атрыманыя манеты";
-        text_keyToString[Text_Key.received_ad_text] = "Атрымайце x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " за прагляд рэкламы"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Атрымайце x" + ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT + " за прагляд рэкламы"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Жыццё"; //+1 Life
         text_keyToString[Text_Key.popUp_coin] = "+1 Манета";
         text_keyToString[Text_Key.popUp_coinRush] = "Манетная Ліхаманка!";

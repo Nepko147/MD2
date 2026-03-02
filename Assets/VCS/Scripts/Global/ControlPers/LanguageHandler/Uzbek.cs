@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Uzbek : ControlPers_LanguageHandler_Par
         text_keyToString[Text_Key.midscreen_pause] = "PAUZA"; //Pause
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Qolgan masofa";
         text_keyToString[Text_Key.received_text] = "Olingan";
-        text_keyToString[Text_Key.received_ad_text] = "Reklama ko'rish uchun x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " oling"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Reklama ko'rish uchun x" + ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT + " oling"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+1 Hayot"; //+1 Life
         text_keyToString[Text_Key.popUp_coin] = "+1 Tanga";
         text_keyToString[Text_Key.popUp_coinRush] = "Tangalar shoshilinchligi!";

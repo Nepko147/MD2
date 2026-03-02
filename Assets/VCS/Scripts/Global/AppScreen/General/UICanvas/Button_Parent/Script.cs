@@ -127,18 +127,29 @@ public abstract class AppScreen_General_UICanvas_Button_Parent : AppScreen_Gener
                 position_last = transform.position;
             }
             
-            if (!Pointed(image_min, image_max))
+            if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current != ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android
+            && ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current != ControlPers_BuildSettings.BuildType_Runtime.android_standalone)
             {
-                if (image.sprite != image_currennt_idle)
+                if (!Pointed(image_min, image_max))
                 {
-                    image.sprite = image_currennt_idle;
+                    if (image.sprite != image_currennt_idle)
+                    {
+                        image.sprite = image_currennt_idle;
+                    }
+                }
+                else
+                {
+                    if (image.sprite != image_currennt_pointed)
+                    {
+                        image.sprite = image_currennt_pointed;
+                    }
                 }
             }
             else
             {
-                if (image.sprite != image_currennt_pointed)
+                if (image.sprite != image_currennt_idle)
                 {
-                    image.sprite = image_currennt_pointed;
+                    image.sprite = image_currennt_idle;
                 }
             }
         }

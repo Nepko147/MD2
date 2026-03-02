@@ -29,7 +29,7 @@ public class ControlScene_Opening : MonoBehaviour
         ControlPers_AudioMixer_Music.SingleOnScene.Play(audio_crickets, true);
         AppScreen_General_UICanvas_Menu_Main_Button_Discord.SingleOnScene.Hide(0);
 
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.windows_standalone)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.windows_standalone)
         {
             stage_pressAnyKey_delay = 0;
         }

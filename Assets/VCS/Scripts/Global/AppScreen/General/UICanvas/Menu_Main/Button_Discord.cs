@@ -96,8 +96,8 @@ public class AppScreen_General_UICanvas_Menu_Main_Button_Discord : AppScreen_Gen
         ImageRefresh();
         ControlPers_LanguageHandler_Entity.SingleOnScene.GameLanguage_OnUpdate += ImageRefresh;
 
-        if (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop
-        || ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current == ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android)
+        if (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop
+        || ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current == ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android)
         {
             gameObject.SetActive(false);
         }

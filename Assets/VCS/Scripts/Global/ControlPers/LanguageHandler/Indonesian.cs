@@ -22,7 +22,7 @@ public class ControlPers_LanguageHandler_Indonesian : ControlPers_LanguageHandle
         text_keyToString[Text_Key.midscreen_pause] = "BERHENTI SEBENTAR";
         text_keyToString[Text_Key.midscreen_distanceRemain] = "Jarak yang tersisa";
         text_keyToString[Text_Key.received_text] = "Menerima";
-        text_keyToString[Text_Key.received_ad_text] = "Dapatkan x" + ControlPers_BuildSettings.BUILDRUNTIMETYPE_WEB_YANDEXGAMES_AD_MULT + " untuk menonton iklan"; //Get x3 for watching ads
+        text_keyToString[Text_Key.received_ad_text] = "Dapatkan x" + ControlPers_BuildSettings.BUILDTYPE_RUNTIME_WEB_YANDEXGAMES_AD_MULT + " untuk menonton iklan"; //Get x3 for watching ads
         text_keyToString[Text_Key.popUp_up] = "+ 1 Kehidupan";
         text_keyToString[Text_Key.popUp_coin] = "+1 Koin";
         text_keyToString[Text_Key.popUp_coinRush] = "Demam Koin!";

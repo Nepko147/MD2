@@ -4,11 +4,7 @@ using System.Collections;
 
 public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
 {
-    public static AppScreen_Local_SceneMain_UICanvas_Received_Entity SingleOnScene 
-    { 
-        get; 
-        private set; 
-    }
+    public static AppScreen_Local_SceneMain_UICanvas_Received_Entity SingleOnScene { get; private set; }
 
     private CanvasGroup canvasGroup;
     private float canvasGroup_deltaApha = 1.0f;
@@ -92,6 +88,7 @@ public class AppScreen_Local_SceneMain_UICanvas_Received_Entity : MonoBehaviour
         SingleOnScene = this;
 
         Received_Coins_Count = 0;
+        Received_Ad_Text_Visible = false;
 
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0.0f;

@@ -39,15 +39,16 @@ public class AppScreen_Local_SceneOpening_UICanvas_StartText : MonoBehaviour
 
     private void Start()
     {
-        switch (ControlPers_BuildSettings.SingleOnScene.BuildRuntimeType_Current)
+        switch (ControlPers_BuildSettings.SingleOnScene.BuildType_Runtime_Current)
         {
-            case ControlPers_BuildSettings.BuildRuntimeType.windows_standalone:
-            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_desktop:
-            case ControlPers_BuildSettings.BuildRuntimeType.web_itchIo:
+            case ControlPers_BuildSettings.BuildType_Runtime.windows_standalone:
+            case ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_desktop:
+            case ControlPers_BuildSettings.BuildType_Runtime.web_itchIo:
                 text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_desktop);
             break;
 
-            case ControlPers_BuildSettings.BuildRuntimeType.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildType_Runtime.web_yandexGames_mobile_android:
+            case ControlPers_BuildSettings.BuildType_Runtime.android_standalone:
                 text.text = ControlPers_LanguageHandler_Entity.SingleOnScene.Text_Get(ControlPers_LanguageHandler_Entity.Text_Key.startText_mobile);
             break;
         }
