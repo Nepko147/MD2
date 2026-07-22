@@ -12,6 +12,8 @@ public class ControlScene_Main : MonoBehaviour
 
     [SerializeField] private GameObject prefab_world_bonus_coin;
 
+    [SerializeField] private GameObject uiCanvas_Backgroung;
+
     [SerializeField] private GameObject[] driftSection_prefab;
 
     private struct DriftSection 
@@ -517,6 +519,7 @@ public class ControlScene_Main : MonoBehaviour
             
             _GeneralActiveState(false);
 
+            uiCanvas_Backgroung.SetActive(true);
             ControlPers_AudioMixer.SingleOnScene.Pause();
             ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Stop();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.Pause();
@@ -541,6 +544,7 @@ public class ControlScene_Main : MonoBehaviour
         {
             _GeneralActiveState(true);
 
+            uiCanvas_Backgroung.SetActive(false);
             ControlPers_AudioMixer.SingleOnScene.UnPause();
             ControlPers_YandexGamesHandler.SingleOnScene.GameReadyAPI_Start();
             ControlScene_SceneMain_Sound_Police.SingleOnScene.UnPause();
@@ -620,6 +624,7 @@ public class ControlScene_Main : MonoBehaviour
         {
             _GeneralActiveState(false);
 
+            uiCanvas_Backgroung.SetActive(true);
             ControlPers_DataHandler.SingleOnScene.ProgressData_Save();
             ControlPers_AudioMixer_Sounds.SingleOnScene.Pitch_ToNormal();
             ControlPers_AudioMixer.SingleOnScene.Stop();
@@ -796,6 +801,7 @@ public class ControlScene_Main : MonoBehaviour
     {
         #region General
 
+        uiCanvas_Backgroung.SetActive(false);
         ControlPers_AudioMixer_Music.SingleOnScene.Volume_Scale_Set(1f);
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_ReviveNumber = 0;
         ControlPers_DataHandler.SingleOnScene.ProgressData_Statistics_TotalDrivings += 1;
